@@ -1,10 +1,6 @@
 ﻿#pragma once
 #include "NonCopyable.h"
 
-#if defined(DEBUG) || defined(_DEBUG)
-#include <cassert> // デバッグ時にヘッダーをコンパイル　(DebugLog)が出来たら変更
-#endif
-
 // =============================================================================================
 // プラットフォームごとで継承して、初期化・後処理をポリモーフィズムする基底クラス
 // このクラスを継承したクラスは１つしか生成できないことを保証する
@@ -26,24 +22,8 @@ private:
 	virtual void GameLoop() = 0;    // ゲームループ
 
 public:
-	explicit PlatformSystem() // コンストラクタ
-	{
-#if defined(DEBUG) || defined(_DEBUG)
-		// デバッグ時のみ確認する
-		if (m_IsCreated)
-		{
-			assert(false && "PlatformSystemクラスが複数生成されています");
-		}
-		m_IsCreated = true;
-#endif
-	}
-
-	~PlatformSystem()// デストラクタ
-	{
-#if defined(DEBUG) || defined(_DEBUG)
-		m_IsCreated = false;
-#endif
-	}
+	explicit PlatformSystem(); // コンストラクタ
+	~PlatformSystem();         // デストラクタ
 
 	void Execute(); // 起動する
 };

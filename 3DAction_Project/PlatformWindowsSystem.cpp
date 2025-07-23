@@ -1,6 +1,7 @@
 ﻿#include "PlatformWindowsSystem.h"
 #include <Windows.h>
 #include "Timer.h"
+#include "DirectX.h"
 #if defined(DEBUG) || defined(_DEBUG)
 #include <iostream>
 #endif

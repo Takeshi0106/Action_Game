@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
 
+
 // =======================================
 // DirectX 処理
 // =======================================
@@ -38,11 +39,13 @@ namespace DirectX11 {
 		unsigned int numFeatureLevels = sizeof(featureLevels) / sizeof(D3D_FEATURE_LEVEL); // ループする回数を取得する
 
 		// スワップチェイン作成 -------------------------------------------------------------------
-		DXGI_SWAP_CHAIN_DESC swapChainDesc;
-		ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC)); // 0を代入して、初期化する
-		swapChainDesc.BufferCount = 2; // ダブルバッファ
-		swapChainDesc.BufferDesc.Width = Width;   // 画面の縦幅
-		swapChainDesc.BufferDesc.Height = Height; // 画面の横幅
+		DXGI_SWAP_CHAIN_DESC swapChainDesc = {}; // C++のためこっちで初期化
+		// ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));  // 全てに0を代入して、初期化する
+		swapChainDesc.BufferCount = 2;                                // ダブルバッファ
+		swapChainDesc.BufferDesc.Width = Width;                 // 画面の縦幅 今はウィンドウサイズと同じにしている
+		swapChainDesc.BufferDesc.Height = Height;               // 画面の横幅 今はウィンドウサイズと同じにしている
+		swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // RGBA 各8ビット 0.0~1.0に正規化　＊一般的でどの環境でも動きやすい
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;          // 
 	}
 
 
