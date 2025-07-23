@@ -81,17 +81,22 @@ namespace DirectX11 {
 		pOutput->FindClosestMatchingMode(&desiredDesc, &closestDesc, pDevice.Get());
 		*/
 
-		// スワップチェイン作成 -------------------------------------------------------------------
-		DXGI_SWAP_CHAIN_DESC swapChainDesc = {}; // C++のためこっちで初期化
-		// ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));  // 全てに0を代入して、初期化する
-		swapChainDesc.BufferCount = 2;                                // ダブルバッファ
-		swapChainDesc.BufferDesc.Width = Width;                       // 画面の縦幅 今はウィンドウサイズと同じにしている
-		swapChainDesc.BufferDesc.Height = Height;                     // 画面の横幅 今はウィンドウサイズと同じにしている
-		swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // RGBA 各8ビット 0.0~1.0に正規化　＊一般的でどの環境でも動きやすい
-		swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;           // リフレッシュレート　分母 (0の場合,OSに任せる)
-		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;         // リフレッシュレート　分子 (*ウィンドウモードの時は適用されない)
+		// スワップチェインの構成 -------------------------------------------------------------------
+		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};                                               // C++のためこっちで初期化
+		// ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));                           // 全てに0を代入して、初期化する
+		swapChainDesc.BufferCount = 2;                                                         // ダブルバッファ
+		swapChainDesc.BufferDesc.Width = Width;                                                // 画面の縦幅 今はウィンドウサイズと同じにしている
+		swapChainDesc.BufferDesc.Height = Height;                                              // 画面の横幅 今はウィンドウサイズと同じにしている
+		swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;                          // RGBA 各8ビット 0.0~1.0に正規化　＊一般的でどの環境でも動きやすい
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;                                    // リフレッシュレート　分母 (0の場合,OSに任せる)
+		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;                                  // リフレッシュレート　分子 (*ウィンドウモードの時は適用されない)
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT; // バックバッファの使用用途
-		swapChainDesc.OutputWindow = windowHandle.Get();
+		swapChainDesc.OutputWindow = windowHandle.Get();                                       // 描画するウィンドウのハンドルを渡す
+		swapChainDesc.SampleDesc.Count = 1;                                                    // マルチサンプリング　アンチエイリアス 1は無効
+		swapChainDesc.SampleDesc.Quality = 0;                                                  // 品質レベル　大きい値ほど良くなる(フォーマットとサンプリング数で上限が決まる)
+		swapChainDesc.Windowed = TRUE;                                                         // ウィンドウモード (FALSEにするとフルスクリーンモードになる)
+
+
 	}
 
 
