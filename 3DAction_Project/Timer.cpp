@@ -1,8 +1,7 @@
 ﻿#include "Timer.h"
 #include <Windows.h>
 
-#if defined(DEBUG) || defined(_DEBUG)
-// デバッグ時にヘッダーをコンパイル
+#if defined(DEBUG) || defined(_DEBUG) // デバッグ時にヘッダーをコンパイル
 #include <cassert>
 #endif
 
