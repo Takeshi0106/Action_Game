@@ -2,30 +2,13 @@
 // #include <dxgi.h>
 #include <d3d11.h>
 #include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
-#include <Windows.h>
 
-// =======================================
-// 前方定義したラッパー構造体の中身
-// =======================================
-struct DX_WINDOWHANDLE {
-private: // 直接アクセス不可
-	HWND hWnd; // ウィンドウハンドル
+#pragma comment (lib, "d3d11.lib")      // DirectXの基本APIを使用するためのライブラリー
+#pragma comment(lib, "d3dcompiler.lib") // HLSLをコンパイルするためAPIを使用するためのライブラリー
 
-public:
-	// コンストラクタ
-	DX_WINDOWHANDLE(const HWND& _hWnd) : hWnd(_hWnd) {}
-	// 代入演算子オーバーロード
-	DX_WINDOWHANDLE& operator=(const HWND& _hWnd)
-	{
-		hWnd = _hWnd;
-		return *this;
-	}
-	// 暗黙的に変換を禁止にする
-	explicit operator HWND() const { return hWnd; }
-	// ラップしているHWNDを返す
-	HWND Get() const { return hWnd; }
-};
-
+#if defined(DEBUG) || defined(_DEBUG) // デバッグ時にヘッダーをコンパイル
+#include <cassert>
+#endif
 
 // =======================================
 // DirectX 処理
@@ -35,6 +18,9 @@ namespace DirectX11 {
 
 	namespace {
 		// 使用しているモニターなどを取得する変数
+		Microsoft::WRL::ComPtr<ID3D11Device>        Device;
+		Microsoft::WRL::ComPtr<ID3D11DeviceContext> DeviceContext; 
+		Microsoft::WRL::ComPtr<IDXGISwapChain>      SwapChain;
 		// Microsoft::WRL::ComPtr<IDXGIOutput> pOutput = null;
 		// Microsoft::WRL::ComPtr<ID3D11Device> pDevice = null;
 	}
@@ -42,8 +28,11 @@ namespace DirectX11 {
 	// =====================================================
 	// 初期化処理
 	// =====================================================
-	void Init(uint16_t Width, uint16_t Height, DX_WINDOWHANDLE windowHandle)
+	long Init(uint16_t Width, uint16_t Height, HWND windowHandle)
 	{
+		HRESULT  hr;             // スワップチェインなどが作製されたかを受け取る
+		D3D_FEATURE_LEVEL level; // スワップチェイン作成成功時に使われたDirectXのバージョンを入れる
+
 		unsigned int createDeviceFlags = 0; // デバイス作成用のフラグ
 #if defined(DEBUG) || defined(_DEBUG)
 		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG; // デバッグ時にデバッグレイヤーを有効可　（ビットORで＋する）
@@ -91,12 +80,42 @@ namespace DirectX11 {
 		swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;                                    // リフレッシュレート　分母 (0の場合,OSに任せる)
 		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;                                  // リフレッシュレート　分子 (*ウィンドウモードの時は適用されない)
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT; // バックバッファの使用用途
-		swapChainDesc.OutputWindow = windowHandle.Get();                                       // 描画するウィンドウのハンドルを渡す
+		swapChainDesc.OutputWindow = windowHandle;                                             // 描画するウィンドウのハンドルを渡す
 		swapChainDesc.SampleDesc.Count = 1;                                                    // マルチサンプリング　アンチエイリアス 1は無効
 		swapChainDesc.SampleDesc.Quality = 0;                                                  // 品質レベル　大きい値ほど良くなる(フォーマットとサンプリング数で上限が決まる)
 		swapChainDesc.Windowed = TRUE;                                                         // ウィンドウモード (FALSEにするとフルスクリーンモードになる)
 
+		// デバイスとスワップチェインの作成 -----------------------------------------------------------
+		for (unsigned int i = 0; i < numDriverTypes; i++) // 使用できるドライバーを見つけるまでループする
+		{
+			// デバイス・デバイスコンテキスト・スワップチェインを作製する
+			hr = D3D11CreateDeviceAndSwapChain(
+				nullptr,                        // 使用するGPUを設定 (nullptrの場合はデフォルトが選択)
+				driverTypes[i],                 // ドライバの設定
+				nullptr,                        // ソフトウェアレンダラーを設定 (今は使用せずGPUを使用する)
+				createDeviceFlags,              // 動作モデルのフラグ　(Debug時にデバッグレイヤーを有効化する)
+				featureLevels,                  // 使用したいDirectXのバージョン一覧
+				numFeatureLevels,               // 試したいバージョンの数
+				D3D11_SDK_VERSION,              // SDKバージョン (これしか入れてはいけない)
+				&swapChainDesc,                 // スワップチェインの構成
+				&SwapChain,                     // 成功時に代入
+				&Device,                        // 成功時に代入
+				&level,                         // 実際に使用されたDirectXのバージョンが入る
+				&DeviceContext                  // 成功時に代入される
+			);							        
 
+			if (SUCCEEDED(hr))
+			{
+				break; // ドライバが成功したらループを抜ける
+			}
+		}
+		if (FAILED(hr)) // 全てのドライバが失敗したらエラー
+		{ 
+			assert(false && "選択されたドライバで生成することが出来ませんでした。");
+			return hr;
+		}
+
+		return S_OK;
 	}
 
 

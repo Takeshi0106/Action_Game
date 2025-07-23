@@ -1,15 +1,11 @@
 ﻿#pragma once
+// ヘッダー内にインクルード非参照
 #include <cstdint>
-
-// ==============================================
-// 前方定義
-// ==============================================
-// ウィンドウハンドルの前方宣言
-struct DX_WINDOWHANDLE;                   // DierctXの初期化で使用するHWNDのラップ構造体
+#include <Windows.h>
 
 // ==============================================
 // DirectXの関数
 // ==============================================
 namespace DirectX11 {
-	void Init(uint16_t Width, uint16_t Height, DX_WINDOWHANDLE windowHandle);
+	long Init(uint16_t Width, uint16_t Height, HWND windowHandle); // DirectXの初期化  戻り値のlongはHRESULTを返しています
 }
