@@ -1,5 +1,5 @@
 ﻿#include "DirectX.h"
-// #include <dxgi.h>
+#include <dxgi.h>
 #include <d3d11.h>
 #include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
 
@@ -18,19 +18,24 @@ namespace DirectX11 {
 
 	namespace {
 		// 使用しているモニターなどを取得する変数
-		Microsoft::WRL::ComPtr<ID3D11Device>        Device;
-		Microsoft::WRL::ComPtr<ID3D11DeviceContext> DeviceContext; 
-		Microsoft::WRL::ComPtr<IDXGISwapChain>      SwapChain;
-		// Microsoft::WRL::ComPtr<IDXGIOutput> pOutput = null;
-		// Microsoft::WRL::ComPtr<ID3D11Device> pDevice = null;
+		Microsoft::WRL::ComPtr<ID3D11Device>              d3dDevice        = nullptr; // リソースの作成
+		Microsoft::WRL::ComPtr<ID3D11DeviceContext>       d3dDeviceContext = nullptr; // 描画コマンドをGPUに送る
+		Microsoft::WRL::ComPtr<IDXGISwapChain>            d3dSwapChain     = nullptr; // バッファを制御する
+		// SRV用　読み取り専用
+		Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforSRV     = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    d3dRTV           = nullptr; // レンダーターゲットビュー  描画結果を描画対象として渡す
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  d3dRTSRV         = nullptr; // シェーダーに計算した描画結果を渡す (読み取り専用)
+		// UAV用　読み書き可能
+		Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforUAV     = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ (UAV用)
+		Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> d3dUAV           = nullptr; // シェーダーに計算した画像結果を渡す (読み書き可能)
 	}
 
 	// =====================================================
 	// 初期化処理
 	// =====================================================
-	long Init(uint16_t Width, uint16_t Height, HWND windowHandle)
+	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle)
 	{
-		HRESULT  hr;             // スワップチェインなどが作製されたかを受け取る
+		HRESULT  hr;             // 初期化の 成功、失敗 を受け取る
 		D3D_FEATURE_LEVEL level; // スワップチェイン作成成功時に使われたDirectXのバージョンを入れる
 
 		unsigned int createDeviceFlags = 0; // デバイス作成用のフラグ
@@ -56,19 +61,6 @@ namespace DirectX11 {
 			// D3D_FEATURE_LEVEL_10_0,
 		};
 		unsigned int numFeatureLevels = sizeof(featureLevels) / sizeof(D3D_FEATURE_LEVEL); // ループする回数を取得する
-
-		/*
-		// 使用しているモニターなどのリフレッシュレートを取得する
-		DXGI_MODE_DESC desiredDesc = {};
-		desiredDesc.Width = 1920;
-		desiredDesc.Height = 1080;
-		desiredDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		desiredDesc.RefreshRate.Numerator = 0;
-		desiredDesc.RefreshRate.Denominator = 1;
-		MF
-		DXGI_MODE_DESC closestDesc = {};
-		pOutput->FindClosestMatchingMode(&desiredDesc, &closestDesc, pDevice.Get());
-		*/
 
 		// スワップチェインの構成 -------------------------------------------------------------------
 		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};                                               // C++のためこっちで初期化
@@ -98,10 +90,10 @@ namespace DirectX11 {
 				numFeatureLevels,               // 試したいバージョンの数
 				D3D11_SDK_VERSION,              // SDKバージョン (これしか入れてはいけない)
 				&swapChainDesc,                 // スワップチェインの構成
-				&SwapChain,                     // 成功時に代入
-				&Device,                        // 成功時に代入
+				d3dSwapChain.GetAddressOf(),    // 成功時に代入
+				d3dDevice.GetAddressOf(),       // 成功時に代入
 				&level,                         // 実際に使用されたDirectXのバージョンが入る
-				&DeviceContext                  // 成功時に代入される
+				d3dDeviceContext.GetAddressOf() // 成功時に代入される
 			);							        
 
 			if (SUCCEEDED(hr))
@@ -112,10 +104,53 @@ namespace DirectX11 {
 		if (FAILED(hr)) // 全てのドライバが失敗したらエラー
 		{ 
 			assert(false && "選択されたドライバで生成することが出来ませんでした。");
-			return hr;
+			return false;
 		}
 
-		return S_OK;
+		// SAVのレンダラーターゲットの作成 -----------------------------------------------------------
+		hr = S_OK;
+
+		// スワップチェインが生成したバックバッファを取得する
+		hr = d3dSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)d3dRTTforSRV.GetAddressOf());
+		if (FAILED(hr))
+		{
+			assert(false && "SRVバックバッファを取得することが出来ませんでした。");
+			return false;
+		}
+		// レンダラーターゲットを生成
+		hr = d3dDevice->CreateRenderTargetView(d3dRTTforSRV.Get(), nullptr, d3dRTV.GetAddressOf());
+		if (FAILED(hr))
+		{
+			assert(false && "レンダラーターゲットビューを作成することが出来ませんでした");
+			return false;
+		}
+		// シェーダーリソースの作成
+		hr = d3dDevice->CreateShaderResourceView(d3dRTTforSRV.Get(), nullptr, d3dRTSRV.GetAddressOf());
+		if (FAILED(hr))
+		{
+			assert(false && "SRVが設定できませんでした");
+			return false;
+		}
+
+		// UAVのレンダラーターゲットの作成 -----------------------------------------------------------
+		// UAV用のテクスチャの構成
+		D3D11_TEXTURE2D_DESC desc = {};
+		desc.Width = Width;                           // テクスチャの横のピクセル数
+		desc.Height = Height;                         // テクスチャの縦のピクセル数
+		desc.MipLevels = 1;                           // ミップマップ
+		desc.ArraySize = 1;                           // 配列のサイズ
+		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; // ピクセルのフォーマット
+		desc.SampleDesc = { 1,0 };                    // マルチサンプリング（アンチエイリアス無効）
+		desc.Usage = D3D11_USAGE_DEFAULT;             // GPUが主にアクセスする
+		desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS; // フラグ UAVのみで使用なので読み書き可能フラグ
+		
+		// バッファを作成
+		d3dDevice->CreateTexture2D(&desc, nullptr, d3dRTTforUAV.GetAddressOf());
+
+		// UAVを作成
+
+
+		return true;
 	}
 
 
