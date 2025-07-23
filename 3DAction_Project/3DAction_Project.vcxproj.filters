@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{d9c192db-dce8-435d-96f0-b0331368b888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{75c95213-2200-46aa-80ae-d01b3181939e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{0f9ff6cd-8446-4aa9-93c5-05af14c6b188}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\DirectX">
+      <UniqueIdentifier>{50a2ac4e-7ef4-4253-84e1-0fd9fb429e1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Platform">
+      <UniqueIdentifier>{03049d1d-813f-4dcc-a623-5e7169e077ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Platform\Base">
+      <UniqueIdentifier>{4906e811-e475-4bd9-bdd7-e3b9e42a46e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Platform\Windows">
+      <UniqueIdentifier>{819d67f3-71a4-49ce-ac6b-e0f9e20b0a37}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx11.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="NonCopyable.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSystem.h">
+      <Filter>core\Platform\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformWindowsSystem.h">
+      <Filter>core\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX.h">
+      <Filter>core\DirectX</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformSystem.cpp">
+      <Filter>core\Platform\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformWindowsSystem.cpp">
+      <Filter>core\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX.cpp">
+      <Filter>core\DirectX</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
