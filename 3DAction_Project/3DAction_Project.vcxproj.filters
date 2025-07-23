@@ -34,6 +34,9 @@
     <Filter Include="core\Platform\Windows">
       <UniqueIdentifier>{819d67f3-71a4-49ce-ac6b-e0f9e20b0a37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\Timer">
+      <UniqueIdentifier>{ad471753-08ba-4717-a981-61a1dcbe8d58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -63,9 +66,6 @@
     <ClInclude Include="NonCopyable.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="PlatformSystem.h">
       <Filter>core\Platform\Base</Filter>
     </ClInclude>
@@ -77,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="DirectX.h">
       <Filter>core\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>core\Timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +104,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="PlatformSystem.cpp">
       <Filter>core\Platform\Base</Filter>
     </ClCompile>
@@ -115,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="DirectX.cpp">
       <Filter>core\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>core\Timer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,20 +1,66 @@
-#include "PlatformWindowsSystem.h"
+ï»¿#include "PlatformWindowsSystem.h"
 #include <Windows.h>
 #include "Timer.h"
-
-// =====================================================
-// Ã“Iƒƒ“ƒo[•Ï”
-// =====================================================
-HINSTANCE PlatformWindowsSystem::m_AppInstance = nullptr;
-HWND         PlatformWindowsSystem::m_WinInstance = nullptr;
-uint16_t     PlatformWindowsSystem::m_Width = 0;
-uint16_t     PlatformWindowsSystem::m_Height = 0;
-std::wstring PlatformWindowsSystem::m_WindowName;
-std::wstring PlatformWindowsSystem::m_WindowClassName;
+#if defined(DEBUG) || defined(_DEBUG)
+#include <iostream>
+#endif
 
 
 // =====================================================
-// ƒfƒoƒbƒO—p
+// å‰æ–¹å®£è¨€ã‚’æ§‹é€ ä½“ã¨ã—ã¦å®šç¾© ã€€ï¼ˆãƒ©ãƒƒãƒ‘ãƒ¼æ§‹é€ ä½“ï¼‰
+// =====================================================
+struct APPLICATIONHANDLE {
+private: // ç›´æ¥ã‚¢ã‚¯ã‚»ã‚¹ä¸å¯
+    HINSTANCE hInstance; // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«
+
+public:
+    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    APPLICATIONHANDLE(const HINSTANCE& _hInstance) : hInstance(_hInstance) {}
+    // ä»£å…¥æ¼”ç®—å­ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
+    APPLICATIONHANDLE& operator=(const HINSTANCE& _hInstance) 
+    {
+        hInstance = _hInstance;
+        return *this;
+    }
+    // æš—é»™çš„ã«å¤‰æ›ã‚’ç¦æ­¢ã«ã™ã‚‹
+    explicit operator HINSTANCE() const { return hInstance; }
+    // ãƒ©ãƒƒãƒ—ã—ã¦ã„ã‚‹HINSTANCEã‚’è¿”ã™
+    HINSTANCE Get() const { return hInstance; }
+};
+
+struct WINDOWHANDLE {
+private: // ç›´æ¥ã‚¢ã‚¯ã‚»ã‚¹ä¸å¯
+    HWND hWnd; // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+
+public:
+    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+    WINDOWHANDLE(const HWND& _hWnd) : hWnd(_hWnd) {}
+    // ä»£å…¥æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
+    WINDOWHANDLE& operator=(const HWND& _hWnd) 
+    {
+        hWnd = _hWnd;
+        return *this;
+    }
+    // æš—é»™çš„ã«å¤‰æ›ã‚’ç¦æ­¢ã«ã™ã‚‹
+    explicit operator HWND() const { return hWnd; }
+    // ãƒ©ãƒƒãƒ—ã—ã¦ã„ã‚‹HWNDã‚’è¿”ã™
+    HWND Get() const { return hWnd; }
+};
+
+
+// =====================================================
+// é™çš„ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°
+// =====================================================
+APPLICATIONHANDLE PlatformWindowsSystem::m_AppInstance = nullptr;
+WINDOWHANDLE      PlatformWindowsSystem::m_WinInstance = nullptr;
+uint16_t          PlatformWindowsSystem::m_Width = 0;
+uint16_t          PlatformWindowsSystem::m_Height = 0;
+std::wstring      PlatformWindowsSystem::m_WindowName;
+std::wstring      PlatformWindowsSystem::m_WindowClassName;
+
+
+// =====================================================
+// ãƒ‡ãƒãƒƒã‚°ç”¨
 // =====================================================
 #if defined(DEBUG) || defined(_DEBUG)
 namespace {
@@ -24,17 +70,17 @@ namespace {
 
 
 // =====================================================
-// ƒvƒƒgƒ^ƒCƒvéŒ¾
+// ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€
 // =====================================================
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 
 
 // =====================================================
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 // =====================================================
 PlatformWindowsSystem::PlatformWindowsSystem(uint16_t Width, uint16_t Height, std::wstring WindowClassName, std::wstring WindowName)
 {
-    // ‰Šú‰»
+    // åˆæœŸåŒ–
     m_Width = Width;
     m_Height = Height;
     m_WindowClassName = WindowClassName;
@@ -43,14 +89,14 @@ PlatformWindowsSystem::PlatformWindowsSystem(uint16_t Width, uint16_t Height, st
 
 
 // =====================================================
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 // =====================================================
 PlatformWindowsSystem::~PlatformWindowsSystem()
 {
 #if defined(DEBUG) || defined(_DEBUG)
     if (IsUninit)
     {
-        std::cout << "PlatformWindowsSystem : Œãˆ—‚ªÀs‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ" << std::endl;
+        std::cout << "PlatformWindowsSystem : å¾Œå‡¦ç†ãŒå®Ÿè¡Œã•ã‚Œã¦ã„ã¾ã›ã‚“" << std::endl;
         Uninit();
     }
 #endif
@@ -58,109 +104,109 @@ PlatformWindowsSystem::~PlatformWindowsSystem()
 
 
 // =====================================================
-// ‰Šú‰»ˆ—
+// åˆæœŸåŒ–å‡¦ç†
 // =====================================================
 bool PlatformWindowsSystem::Init()
 {
-    // ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹æ“¾
+    // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«å–å¾—
    m_AppInstance = GetModuleHandle(nullptr);
-    if (m_AppInstance == nullptr) { return false; } // æ“¾‚É¸”s‚µ‚½‚çfalse‚ğ•Ô‚·
+    if (m_AppInstance.Get() == nullptr) { return false; } // å–å¾—ã«å¤±æ•—ã—ãŸã‚‰falseã‚’è¿”ã™
 
-    // ƒEƒBƒ“ƒhƒEî•ñİ’è
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æƒ…å ±è¨­å®š
     WNDCLASSEX windClass = {};
-    windClass.cbSize = sizeof(WNDCLASSEX);                           // \‘¢‘Ì‚ÌƒTƒCƒYİ’è (ƒo[ƒWƒ‡ƒ“‚ğ”»’è‚µ‚Ä‚¢‚é‚½‚ß•K{)  
-    windClass.style = CS_HREDRAW | CS_VREDRAW;                       // ƒTƒCƒY•ÏX‚ÉÄ•`‰æ—LŒø‚É‚·‚é
-    windClass.lpfnWndProc = WndProc;                                 // ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒŠÖ”‚Ìƒ|ƒCƒ“ƒ^[
-    windClass.hIcon = LoadIcon(m_AppInstance, IDI_APPLICATION);   // ƒEƒBƒ“ƒhƒE‚Ì¶ã‚ÌƒAƒCƒRƒ“@i•W€ƒAƒCƒRƒ“‚Åì¬ .ico‚Å•ÏX‰Â”\)
-    windClass.hCursor = LoadCursor(m_AppInstance, IDC_CROSS);     // ƒNƒƒXƒJ[ƒ\ƒ‹•\¦‚·‚é iƒfƒUƒCƒ“j
-    windClass.hbrBackground = GetSysColorBrush(COLOR_BACKGROUND);    // ƒVƒXƒeƒ€‚ÌƒfƒtƒHƒ‹ƒg”wŒiF‚ÅƒEƒBƒ“ƒhƒE‚Ì”wŒi‚ğ“h‚é
-    windClass.lpszMenuName = nullptr;                                // ƒEƒBƒ“ƒhƒE‚Ìƒƒjƒ…[‚ğì¬‚µ‚È‚¢
-    windClass.lpszClassName = m_WindowClassName.c_str();             // ƒEƒBƒ“ƒhƒE‚Ì–¼‘Oİ’è
-    windClass.hIconSm = LoadIcon(m_AppInstance, IDI_APPLICATION); // ƒ^ƒXƒNƒo[‚É•\¦‚³‚ê‚éƒAƒCƒRƒ“ (•W€ƒAƒCƒRƒ“‚Åì¬ .ico‚Å•ÏX‰Â”\)
+    windClass.cbSize = sizeof(WNDCLASSEX);                                  // æ§‹é€ ä½“ã®ã‚µã‚¤ã‚ºè¨­å®š (ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’åˆ¤å®šã—ã¦ã„ã‚‹ãŸã‚å¿…é ˆ)  
+    windClass.style = CS_HREDRAW | CS_VREDRAW;                              // ã‚µã‚¤ã‚ºå¤‰æ›´æ™‚ã«å†æç”»æœ‰åŠ¹ã«ã™ã‚‹
+    windClass.lpfnWndProc = WndProc;                                        // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+    windClass.hIcon = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);   // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å·¦ä¸Šã®ã‚¢ã‚¤ã‚³ãƒ³ã€€ï¼ˆæ¨™æº–ã‚¢ã‚¤ã‚³ãƒ³ã§ä½œæˆ .icoã§å¤‰æ›´å¯èƒ½)
+    windClass.hCursor = LoadCursor(m_AppInstance.Get(), IDC_CROSS);     // ã‚¯ãƒ­ã‚¹ã‚«ãƒ¼ã‚½ãƒ«è¡¨ç¤ºã™ã‚‹ ï¼ˆãƒ‡ã‚¶ã‚¤ãƒ³ï¼‰
+    windClass.hbrBackground = GetSysColorBrush(COLOR_BACKGROUND);           // ã‚·ã‚¹ãƒ†ãƒ ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆèƒŒæ™¯è‰²ã§ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®èƒŒæ™¯ã‚’å¡—ã‚‹
+    windClass.lpszMenuName = nullptr;                                       // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ä½œæˆã—ãªã„
+    windClass.lpszClassName = m_WindowClassName.c_str();                    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®åå‰è¨­å®š
+    windClass.hIconSm = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION); // ã‚¿ã‚¹ã‚¯ãƒãƒ¼ã«è¡¨ç¤ºã•ã‚Œã‚‹ã‚¢ã‚¤ã‚³ãƒ³ (æ¨™æº–ã‚¢ã‚¤ã‚³ãƒ³ã§ä½œæˆ .icoã§å¤‰æ›´å¯èƒ½)
 
-    // ƒEƒBƒ“ƒhƒE‚Ì“o˜^ ¸”s‚µ‚½‚çfalse‚ğ•Ô‚·
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç™»éŒ² å¤±æ•—ã—ãŸã‚‰falseã‚’è¿”ã™
     if (!RegisterClassEx(&windClass)) { return false; }
 
-    // •`‰æ‚·‚é‘å‚«‚³‚ğİ’è
+    // æç”»ã™ã‚‹å¤§ãã•ã‚’è¨­å®š
     RECT rect = {};
-    rect.right = static_cast<LONG>(m_Width);   // ‰¡
-    rect.bottom = static_cast<LONG>(m_Height); // c
+    rect.right = static_cast<LONG>(m_Width);   // æ¨ª
+    rect.bottom = static_cast<LONG>(m_Height); // ç¸¦
 
-    // ƒEƒBƒ“ƒhƒE‚Ì‘å‚«‚³‚ğŒvZ@i•`‰æ‚·‚é‘å‚«‚³{˜gj
-    DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX; // ˜g‚ğİ’è (•W€‚ÈƒEƒBƒ“ƒhƒEAƒ^ƒCƒgƒ‹ƒo[‚ ‚èAƒVƒXƒeƒ€ƒƒjƒ…[‚ ‚è)
-    AdjustWindowRect(&rect, style, FALSE); // rect‚ÉŒvZ‚µ‚½‘å‚«‚³‚ğ‘ã“ü
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•ã‚’è¨ˆç®—ã€€ï¼ˆæç”»ã™ã‚‹å¤§ãã•ï¼‹æ ï¼‰
+    DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX; // æ ã‚’è¨­å®š (æ¨™æº–ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã€ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã‚ã‚Šã€ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚ã‚Š)
+    AdjustWindowRect(&rect, style, FALSE); // rectã«è¨ˆç®—ã—ãŸå¤§ãã•ã‚’ä»£å…¥
 
-    // ƒEƒBƒ“ƒhƒEì¬
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ
     m_WinInstance = CreateWindowEx(
-        0,                          // ƒEƒBƒ“ƒhƒE‚Ì“®ì‚âŒ©‚½–ÚiƒfƒtƒHƒ‹ƒgj
-        m_WindowClassName.c_str(),  // ƒEƒBƒ“ƒhƒE‚ÌƒNƒ‰ƒX–¼
-        m_WindowName.c_str(),       // ƒEƒBƒ“ƒhƒE‚Ìƒ^ƒCƒgƒ‹ƒo[‚Å•\¦‚³‚ê‚é–¼‘O
-        style,                      // ƒEƒBƒ“ƒhƒE‚ÌƒXƒ^ƒCƒ‹
-        CW_USEDEFAULT,              // ƒEƒBƒ“ƒhƒE‚Ì•\¦ˆÊ’u‚ğOS‚ÉŒˆ‚ß‚Ä‚à‚ç‚¤
-        CW_USEDEFAULT,              // ƒEƒBƒ“ƒhƒE‚Ì•\¦ˆÊ’u‚ğOS‚ÉŒˆ‚ß‚Ä‚à‚ç‚¤
-        rect.right - rect.left,     // ƒEƒBƒ“ƒhƒE‚Ì‰¡•İ’è
-        rect.bottom - rect.top,     // ƒEƒBƒ“ƒhƒE‚Ìc•İ’è
-        nullptr,                    // eƒEƒBƒ“ƒhƒE‚È‚µ
-        nullptr,                    // ƒƒjƒ…[‚È‚µ
-        m_AppInstance,              // ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹
-        nullptr);                   // ’Ç‰Áƒpƒ‰ƒ[ƒ^[
+        0,                          // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å‹•ä½œã‚„è¦‹ãŸç›®ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼‰
+        m_WindowClassName.c_str(),  // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ©ã‚¹å
+        m_WindowName.c_str(),       // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã§è¡¨ç¤ºã•ã‚Œã‚‹åå‰
+        style,                      // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¹ã‚¿ã‚¤ãƒ«
+        CW_USEDEFAULT,              // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºä½ç½®ã‚’OSã«æ±ºã‚ã¦ã‚‚ã‚‰ã†
+        CW_USEDEFAULT,              // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºä½ç½®ã‚’OSã«æ±ºã‚ã¦ã‚‚ã‚‰ã†
+        rect.right - rect.left,     // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æ¨ªå¹…è¨­å®š
+        rect.bottom - rect.top,     // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç¸¦å¹…è¨­å®š
+        nullptr,                    // è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãªã—
+        nullptr,                    // ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãªã—
+        m_AppInstance.Get(),              // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«
+        nullptr);                   // è¿½åŠ ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
 
-    // ƒEƒBƒ“ƒhƒE‚ğì¬‚Å‚«‚½‚©‚Ìƒ`ƒFƒbƒN
-    if (m_WinInstance == nullptr) { return false; }
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œæˆã§ããŸã‹ã®ãƒã‚§ãƒƒã‚¯
+    if (m_WinInstance.Get() == nullptr) { return false; }
 
-    // ƒEƒBƒ“ƒhƒE‚ğ•\¦
-    ShowWindow(m_WinInstance, SW_SHOWNORMAL);
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¡¨ç¤º
+    ShowWindow(m_WinInstance.Get(), SW_SHOWNORMAL);
 
-    // ƒEƒBƒ“ƒhƒE‚ğXV
-    UpdateWindow(m_WinInstance);
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æ›´æ–°
+    UpdateWindow(m_WinInstance.Get());
 
-    // ƒEƒBƒ“ƒhƒE‚É“ü—Íî•ñ‚ğæ“¾‚³‚¹‚é
-    SetFocus(m_WinInstance);
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«å…¥åŠ›æƒ…å ±ã‚’å–å¾—ã•ã›ã‚‹
+    SetFocus(m_WinInstance.Get());
 
-    // ³íI—¹.
+    // æ­£å¸¸çµ‚äº†.
     return true;
 }
 
 
 // =====================================================
-// ƒQ[ƒ€ƒ‹[ƒv@iƒQ[ƒ€–{•Òj
+// ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—ã€€ï¼ˆã‚²ãƒ¼ãƒ æœ¬ç·¨ï¼‰
 // =====================================================
 void PlatformWindowsSystem::GameLoop()
 {
-    MSG msg = {}; // ƒƒbƒZ[ƒW
+    MSG msg = {}; // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 
-    Timer::Init(); // ƒ^ƒCƒ}[‰Šú‰»
-    Timer::Start(); // ƒ^ƒCƒ}[ŠJn
+    Timer::Init(); // ã‚¿ã‚¤ãƒãƒ¼åˆæœŸåŒ–
+    Timer::Start(); // ã‚¿ã‚¤ãƒãƒ¼é–‹å§‹
 
     while (true)
     {
 #if defined(DEBUG) || defined(_DEBUG)
-        Timer::Debug_CheckUpdate(); // ƒ^ƒCƒ}[ƒfƒoƒbƒO
+        Timer::Debug_CheckUpdate(); // ã‚¿ã‚¤ãƒãƒ¼ãƒ‡ãƒãƒƒã‚°
 #endif
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // ƒƒbƒZ[ƒW‚ğó‚¯æ‚é
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å—ã‘å–ã‚‹
         {
-            TranslateMessage(&msg); // ƒL[“ü—Í‚È‚Ç‚ğ•¶š—ñ‚É•ÏŠ·‚·‚éŠÖ”
-            DispatchMessage(&msg); // ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚ÉƒƒbƒZ[ƒW‚ğ‘—‚é
+            TranslateMessage(&msg); // ã‚­ãƒ¼å…¥åŠ›ãªã©ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹é–¢æ•°
+            DispatchMessage(&msg); // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‹
         }
         else
         {
 
 
         }
-        Timer::LastUpdate(); // ƒ^ƒCƒ}[XVˆ—
+        Timer::LastUpdate(); // ã‚¿ã‚¤ãƒãƒ¼æ›´æ–°å‡¦ç†
     }
 }
 
 
 // =====================================================
-// Œãˆ—
+// å¾Œå‡¦ç†
 // =====================================================
 void PlatformWindowsSystem::Uninit()
 {
-    // ƒEƒBƒ“ƒhƒE‚Ì“o˜^‚ğ‰ğœ
-    if (m_AppInstance != nullptr)
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç™»éŒ²ã‚’è§£é™¤
+    if (m_AppInstance.Get() != nullptr)
     {
-        UnregisterClass(m_WindowClassName.c_str(), m_AppInstance);
+        UnregisterClass(m_WindowClassName.c_str(), m_AppInstance.Get());
     }
 
     m_AppInstance = nullptr;
@@ -169,22 +215,22 @@ void PlatformWindowsSystem::Uninit()
 
 
 // =====================================================
-// ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 // =====================================================
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
     switch (msg)
     {
-    case WM_DESTROY: // ƒEƒBƒ“ƒhƒE”jŠü
-        PostQuitMessage(0); // I—¹ˆ—
+    case WM_DESTROY: // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç ´æ£„
+        PostQuitMessage(0); // çµ‚äº†å‡¦ç†
         break;
 
     case WM_CLOSE:
     {
-        int res = MessageBoxA(NULL, "I—¹‚µ‚Ü‚·‚©H", "Šm”F", MB_OKCANCEL);
-        if (res == IDOK) // ƒƒbƒZ[ƒWƒ{ƒbƒNƒX
+        int res = MessageBoxA(NULL, "çµ‚äº†ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_OKCANCEL);
+        if (res == IDOK) // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹
         {
-            DestroyWindow(hWnd); // ƒEƒBƒ“ƒhƒEíœ
+            DestroyWindow(hWnd); // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å‰Šé™¤
         }
         break;
     }
@@ -192,7 +238,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
     case WM_KEYDOWN:
         if (LOWORD(wp) == VK_ESCAPE)
         {
-            PostMessage(hWnd, WM_CLOSE, wp, lp);//ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚ÉWM_CLOSE‚ğ‘—‚é
+            PostMessage(hWnd, WM_CLOSE, wp, lp);//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã«WM_CLOSEã‚’é€ã‚‹
         }
         break;
 

@@ -7,12 +7,9 @@
 // 前方宣言
 // =====================================================
 // アプリケーションハンドルの前方宣言
-struct HINSTANCE__ { };                // 構造体作成 (前方宣言)
-using HINSTANCE = HINSTANCE__*;        // ポインタ型を定義 (エイリアス)
+struct APPLICATIONHANDLE;              // HINSTANCEのラップ構造体
 // ウィンドウハンドルの前方宣言
-struct HWND__ { };                     // 構造体作成 (前方宣言)
-using HWND = HWND__*;                  // ポインタ型を定義 (エイリアス)
-
+struct WINDOWHANDLE;                   // HWNDのラップ構造体
 
 // =====================================================
 // ウィンドウプラットフォームの初期化・後処理クラス
@@ -20,12 +17,12 @@ using HWND = HWND__*;                  // ポインタ型を定義 (エイリアス)
 class PlatformWindowsSystem : public PlatformSystem
 {
 private:
-	static HINSTANCE m_AppInstance;        // アプリケーションのハンドル
-	static HWND      m_WinInstance;        // ウィンドウハンドル
-	static uint16_t  m_Width;	           // ウィンドウの画面横幅 
-	static uint16_t  m_Height;	           // ウィンドウの画面縦幅
-	static std::wstring m_WindowName;      // ウィンドウの名前
-	static std::wstring m_WindowClassName; // ウィンドウのクラス名
+	static APPLICATIONHANDLE m_AppInstance; // アプリケーションのハンドル
+	static WINDOWHANDLE m_WinInstance;      // ウィンドウハンドル
+	static uint16_t  m_Width;	            // ウィンドウの画面横幅 
+	static uint16_t  m_Height;	            // ウィンドウの画面縦幅
+	static std::wstring m_WindowName;       // ウィンドウの名前
+	static std::wstring m_WindowClassName;  // ウィンドウのクラス名
 
 	bool Init() override;     // 初期化処理
 	void GameLoop() override; // ゲームループ
