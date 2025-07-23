@@ -19,17 +19,24 @@ namespace DirectX11 {
 	// 変数
 	// =====================================================
 	namespace {
+
 		// スワップチェインやデバイス
 		Microsoft::WRL::ComPtr<ID3D11Device>              d3dDevice        = nullptr; // リソースの作成
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext>       d3dDeviceContext = nullptr; // 描画コマンドをGPUに送る
 		Microsoft::WRL::ComPtr<IDXGISwapChain>            d3dSwapChain     = nullptr; // バッファを制御する
+
 		// SRV用　読み取り専用
-		Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforSRV     = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    d3dRTV           = nullptr; // レンダーターゲットビュー  描画結果を描画対象として渡す
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  d3dRTSRV         = nullptr; // シェーダーに計算した描画結果を渡す (読み取り専用)
+		namespace SRV {
+			Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforSRV = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ
+			Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    d3dRTV = nullptr; // レンダーターゲットビュー  描画結果を描画対象として渡す
+			Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  d3dRTSRV = nullptr; // シェーダーに計算した描画結果を渡す (読み取り専用)
+		}
+
 		// UAV用　読み書き可能
-		Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforUAV     = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ (UAV用)
-		Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> d3dUAV           = nullptr; // シェーダーに計算した画像結果を渡す (読み書き可能)
+		namespace UAV {
+			Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforUAV = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ (UAV用)
+			Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> d3dUAV = nullptr; // シェーダーに計算した画像結果を渡す (読み書き可能)
+		}
 	}
 
 
@@ -162,6 +169,8 @@ namespace DirectX11 {
 					assert(false && "選択されたドライバで生成することが出来ませんでした。");
 					return false;
 				}
+
+				return true;
 			}
 
 
@@ -205,6 +214,8 @@ namespace DirectX11 {
 					assert(false && "SRVが設定できませんでした");
 					return false;
 				}
+
+				return true;
 			}
 
 
@@ -249,6 +260,7 @@ namespace DirectX11 {
 
 				// UAVを作成
 
+				return true;
 			}
 
 
