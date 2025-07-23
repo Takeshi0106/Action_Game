@@ -1,39 +1,39 @@
-#pragma once
+ï»¿#pragma once
 #include "PlatformSystem.h"
 #include <string>
 
 
 // =====================================================
-// ‘O•ûéŒ¾
+// å‰æ–¹å®£è¨€
 // =====================================================
-// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒnƒ“ƒhƒ‹‚Ì‘O•ûéŒ¾
-struct APPLICATIONHANDLE;              // HINSTANCE‚Ìƒ‰ƒbƒv\‘¢‘Ì
-// ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚Ì‘O•ûéŒ¾
-struct WINDOWHANDLE;                   // HWND‚Ìƒ‰ƒbƒv\‘¢‘Ì
+// ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«ã®å‰æ–¹å®£è¨€
+struct APPLICATIONHANDLE;              // HINSTANCEã®ãƒ©ãƒƒãƒ—æ§‹é€ ä½“
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã®å‰æ–¹å®£è¨€
+struct WINDOWHANDLE;                   // HWNDã®ãƒ©ãƒƒãƒ—æ§‹é€ ä½“
 
 // =====================================================
-// ƒEƒBƒ“ƒhƒEƒvƒ‰ƒbƒgƒtƒH[ƒ€‚Ì‰Šú‰»EŒãˆ—ƒNƒ‰ƒX
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã®åˆæœŸåŒ–ãƒ»å¾Œå‡¦ç†ã‚¯ãƒ©ã‚¹
 // =====================================================
 class PlatformWindowsSystem : public PlatformSystem
 {
 private:
-	static APPLICATIONHANDLE m_AppInstance; // ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ìƒnƒ“ƒhƒ‹
-	static WINDOWHANDLE m_WinInstance;      // ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	static uint16_t  m_Width;	            // ƒEƒBƒ“ƒhƒE‚Ì‰æ–Ê‰¡• 
-	static uint16_t  m_Height;	            // ƒEƒBƒ“ƒhƒE‚Ì‰æ–Êc•
-	static std::wstring m_WindowName;       // ƒEƒBƒ“ƒhƒE‚Ì–¼‘O
-	static std::wstring m_WindowClassName;  // ƒEƒBƒ“ƒhƒE‚ÌƒNƒ‰ƒX–¼
+	static APPLICATIONHANDLE m_AppInstance; // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒãƒ³ãƒ‰ãƒ«
+	static WINDOWHANDLE m_WinInstance;      // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+	static uint16_t  m_Width;	            // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç”»é¢æ¨ªå¹… 
+	static uint16_t  m_Height;	            // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç”»é¢ç¸¦å¹…
+	static std::wstring m_WindowName;       // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®åå‰
+	static std::wstring m_WindowClassName;  // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ©ã‚¹å
 
-	bool Init() override;     // ‰Šú‰»ˆ—
-	void GameLoop() override; // ƒQ[ƒ€ƒ‹[ƒv
-	void Uninit() override;   // Œãˆ—
+	bool Init() override;     // åˆæœŸåŒ–å‡¦ç†
+	void GameLoop() override; // ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—
+	void Uninit() override;   // å¾Œå‡¦ç†
 
 public:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^EƒfƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ»ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	PlatformWindowsSystem(uint16_t Width, uint16_t Height, std::wstring WindowClassName, std::wstring WindowName);
 	~PlatformWindowsSystem();
 
-	// ƒQƒbƒ^[
-	static uint16_t GetWidthSize() { return m_Width; }       // ƒEƒBƒ“ƒhƒE‚Ì‰¡•‚ğ–ß‚è’l‚Å•Ô‚·
-	static uint16_t GetHeightSize() { return m_Height; }	 // ƒEƒBƒ“ƒhƒE‚Ìc•‚ğ–ß‚è’l‚Å•Ô‚·
+	// ã‚²ãƒƒã‚¿ãƒ¼
+	static uint16_t GetWidthSize() { return m_Width; }       // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æ¨ªå¹…ã‚’æˆ»ã‚Šå€¤ã§è¿”ã™
+	static uint16_t GetHeightSize() { return m_Height; }	 // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç¸¦å¹…ã‚’æˆ»ã‚Šå€¤ã§è¿”ã™
 };

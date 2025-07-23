@@ -1,19 +1,19 @@
-#include "Main.h"
+ï»¿#include "Main.h"
 
-// ƒƒ‚ƒŠ[ƒŠ[ƒNŒŸo—p
+// ãƒ¡ãƒ¢ãƒªãƒ¼ãƒªãƒ¼ã‚¯æ¤œå‡ºç”¨
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 
 int main(void)
 {
 #if defined(DEBUG) || defined(_DEBUG)
-	// ƒfƒoƒbƒOŽž‚Éƒƒ‚ƒŠƒŠ[ƒN‚ð”­Œ©‚Å‚«‚é‚æ‚¤‚É‚·‚é
+	// ãƒ‡ãƒãƒƒã‚°æ™‚ã«ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯ã‚’ç™ºè¦‹ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-	// ƒEƒBƒ“ƒhƒEƒYƒvƒ‰ƒbƒgƒtƒH[ƒ€‚ðì¬
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚ºãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã‚’ä½œæˆ
 	PlatformWindowsSystem system{ SCREEN_WIDTH,SCREEN_HEIGHT,WINDOW_NAME,WINDOW_CLASS_NAME };
-	system.Execute(); // ‹N“®
+	system.Execute(); // èµ·å‹•
 
 	return 0;
 }

@@ -1,21 +1,21 @@
-#pragma once
+ï»¿#pragma once
 
 // ==============================================
-// ƒRƒs[‚ğ‹Ö~‚·‚éƒNƒ‰ƒX
-// ¶¬E”jŠü‚Í‰Â”\
+// ã‚³ãƒ”ãƒ¼ã‚’ç¦æ­¢ã™ã‚‹ã‚¯ãƒ©ã‚¹
+// ç”Ÿæˆãƒ»ç ´æ£„ã¯å¯èƒ½
 // ==============================================
 
 class NonCopyable
 {
 protected:
-	// ©“®¶¬‚µ‚È‚¢‚±‚Æ‚ğ”ğ‚¯‚é‚½‚ß‚É–¾¦‚·‚é
+	// è‡ªå‹•ç”Ÿæˆã—ãªã„ã“ã¨ã‚’é¿ã‘ã‚‹ãŸã‚ã«æ˜ç¤ºã™ã‚‹
 	NonCopyable() = default;
 	~NonCopyable() = default;
 
 
-	NonCopyable(const NonCopyable&) = delete; // ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^‹Ö~
+	NonCopyable(const NonCopyable&) = delete; // ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ç¦æ­¢
 
 
-	NonCopyable& operator=(const NonCopyable&) = delete; // ƒRƒs[‰‰Zq‚ğ‹Ö~
+	NonCopyable& operator=(const NonCopyable&) = delete; // ã‚³ãƒ”ãƒ¼æ¼”ç®—å­ã‚’ç¦æ­¢
 };
 

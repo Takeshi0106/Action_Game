@@ -1,19 +1,19 @@
-#include "PlatformSystem.h"
+ï»¿#include "PlatformSystem.h"
 
 // ========================================================
-// ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚²‚Æ‚Éˆ—‚ğ•ÏX‚Å‚«‚éŠî’êƒNƒ‰ƒX
+// ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã”ã¨ã«å‡¦ç†ã‚’å¤‰æ›´ã§ãã‚‹åŸºåº•ã‚¯ãƒ©ã‚¹
 // ========================================================
 
 #if defined(DEBUG) || defined(_DEBUG)
-bool PlatformSystem::m_IsCreated = false; // ƒfƒoƒbƒO‚ÉƒRƒ“ƒpƒCƒ‹
+bool PlatformSystem::m_IsCreated = false; // ãƒ‡ãƒãƒƒã‚°æ™‚ã«ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«
 #endif
 
-// ‹N“®
+// èµ·å‹•
 void PlatformSystem::Execute()
 {
-	if (Init()) // ‰Šú‰»
+	if (Init()) // åˆæœŸåŒ–
 	{
-		GameLoop(); // ƒQ[ƒ€ƒ‹[ƒv
+		GameLoop(); // ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—
 	}
-	Uninit(); // I—¹ˆ—
+	Uninit(); // çµ‚äº†å‡¦ç†
 }

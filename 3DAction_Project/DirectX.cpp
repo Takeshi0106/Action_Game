@@ -1,48 +1,48 @@
-#include "DirectX.h"
+﻿#include "DirectX.h"
 #include <d3d11.h>
-#include <wrl/client.h> // �}�C�N���\�t�g���񋟂���X�}�[�g�|�C���^
+#include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
 
 // =======================================
-// DirectX ����
+// DirectX 処理
 // =======================================
 
 namespace DirectX11 {
 
 	// =====================================================
-	// ����������
+	// 初期化処理
 	// =====================================================
 	void Init(uint16_t Width, uint16_t Height)
 	{
-		unsigned int createDeviceFlags = 0; // �f�o�C�X�쐬�p�̃t���O
+		unsigned int createDeviceFlags = 0; // デバイス作成用のフラグ
 #if defined(DEBUG) || defined(_DEBUG)
-		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG; // �f�o�b�O���Ƀf�o�b�O���C���[��L���@�i�r�b�gOR�Ł{����j
+		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG; // デバッグ時にデバッグレイヤーを有効可　（ビットORで＋する）
 #endif
 
-		// �h���C�o�[�̗D��x���쐬�@(���ɔz��) ------------------------------------------------
-		// �g�p�\�ȃh���C�o�[�^�C�v�����Ɏ������߂̔z�� (�D�揇�ʏ�)
+		// ドライバーの優先度を作成　(環境に配慮) ------------------------------------------------
+		// 使用可能なドライバータイプを順に試すための配列 (優先順位順)
 		D3D_DRIVER_TYPE driverTypes[] = {
-			D3D_DRIVER_TYPE_HARDWARE,  // GPU���g�p���č����`��
-			D3D_DRIVER_TYPE_WARP,      // CPU��GPU�̑�����s���B�i�}���`�X���b�h�̂��߁A���������_�����O�j
-			D3D_DRIVER_TYPE_REFERENCE, // CPU�ŕ`�悷��\�t�g�E�F�A�����_�����O�@�i�P�X���b�h�̂��ߒx���A�J���E���،����j
+			D3D_DRIVER_TYPE_HARDWARE,  // GPUを使用して高速描画
+			D3D_DRIVER_TYPE_WARP,      // CPUでGPUの代わりを行う。（マルチスレッドのため、高速レンダリング）
+			D3D_DRIVER_TYPE_REFERENCE, // CPUで描画するソフトウェアレンダリング　（１スレッドのため遅い、開発・検証向け）
 		};
-		unsigned int numDriverTypes = sizeof(driverTypes) / sizeof(D3D_DRIVER_TYPE); // ���[�v����񐔂��擾����
+		unsigned int numDriverTypes = sizeof(driverTypes) / sizeof(D3D_DRIVER_TYPE); // ループする回数を取得する
 
-		// �@�\�̃��x���̗D��x���쐬 ------------------------------------------------------------
+		// 機能のレベルの優先度を作成 ------------------------------------------------------------
 		D3D_FEATURE_LEVEL featureLevels[] = {
-			D3D_FEATURE_LEVEL_11_0, // DirectX11�Ή� (�R���s���[�g�V�F�[�_�[�Ȃǂ��g�p�\)
+			D3D_FEATURE_LEVEL_11_0, // DirectX11対応 (コンピュートシェーダーなどが使用可能)
 			
-			// �����Ή��ł���悤�ɂ���ꍇ�V�F�[�_�[��ʂɏ����Ȃ��Ƃ����Ȃ�
-			// D3D_FEATURE_LEVEL_10_1, �R���s���[�g�V�F�[�_�[�Ȃǂ͎g�p�ł��Ȃ�
+			// もし対応できるようにする場合シェーダーを別に書かないといけない
+			// D3D_FEATURE_LEVEL_10_1, コンピュートシェーダーなどは使用できない
 			// D3D_FEATURE_LEVEL_10_0,
 		};
-		unsigned int numFeatureLevels = sizeof(featureLevels) / sizeof(D3D_FEATURE_LEVEL); // ���[�v����񐔂��擾����
+		unsigned int numFeatureLevels = sizeof(featureLevels) / sizeof(D3D_FEATURE_LEVEL); // ループする回数を取得する
 
-		// �X���b�v�`�F�C���쐬 -------------------------------------------------------------------
+		// スワップチェイン作成 -------------------------------------------------------------------
 		DXGI_SWAP_CHAIN_DESC swapChainDesc;
-		ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC)); // 0�������āA����������
-		swapChainDesc.BufferCount = 2; // �_�u���o�b�t�@
-		swapChainDesc.BufferDesc.Width = Width;   // ��ʂ̏c��
-		swapChainDesc.BufferDesc.Height = Height; // ��ʂ̉���
+		ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC)); // 0を代入して、初期化する
+		swapChainDesc.BufferCount = 2; // ダブルバッファ
+		swapChainDesc.BufferDesc.Width = Width;   // 画面の縦幅
+		swapChainDesc.BufferDesc.Height = Height; // 画面の横幅
 	}
 
 

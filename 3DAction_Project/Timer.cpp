@@ -1,23 +1,23 @@
-#include "Timer.h"
+ï»¿#include "Timer.h"
 #include <Windows.h>
 
 #if defined(DEBUG) || defined(_DEBUG)
-// ƒfƒoƒbƒO‚Éƒwƒbƒ_[‚ğƒRƒ“ƒpƒCƒ‹
+// ãƒ‡ãƒãƒƒã‚°æ™‚ã«ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«
 #include <cassert>
 #endif
 
-// Ã“Iƒƒ“ƒo[•Ï”
+// é™çš„ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°
 namespace Timer {
 	namespace {
 		// =====================================================
-		// •Ï”
+		// å¤‰æ•°
 		// =====================================================
-		LARGE_INTEGER frequency; // ˆê•bŠÔ‚ÌŒo‰ßŠÔ
-		LARGE_INTEGER lastTime;  // ‘O‰ñ‚ÌŒv‘ªŠÔ‚ğ•Û‘¶‚·‚é
-		LARGE_INTEGER startTime; // Œv‘ªŠJnŠÔ
+		LARGE_INTEGER frequency; // ä¸€ç§’é–“ã®çµŒéæ™‚é–“
+		LARGE_INTEGER lastTime;  // å‰å›ã®è¨ˆæ¸¬æ™‚é–“ã‚’ä¿å­˜ã™ã‚‹
+		LARGE_INTEGER startTime; // è¨ˆæ¸¬é–‹å§‹æ™‚é–“
 
 #if defined(DEBUG) || defined(_DEBUG)
-		// ƒfƒoƒbƒOˆÈŠO‚Å‚ÍƒRƒ“ƒpƒCƒ‹‚µ‚È‚¢
+		// ãƒ‡ãƒãƒƒã‚°æ™‚ä»¥å¤–ã§ã¯ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ãªã„
 		bool IsInit = false;
 		bool IsStart = false;
 		bool IsCheck = false;
@@ -28,53 +28,53 @@ namespace Timer {
 
 
 	// =====================================================
-    // ‘O•ûéŒ¾‚ğ\‘¢‘Ì‚Æ‚µ‚Ä’è‹`
+    // å‰æ–¹å®£è¨€ã‚’æ§‹é€ ä½“ã¨ã—ã¦å®šç¾©
     // =====================================================
 	struct TimePoint {
 		LARGE_INTEGER time;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		TimePoint(const LARGE_INTEGER& largeInteger) : time(largeInteger) {}
 	};
 
 
 	// =====================================================
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	// =====================================================
 	void Init()
 	{
-		QueryPerformanceFrequency(&frequency); // ü”g”‚ğæ“¾
-		QueryPerformanceCounter(&lastTime);    // ‰Šú‰»‚ªŒÄ‚Î‚ê‚½ŠÔ‚ğæ“¾
+		QueryPerformanceFrequency(&frequency); // å‘¨æ³¢æ•°ã‚’å–å¾—
+		QueryPerformanceCounter(&lastTime);    // åˆæœŸåŒ–ãŒå‘¼ã°ã‚ŒãŸæ™‚é–“ã‚’å–å¾—
 #if defined(DEBUG) || defined(_DEBUG)
-		IsInit = true; // ƒfƒoƒbƒOˆÈŠO‚Å‚ÍƒRƒ“ƒpƒCƒ‹‚³‚ê‚È‚¢
+		IsInit = true; // ãƒ‡ãƒãƒƒã‚°æ™‚ä»¥å¤–ã§ã¯ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã•ã‚Œãªã„
 #endif
 	}
 
 
 	// =====================================================
-	// Œv‘ªŠJnŠÔ‚ğæ“¾‚·‚é
+	// è¨ˆæ¸¬é–‹å§‹æ™‚é–“ã‚’å–å¾—ã™ã‚‹
 	// =====================================================
 	void Start()
 	{
-		QueryPerformanceCounter(&startTime); // Œv‘ªŠJnŠÔ‚ğæ“¾
+		QueryPerformanceCounter(&startTime); // è¨ˆæ¸¬é–‹å§‹æ™‚é–“ã‚’å–å¾—
 #if defined(DEBUG) || defined(_DEBUG)
-		IsStart = true; // ƒfƒoƒbƒOˆÈŠO‚Å‚ÍƒRƒ“ƒpƒCƒ‹‚³‚ê‚È‚¢
+		IsStart = true; // ãƒ‡ãƒãƒƒã‚°æ™‚ä»¥å¤–ã§ã¯ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã•ã‚Œãªã„
 #endif
 	}
 
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// =====================================================
-	// ƒfƒoƒbƒN‚É‚Ì‚İ—LŒø
-	// –ˆƒtƒŒ[ƒ€LastUpdate‚ªŒÄ‚Î‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN‚·‚éƒNƒ‰ƒX
+	// ãƒ‡ãƒãƒƒã‚¯æ™‚ã«ã®ã¿æœ‰åŠ¹
+	// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ LastUpdateãŒå‘¼ã°ã‚Œã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚¯ãƒ©ã‚¹
 	// =====================================================
 	void Debug_CheckUpdate()
 	{
 		if (LastCount == CollCount)
 		{
-			assert(false && "LastUpdate()‚ª‘O‚ÌƒtƒŒ[ƒ€‚ÅŒÄ‚Î‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+			assert(false && "LastUpdate()ãŒå‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§å‘¼ã°ã‚Œã¦ã„ã¾ã›ã‚“");
 		}
-		assert(!IsCheck && "Debug_CheckeUpdate()‚ª•¡”‰ñŒÄ‚Î‚ê‚Ä‚¢‚Ü‚·");
+		assert(!IsCheck && "Debug_CheckeUpdate()ãŒè¤‡æ•°å›å‘¼ã°ã‚Œã¦ã„ã¾ã™");
 		LastCount = CollCount;
 		IsCheck = true;
 	}
@@ -82,67 +82,67 @@ namespace Timer {
 
 
 	// =====================================================
-	// ÅŒã‚ÉŒÄ‚Ño‚·
+	// æœ€å¾Œã«å‘¼ã³å‡ºã™
 	// =====================================================
 	void LastUpdate()
 	{
 #if defined(DEBUG) || defined(_DEBUG)
 		if (LastCount < CollCount)
 		{
-			assert(false && "LastUpdate()‚ª•¡”‰ñŒÄ‚Î‚ê‚Ä‚¢‚Ü‚·");
+			assert(false && "LastUpdate()ãŒè¤‡æ•°å›å‘¼ã°ã‚Œã¦ã„ã¾ã™");
 		}
 		CollCount++;
 		IsCheck = false;
 #endif
-		QueryPerformanceCounter(&lastTime);    // ‰Šú‰»‚ªŒÄ‚Î‚ê‚½ŠÔ‚ğæ“¾
+		QueryPerformanceCounter(&lastTime);    // åˆæœŸåŒ–ãŒå‘¼ã°ã‚ŒãŸæ™‚é–“ã‚’å–å¾—
 	}
 
 
 	// =====================================================
-	// ‘O‚ÌƒtƒŒ[ƒ€‚©‚ç‚ÌŒo‰ßŠÔ‚ğ•Ô‚·
+	// å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã®çµŒéæ™‚é–“ã‚’è¿”ã™
 	// =====================================================
 	float GetDeltaTime()
 	{
 #if defined(DEBUG) || defined(_DEBUG)
-		assert(IsInit && "‰Šú‰»ˆ—‚ªŒÄ‚Î‚ê‚Ä‚¢‚Ü‚¹‚ñ"); // ‰Šú‰»ƒtƒ‰ƒO‚ªfalse‚Ì‚Æ‚«ƒvƒƒOƒ‰ƒ€‚ğ‹­§I—¹
+		assert(IsInit && "åˆæœŸåŒ–å‡¦ç†ãŒå‘¼ã°ã‚Œã¦ã„ã¾ã›ã‚“"); // åˆæœŸåŒ–ãƒ•ãƒ©ã‚°ãŒfalseã®ã¨ããƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å¼·åˆ¶çµ‚äº†
 #endif
-		// ¡‚ÌŠÔ‚ğæ“¾
+		// ä»Šã®æ™‚é–“ã‚’å–å¾—
 		LARGE_INTEGER currentTime;
 		QueryPerformanceCounter(&currentTime);
-		// ‘O‚ÌƒJƒEƒ“ƒg‚Æ¡‚ÌƒJƒEƒ“ƒg‚ğˆø‚¢‚Äü”g”‚ÅŠ„‚èA‘O‚ÌƒtƒŒ[ƒ€‚Æ‚ÌŠÔ‚ğæ“¾
+		// å‰ã®ã‚«ã‚¦ãƒ³ãƒˆã¨ä»Šã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¼•ã„ã¦å‘¨æ³¢æ•°ã§å‰²ã‚Šã€å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã¨ã®æ™‚é–“ã‚’å–å¾—
 		return static_cast<float>(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
 	}
 
 
 	// =====================================================
-	// ˆø‚«”‚Å“n‚³‚ê‚½ŠÔ‚©‚ç‚ÌŒv‘ªŠÔ‚ğ•Ô‚·
+	// å¼•ãæ•°ã§æ¸¡ã•ã‚ŒãŸæ™‚é–“ã‹ã‚‰ã®è¨ˆæ¸¬æ™‚é–“ã‚’è¿”ã™
 	// =====================================================
 	float GetElapsedTime(const TimePoint& _startTime)
 	{
 #if defined(DEBUG) || defined(_DEBUG)
-		assert(IsInit && "‰Šú‰»ˆ—‚ªŒÄ‚Î‚ê‚Ä‚¢‚Ü‚¹‚ñ");    // ‰Šú‰»ƒtƒ‰ƒO‚ªfalse‚Ì‚Æ‚«ƒvƒƒOƒ‰ƒ€‚ğ‹­§I—¹
+		assert(IsInit && "åˆæœŸåŒ–å‡¦ç†ãŒå‘¼ã°ã‚Œã¦ã„ã¾ã›ã‚“");    // åˆæœŸåŒ–ãƒ•ãƒ©ã‚°ãŒfalseã®ã¨ããƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å¼·åˆ¶çµ‚äº†
 #endif
-		// ¡‚ÌŠÔ‚ğæ“¾
+		// ä»Šã®æ™‚é–“ã‚’å–å¾—
 		LARGE_INTEGER currentTime;
 		QueryPerformanceCounter(&currentTime);
-		// ƒJƒEƒ“ƒg‚ğü”g”‚ÅŠ„‚Á‚ÄŒo‰ßŠÔ‚ğ‹‚ß‚é
+		// ã‚«ã‚¦ãƒ³ãƒˆã‚’å‘¨æ³¢æ•°ã§å‰²ã£ã¦çµŒéæ™‚é–“ã‚’æ±‚ã‚ã‚‹
 		return static_cast<float>(currentTime.QuadPart - _startTime.time.QuadPart) / frequency.QuadPart;
 	}
 
 
 	// =====================================================
-	// Œv‘ªŠJnŠÔ‚©‚ç‚ÌŒo‰ßŠÔ‚ğ•Ô‚·ŠÖ”
+	// è¨ˆæ¸¬é–‹å§‹æ™‚é–“ã‹ã‚‰ã®çµŒéæ™‚é–“ã‚’è¿”ã™é–¢æ•°
 	// =====================================================
 	float GetElapsedTime()
 	{
 #if defined(DEBUG) || defined(_DEBUG)
-		assert(IsInit && "‰Šú‰»ˆ—‚ªŒÄ‚Î‚ê‚Ä‚¢‚Ü‚¹‚ñ");    // ‰Šú‰»ƒtƒ‰ƒO‚ªfalse‚Ì‚Æ‚«ƒvƒƒOƒ‰ƒ€‚ğ‹­§I—¹
-		assert(IsStart && "Œv‘ªŠJnˆ—‚ª‚æ‚Î‚ê‚Ä‚¢‚Ü‚¹‚ñ"); // Œv‘ªŠJnƒtƒ‰ƒO‚ªfalse‚Ì‚Æ‚«ƒvƒƒOƒ‰ƒ€‚ğ‹­§I—¹
+		assert(IsInit && "åˆæœŸåŒ–å‡¦ç†ãŒå‘¼ã°ã‚Œã¦ã„ã¾ã›ã‚“");    // åˆæœŸåŒ–ãƒ•ãƒ©ã‚°ãŒfalseã®ã¨ããƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å¼·åˆ¶çµ‚äº†
+		assert(IsStart && "è¨ˆæ¸¬é–‹å§‹å‡¦ç†ãŒã‚ˆã°ã‚Œã¦ã„ã¾ã›ã‚“"); // è¨ˆæ¸¬é–‹å§‹ãƒ•ãƒ©ã‚°ãŒfalseã®ã¨ããƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å¼·åˆ¶çµ‚äº†
 #endif
-		// ¡‚ÌŠÔ‚ğæ“¾
+		// ä»Šã®æ™‚é–“ã‚’å–å¾—
 		LARGE_INTEGER currentTime;
 		QueryPerformanceCounter(&currentTime);
-		// ƒJƒEƒ“ƒg‚ğü”g”‚ÅŠ„‚Á‚ÄŒo‰ßŠÔ‚ğ‹‚ß‚é
+		// ã‚«ã‚¦ãƒ³ãƒˆã‚’å‘¨æ³¢æ•°ã§å‰²ã£ã¦çµŒéæ™‚é–“ã‚’æ±‚ã‚ã‚‹
 		return static_cast<float>(currentTime.QuadPart - startTime.QuadPart) / frequency.QuadPart;
 	}
 }

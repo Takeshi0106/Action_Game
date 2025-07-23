@@ -1,49 +1,49 @@
-#pragma once
+ï»¿#pragma once
 #include "NonCopyable.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
-#include <cassert> // ƒfƒoƒbƒO‚Éƒwƒbƒ_[‚ğƒRƒ“ƒpƒCƒ‹@(DebugLog)‚ªo—ˆ‚½‚ç•ÏX
+#include <cassert> // ãƒ‡ãƒãƒƒã‚°æ™‚ã«ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã€€(DebugLog)ãŒå‡ºæ¥ãŸã‚‰å¤‰æ›´
 #endif
 
 // =============================================================================================
-// ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚²‚Æ‚ÅŒp³‚µ‚ÄA‰Šú‰»EŒãˆ—‚ğƒ|ƒŠƒ‚[ƒtƒBƒYƒ€‚·‚éŠî’êƒNƒ‰ƒX
-// ‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒX‚Í‚P‚Â‚µ‚©¶¬‚Å‚«‚È‚¢‚±‚Æ‚ğ•ÛØ‚·‚é
+// ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã”ã¨ã§ç¶™æ‰¿ã—ã¦ã€åˆæœŸåŒ–ãƒ»å¾Œå‡¦ç†ã‚’ãƒãƒªãƒ¢ãƒ¼ãƒ•ã‚£ã‚ºãƒ ã™ã‚‹åŸºåº•ã‚¯ãƒ©ã‚¹
+// ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã¯ï¼‘ã¤ã—ã‹ç”Ÿæˆã§ããªã„ã“ã¨ã‚’ä¿è¨¼ã™ã‚‹
 // =============================================================================================
 
 class PlatformSystem : public NonCopyable
 {
 public:
 #if defined(DEBUG) || defined(_DEBUG)
-	static bool m_IsCreated; // ‚P‚Â‚µ‚©‚È‚¢‚±‚Æ‚ğ•ÛØ‚·‚é
+	static bool m_IsCreated; // ï¼‘ã¤ã—ã‹ãªã„ã“ã¨ã‚’ä¿è¨¼ã™ã‚‹
 #endif
 
 private:
 	// -----------------------------------------------------------------
-	// ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚²‚Æ‚ÉƒI[ƒo[ƒ‰ƒCƒh‚·‚é
+	// ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã”ã¨ã«ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã™ã‚‹
 	// -----------------------------------------------------------------
-	virtual bool Init() = 0;	    // ‰Šú‰» (–ß‚è’l‚Å‰Šú‰»¬Œ÷‚©‚ğ•Ô‚·)
-	virtual void Uninit() = 0;		// Œãˆ—
-	virtual void GameLoop() = 0;    // ƒQ[ƒ€ƒ‹[ƒv
+	virtual bool Init() = 0;	    // åˆæœŸåŒ– (æˆ»ã‚Šå€¤ã§åˆæœŸåŒ–æˆåŠŸã‹ã‚’è¿”ã™)
+	virtual void Uninit() = 0;		// å¾Œå‡¦ç†
+	virtual void GameLoop() = 0;    // ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—
 
 public:
-	explicit PlatformSystem() // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	explicit PlatformSystem() // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	{
 #if defined(DEBUG) || defined(_DEBUG)
-		// ƒfƒoƒbƒO‚Ì‚İŠm”F‚·‚é
+		// ãƒ‡ãƒãƒƒã‚°æ™‚ã®ã¿ç¢ºèªã™ã‚‹
 		if (m_IsCreated)
 		{
-			assert(false && "PlatformSystemƒNƒ‰ƒX‚ª•¡”¶¬‚³‚ê‚Ä‚¢‚Ü‚·");
+			assert(false && "PlatformSystemã‚¯ãƒ©ã‚¹ãŒè¤‡æ•°ç”Ÿæˆã•ã‚Œã¦ã„ã¾ã™");
 		}
 		m_IsCreated = true;
 #endif
 	}
 
-	~PlatformSystem()// ƒfƒXƒgƒ‰ƒNƒ^
+	~PlatformSystem()// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	{
 #if defined(DEBUG) || defined(_DEBUG)
 		m_IsCreated = false;
 #endif
 	}
 
-	void Execute(); // ‹N“®‚·‚é
+	void Execute(); // èµ·å‹•ã™ã‚‹
 };

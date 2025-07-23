@@ -1,7 +1,7 @@
-#pragma once
+ï»¿#pragma once
 #include "PlatformWindowsSystem.h"
 
-// ƒEƒBƒ“ƒhƒE‚Ì‘å‚«‚³
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•
 constexpr uint16_t SCREEN_WIDTH = 1280;
 constexpr uint16_t SCREEN_HEIGHT = 720; 
 constexpr const wchar_t* WINDOW_CLASS_NAME = L"MyWindowClass";
