@@ -10,8 +10,9 @@
 #include <cassert>
 #endif
 
+
 // =======================================
-// DirectX 処理
+// DirectX の処理
 // =======================================
 
 namespace DirectX11 {
@@ -68,19 +69,35 @@ namespace DirectX11 {
 	// =====================================================
 	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle)
 	{
-		bool hr = true; // 初期化の 成功、失敗 を受け取る
+		bool IsSuccess = true; // 初期化の 成功、失敗 を受け取る
 
-		hr = DXCore::Init(Width, Height, windowHandle); // デバイスやスワップチェインの初期化
-		hr = SRV::Init();                               // RTVとSRVの初期化
-		hr = UAV::Init(Width, Height);                  // UAVの初期化
+		// デバイスやスワップチェインの初期化
+		IsSuccess = DXCore::Init(Width, Height, windowHandle);
+		if(!IsSuccess){
+			assert(false && "DXCoreの初期化に失敗");
+			return false;
+		}
+		// RTVとSRVの初期化
+		IsSuccess = SRV::Init();
+		if (!IsSuccess) {
+			assert(false && "SRVの初期化に失敗");
+			return false;
+		}
+		// UAVの初期化
+		IsSuccess = UAV::Init(Width, Height);
+		if (!IsSuccess) {
+			assert(false && "UAVの初期化に失敗");
+			return false;
+		}
 
-		return hr;
+		return IsSuccess;
 	}
 
 
 	// =====================================================
     // DirectX 後処理
     // =====================================================
+
 
 
 	// =====================================================
