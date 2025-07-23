@@ -1,5 +1,5 @@
 ﻿#pragma once
-// ヘッダー内にインクルード非参照
+
 #include <cstdint>
 #include <Windows.h>
 

@@ -40,9 +40,6 @@
     <Filter Include="OpenSource\imgui">
       <UniqueIdentifier>{d9c192db-dce8-435d-96f0-b0331368b888}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\DirectX\GraphicsDevice">
-      <UniqueIdentifier>{f96d9a96-bd58-4a8c-8f20-86b905fb31ec}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -87,9 +84,6 @@
     <ClInclude Include="Timer.h">
       <Filter>core\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsDevice.h">
-      <Filter>core\DirectX\GraphicsDevice</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -127,9 +121,6 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>core\Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsDevice.cpp">
-      <Filter>core\DirectX\GraphicsDevice</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
