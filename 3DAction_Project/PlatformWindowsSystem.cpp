@@ -176,7 +176,7 @@ void PlatformWindowsSystem::GameLoop()
 {
     MSG msg = {}; // メッセージ
 
-    DirectX11::Init(m_Width, m_Height, m_WinInstance.Get());
+    DirectX11::Init(m_Width, m_Height, m_WinInstance.Get()); // DirectXの初期化
 
     Timer::Init(); // タイマー初期化
     Timer::Start(); // タイマー開始
@@ -200,6 +200,9 @@ void PlatformWindowsSystem::GameLoop()
         }
         Timer::LastUpdate(); // タイマー更新処理
     }
+
+    DirectX11::Uninit(); // Directの後処理
+
 }
 
 

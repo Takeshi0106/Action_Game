@@ -69,26 +69,30 @@ namespace DirectX11 {
 		// デバイスとスワップチェインの初期化・後処理 --------------------------------------
 		namespace DXCore {
 			bool Init(HWND windowHandle); // 初期化関数
+			void Uninit();                // 後処理
 		}
 
 		// RTVとSRVの初期化・後処理 ---------------------------------------------------------
 		namespace SRV {
-			bool Init(); // 初期化
+			bool Init();   // 初期化
+			void Uninit(); // 後処理
 		}
 
 		// UAVの初期化・後処理 ---------------------------------------------------------------
 		namespace UAV {
-			bool Init(); // 初期化
+			bool Init();   // 初期化
+			void Uninit(); // 後処理
 		}
 
-		// UAVの初期化・後処理 ---------------------------------------------------------------
+		// 深度ステンシルの初期化・後処理 ---------------------------------------------------------------
 		namespace DepthStencil {
-			bool Init(DepthStencilFormatType depthStencilFormat); // 初期化 
+			bool Init(DepthStencilFormatType depthStencilFormat); // 初期化
+			void Uninit();                                        // 後処理
 		}
 
 		// ビューポートの初期化・後処理 ---------------------------------------------------------------
 		namespace ViewPort {
-			void Init(); // 初期化 
+			void Init();   // 初期化
 		}
 	}
 
@@ -139,7 +143,13 @@ namespace DirectX11 {
 	// =====================================================
     // DirectX 後処理
     // =====================================================
-
+	void Uninit()
+	{
+		DepthStencil::Uninit();
+		UAV         ::Uninit();
+		SRV         ::Uninit();
+		DXCore      ::Uninit();
+	}
 
 
 	// =====================================================
@@ -257,8 +267,15 @@ namespace DirectX11 {
 
 
 			// -----------------------------------------------------
-			// デバイスとスワップチェインの後処理
-			// -----------------------------------------------------
+            // デバイスとスワップチェインの後処理
+            // -----------------------------------------------------
+			void Uninit()
+			{
+				d3dSwapChain.Reset();     // スワップチェインの解放
+				d3dDeviceContext.Reset(); // デバイスコンテキストの解放
+				d3dDevice.Reset();        // デバイスの解放
+			}
+
 
 		}
 
@@ -277,22 +294,19 @@ namespace DirectX11 {
 
 				// スワップチェインが生成したバックバッファを取得する
 				hr = d3dSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)d3dRTTforSRV.GetAddressOf());
-				if (FAILED(hr))
-				{
+				if (FAILED(hr)){
 					assert(false && "SRVバックバッファを取得することが出来ませんでした。");
 					return false;
 				}
 				// レンダラーターゲットを生成
 				hr = d3dDevice->CreateRenderTargetView(d3dRTTforSRV.Get(), nullptr, d3dRTV.GetAddressOf());
-				if (FAILED(hr))
-				{
+				if (FAILED(hr)){
 					assert(false && "レンダラーターゲットビューを作成することが出来ませんでした");
 					return false;
 				}
 				// シェーダーリソースの作成
 				hr = d3dDevice->CreateShaderResourceView(d3dRTTforSRV.Get(), nullptr, d3dRTSRV.GetAddressOf());
-				if (FAILED(hr))
-				{
+				if (FAILED(hr)){
 					assert(false && "SRVが設定できませんでした");
 					return false;
 				}
@@ -304,7 +318,12 @@ namespace DirectX11 {
 			// -----------------------------------------------------
             // RTV・SRVの後処理
             // -----------------------------------------------------
-
+			void Uninit()
+			{
+				d3dRTSRV.Reset();     // SRVを解放
+				d3dRTV.Reset();       // レンダラーターゲットを解放
+				d3dRTTforSRV.Reset(); // SRVの記憶領域を解放
+			}
 
 
 		}
@@ -354,18 +373,23 @@ namespace DirectX11 {
 			// -----------------------------------------------------
             // UAVの後処理
             // -----------------------------------------------------
+			void Uninit()
+			{
+				d3dUAV.Reset();       // UAVを解放
+				d3dRTTforUAV.Reset(); // UAVの記憶領域を解放
+			}
 
 
 		}
 
 
 		// *********************************************************************************
-        // 深度ステンシルバッファ初期化・後処理 
+        // 深度ステンシルの初期化・後処理 
         // *********************************************************************************
 		namespace DepthStencil {
 
 			// -----------------------------------------------------
-            // 深度ステンシルバッファの初期化
+            // 深度ステンシルの初期化
             // -----------------------------------------------------
 			bool Init(DepthStencilFormatType depthStencilFormat)
 			{
@@ -443,9 +467,14 @@ namespace DirectX11 {
 
 
 			// -----------------------------------------------------
-            // 深度ステンシルバッファの後処理
+            // 深度ステンシルの後処理
             // -----------------------------------------------------
-
+			void Uninit()
+			{
+				d3dDSRV.Reset();          // 深度ステンシルのSRVを解放
+				d3dDSV.Reset();           // 深度ステンシルビューの解放
+				d3dDepthTexture.Reset();  // 深度ステンシルテクスチャの解放
+			}
 
 
 		}
@@ -474,14 +503,8 @@ namespace DirectX11 {
 			}
 
 
-			// -----------------------------------------------------
-            // ビューポートの後処理
-            // -----------------------------------------------------
-
-
-
 		}
-	}
 
+	}
 
 }
