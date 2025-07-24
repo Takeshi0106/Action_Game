@@ -16,6 +16,7 @@
 // =======================================
 
 namespace DirectX11 {
+
 	// =====================================================
 	// 変数
 	// =====================================================
@@ -55,6 +56,7 @@ namespace DirectX11 {
 			Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  d3dDSV    = nullptr; // 深度情報などが入っている記憶領域と深度ステンシルステージを繋げる窓口
 			Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  d3dDSRV = nullptr; // 深度ステンシルテクスチャとシェーダーを繋げる窓口
 		}
+
 	}
 
 
@@ -81,6 +83,11 @@ namespace DirectX11 {
 		// UAVの初期化・後処理 ---------------------------------------------------------------
 		namespace DepthStencil {
 			bool Init(DepthStencilFormatType depthStencilFormat); // 初期化 
+		}
+
+		// ビューポートの初期化・後処理 ---------------------------------------------------------------
+		namespace ViewPort {
+			void Init(); // 初期化 
 		}
 	}
 
@@ -120,6 +127,8 @@ namespace DirectX11 {
 			assert(false && "深度ステンシルの初期化に失敗");
 			return false;
 		}
+		// ビューポートの初期化
+		ViewPort::Init();
 
 		return IsSuccess;
 	}
@@ -428,5 +437,39 @@ namespace DirectX11 {
 
 
 		}
+
+
+		// *********************************************************************************
+        // ビューポート初期化・後処理 
+        // *********************************************************************************
+
+		namespace ViewPort {
+
+			// -----------------------------------------------------
+			// ビューポートの初期化
+			// -----------------------------------------------------
+			void Init()
+			{
+				D3D11_VIEWPORT viewPort = {}; 
+				viewPort.Width = RenderWidth;   // ビューポートの横幅
+				viewPort.Height = RenderHeight; // ビューポートの縦幅
+				viewPort.MinDepth = 0.0f;       // 最も近い位置 
+				viewPort.MaxDepth = 1.0f;       // 最も遠い位置 0~1で正規化する
+				viewPort.TopLeftX = 0;          // 描画を始める位置
+				viewPort.TopLeftY = 0;          // 描画を始める位置
+
+				d3dDeviceContext->RSSetViewports(1, &viewPort);
+			}
+
+
+			// -----------------------------------------------------
+            // ビューポートの後処理
+            // -----------------------------------------------------
+
+
+
+		}
 	}
+
+
 }
