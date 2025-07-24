@@ -220,6 +220,7 @@ namespace DirectX11 {
 				swapChainDesc.SampleDesc.Count                   = 1;                                                         // マルチサンプリング　アンチエイリアス 1は無効
 				swapChainDesc.SampleDesc.Quality                 = 0;                                                         // 品質レベル　大きい値ほど良くなる(フォーマットとサンプリング数で上限が決まる)
 				swapChainDesc.Windowed                           = TRUE;                                                      // ウィンドウモード (FALSEにするとフルスクリーンモードになる)
+				swapChainDesc.SwapEffect                         = DXGI_SWAP_EFFECT_FLIP_DISCARD;                             // 推奨されている
 
 				// デバイスとスワップチェインの作成 -----------------------------------------------------------
 				for (unsigned int i = 0; i < numDriverTypes; i++) // 使用できるドライバーを見つけるまでループする
