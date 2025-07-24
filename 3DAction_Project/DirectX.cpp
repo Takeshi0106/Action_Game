@@ -7,6 +7,7 @@
 #pragma comment(lib, "d3dcompiler.lib") // HLSLをコンパイルするためAPIを使用するためのライブラリー
 
 #if defined(DEBUG) || defined(_DEBUG) // デバッグ時にヘッダーをコンパイル
+#include <cmath> //デバッグ描画のため後で消す
 #include <cassert>
 #endif
 
@@ -106,6 +107,7 @@ namespace DirectX11 {
 		// デバイスやスワップチェインの初期化
 		IsSuccess = DXCore::Init(windowHandle);
 		if(!IsSuccess){
+
 			assert(false && "DXCoreの初期化に失敗");
 			return false;
 		}
@@ -138,6 +140,28 @@ namespace DirectX11 {
     // DirectX 後処理
     // =====================================================
 
+
+
+	// =====================================================
+	// DirectX デバッグ用描画　背景の色を変更せる
+	// =====================================================
+	void DebugDraw(float time)
+	{
+		// クリアカラー（青っぽい色にしてみる）
+		float clearColor[4] = { std::fmod(time, 1.0f), 0.3f, 0.7f, 1.0f };
+
+		// レンダーターゲットと深度バッファをクリア
+		d3dDeviceContext->ClearRenderTargetView(SRV::d3dRTV.Get(), clearColor);
+		d3dDeviceContext->ClearDepthStencilView(DepthStencil::d3dDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+		// レンダーターゲットと深度ステンシルビューをセット
+		d3dDeviceContext->OMSetRenderTargets(1, SRV::d3dRTV.GetAddressOf(), DepthStencil::d3dDSV.Get());
+
+		// （ここに描画コマンドを書く）
+
+		// スワップチェインのバッファを交換して画面に表示
+		d3dSwapChain->Present(1, 0); // VSyncありで表示。0にするとVSync無し
+	}
 
 
 	// =====================================================
@@ -347,11 +371,6 @@ namespace DirectX11 {
 				DXGI_FORMAT depthTextureFormat = DXGI_FORMAT_UNKNOWN;                 // 深度ステンシルテクスチャのフォーマット
 				DXGI_FORMAT depthViewFormat    = DXGI_FORMAT_UNKNOWN;                 // 深度ステンシルビューのフォーマット
 				DXGI_FORMAT depthSRVFormat     = DXGI_FORMAT_UNKNOWN;                 // 深度ステンシルSRVのフォーマット
-				uint16_t    mipSlice           = 0;                                   // ミップマップレベル
-				D3D11_DSV_DIMENSION depthViewDimension = D3D11_DSV_DIMENSION_UNKNOWN; // 深度ステンシルビューの参照フラグ
-				D3D11_SRV_DIMENSION depthSRVDimension  = D3D11_SRV_DIMENSION_UNKNOWN; // 深度ステンシルSRVの参照フラグ
-				uint16_t    mipSDetailedMip    = 0;                                   // ミップマップレベル
-				uint16_t    mipLevel           = 0;                                   // ミップマップレベル
 
 				switch (depthStencilFormat)
 				{
@@ -359,20 +378,12 @@ namespace DirectX11 {
 					depthTextureFormat = DXGI_FORMAT_R32_TYPELESS;
 					depthViewFormat    = DXGI_FORMAT_D32_FLOAT;
 					depthSRVFormat     = DXGI_FORMAT_R32_FLOAT;
-					mipSlice = 0;
-					depthViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-					depthSRVDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-					mipSDetailedMip = 0;
-					mipLevel = 1;
 					break;
 
 				case DepthStencilFormatType::Depth28Bit_Stencil4Bit: // 深度とステンシルを使用する
 					depthTextureFormat = DXGI_FORMAT_R24G8_TYPELESS;
 					depthViewFormat    = DXGI_FORMAT_D24_UNORM_S8_UINT;
 					depthSRVFormat     = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-					mipSlice = 1;
-					depthViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-					depthSRVDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 					break;
 				}
 
@@ -386,7 +397,7 @@ namespace DirectX11 {
 				textureDesc.MipLevels      = 1;                                                     // 深度バッファのため必要なし
 				textureDesc.ArraySize      = 1;                                                     // バッファの配列サイズ
 				textureDesc.Format         = depthTextureFormat;                                    // フォーマット設定
-				textureDesc.SampleDesc     = { mipSlice,0 };                                        // ミップマップレベル
+				textureDesc.SampleDesc     = { 1,0 };                                               // ミップマップレベル
 				textureDesc.Usage          = D3D11_USAGE_DEFAULT;                                   // GPU読み書き可能　CPU直接アクセス不可
 				textureDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE; // 深度テスト・読み取り専用
 				textureDesc.CPUAccessFlags = 0;                                                     // CPUが直接アクセス禁止
@@ -402,7 +413,7 @@ namespace DirectX11 {
 				// 深度ステンシルビューの設定
 				D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc = {};
 				depthViewDesc.Format = depthViewFormat;              // フォ―マット
-				depthViewDesc.ViewDimension = depthViewDimension;    // 参照する値を決めるフラグ
+				depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;    // 参照する値を決めるフラグ
 
 				// 深度ステンシルビューの作成
 				hr = d3dDevice->CreateDepthStencilView(d3dDepthTexture.Get(), &depthViewDesc, d3dDSV.GetAddressOf());
@@ -414,8 +425,8 @@ namespace DirectX11 {
 				// シェーダーリソースビューの設定
 				D3D11_SHADER_RESOURCE_VIEW_DESC depthSRVDesc = {};
 				depthSRVDesc.Format = depthSRVFormat; // フォーマット作成
-				depthSRVDesc.ViewDimension = depthSRVDimension;
-				depthSRVDesc.Texture2D = { mipSDetailedMip,mipLevel };
+				depthSRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+				depthSRVDesc.Texture2D = { 0,1 };
 
 				// シェーダーリソースビューを作成
 				hr = d3dDevice->CreateShaderResourceView(d3dDepthTexture.Get(), &depthSRVDesc, d3dDSRV.GetAddressOf());

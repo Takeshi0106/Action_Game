@@ -118,15 +118,15 @@ bool PlatformWindowsSystem::Init()
     windClass.cbSize = sizeof(WNDCLASSEX);                                  // 構造体のサイズ設定 (バージョンを判定しているため必須)  
     windClass.style = CS_HREDRAW | CS_VREDRAW;                              // サイズ変更時に再描画有効にする
     windClass.lpfnWndProc = WndProc;                                        // ウィンドウプロシージャ関数のポインター
-    windClass.hIcon = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);   // ウィンドウの左上のアイコン　（標準アイコンで作成 .icoで変更可能)
-    windClass.hCursor = LoadCursor(m_AppInstance.Get(), IDC_CROSS);     // クロスカーソル表示する （デザイン）
+    windClass.hIcon = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);       // ウィンドウの左上のアイコン　（標準アイコンで作成 .icoで変更可能)
+    windClass.hCursor = LoadCursor(m_AppInstance.Get(), IDC_ARROW);         // クロスカーソル表示する （デザイン）
     windClass.hbrBackground = GetSysColorBrush(COLOR_BACKGROUND);           // システムのデフォルト背景色でウィンドウの背景を塗る
     windClass.lpszMenuName = nullptr;                                       // ウィンドウのメニューを作成しない
     windClass.lpszClassName = m_WindowClassName.c_str();                    // ウィンドウの名前設定
-    windClass.hIconSm = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION); // タスクバーに表示されるアイコン (標準アイコンで作成 .icoで変更可能)
+    windClass.hIconSm = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);     // タスクバーに表示されるアイコン (標準アイコンで作成 .icoで変更可能)
 
     // ウィンドウの登録 失敗したらfalseを返す
-    if (!RegisterClassEx(&windClass)) { return false; }
+    if (!RegisterClassEx(&windClass)) { return false; } 
 
     // 描画する大きさを設定
     RECT rect = {};
@@ -134,7 +134,7 @@ bool PlatformWindowsSystem::Init()
     rect.bottom = static_cast<LONG>(m_Height); // 縦
 
     // ウィンドウの大きさを計算　（描画する大きさ＋枠）
-    DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX; // 枠を設定 (標準なウィンドウ、タイトルバーあり、システムメニューあり)
+    DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;; // 枠を設定 (標準なウィンドウ、タイトルバーあり、システムメニューあり)
     AdjustWindowRect(&rect, style, FALSE); // rectに計算した大きさを代入
 
     // ウィンドウ作成
@@ -149,7 +149,7 @@ bool PlatformWindowsSystem::Init()
         rect.bottom - rect.top,     // ウィンドウの縦幅設定
         nullptr,                    // 親ウィンドウなし
         nullptr,                    // メニューなし
-        m_AppInstance.Get(),              // インスタンスハンドル
+        m_AppInstance.Get(),        // インスタンスハンドル
         nullptr);                   // 追加パラメーター
 
     // ウィンドウを作成できたかのチェック
@@ -176,6 +176,8 @@ void PlatformWindowsSystem::GameLoop()
 {
     MSG msg = {}; // メッセージ
 
+    DirectX11::Init(m_Width, m_Height, m_WinInstance.Get());
+
     Timer::Init(); // タイマー初期化
     Timer::Start(); // タイマー開始
 
@@ -186,12 +188,14 @@ void PlatformWindowsSystem::GameLoop()
 #endif
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
         {
+            if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
+
             TranslateMessage(&msg); // キー入力などを文字列に変換する関数
             DispatchMessage(&msg); // ウィンドウプロシージャにメッセージを送る
         }
         else
         {
-
+            DirectX11::DebugDraw(Timer::GetElapsedTime());
 
         }
         Timer::LastUpdate(); // タイマー更新処理
