@@ -176,7 +176,9 @@ void PlatformWindowsSystem::GameLoop()
 {
     MSG msg = {}; // メッセージ
 
-    DirectX11::Init(m_Width, m_Height, m_WinInstance.Get()); // DirectXの初期化
+    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance.Get())) { // DirectXの初期化
+        return; // 失敗したら戻る
+    }
 
     Timer::Init(); // タイマー初期化
     Timer::Start(); // タイマー開始
@@ -195,8 +197,11 @@ void PlatformWindowsSystem::GameLoop()
         }
         else
         {
-            DirectX11::DebugDraw(Timer::GetElapsedTime());
+            DirectX11::BeginDraw(); // 描画の開始処理
 
+            DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
+
+            DirectX11::EndDraw(); // 描画の終わり処理
         }
         Timer::LastUpdate(); // タイマー更新処理
     }

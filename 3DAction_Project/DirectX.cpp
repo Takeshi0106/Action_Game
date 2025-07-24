@@ -1,13 +1,11 @@
 ﻿#include "DirectX.h"
-#include <dxgi.h>
 #include <d3d11.h>
 #include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
+#include <cmath>        //デバッグ描画のため後で消す
 
 #pragma comment (lib, "d3d11.lib")      // DirectXの基本APIを使用するためのライブラリー
-#pragma comment(lib, "d3dcompiler.lib") // HLSLをコンパイルするためAPIを使用するためのライブラリー
 
 #if defined(DEBUG) || defined(_DEBUG) // デバッグ時にヘッダーをコンパイル
-#include <cmath> //デバッグ描画のため後で消す
 #include <cassert>
 #endif
 
@@ -111,26 +109,25 @@ namespace DirectX11 {
 		// デバイスやスワップチェインの初期化
 		IsSuccess = DXCore::Init(windowHandle);
 		if(!IsSuccess){
-
-			assert(false && "DXCoreの初期化に失敗");
+			MessageBoxA(NULL, "デバイスやスワップチェインの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
 			return false;
 		}
 		// RTVとSRVの初期化
 		IsSuccess = SRV::Init();
 		if (!IsSuccess) {
-			assert(false && "SRVの初期化に失敗");
+			MessageBoxA(NULL, "SRVの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
 			return false;
 		}
 		// UAVの初期化
 		IsSuccess = UAV::Init();
 		if (!IsSuccess) {
-			assert(false && "UAVの初期化に失敗");
+			MessageBoxA(NULL, "URVの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
 			return false;
 		}
 		// 深度ステンシルの初期化
 		IsSuccess = DepthStencil::Init(DepthStencil::DepthStencilFormatType::Depth32Bit);
 		if (!IsSuccess) {
-			assert(false && "深度ステンシルの初期化に失敗");
+			MessageBoxA(NULL, "深度ステンシルの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
 			return false;
 		}
 		// ビューポートの初期化
@@ -153,6 +150,30 @@ namespace DirectX11 {
 
 
 	// =====================================================
+    // DirectX 最初の描画処理
+    // =====================================================
+	void BeginDraw()
+	{
+		// レンダーターゲットと深度ステンシルビューをセット
+		d3dDeviceContext->OMSetRenderTargets(1, SRV::d3dRTV.GetAddressOf(), DepthStencil::d3dDSV.Get());
+
+		float clearColor[4] = { 0.1f, 0.3f, 0.7f, 1.0f }; // 塗りつぶす色
+		// レンダーターゲットと深度バッファをクリア
+		d3dDeviceContext->ClearRenderTargetView(SRV::d3dRTV.Get(), clearColor);
+		d3dDeviceContext->ClearDepthStencilView(DepthStencil::d3dDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	}
+
+
+	// =====================================================
+	// DirectX 最後の描画処理
+	// =====================================================
+	void EndDraw()
+	{
+		d3dSwapChain->Present(1, 0); // バッファを交換して画面に表示
+	}
+
+
+	// =====================================================
 	// DirectX デバッグ用描画　背景の色を変更せる
 	// =====================================================
 	void DebugDraw(float time)
@@ -162,15 +183,6 @@ namespace DirectX11 {
 
 		// レンダーターゲットと深度バッファをクリア
 		d3dDeviceContext->ClearRenderTargetView(SRV::d3dRTV.Get(), clearColor);
-		d3dDeviceContext->ClearDepthStencilView(DepthStencil::d3dDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-		// レンダーターゲットと深度ステンシルビューをセット
-		d3dDeviceContext->OMSetRenderTargets(1, SRV::d3dRTV.GetAddressOf(), DepthStencil::d3dDSV.Get());
-
-		// （ここに描画コマンドを書く）
-
-		// スワップチェインのバッファを交換して画面に表示
-		d3dSwapChain->Present(1, 0); // VSyncありで表示。0にするとVSync無し
 	}
 
 
@@ -251,14 +263,15 @@ namespace DirectX11 {
 						d3dDeviceContext.GetAddressOf() // 成功時に代入される
 					);
 
-					if (SUCCEEDED(hr))
-					{
+					if (SUCCEEDED(hr)){
 						break; // ドライバが成功したらループを抜ける
 					}
 				}
 				if (FAILED(hr)) // 全てのドライバが失敗したらエラー
 				{
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "選択されたドライバで生成することが出来ませんでした。");
+#endif
 					return false;
 				}
 
@@ -295,19 +308,25 @@ namespace DirectX11 {
 				// スワップチェインが生成したバックバッファを取得する
 				hr = d3dSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)d3dRTTforSRV.GetAddressOf());
 				if (FAILED(hr)){
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "SRVバックバッファを取得することが出来ませんでした。");
+#endif
 					return false;
 				}
 				// レンダラーターゲットを生成
 				hr = d3dDevice->CreateRenderTargetView(d3dRTTforSRV.Get(), nullptr, d3dRTV.GetAddressOf());
 				if (FAILED(hr)){
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "レンダラーターゲットビューを作成することが出来ませんでした");
+#endif
 					return false;
 				}
 				// シェーダーリソースの作成
 				hr = d3dDevice->CreateShaderResourceView(d3dRTTforSRV.Get(), nullptr, d3dRTSRV.GetAddressOf());
 				if (FAILED(hr)){
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "SRVが設定できませんでした");
+#endif
 					return false;
 				}
 
@@ -355,7 +374,9 @@ namespace DirectX11 {
 				// バッファを作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dRTTforUAV.GetAddressOf());
 				if (FAILED(hr)) {
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "UAVテクスチャの作成に失敗しました");
+#endif
 					return false;
 				}
 
@@ -431,7 +452,9 @@ namespace DirectX11 {
 				// 深度ステンシルテクスチャの作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dDepthTexture.GetAddressOf());
 				if(FAILED(hr)){ 
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "深度ステンシルテクスチャの作成に失敗しました");
+#endif
 					return false;
 				}
 
@@ -443,7 +466,9 @@ namespace DirectX11 {
 				// 深度ステンシルビューの作成
 				hr = d3dDevice->CreateDepthStencilView(d3dDepthTexture.Get(), &depthViewDesc, d3dDSV.GetAddressOf());
 				if (FAILED(hr)) {
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "深度ステンシルビューの作成に失敗しました");
+#endif
 					return false;
 				}
 
@@ -456,7 +481,9 @@ namespace DirectX11 {
 				// シェーダーリソースビューを作成
 				hr = d3dDevice->CreateShaderResourceView(d3dDepthTexture.Get(), &depthSRVDesc, d3dDSRV.GetAddressOf());
 				if (FAILED(hr)) {
+#if defined(DEBUG) || defined(_DEBUG)
 					assert(false && "シェーダーリソースビューの作成に失敗しました");
+#endif
 					return false;
 				}
 
