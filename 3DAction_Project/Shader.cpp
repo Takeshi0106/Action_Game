@@ -7,13 +7,14 @@
 
 // プロトタイプ宣言
 namespace {
+	std::string ShaderModelToString(const ShaderType type); // シェーダーモデルが5.0のみのため、シェーダーの種類を渡して文字列を返す関数
 	std::string WStringToString(const std::wstring& wstr); // ワイド文字をマルチバイト文字にして返すヘルパー関数
 }
 
 // ======================================
 // シェーダーをコンパイルする関数
 // ======================================
-bool CompileShader(const std::wstring fileName, const std::string entryPoint, const std::string shaderModel, ID3DBlob** ppBlobOut)
+bool CompileShader(const std::wstring fileName, const std::string entryPoint, const ShaderType type, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK; // 成功か失敗を返す
 
@@ -35,7 +36,7 @@ bool CompileShader(const std::wstring fileName, const std::string entryPoint, co
 		nullptr,                           // GPUで使用するマクロ定義（ない場合nullptr）
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // HLSLで他のHLSLを読み込むフラグ
 		entryPoint.c_str(),                // シェーダーないで最初に実行される関数の名前
-		shaderModel.c_str(),               // シェーダーの種類とバージョン
+		ShaderModelToString(type).c_str(), // シェーダーの種類とバージョン
 		dwShaderFlags,                     // コンパイルのフラグ
 		0,                                 // 今は何もないフラグ
 		ppBlobOut,                         // コンパイルしたシェーダーを取得する
@@ -44,18 +45,18 @@ bool CompileShader(const std::wstring fileName, const std::string entryPoint, co
 
 	if (FAILED(hr)) { // エラー取得時
 		std::string messegeError = WStringToString(fileName) + "のコンパイルに失敗";
-		MessageBoxA(nullptr, messegeError.c_str(), "エラー", MB_OKCANCEL | MB_ICONERROR); // メッセージボックス
+		MessageBoxA(nullptr, messegeError.c_str(), "エラー", MB_OK | MB_ICONERROR); // メッセージボックス
 
 #if defined(DEBUG) || defined(_DEBUG)
 		if (pErrorBlob != nullptr) {  // デバッグ時のみ詳細なエラー出力
 			std::cout << static_cast<const char*>(pErrorBlob->GetBufferPointer()) << std::endl;
 		}
 #endif
-			return false;
+		return false;
 	}
 
 	// 解放処理
-	if (pErrorBlob){
+	if (pErrorBlob) {
 		pErrorBlob.Reset(); // 一応解放処理
 	}
 
@@ -65,6 +66,41 @@ bool CompileShader(const std::wstring fileName, const std::string entryPoint, co
 
 
 namespace {
+
+	// シェーダーの種類を渡して、コンパイルに必要な情報を返す関数
+	std::string ShaderModelToString(const ShaderType type) {
+
+		std::string sharderInf;
+
+		switch (type) {
+		case ShaderType::VERTEX_5_0:
+			sharderInf = "vs_5_0";
+			break;
+
+		case ShaderType::PIXEL_5_0:
+			sharderInf = "ps_5_0";
+			break;
+
+		case ShaderType::GEOMETRY_5_0:
+			sharderInf = "gs_5_0";
+			break;
+
+		case ShaderType::HULL_5_0:
+			sharderInf = "hs_5_0";
+			break;
+
+		case ShaderType::DOMAIN_5_0:  
+			sharderInf = "ds_5_0";
+			break;
+
+		case ShaderType::COMPUTE_5_0:
+			sharderInf = "cs_5_0";
+			break;
+		}
+
+		return sharderInf;
+	}
+
 
 	// ワイド文字をマルチバイトにして返すヘルパー関数
 	std::string WStringToString(const std::wstring& wstr)
@@ -78,5 +114,6 @@ namespace {
 
 		return result;
 	}
+
 
 }
