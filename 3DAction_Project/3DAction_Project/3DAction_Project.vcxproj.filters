@@ -22,6 +22,9 @@
     <Filter Include="Hlsl">
       <UniqueIdentifier>{194a4f8a-d370-42ab-afab-1822f9a36484}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Windews">
+      <UniqueIdentifier>{4e12890a-cbe3-4d48-ad82-b63805e872bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp">
@@ -33,14 +36,14 @@
     <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="PlatformWindowsSystem.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="PlatformSystem.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Core\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformWindowsSystem.cpp">
+      <Filter>Platform\Windews</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,11 +62,11 @@
     <ClInclude Include="PlatformSystem.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformWindowsSystem.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Core\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformWindowsSystem.h">
+      <Filter>Platform\Windews</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
