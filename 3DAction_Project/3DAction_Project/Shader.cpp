@@ -2,6 +2,8 @@
 #include <iostream>
 #include <Windows.h>
 #include <wrl/client.h>
+#include <fstream>
+#include <d3dcompiler.h>
 
 #pragma comment(lib, "d3dcompiler.lib") // HLSLをコンパイルするためAPIを使用するためのライブラリー
 
@@ -14,13 +16,14 @@ namespace {
 // ======================================
 // シェーダーをコンパイルする関数
 // ======================================
-bool CompileShader(const std::wstring fileName, const std::string entryPoint, const ShaderType type, ID3DBlob* ppBlobOut)
+bool OutputCompileShader(const ShaderInfo info, const std::string outputFilePath)
 {
-	HRESULT hr = S_OK; // 成功か失敗を返す
+	HRESULT hr = S_OK;                                      // 成功か失敗を返す
+	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;   // エラーを取得する
+	Microsoft::WRL::ComPtr<ID3DBlob> compileBlob = nullptr; // コンパイルしたバイナリーデータを入れる
 
 	// コンパイルフラグ
 	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS; // コンパイル時に厳しくチェックするフラグ
-
 #if defined(DEBUG) || defined(_DEBUG)
 	dwShaderFlags |= D3DCOMPILE_DEBUG; // コンパイルしたシェーダーにデバッグ情報を付けるフラグ
 #endif
@@ -29,36 +32,51 @@ bool CompileShader(const std::wstring fileName, const std::string entryPoint, co
 	dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3; // 最高レベルの最適化を行うフラグ
 #endif
 
-	Microsoft::WRL::ComPtr<ID3DBlob> pErrorBlob = nullptr; // エラーを取得する
-
 	hr = D3DCompileFromFile(
-		fileName.c_str(),                  // シェーダーのファイル名
-		nullptr,                           // GPUで使用するマクロ定義（ない場合nullptr）
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, // HLSLで他のHLSLを読み込むフラグ
-		entryPoint.c_str(),                // シェーダーないで最初に実行される関数の名前
-		ShaderModelToString(type).c_str(), // シェーダーの種類とバージョン
-		dwShaderFlags,                     // コンパイルのフラグ
-		0,                                 // 今は何もないフラグ
-		&ppBlobOut,                         // コンパイルしたシェーダーを取得する
-		pErrorBlob.GetAddressOf()          // エラーメッセージを取得する
+		info.name.wstring().c_str(),            // シェーダーのファイル名
+		nullptr,                                // GPUで使用するマクロ定義（ない場合nullptr）
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,      // HLSLで他のHLSLを読み込むフラグ
+		info.entryPoint.c_str(),                // シェーダーないで最初に実行される関数の名前
+		ShaderModelToString(info.type).c_str(), // シェーダーの種類とバージョン
+		dwShaderFlags,                          // コンパイルのフラグ
+		0,                                      // 今は何もないフラグ
+		compileBlob.GetAddressOf(),             // コンパイルしたシェーダーを取得する
+		errorBlob.GetAddressOf()                // エラーメッセージを取得する
 	);
 
 	if (FAILED(hr)) { // エラー取得時
-		std::string messegeError = WStringToString(fileName) + "のコンパイルに失敗";
+		std::string messegeError =info.name.string() + "のコンパイルに失敗";
 		MessageBoxA(nullptr, messegeError.c_str(), "エラー", MB_OK | MB_ICONERROR); // メッセージボックス
 
 #if defined(DEBUG) || defined(_DEBUG)
-		if (pErrorBlob != nullptr) {  // デバッグ時のみ詳細なエラー出力
-			std::cout << static_cast<const char*>(pErrorBlob->GetBufferPointer()) << std::endl;
+		if (errorBlob != nullptr) {  // デバッグ時のみ詳細なエラー出力
+			std::cout << static_cast<const char*>(errorBlob->GetBufferPointer()) << std::endl;
 		}
 #endif
 		return false;
 	}
 
-	// 解放処理
-	if (pErrorBlob) {
-		pErrorBlob.Reset(); // 一応解放処理
+	// 出力パスが設定されたいなかったらエラー
+	if (outputFilePath.empty()) {
+		MessageBoxA(nullptr, "コンパイルファイルの出力先パスが設定されていません", "エラー", MB_OK | MB_ICONERROR);
+		return false;
 	}
+
+	std::string filename = info.name.stem().string();                      // 拡張子なしの名前を取得
+	std::string outputPath = outputFilePath + filename + ".cso";           // 出力パスを作成
+
+	// 書き出し処理
+	std::ofstream ofs(outputPath, std::ios::binary | std::ios::out);
+	if (!ofs) {
+		MessageBoxA(nullptr, "CSOファイルの書き込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
+		return false;
+	}
+	ofs.write(static_cast<const char*>(compileBlob->GetBufferPointer()), compileBlob->GetBufferSize());   // バイナリデータを書き出す
+	ofs.close();                                                                                          // ファイルを閉じる
+
+	// 一応解放
+	errorBlob.Reset();
+	compileBlob.Reset();
 
 	return true;
 }

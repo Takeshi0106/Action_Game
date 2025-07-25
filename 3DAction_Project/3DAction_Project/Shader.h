@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <string>
-#include <d3dcompiler.h>
+#include <filesystem>
 
 // シェーダーの関数　
 // 今は　Shader Model 5.0のみ使用可能
@@ -19,10 +19,20 @@ enum ShaderType {
 
 
 // ==============================================
+// シェーダーの情報
+// ==============================================
+struct ShaderInfo {
+    std::filesystem::path name;
+    std::string entryPoint;
+    ShaderType type;
+};
+
+
+// ==============================================
 // シェーダーの関数群
 // ==============================================
 
 // シェーダーをコンパイルしてGPUで使用できるコードに変換する関数　戻り値で成功か失敗を返す
 // 今は.csoを書き出す機能を作成していません
-bool CompileShader(const std::wstring FileName, const std::string EntryPoint, const ShaderType type, ID3DBlob* ppBlobOut);
+bool OutputCompileShader(const ShaderInfo info, const std::string outputFilePath);
 

@@ -271,9 +271,12 @@ void PlatformWindowsSystem::GameInit()
     
     // デバッグ用 頂点シェーダ読込み
     bool     hr = true;
-    ID3DBlob* vsBlob = nullptr;
-    
-    hr = CompileShader(L"VS_Debug.hlsl", "VSFunc", ShaderType::VERTEX_5_0, vsBlob);
+
+    hr = OutputCompileShader(ShaderInfo{ "VS_Debug.hlsl", "VSFunc", ShaderType::VERTEX_5_0 },"Asset/Shader/");
+    if (!hr) {
+        MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
+    }
+    hr = OutputCompileShader(ShaderInfo{ "PS_Debug.hlsl", "PSFunc", ShaderType::PIXEL_5_0 }, "Asset/Shader/");
     if (!hr) {
         MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
     }
