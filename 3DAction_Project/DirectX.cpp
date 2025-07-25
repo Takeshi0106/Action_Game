@@ -1,4 +1,4 @@
-﻿#include "DirectX.h"
+#include "DirectX.h"
 #include <d3d11.h>
 #include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
 #include <cmath>        //デバッグ描画のため後で消す

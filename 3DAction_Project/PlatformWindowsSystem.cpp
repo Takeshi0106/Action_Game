@@ -1,4 +1,4 @@
-﻿#include "PlatformWindowsSystem.h"
+#include "PlatformWindowsSystem.h"
 #include "Timer.h"
 #include "DirectX.h"
 

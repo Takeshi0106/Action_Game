@@ -13,26 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="core">
-      <UniqueIdentifier>{75c95213-2200-46aa-80ae-d01b3181939e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Main">
       <UniqueIdentifier>{0f9ff6cd-8446-4aa9-93c5-05af14c6b188}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\DirectX">
-      <UniqueIdentifier>{50a2ac4e-7ef4-4253-84e1-0fd9fb429e1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\Platform">
-      <UniqueIdentifier>{03049d1d-813f-4dcc-a623-5e7169e077ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\Platform\Base">
-      <UniqueIdentifier>{4906e811-e475-4bd9-bdd7-e3b9e42a46e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\Platform\Windows">
-      <UniqueIdentifier>{819d67f3-71a4-49ce-ac6b-e0f9e20b0a37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\Timer">
-      <UniqueIdentifier>{ad471753-08ba-4717-a981-61a1dcbe8d58}</UniqueIdentifier>
     </Filter>
     <Filter Include="OpenSource">
       <UniqueIdentifier>{5bfc3f2d-3a4d-44aa-8596-7e6410515ca3}</UniqueIdentifier>
@@ -40,8 +22,32 @@
     <Filter Include="OpenSource\imgui">
       <UniqueIdentifier>{d9c192db-dce8-435d-96f0-b0331368b888}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\DirectX\Shader">
+    <Filter Include="Debug">
+      <UniqueIdentifier>{2f83b4b8-6619-4287-a943-4cd787a12d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug\Hlsl">
+      <UniqueIdentifier>{f358234b-b03b-4b49-b7ab-fd14303e1dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{75c95213-2200-46aa-80ae-d01b3181939e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX">
+      <UniqueIdentifier>{50a2ac4e-7ef4-4253-84e1-0fd9fb429e1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX\Shader">
       <UniqueIdentifier>{b67d4a02-a0fe-4a0c-92af-d4feb18f5a7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Platform">
+      <UniqueIdentifier>{03049d1d-813f-4dcc-a623-5e7169e077ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Platform\Base">
+      <UniqueIdentifier>{4906e811-e475-4bd9-bdd7-e3b9e42a46e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Platform\Windows">
+      <UniqueIdentifier>{819d67f3-71a4-49ce-ac6b-e0f9e20b0a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Timer">
+      <UniqueIdentifier>{ad471753-08ba-4717-a981-61a1dcbe8d58}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,25 +76,25 @@
       <Filter>OpenSource\imgui</Filter>
     </ClInclude>
     <ClInclude Include="NonCopyable.h">
-      <Filter>core</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="PlatformSystem.h">
-      <Filter>core\Platform\Base</Filter>
+      <Filter>Core\Platform\Base</Filter>
     </ClInclude>
     <ClInclude Include="PlatformWindowsSystem.h">
-      <Filter>core\Platform\Windows</Filter>
+      <Filter>Core\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Main.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="DirectX.h">
-      <Filter>core\DirectX</Filter>
+      <Filter>Core\DirectX</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>core\Timer</Filter>
+      <Filter>Core\Timer</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>core\DirectX\Shader</Filter>
+      <Filter>Core\DirectX\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,22 +120,30 @@
       <Filter>OpenSource\imgui</Filter>
     </ClCompile>
     <ClCompile Include="PlatformSystem.cpp">
-      <Filter>core\Platform\Base</Filter>
+      <Filter>Core\Platform\Base</Filter>
     </ClCompile>
     <ClCompile Include="PlatformWindowsSystem.cpp">
-      <Filter>core\Platform\Windows</Filter>
+      <Filter>Core\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="DirectX.cpp">
-      <Filter>core\DirectX</Filter>
+      <Filter>Core\DirectX</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>core\Timer</Filter>
+      <Filter>Core\Timer</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>core\DirectX\Shader</Filter>
+      <Filter>Core\DirectX\Shader</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VS_Debug.hlsl">
+      <Filter>Debug\Hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Debug.hlsl">
+      <Filter>Debug\Hlsl</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
