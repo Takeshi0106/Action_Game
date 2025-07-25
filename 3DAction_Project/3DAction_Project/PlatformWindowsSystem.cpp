@@ -1,6 +1,7 @@
 ﻿#include "PlatformWindowsSystem.h"
 #include "Timer.h"
 #include "DirectX.h"
+#include "Shader.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #include <iostream>
@@ -105,7 +106,7 @@ PlatformWindowsSystem::~PlatformWindowsSystem()
 
 
 // =====================================================
-// 初期化処理
+// ウィンドウの初期化処理
 // =====================================================
 bool PlatformWindowsSystem::Init()
 {
@@ -179,9 +180,7 @@ void PlatformWindowsSystem::GameLoop()
     if (!DirectX11::Init(m_Width, m_Height, m_WinInstance.Get())) { // DirectXの初期化
         return; // 失敗したら戻る
     }
-
-    Timer::Init(); // タイマー初期化
-    Timer::Start(); // タイマー開始
+    GameInit(); // ゲームの初期化処理
 
     while (true)
     {
@@ -197,22 +196,18 @@ void PlatformWindowsSystem::GameLoop()
         }
         else
         {
-            DirectX11::BeginDraw(); // 描画の開始処理
-
-            DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
-
-            DirectX11::EndDraw(); // 描画の終わり処理
+            GameMain();
         }
         Timer::LastUpdate(); // タイマー更新処理
     }
 
+    GameUninit();        // ゲームの後処理
     DirectX11::Uninit(); // Directの後処理
-
 }
 
 
 // =====================================================
-// 後処理
+// ウィンドウの後処理
 // =====================================================
 void PlatformWindowsSystem::Uninit()
 {
@@ -262,4 +257,51 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
     }
 
     return 0;
+}
+
+
+// =====================================================
+// ゲームの初期化処理
+// =====================================================
+void PlatformWindowsSystem::GameInit()
+{
+    Timer::Init(); // タイマー初期化
+    Timer::Start(); // タイマー開始
+
+    
+    // デバッグ用 頂点シェーダ読込み
+    bool     hr = true;
+
+    hr = OutputCompileShader(ShaderInfo{ "VS_Debug.hlsl", "VSFunc", ShaderType::VERTEX_5_0 },"Asset/Shader/");
+    if (!hr) {
+        MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
+    }
+    hr = OutputCompileShader(ShaderInfo{ "PS_Debug.hlsl", "PSFunc", ShaderType::PIXEL_5_0 }, "Asset/Shader/");
+    if (!hr) {
+        MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
+    }
+
+}
+
+
+// =====================================================
+// ゲームの更新処理
+// =====================================================
+void PlatformWindowsSystem::GameMain()
+{
+    // デバッグ時 
+    DirectX11::BeginDraw(); // 描画の開始処理
+
+    DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
+
+    DirectX11::EndDraw(); // 描画の終わり処理
+}
+
+
+// =====================================================
+// ゲームの後処理
+// =====================================================
+void PlatformWindowsSystem::GameUninit()
+{
+
 }

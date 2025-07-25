@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{27cea455-6d1f-4715-a5f0-914789bc7745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{d10edca7-4758-4eda-aad4-696676e55158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX">
+      <UniqueIdentifier>{956532da-11eb-446a-aa56-f84748cfbaa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX\Shader">
+      <UniqueIdentifier>{07e90396-7836-496f-9361-68a26f7d0442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{444d5151-fce7-4107-8539-d76aa28f92df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Timer">
+      <UniqueIdentifier>{7b4f348f-0d22-445f-a581-94055d072da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hlsl">
+      <UniqueIdentifier>{194a4f8a-d370-42ab-afab-1822f9a36484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windews">
+      <UniqueIdentifier>{4e12890a-cbe3-4d48-ad82-b63805e872bb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DirectX.cpp">
+      <Filter>Core\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Core\DirectX\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformSystem.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Core\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformWindowsSystem.cpp">
+      <Filter>Platform\Windews</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DirectX.h">
+      <Filter>Core\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Core\DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="NonCopyable.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSystem.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Core\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformWindowsSystem.h">
+      <Filter>Platform\Windews</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VS_Debug.hlsl">
+      <Filter>Hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Debug.hlsl">
+      <Filter>Hlsl</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

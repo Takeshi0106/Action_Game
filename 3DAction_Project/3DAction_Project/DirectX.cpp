@@ -109,25 +109,25 @@ namespace DirectX11 {
 		// デバイスやスワップチェインの初期化
 		IsSuccess = DXCore::Init(windowHandle);
 		if(!IsSuccess){
-			MessageBoxA(NULL, "デバイスやスワップチェインの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
+			MessageBoxA(NULL, "デバイスやスワップチェインの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
 			return false;
 		}
 		// RTVとSRVの初期化
 		IsSuccess = SRV::Init();
 		if (!IsSuccess) {
-			MessageBoxA(NULL, "SRVの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
+			MessageBoxA(NULL, "SRVの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
 			return false;
 		}
 		// UAVの初期化
 		IsSuccess = UAV::Init();
 		if (!IsSuccess) {
-			MessageBoxA(NULL, "URVの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
+			MessageBoxA(NULL, "URVの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
 			return false;
 		}
 		// 深度ステンシルの初期化
 		IsSuccess = DepthStencil::Init(DepthStencil::DepthStencilFormatType::Depth32Bit);
 		if (!IsSuccess) {
-			MessageBoxA(NULL, "深度ステンシルの初期化に失敗", "エラー", MB_OKCANCEL | MB_ICONERROR);
+			MessageBoxA(NULL, "深度ステンシルの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
 			return false;
 		}
 		// ビューポートの初期化
