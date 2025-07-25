@@ -14,7 +14,7 @@ namespace {
 // ======================================
 // シェーダーをコンパイルする関数
 // ======================================
-bool CompileShader(const std::wstring fileName, const std::string entryPoint, const ShaderType type, ID3DBlob** ppBlobOut)
+bool CompileShader(const std::wstring fileName, const std::string entryPoint, const ShaderType type, ID3DBlob* ppBlobOut)
 {
 	HRESULT hr = S_OK; // 成功か失敗を返す
 
@@ -39,7 +39,7 @@ bool CompileShader(const std::wstring fileName, const std::string entryPoint, co
 		ShaderModelToString(type).c_str(), // シェーダーの種類とバージョン
 		dwShaderFlags,                     // コンパイルのフラグ
 		0,                                 // 今は何もないフラグ
-		ppBlobOut,                         // コンパイルしたシェーダーを取得する
+		&ppBlobOut,                         // コンパイルしたシェーダーを取得する
 		pErrorBlob.GetAddressOf()          // エラーメッセージを取得する
 	);
 

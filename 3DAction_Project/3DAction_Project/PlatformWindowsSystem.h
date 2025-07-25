@@ -25,9 +25,12 @@ private:
 	static std::wstring m_WindowClassName;  // ウィンドウのクラス名
 
 	// オーバーライド関数
-	bool Init()     override; // 初期化処理
-	void GameLoop() override; // ゲームループ
-	void Uninit()   override; // 後処理
+	bool Init()     override;   // 初期化処理
+	void GameLoop() override;   // ゲームループ
+	void Uninit()   override;   // 後処理
+	void GameInit() override;   // ゲームの開始処理
+	void GameMain() override;   // ゲームのメイン処理
+	void GameUninit() override; // ゲームの後処理
 
 public:
 	// コンストラクタ・デストラクタ
