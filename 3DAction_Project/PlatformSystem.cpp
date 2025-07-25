@@ -1,4 +1,4 @@
-#include "PlatformSystem.h"
+﻿#include "PlatformSystem.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #include <cassert> // デバッグ時にヘッダーをコンパイル　(DebugLog)が出来たら変更

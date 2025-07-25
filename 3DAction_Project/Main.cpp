@@ -1,4 +1,4 @@
-#include "Main.h"
+﻿#include "Main.h"
 
 // メモリーリーク検出用
 #define _CRTDBG_MAP_ALLOC

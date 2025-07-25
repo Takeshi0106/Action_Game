@@ -1,6 +1,7 @@
-#include "PlatformWindowsSystem.h"
+﻿#include "PlatformWindowsSystem.h"
 #include "Timer.h"
 #include "DirectX.h"
+#include "Shader.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #include <iostream>

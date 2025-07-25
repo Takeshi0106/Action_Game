@@ -139,10 +139,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VS_Debug.hlsl">
-      <Filter>Debug\Hlsl</Filter>
-    </FxCompile>
-    <FxCompile Include="PS_Debug.hlsl">
+    <FxCompile Include="PixelShader.hlsl">
       <Filter>Debug\Hlsl</Filter>
     </FxCompile>
   </ItemGroup>

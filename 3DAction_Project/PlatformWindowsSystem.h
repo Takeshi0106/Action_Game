@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "PlatformSystem.h"
 #include <cstdint>
 #include <string>
