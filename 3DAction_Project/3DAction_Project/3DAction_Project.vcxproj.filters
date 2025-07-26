@@ -10,9 +10,6 @@
     <Filter Include="Core\DirectX">
       <UniqueIdentifier>{956532da-11eb-446a-aa56-f84748cfbaa0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Shader">
-      <UniqueIdentifier>{07e90396-7836-496f-9361-68a26f7d0442}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{444d5151-fce7-4107-8539-d76aa28f92df}</UniqueIdentifier>
     </Filter>
@@ -25,13 +22,22 @@
     <Filter Include="Platform\Windews">
       <UniqueIdentifier>{4e12890a-cbe3-4d48-ad82-b63805e872bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\DirectX\Manager">
+      <UniqueIdentifier>{b485ea38-40c2-45b7-aa60-c162f0b52442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX\Manager\ShaderManager">
+      <UniqueIdentifier>{06acb924-c94c-4191-ad05-e23f7fa0df66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX\Manager\ShaderManager\Shader">
+      <UniqueIdentifier>{07e90396-7836-496f-9361-68a26f7d0442}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp">
       <Filter>Core\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Core\DirectX\Shader</Filter>
+    <ClCompile Include="ShaderData.cpp">
+      <Filter>Core\DirectX\Manager\ShaderManager\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>
@@ -45,13 +51,19 @@
     <ClCompile Include="PlatformWindowsSystem.cpp">
       <Filter>Platform\Windews</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Core\DirectX\Manager\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseDirectXManager.cpp">
+      <Filter>Core\DirectX\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX.h">
       <Filter>Core\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Core\DirectX\Shader</Filter>
+    <ClInclude Include="ShaderData.h">
+      <Filter>Core\DirectX\Manager\ShaderManager\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Main.h">
       <Filter>Main</Filter>
@@ -67,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="PlatformWindowsSystem.h">
       <Filter>Platform\Windews</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Core\DirectX\Manager\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDirectXManager.h">
+      <Filter>Core\DirectX\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

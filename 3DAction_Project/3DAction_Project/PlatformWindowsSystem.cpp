@@ -1,10 +1,12 @@
-﻿#include "PlatformWindowsSystem.h"
-#include "Timer.h"
-#include "DirectX.h"
-#include "Shader.h"
+﻿#include "PlatformWindowsSystem.h"   
+#include <Windows.h>                 // ウィンドウ作成用
+
+#include "Timer.h"                   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
+#include "DirectX.h"                 // DirectX初期化用　後で描画マネージャーに任せるようにする
+
 
 #if defined(DEBUG) || defined(_DEBUG)
-#include <iostream>
+#include <iostream> // デバッグ文字を出力ウィンドウに書き出す
 #endif
 
 
@@ -30,31 +32,12 @@ public:
     HINSTANCE Get() const { return hInstance; }
 };
 
-struct WINDOWHANDLE {
-private: // 直接アクセス不可
-    HWND hWnd; // ウィンドウハンドル
-
-public:
-    // コンストラクタ
-    WINDOWHANDLE(const HWND& _hWnd) : hWnd(_hWnd) {}
-    // 代入演算子オーバーロード
-    WINDOWHANDLE& operator=(const HWND& _hWnd) 
-    {
-        hWnd = _hWnd;
-        return *this;
-    }
-    // 暗黙的に変換を禁止にする
-    explicit operator HWND() const { return hWnd; }
-    // ラップしているHWNDを返す
-    HWND Get() const { return hWnd; }
-};
-
 
 // =====================================================
 // 静的メンバー変数
 // =====================================================
 APPLICATIONHANDLE PlatformWindowsSystem::m_AppInstance = nullptr;
-WINDOWHANDLE      PlatformWindowsSystem::m_WinInstance = nullptr;
+HWND              PlatformWindowsSystem::m_WinInstance = nullptr;
 uint16_t          PlatformWindowsSystem::m_Width = 0;
 uint16_t          PlatformWindowsSystem::m_Height = 0;
 std::wstring      PlatformWindowsSystem::m_WindowName;
@@ -154,16 +137,16 @@ bool PlatformWindowsSystem::Init()
         nullptr);                   // 追加パラメーター
 
     // ウィンドウを作成できたかのチェック
-    if (m_WinInstance.Get() == nullptr) { return false; }
+    if (m_WinInstance == nullptr) { return false; }
 
     // ウィンドウを表示
-    ShowWindow(m_WinInstance.Get(), SW_SHOWNORMAL);
+    ShowWindow(m_WinInstance, SW_SHOWNORMAL);
 
     // ウィンドウを更新
-    UpdateWindow(m_WinInstance.Get());
+    UpdateWindow(m_WinInstance);
 
     // ウィンドウに入力情報を取得させる
-    SetFocus(m_WinInstance.Get());
+    SetFocus(m_WinInstance);
 
     // 正常終了.
     return true;
@@ -177,7 +160,7 @@ void PlatformWindowsSystem::GameLoop()
 {
     MSG msg = {}; // メッセージ
 
-    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance.Get())) { // DirectXの初期化
+    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
         return; // 失敗したら戻る
     }
     GameInit(); // ゲームの初期化処理
@@ -272,6 +255,7 @@ void PlatformWindowsSystem::GameInit()
     // デバッグ用 頂点シェーダ読込み
     bool     hr = true;
 
+    /*
     hr = OutputCompileShader(ShaderInfo{ "VS_Debug.hlsl", "VSFunc", ShaderType::VERTEX_5_0 },"Asset/Shader/");
     if (!hr) {
         MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
@@ -280,7 +264,7 @@ void PlatformWindowsSystem::GameInit()
     if (!hr) {
         MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
     }
-
+    */
 }
 
 

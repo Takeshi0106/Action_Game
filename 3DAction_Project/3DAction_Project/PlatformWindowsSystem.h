@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "PlatformSystem.h"
-#include <cstdint>
-#include <string>
+#include <cstdint>          // 数字
+#include <string>           // 文字列
 
 // =====================================================
 // 前方宣言　Windows.hを.cpp内だけでインクルードする
@@ -9,7 +9,8 @@
 // アプリケーションハンドルの前方宣言
 struct APPLICATIONHANDLE;              // HINSTANCEのラップ構造体
 // ウィンドウハンドルの前方宣言
-struct WINDOWHANDLE;                   // HWNDのラップ構造体
+struct HWND__;
+using HWND = HWND__*;
 
 // =====================================================
 // ウィンドウプラットフォームの初期化・後処理クラス
@@ -18,7 +19,7 @@ class PlatformWindowsSystem : public PlatformSystem
 {
 private:
 	static APPLICATIONHANDLE m_AppInstance; // アプリケーションのハンドル
-	static WINDOWHANDLE m_WinInstance;      // ウィンドウハンドル
+	static HWND m_WinInstance;              // ウィンドウハンドル
 	static uint16_t  m_Width;	            // ウィンドウの画面横幅 
 	static uint16_t  m_Height;	            // ウィンドウの画面縦幅
 	static std::wstring m_WindowName;       // ウィンドウの名前

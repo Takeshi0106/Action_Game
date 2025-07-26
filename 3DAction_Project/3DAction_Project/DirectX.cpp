@@ -1,10 +1,12 @@
 ﻿#include "DirectX.h"
-#include <d3d11.h>
 #include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
-#include <cmath>        //デバッグ描画のため後で消す
+#include <Windows.h>    // ウィンドウのハンドル用
+#include <d3d11.h>      // DirectXの基本的なAPI
 
 #pragma comment (lib, "d3d11.lib")      // DirectXの基本APIを使用するためのライブラリー
 
+
+#include <cmath>        //デバッグ描画の色変更で使用しています　後で消す
 #if defined(DEBUG) || defined(_DEBUG) // デバッグ時にヘッダーをコンパイル
 #include <cassert>
 #endif
@@ -183,6 +185,16 @@ namespace DirectX11 {
 
 		// レンダーターゲットと深度バッファをクリア
 		d3dDeviceContext->ClearRenderTargetView(SRV::d3dRTV.Get(), clearColor);
+	}
+
+
+	// =====================================================
+    // DirectX のゲッター
+    // =====================================================
+	namespace Get {
+		ID3D11Device* GetDevice() { return d3dDevice.Get(); }
+		ID3D11DeviceContext* GetContext() { return d3dDeviceContext.Get(); }
+		IDXGISwapChain* GetSwapChain() { return d3dSwapChain.Get(); }
 	}
 
 
@@ -533,5 +545,6 @@ namespace DirectX11 {
 		}
 
 	}
+
 
 }
