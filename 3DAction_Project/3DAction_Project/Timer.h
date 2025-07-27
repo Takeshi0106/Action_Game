@@ -22,7 +22,10 @@ namespace Timer
 	// デバック時にのみ有効　ゲームループの開始で呼び出してください
 	// 毎フレームLastUpdate()が呼ばれているかのチェックをしています
 	void Debug_CheckUpdate();
+#else
+	inline void Debug_CheckUpdate() {} // コンパイル時に展開されるように
 #endif
+
 	void LastUpdate(); // ゲームループの一番最後で呼び出す処理
 	
 	float GetDeltaTime(); // 1フレームの経過時間を返す

@@ -162,9 +162,6 @@ void PlatformWindowsSystem::GameLoop()
 
     while (true)
     {
-#if defined(DEBUG) || defined(_DEBUG)
-        Timer::Debug_CheckUpdate(); // タイマーデバッグ
-#endif
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
         {
             if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
@@ -176,7 +173,6 @@ void PlatformWindowsSystem::GameLoop()
         {
             GameMain();
         }
-        Timer::LastUpdate(); // タイマー更新処理
     }
 
     GameUninit();        // ゲームの後処理
@@ -259,12 +255,16 @@ void PlatformWindowsSystem::GameInit()
 // =====================================================
 void PlatformWindowsSystem::GameMain()
 {
+    Timer::Debug_CheckUpdate(); // タイマーデバッグ
+
     // デバッグ時 
     DirectX11::BeginDraw(); // 描画の開始処理
 
     DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
 
     DirectX11::EndDraw(); // 描画の終わり処理
+
+    Timer::LastUpdate(); // タイマー更新処理
 }
 
 
