@@ -1,6 +1,5 @@
 ﻿#include "ReportMessage.h"
 #include <Windows.h> // メッセージボックス出力、HRESULT出力
-#include <iostream> // デバッグ文字を出力ウィンドウに書き出す
 
 namespace ErrorLog {
 

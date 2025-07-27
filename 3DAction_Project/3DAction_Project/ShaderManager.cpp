@@ -101,7 +101,7 @@ void ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // 同�
 			m_Pixels[filename.stem().string()] = std::move(pixel);
 		}
 		else if (filename.string().rfind("CS_", 0) == 0) {
-			OutputCompileShader(kFilePath, filename.stem().string(), "main", "cs_5_0", blob.GetAddressOf());                                // コンパイルして書き出す
+			OutputCompileShader(kFilePath, filename.stem().string(), "main", "cs_5_0", blob.GetAddressOf());                     // コンパイルして書き出す
 			auto compute = std::make_unique< ComputeShaderData>(filename.stem().string(), "main", "cs_5_0", device, blob.Get()); // 動的確保
 			m_Computes[filename.stem().string()] = std::move(compute);                                                           // メンバー配列に代入
 		}
@@ -172,9 +172,9 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	ofs.write(static_cast<const char*>(compileBlob->GetBufferPointer()), compileBlob->GetBufferSize());   // バイナリデータを書き出す
 	ofs.close();                                                                                          // ファイルを閉じる
 
-	blob = compileBlob.GetAddressOf();
+	*blob = compileBlob.Detach();
 
-	// 一応解放
+	// 一応明示的に解放　
 	errorBlob.Reset();
 	compileBlob.Reset();
 
