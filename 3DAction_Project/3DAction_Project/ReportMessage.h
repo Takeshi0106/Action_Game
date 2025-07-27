@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #if defined(DEBUG) || defined(_DEBUG)
 #include <iostream> // デバッグ文字を出力ウィンドウに書き出す
 #endif
@@ -10,12 +9,12 @@ bool IsHRESULTFailedWithLog(long hr, const char* message); // HRESULTとメッ�
 
 
 #if defined(DEBUG) || defined(_DEBUG)
-inline void Log(const char* message)
+inline void Log(const char* message) // インラインできるようにする
 {
     std::cerr << message << std::endl;
 }
 #else
-inline void Log(const char* message){}
+inline void Log(const char* message){} // インラインにしてなにも処理されないようにする
 #endif
 
 
