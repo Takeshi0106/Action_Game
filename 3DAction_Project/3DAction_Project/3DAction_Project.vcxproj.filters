@@ -31,6 +31,9 @@
     <Filter Include="Core\DirectX\Manager\ShaderManager\Shader">
       <UniqueIdentifier>{07e90396-7836-496f-9361-68a26f7d0442}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ReportMessage">
+      <UniqueIdentifier>{8ece8b84-d472-4735-bb54-33044975648a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="BaseDirectXManager.cpp">
       <Filter>Core\DirectX\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ReportMessage.cpp">
+      <Filter>ReportMessage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="BaseDirectXManager.h">
       <Filter>Core\DirectX\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ReportMessage.h">
+      <Filter>ReportMessage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

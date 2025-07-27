@@ -1,3 +1,3 @@
-#include "BaseDirectXManager.h"
+﻿#include "BaseDirectXManager.h"
 
 

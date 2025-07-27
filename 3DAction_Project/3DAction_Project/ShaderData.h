@@ -1,13 +1,8 @@
 ﻿#pragma once
-#include <string>       // 名前など
+#include <string>        // 名前など
 #include <d3d11.h>       // DirectXのAPI
-#include <wrl/client.h> // マイクロソフトが提供するスマートポインタ
-
-// ====================================================================
-// 前方宣言
-// ====================================================================
-struct Blob;     // シェーダーのバイナリデータ
-
+#include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
+#include <d3dcompiler.h> // シェーダーをコンパイルするヘッダー 描画マネージャーやプラットフォームクラスには必要がないため、中に入れたい
 
 // ====================================================================
 // シェーダークラス
@@ -42,9 +37,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_VertexShader; // ピクセルシェーダー
 
 public:
-	VertexShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, Blob* blob);   // コンストラクタ
-	~VertexShaderData() = default;                                                                               // デストラクタ
-	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }                                             // シェーダーのゲッター
+	VertexShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob);   // コンストラクタ
+	~VertexShaderData() = default;                                                                                   // デストラクタ
+	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }                                                 // シェーダーのゲッター
 };
 
 
@@ -54,7 +49,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_PixelShader; // ピクセルシェーダー
 
 public:
-	PixelShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, Blob* blob);   // コンストラクタ
+	PixelShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob);   // コンストラクタ
 	~PixelShaderData() = default;                                                                               // デストラクタ
 	ID3D11PixelShader* GetShader() { return m_PixelShader.Get(); }                                              // シェーダーのゲッター
 };
@@ -66,7 +61,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> m_ComputeShader; // コンピュートシェーダー
 
 public:
-	ComputeShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, Blob* blob); // コンストラクタ
+	ComputeShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob); // コンストラクタ
 	~ComputeShaderData() = default;                                                                             // デストラクタ
 	ID3D11ComputeShader* GetShader() { return m_ComputeShader.Get(); }                                          // シェーダーのゲッター
 };

@@ -1,22 +1,21 @@
-#pragma once
-#include <filesystem>           // ƒtƒ@ƒCƒ‹ƒpƒX‚È‚Ç@C++17ˆÈ~
-#include <string>               // •¶š—ñ
-#include <unordered_map>        // ƒnƒbƒVƒ…’l”z—ñ
+ï»¿#pragma once
+#include <filesystem>           // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãªã©ã€€C++17ä»¥é™
+#include <string>               // æ–‡å­—åˆ—
 
 // ==================================================================
-// DirectX‚Åg—p‚·‚éƒ}ƒl[ƒWƒƒ[‚ÌŠî’êƒNƒ‰ƒX
-// ƒVƒF[ƒ_[EƒeƒNƒXƒ`ƒƒEƒIƒuƒWƒFƒNƒg‚È‚Ç‚É”h¶‚³‚¹‚é
+// DirectXã§ä½¿ç”¨ã™ã‚‹ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åŸºåº•ã‚¯ãƒ©ã‚¹
+// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒ»ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãªã©ã«æ´¾ç”Ÿã•ã›ã‚‹
 // ==================================================================
 
 class BaseDirectXManager
 {
 protected:
-	const  std::filesystem::path kFilePath;     // ƒtƒ@ƒCƒ‹‚ğQÆ‚µ‚És‚­ƒpƒX
-	const  std::filesystem::path kAssetLogPath; // ƒAƒZƒbƒg‚ÌƒƒO ƒfƒoƒbƒOƒrƒ‹ƒh‚É‘o‚µAƒŠƒŠ[ƒXƒrƒ‹ƒh‚ÉƒAƒZƒbƒg‚ª‚ ‚é‚©‚ğŠm”F‚·‚é 
+	const  std::filesystem::path kFilePath;     // ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‚ç…§ã—ã«è¡Œããƒ‘ã‚¹
+	const  std::filesystem::path kAssetLogPath; // ã‚¢ã‚»ãƒƒãƒˆã®ãƒ­ã‚° ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰æ™‚ã«æ›¸å‡ºã—ã€ãƒªãƒªãƒ¼ã‚¹ãƒ“ãƒ«ãƒ‰æ™‚ã«ã‚¢ã‚»ãƒƒãƒˆãŒã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹ 
 
 public:
-	BaseDirectXManager(std::filesystem::path file, std::filesystem::path assetLog) : kFilePath(file), kAssetLogPath(assetLog) {}; // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	~BaseDirectXManager() = default;                                   // ƒfƒXƒgƒ‰ƒNƒ^
+	BaseDirectXManager(std::filesystem::path file, std::filesystem::path assetLog) : kFilePath(file), kAssetLogPath(assetLog) {}; // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	~BaseDirectXManager() = default;                                                                                              // ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 
 
 };

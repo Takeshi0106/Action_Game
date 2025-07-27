@@ -1,121 +1,182 @@
-#include "ShaderManager.h"
+ï»¿// å¿…é ˆãƒ˜ãƒƒãƒ€ãƒ¼
+#include "ShaderManager.h" // è‡ªåˆ†ã®ãƒ˜ãƒƒãƒ€ãƒ¼
+#include "ShaderData.h"    // ã‚·ã‚§ã‚¤ãƒ€ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚¯ãƒ©ã‚¹
 
-#include "ShaderData.h"  // ƒVƒFƒCƒ_[ƒNƒ‰ƒX
-#include <wrl/client.h>  // ƒXƒ}[ƒgƒ|ƒCƒ“ƒ^[
-#include <fstream>       //@ƒtƒ@ƒCƒ‹‚Ì‘o‚µ 
-#include <d3dcompiler.h> // ƒVƒF[ƒ_[‚ğƒRƒ“ƒpƒCƒ‹‚·‚éƒwƒbƒ_[
+// ã‚·ã‚§ã‚¤ãƒ€ãƒ¼ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ç”¨ãƒ˜ãƒƒãƒ€ãƒ¼
+#include <d3dcompiler.h>                // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã™ã‚‹ãŸã‚ã®ãƒ˜ãƒƒãƒ€ãƒ¼
+#pragma comment(lib, "d3dcompiler.lib") // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã™ã‚‹ãŸã‚ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ¼
+#include <fstream>                      // å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦æ›¸å‡ºã—
 
-#pragma comment(lib, "d3dcompiler.lib") // ƒVƒF[ƒ_[‚ğƒRƒ“ƒpƒCƒ‹‚·‚é‚½‚ßAPI‚ğg—p‚·‚é‚½‚ß‚Ìƒ‰ƒCƒuƒ‰ƒŠ[
+// DirectXç”¨
+#include <wrl/client.h>                 // DirectXç”¨ã®ã‚¹ãƒãƒ¼ãƒˆãƒã‚¤ãƒ³ã‚¿ãƒ¼
 
-
-#include <Windows.h>     // ƒGƒ‰[‚ÆƒGƒ‰[‚Ìí—Ş‚ğó‚¯æ‚é‚½‚ß‚É‚ ‚é@Œã‚Å‘‚«Š·‚¦‚é
+// ãƒ‡ãƒãƒƒã‚°æƒ…å ±ã‚„ã‚„ã‚¨ãƒ©ãƒ¼å‡ºåŠ›ç”¨
+#include <Windows.h>     // ã‚¨ãƒ©ãƒ¼ã¨ã‚¨ãƒ©ãƒ¼ã®ç¨®é¡ã‚’å—ã‘å–ã‚‹ãŸã‚ã«ã‚ã‚‹ã€€å¾Œã§æ›¸ãæ›ãˆã‚‹
 #if defined(DEBUG) || defined(_DEBUG)
-#include <iostream> // ƒEƒBƒ“ƒhƒE‚É‘‚«o‚·‚æ‚¤
+#include <iostream> // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«æ›¸ãå‡ºã™ã‚ˆã†
 #endif
 
 // ================================================
-// Ã“I•Ï”
+// é™çš„å¤‰æ•°
 // ================================================
-std::unordered_map<std::string, VertexShaderData> ShaderManager::m_Vertexs;
-std::unordered_map<std::string, PixelShaderData> ShaderManager::m_Pixels;
-std::unordered_map<std::string, ComputeShaderData> ShaderManager::m_Computes;
-
-// =================================================
-// ƒVƒF[ƒ_[‚ğæ“¾‚·‚éŠÖ”
-// =================================================
-
+std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  ShaderManager::m_Vertexs;
+std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   ShaderManager::m_Pixels;
+std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManager::m_Computes;
 
 
 // =================================================
-// ƒVƒF[ƒ_[‚ğƒRƒ“ƒpƒCƒ‹‚·‚éŠÖ”
+// ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€
 // =================================================
-bool ShaderManager::OutputCompileShader(const ShaderInfo info)
+bool OutputCompileShader(const std::filesystem::path kFilePath,const std::filesystem::path name, 
+	const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob); // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¦å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã—å¼•ãæ•°ã®blobã«ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã‚’å…¥ã‚Œã‚‹
+
+
+// =================================================
+// åˆæœŸåŒ–
+// =================================================
+void ShaderManager::Init(ID3D11Device* device)
 {
-	HRESULT hr = S_OK;                                      // ¬Œ÷‚©¸”s‚ğ•Ô‚·
-	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;   // ƒGƒ‰[‚ğæ“¾‚·‚é
-	Microsoft::WRL::ComPtr<ID3DBlob> compileBlob = nullptr; // ƒRƒ“ƒpƒCƒ‹‚µ‚½ƒoƒCƒiƒŠ[ƒf[ƒ^‚ğ“ü‚ê‚é
 
-	// ƒRƒ“ƒpƒCƒ‹ƒtƒ‰ƒO
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS; // ƒRƒ“ƒpƒCƒ‹‚ÉŒµ‚µ‚­ƒ`ƒFƒbƒN‚·‚éƒtƒ‰ƒO
 #if defined(DEBUG) || defined(_DEBUG)
-	dwShaderFlags |= D3DCOMPILE_DEBUG; // ƒRƒ“ƒpƒCƒ‹‚µ‚½ƒVƒF[ƒ_[‚ÉƒfƒoƒbƒOî•ñ‚ğ•t‚¯‚éƒtƒ‰ƒO
+	// ãƒ‡ãƒãƒƒã‚°ç”¨åˆæœŸåŒ–
+
+
+#endif
+}
+
+
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’æ¢ã™é–¢æ•°
+VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
+{
+	auto it = m_Vertexs.find(name);
+	if (it != m_Vertexs.end()) {
+		return it->second.get();
+	}
+	return nullptr; // è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
+}
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã‚’æ¢ã™é–¢æ•°
+PixelShaderData* ShaderManager::GetFindPixelShader(const std::string& name)
+{
+	auto it = m_Pixels.find(name);
+	if (it != m_Pixels.end()) {
+		return it->second.get();
+	}
+	return nullptr; // è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
+}
+// ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ãƒˆã‚·ã‚§ãƒ¼ãƒ€ã‚’æ¢ã™é–¢æ•°
+ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
+{
+	auto it = m_Computes.find(name);
+	if (it != m_Computes.end()) {
+		return it->second.get(); 
+	}
+	return nullptr; // è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
+}
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+
+// ãƒ‡ãƒãƒƒã‚°æ™‚ã®ã¿æœ‰åŠ¹ã«ã™ã‚‹é–¢æ•°
+void ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // åŒã˜éšå±¤ã«ã‚ã‚‹.hlslã‚’å…¨ã¦ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¦æ›¸ãå‡ºã™ å°†æ¥çš„ã«ã¯æ›´æ–°ã•ã‚Œã¦ã„ã‚‹ã‹ã‚’ç¢ºèªã—ã¦ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã™ã‚‹ã‹ã—ãªã„ã‹ã‚’åˆ¤å®šã—ãŸã„
+{
+	std::filesystem::path currentFilePath = __FILE__;                       // ã“ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ã®ãƒ‘ã‚¹ã‚’å–å¾—
+	std::filesystem::path currentDirectory = currentFilePath.parent_path(); // ãƒ‘ã‚¹ã‹ã‚‰è‡ªåˆ†ã®éšå±¤ã ã‘ã‚’æŠœãå–ã‚‹
+
+	// .hlslãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¢ã™
+	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory)) // éšå±¤å†…ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦å–å¾—ã—ã¦ã„ã¾ã™
+	{
+		if (!entry.is_regular_file() || entry.path().extension() != ".hlsl") { continue; } // ãƒ•ã‚¡ã‚¤ãƒ«ã§ãªã‹ã£ãŸã‚Šã€æ‹¡å¼µå­ãŒé•ã£ãŸã‚Šã™ã‚Œã°æ¬¡ã®ãƒ«ãƒ¼ãƒ—ã¸
+
+		Microsoft::WRL::ComPtr<ID3DBlob> blob;
+		std::filesystem::path filename = entry.path().filename();
+
+		if (filename.string().rfind("VS_", 0) == 0) {
+			OutputCompileShader(kFilePath, filename.stem(), "main", "vs_5_0", blob.GetAddressOf());                                      // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¦æ›¸ãå‡ºã™
+			auto vertex = std::make_unique<VertexShaderData>(filename.stem().string(), "main", "vs_5_0", device, blob.Get()); // å‹•çš„ç¢ºä¿
+			m_Vertexs[filename.stem().string()] = std::move(vertex);                                                          // ãƒ¡ãƒ³ãƒãƒ¼é…åˆ—ã«ä»£å…¥
+		}
+		else if (filename.string().rfind("PS_", 0) == 0) {
+			OutputCompileShader(kFilePath, filename.stem().string(), "main", "ps_5_0", blob.GetAddressOf()); // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¦æ›¸ãå‡ºã™
+			auto pixel = std::make_unique<PixelShaderData>(filename.stem().string(), "main", "ps_5_0", device, blob.Get());
+			m_Pixels[filename.stem().string()] = std::move(pixel);
+		}
+		else if (filename.string().rfind("CS_", 0) == 0) {
+			OutputCompileShader(kFilePath, filename.stem().string(), "main", "cs_5_0", blob.GetAddressOf());                                // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¦æ›¸ãå‡ºã™
+			auto compute = std::make_unique< ComputeShaderData>(filename.stem().string(), "main", "cs_5_0", device, blob.Get()); // å‹•çš„ç¢ºä¿
+			m_Computes[filename.stem().string()] = std::move(compute);                                                           // ãƒ¡ãƒ³ãƒãƒ¼é…åˆ—ã«ä»£å…¥
+		}
+
+	}
+
+}
+
+
+#endif
+
+
+// =================================================
+// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã™ã‚‹é–¢æ•°
+// =================================================
+bool OutputCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path name, const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob)
+{
+	HRESULT hr = S_OK;                                      // æˆåŠŸã‹å¤±æ•—ã‚’è¿”ã™
+	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;   // ã‚¨ãƒ©ãƒ¼ã‚’å–å¾—ã™ã‚‹
+	Microsoft::WRL::ComPtr<ID3DBlob> compileBlob = nullptr; // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ãŸãƒã‚¤ãƒŠãƒªãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚’å…¥ã‚Œã‚‹
+
+	// ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ãƒ•ãƒ©ã‚°
+	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS; // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ™‚ã«å³ã—ããƒã‚§ãƒƒã‚¯ã™ã‚‹ãƒ•ãƒ©ã‚°
+#if defined(DEBUG) || defined(_DEBUG)
+	dwShaderFlags |= D3DCOMPILE_DEBUG; // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ãŸã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«ãƒ‡ãƒãƒƒã‚°æƒ…å ±ã‚’ä»˜ã‘ã‚‹ãƒ•ãƒ©ã‚°
 #endif
 
 #if !defined(DEBUG) && !defined(_DEBUG)
-	dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3; // Å‚ƒŒƒxƒ‹‚ÌÅ“K‰»‚ğs‚¤ƒtƒ‰ƒO
+	dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3; // æœ€é«˜ãƒ¬ãƒ™ãƒ«ã®æœ€é©åŒ–ã‚’è¡Œã†ãƒ•ãƒ©ã‚°
 #endif
 
 	hr = D3DCompileFromFile(
-		info.name.wstring().c_str(),            // ƒVƒF[ƒ_[‚Ìƒtƒ@ƒCƒ‹–¼
-		nullptr,                                // GPU‚Åg—p‚·‚éƒ}ƒNƒ’è‹`i‚È‚¢ê‡nullptrj
-		D3D_COMPILE_STANDARD_FILE_INCLUDE,      // HLSL‚Å‘¼‚ÌHLSL‚ğ“Ç‚İ‚Şƒtƒ‰ƒO
-		info.entryPoint.c_str(),                // ƒVƒF[ƒ_[‚È‚¢‚ÅÅ‰‚ÉÀs‚³‚ê‚éŠÖ”‚Ì–¼‘O
-		info.shaderTypeModel.c_str(),           // ƒVƒF[ƒ_[‚Ìí—Ş‚Æƒo[ƒWƒ‡ƒ“
-		dwShaderFlags,                          // ƒRƒ“ƒpƒCƒ‹‚Ìƒtƒ‰ƒO
-		0,                                      // ¡‚Í‰½‚à‚È‚¢ƒtƒ‰ƒO
-		compileBlob.GetAddressOf(),             // ƒRƒ“ƒpƒCƒ‹‚µ‚½ƒVƒF[ƒ_[‚ğæ“¾‚·‚é
-		errorBlob.GetAddressOf()                // ƒGƒ‰[ƒƒbƒZ[ƒW‚ğæ“¾‚·‚é
+		name.wstring().c_str(),                 // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«å
+		nullptr,                                // GPUã§ä½¿ç”¨ã™ã‚‹ãƒã‚¯ãƒ­å®šç¾©ï¼ˆãªã„å ´åˆnullptrï¼‰
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,      // HLSLã§ä»–ã®HLSLã‚’èª­ã¿è¾¼ã‚€ãƒ•ãƒ©ã‚°
+		entryPoint.c_str(),                     // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãªã„ã§æœ€åˆã«å®Ÿè¡Œã•ã‚Œã‚‹é–¢æ•°ã®åå‰
+		shaderTypeModel.c_str(),                // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç¨®é¡ã¨ãƒãƒ¼ã‚¸ãƒ§ãƒ³
+		dwShaderFlags,                          // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã®ãƒ•ãƒ©ã‚°
+		0,                                      // ä»Šã¯ä½•ã‚‚ãªã„ãƒ•ãƒ©ã‚°
+		compileBlob.GetAddressOf(),             // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ãŸã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’å–å¾—ã™ã‚‹
+		errorBlob.GetAddressOf()                // ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å–å¾—ã™ã‚‹
 	);
 
-	if (FAILED(hr)) { // ƒGƒ‰[æ“¾
-		std::string messegeError = info.name.string() + "‚ÌƒRƒ“ƒpƒCƒ‹‚É¸”s";
-		MessageBoxA(nullptr, messegeError.c_str(), "ƒGƒ‰[", MB_OK | MB_ICONERROR); // ƒƒbƒZ[ƒWƒ{ƒbƒNƒX
+	if (FAILED(hr)) { // ã‚¨ãƒ©ãƒ¼å–å¾—æ™‚
+		std::string messegeError = name.string() + "ã®ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã«å¤±æ•—";
+		MessageBoxA(nullptr, messegeError.c_str(), "ã‚¨ãƒ©ãƒ¼", MB_OK | MB_ICONERROR); // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹
 
 #if defined(DEBUG) || defined(_DEBUG)
-		if (errorBlob != nullptr) {  // ƒfƒoƒbƒO‚Ì‚İÚ×‚ÈƒGƒ‰[o—Í
+		if (errorBlob != nullptr) {  // ãƒ‡ãƒãƒƒã‚°æ™‚ã®ã¿è©³ç´°ãªã‚¨ãƒ©ãƒ¼å‡ºåŠ›
 			std::cout << static_cast<const char*>(errorBlob->GetBufferPointer()) << std::endl;
 		}
 #endif
 		return false;
 	}
 
-	std::string filename = info.name.stem().string();                            // Šg’£q‚È‚µ‚Ì–¼‘O‚ğæ“¾
-	std::filesystem::path outputPath = kFilePath / (filename + ".cso");          // o—ÍƒpƒX‚ğì¬
+	std::string filename = name.stem().string();                                 // æ‹¡å¼µå­ãªã—ã®åå‰ã‚’å–å¾—
+	std::filesystem::path outputPath = kFilePath / (filename + ".cso");          // å‡ºåŠ›ãƒ‘ã‚¹ã‚’ä½œæˆ
 
-	std::filesystem::create_directories(outputPath.parent_path()); // ƒpƒX‚©‚çƒtƒHƒ‹ƒ_‚ğŠm”F ‚È‚¯‚ê‚Î‚ğì¬‚µ‚Ä‚­‚ê‚é
+	std::filesystem::create_directories(outputPath.parent_path()); // ãƒ‘ã‚¹ã‹ã‚‰ãƒ•ã‚©ãƒ«ãƒ€ã‚’ç¢ºèª ãªã‘ã‚Œã°ã‚’ä½œæˆã—ã¦ãã‚Œã‚‹
 
-	// ‘‚«o‚µˆ—
+	// æ›¸ãå‡ºã—å‡¦ç†
 	std::ofstream ofs(outputPath, std::ios::binary | std::ios::out);
 	if (!ofs) {
-		MessageBoxA(nullptr, "CSOƒtƒ@ƒCƒ‹‚Ì‘‚«‚İ‚É¸”s‚µ‚Ü‚µ‚½B", "ƒGƒ‰[", MB_OK | MB_ICONERROR);
+		MessageBoxA(nullptr, "CSOãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", "ã‚¨ãƒ©ãƒ¼", MB_OK | MB_ICONERROR);
 		return false;
 	}
 
-	ofs.write(static_cast<const char*>(compileBlob->GetBufferPointer()), compileBlob->GetBufferSize());   // ƒoƒCƒiƒŠƒf[ƒ^‚ğ‘‚«o‚·
-	ofs.close();                                                                                          // ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+	ofs.write(static_cast<const char*>(compileBlob->GetBufferPointer()), compileBlob->GetBufferSize());   // ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãå‡ºã™
+	ofs.close();                                                                                          // ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 
-	// ˆê‰‰ğ•ú
+	blob = compileBlob.GetAddressOf();
+
+	// ä¸€å¿œè§£æ”¾
 	errorBlob.Reset();
 	compileBlob.Reset();
 
 	return true;
-}
-
-
-// ’¸“_ƒVƒF[ƒ_[‚ğ’T‚·ŠÖ”
-VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
-{
-	auto it = m_Vertexs.find(name);
-	if (it != m_Vertexs.end()) {
-		return &(it->second);
-	}
-	return nullptr; // Œ©‚Â‚©‚ç‚È‚©‚Á‚½
-}
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚ğ’T‚·ŠÖ”
-PixelShaderData* ShaderManager::GetFindPixelShader(const std::string& name)
-{
-	auto it = m_Pixels.find(name);
-	if (it != m_Pixels.end()) {
-		return &(it->second);
-	}
-	return nullptr; // Œ©‚Â‚©‚ç‚È‚©‚Á‚½
-}
-// ƒRƒ“ƒsƒ…[ƒgƒVƒF[ƒ_‚ğ’T‚·ŠÖ”
-ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
-{
-	auto it = m_Computes.find(name);
-	if (it != m_Computes.end()) {
-		return &(it->second); 
-	}
-	return nullptr; // Œ©‚Â‚©‚ç‚È‚©‚Á‚½
 }

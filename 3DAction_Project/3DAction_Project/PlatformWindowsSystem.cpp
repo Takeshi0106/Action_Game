@@ -26,8 +26,6 @@ public:
         hInstance = _hInstance;
         return *this;
     }
-    // 暗黙的に変換を禁止にする
-    explicit operator HINSTANCE() const { return hInstance; }
     // ラップしているHINSTANCEを返す
     HINSTANCE Get() const { return hInstance; }
 };
@@ -160,9 +158,6 @@ void PlatformWindowsSystem::GameLoop()
 {
     MSG msg = {}; // メッセージ
 
-    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
-        return; // 失敗したら戻る
-    }
     GameInit(); // ゲームの初期化処理
 
     while (true)
@@ -185,7 +180,6 @@ void PlatformWindowsSystem::GameLoop()
     }
 
     GameUninit();        // ゲームの後処理
-    DirectX11::Uninit(); // Directの後処理
 }
 
 
@@ -248,23 +242,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 // =====================================================
 void PlatformWindowsSystem::GameInit()
 {
+    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
+        return; // 失敗したら戻る
+    }
+
     Timer::Init(); // タイマー初期化
     Timer::Start(); // タイマー開始
 
     
-    // デバッグ用 頂点シェーダ読込み
-    bool     hr = true;
 
-    /*
-    hr = OutputCompileShader(ShaderInfo{ "VS_Debug.hlsl", "VSFunc", ShaderType::VERTEX_5_0 },"Asset/Shader/");
-    if (!hr) {
-        MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
-    }
-    hr = OutputCompileShader(ShaderInfo{ "PS_Debug.hlsl", "PSFunc", ShaderType::PIXEL_5_0 }, "Asset/Shader/");
-    if (!hr) {
-        MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
-    }
-    */
 }
 
 
@@ -287,5 +273,5 @@ void PlatformWindowsSystem::GameMain()
 // =====================================================
 void PlatformWindowsSystem::GameUninit()
 {
-
+    DirectX11::Uninit(); // Directの後処理
 }

@@ -15,7 +15,7 @@ struct PSInput
 };
 
 // エントリーポイント
-PSInput VSFunc(VSInput input)
+PSInput main(VSInput input)
 {
 
     PSInput output;

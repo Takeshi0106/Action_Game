@@ -1,36 +1,21 @@
 ﻿#include "ShaderData.h"
-#include <d3dcompiler.h>  // シェーダーをコンパイルするヘッダー
 
 #if defined(DEBUG) || defined(_DEBUG)
 #include <iostream> // 文字出力
 #endif
 
 
-struct Blob{
-private: // 直接アクセス不可
-    ID3DBlob* blob; // アプリケーションハンドル
-
-public:
-    Blob(ID3DBlob* pBlob) : blob(pBlob) {}
-    ~Blob() {
-            blob->Release();
-            blob = nullptr;
-    }
-    ID3DBlob* Get() { return blob; }
-};
-
-
 // =======================================================================
 // 頂点シェイダー
 // =======================================================================
-VertexShaderData::VertexShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, Blob* blob)
+VertexShaderData::VertexShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob)
     :BaseShaderData(name, entry, type) 
 {
     HRESULT hr = S_OK;
     
     hr = device->CreateVertexShader(
-        blob->Get(),                  // バイナリデータ
-        blob->Get()->GetBufferSize(), // サイズ
+        blob,                         // バイナリデータ
+        blob->GetBufferSize(),        // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
         m_VertexShader.GetAddressOf() // 出力先
     );
@@ -48,14 +33,14 @@ VertexShaderData::VertexShaderData(std::string name, std::string entry, std::str
 // =======================================================================
 // ピクセルシェイダー
 // =======================================================================
-PixelShaderData::PixelShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, Blob* blob)
+PixelShaderData::PixelShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob)
     :BaseShaderData(name, entry, type) 
 {
     HRESULT hr = S_OK;
 
     hr = device->CreatePixelShader(
-        blob->Get(),                  // バイナリデータ
-        blob->Get()->GetBufferSize(), // サイズ
+        blob,                  // バイナリデータ
+        blob->GetBufferSize(), // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
         m_PixelShader.GetAddressOf()  // 出力先
     );
@@ -73,14 +58,14 @@ PixelShaderData::PixelShaderData(std::string name, std::string entry, std::strin
 // =======================================================================
 // コンピュートシェイダー
 // =======================================================================
-ComputeShaderData::ComputeShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, Blob* blob)
+ComputeShaderData::ComputeShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob)
     :BaseShaderData(name, entry, type)
 {
     HRESULT hr = S_OK;
 
     hr = device->CreateComputeShader(
-        blob->Get(),                    // バイナリデータ
-        blob->Get()->GetBufferSize(),   // サイズ
+        blob,                    // バイナリデータ
+        blob->GetBufferSize(),   // サイズ
         nullptr,                        // クラスリンク未使用ならnullptr
         m_ComputeShader.GetAddressOf()  // 出力先
     );

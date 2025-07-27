@@ -1,48 +1,42 @@
-#pragma once
-#include "BaseDirectXManager.h" // ƒ}ƒl[ƒWƒƒ[ƒNƒ‰ƒX
-
-// ==============================================
-// ‘O•ûéŒ¾
-// ==============================================
-struct ID3D11Device;     // DirectX‚ÌƒfƒoƒCƒX
-class VertexShaderData;  // ’¸“_ƒVƒF[ƒ_[
-class PixelShaderData;   // ƒsƒNƒZƒ‹ƒVƒF[ƒ_
-class ComputeShaderData; // ƒRƒ“ƒsƒ…[ƒgƒVƒF[ƒ_
+ï»¿#pragma once
+#include "BaseDirectXManager.h" // ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚¯ãƒ©ã‚¹ï¼ˆåŸºåº•ã‚¯ãƒ©ã‚¹ï¼‰
+#include <memory>               // ã‚¹ãƒãƒ¼ãƒˆãƒã‚¤ãƒ³ã‚¿ãƒ¼
+#include <unordered_map>        // ãƒãƒƒã‚·ãƒ¥å€¤é…åˆ—
 
 
 // ==============================================
-// ƒVƒF[ƒ_[‚Ìî•ñ
+// å‰æ–¹å®£è¨€
 // ==============================================
-struct ShaderInfo {
-    std::filesystem::path name;  // ƒVƒF[ƒ_[‚Ì–¼‘O .hlsl‚ğŠÜ‚ß‚Ä‚­‚¾‚³‚¢
-    std::string entryPoint;      // ƒVƒF[ƒ_[‚ÌƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg
-    std::string shaderTypeModel; // ƒVƒF[ƒ_[ƒ^ƒCƒv‚Æƒ‚ƒfƒ‹‚ğ“ü‚ê‚é
-};
+struct ID3D11Device;     // DirectXã®ãƒ‡ãƒã‚¤ã‚¹
+class VertexShaderData;  // é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
+class PixelShaderData;   // ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€
+class ComputeShaderData; // ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ãƒˆã‚·ã‚§ãƒ¼ãƒ€
 
 
 // ===================================================================================================
-// ƒVƒF[ƒ_[‚ğŠÇ—‚·‚éƒNƒ‰ƒX  iƒVƒFƒCƒ_[‚ÌƒRƒ“ƒpƒCƒ‹AƒoƒCƒiƒŠ[ƒtƒ@ƒCƒ‹‚Ìƒ[ƒhAƒLƒƒƒbƒVƒ…j
-// unordered_map(std::string,shader) ”z—ñ‚Åì¬‚·‚é
+// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹  ï¼ˆã‚·ã‚§ã‚¤ãƒ€ãƒ¼ã®ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã€ãƒã‚¤ãƒŠãƒªãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ­ãƒ¼ãƒ‰ã€ã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼‰
+// unordered_map(std::string,shader) é…åˆ—ã§ä½œæˆã™ã‚‹
 // ===================================================================================================
 class ShaderManager : public BaseDirectXManager
 {
 private:
-    const std::string kHlslFailePath;    // .hlsl‚ª“ü‚Á‚Ä‚¢‚éƒtƒHƒ‹ƒ_[‚ÌƒpƒX
+    // ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°
+    const std::string kHlslFailePath;    // .hlslãŒå…¥ã£ã¦ã„ã‚‹ãƒ•ã‚©ãƒ«ãƒ€ãƒ¼ã®ãƒ‘ã‚¹
 
-    static std::unordered_map<std::string, VertexShaderData>  m_Vertexs;  // ’¸“_ƒVƒF[ƒ_[‚ğ“ü‚ê‚é”z—ñ
-    static std::unordered_map<std::string, PixelShaderData>   m_Pixels;   // ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚ğ“ü‚ê‚é”z—ñ
-    static std::unordered_map<std::string, ComputeShaderData> m_Computes; // ƒRƒ“ƒsƒ…[ƒgƒVƒF[ƒ_[‚ğ“ü‚ê‚é”z—ñ
-
-    bool OutputCompileShader(const ShaderInfo info); // ƒVƒF[ƒ_[‚ğƒRƒ“ƒpƒCƒ‹‚µ‚ÄŠO•”ƒtƒ@ƒCƒ‹‚É‘‚«o‚·
+    static std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’å…¥ã‚Œã‚‹é…åˆ—
+    static std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã‚’å…¥ã‚Œã‚‹é…åˆ—
+    static std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ãƒˆã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’å…¥ã‚Œã‚‹é…åˆ—
 
 #if defined(DEBUG) || defined(_DEBUG)
-    // ƒfƒoƒbƒO‚Ì‚İ—LŒø‚É‚·‚éŠÖ”
+    // ãƒ‡ãƒãƒƒã‚°æ™‚ã®ã¿æœ‰åŠ¹ã«ã™ã‚‹é–¢æ•°
+    void CompileAllHLSLFilesInDirectory(ID3D11Device* device); // åŒã˜éšå±¤ã«ã‚ã‚‹.hlslã‚’å…¨ã¦ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¦å‡ºåŠ›ã™ã‚‹é–¢æ•°
 
 #endif
 
 public:
+    void Init(ID3D11Device* device); // ã‚·ã‚§ã‚¤ãƒ€ãƒ¼ã‚’ä¿å­˜ã™ã‚‹ã‚¯ãƒ©ã‚¹
 
-    // ƒQƒbƒ^[
+    // ã‚²ãƒƒã‚¿ãƒ¼
     static VertexShaderData*  GetFindVertexShader (const std::string& name);
     static PixelShaderData*   GetFindPixelShader  (const std::string& name);
     static ComputeShaderData* GetFindComputeShader(const std::string& name);
