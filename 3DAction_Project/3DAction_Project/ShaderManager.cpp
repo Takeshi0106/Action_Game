@@ -17,10 +17,6 @@
 // ファイルパス用ヘッダー
 #include <filesystem>  // ファイルパスなどを楽に扱える　C++17以降
 
-#if defined(DEBUG) || defined(_DEBUG)
-#include <vector>  // デバッグ時にシェイダーの名前を保存しておく用
-#endif
-
 
 // ================================================
 // 静的変数
@@ -36,7 +32,6 @@ std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManage
 bool OutputCompileShader(const std::filesystem::path kFilePath,const std::filesystem::path name, 
 	const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob); // シェーダーをコンパイルして外部ファイルに書き出し引き数のblobにバイナリデータを入れる
 bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blob);    // パスから.csoを読み込んでくる関数
-
 
 #if defined(DEBUG) || defined(_DEBUG)
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath); // .hlslが更新されているかを確認する
@@ -155,7 +150,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 				return false;
 			}
 		}
-		else {			// .cso を読み込む
+		else {	// .cso を読み込む
 			if (!LoadCompiledShaderBlob(csoPath, blob.GetAddressOf())) {
 				ErrorLog::MessageBoxOutput((csoPath.string() + " : CSOの読み込みに失敗しました").c_str());
 				return false;
@@ -196,24 +191,12 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 		blob.Reset(); // 一応、解放処理
 	}
 
-	// 使用したシェイダーの名前をテキストファイルに書き出す処理
-	// フォルダがない場合作成
-	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) { // ファイルがない場合作成する
-		if (!std::filesystem::create_directories(std::filesystem::path(kAssetLogPath).parent_path())) {
-			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
-			return false;
-		}
+	if (!WriteLog(shaderNames)) {// 配列をログにして書き出す
+		ErrorLog::Log("シェイーダーのログ書出しに失敗");
+		return false;
 	}
-
-	std::ofstream ofs(kAssetLogPath, std::ios::binary | std::ios::out); // ファイルを開ける
-
-	for (const std::string& name : shaderNames) {
-		ofs << name << "\n";                                              // ファイルに書き込み
-	}
-	ofs.close();                                                          // ファイルを閉じる
 
 	return true;
-
 }
 
 
