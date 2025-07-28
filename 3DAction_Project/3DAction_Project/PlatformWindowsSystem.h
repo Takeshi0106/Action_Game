@@ -1,9 +1,15 @@
 ﻿#pragma once
+
+// 基底クラスのヘッダー
 #include "PlatformSystem.h"
-#include <cstdint>          // 数字
+
+// 標準ヘッダー
+#include <cstdint>          // 整数
 #include <string>           // 文字列
 
-#include "ShaderManager.h"
+// GameMainで使用するヘッダー
+#include "ShaderManager.h"  // メンバー変数として保持するシェイダーマネージャー もしかしたら描画マネージャーの中に入れる可能性あり
+
 
 // =====================================================
 // 前方宣言　Windows.hを.cpp内だけでインクルードする

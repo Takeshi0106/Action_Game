@@ -9,10 +9,13 @@
 #include <Windows.h>                    // デバイス受け取り
 
 // DirectX用
-#include <wrl/client.h>                 // DirectX用のスマートポインター
+#include <wrl/client.h>  // DirectX用のスマートポインター
 
 // デバッグ情報ややエラー出力用
 #include "ReportMessage.h"
+
+// ファイルパス用ヘッダー
+#include <filesystem>  // ファイルパスなどを楽に扱える　C++17以降
 
 #if defined(DEBUG) || defined(_DEBUG)
 #include <vector>  // デバッグ時にシェイダーの名前を保存しておく用
@@ -113,9 +116,9 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 	{
 		if (!entry.is_regular_file() || entry.path().extension() != ".hlsl") { continue; } // ファイルでなかったり、拡張子が違ったりすれば次のループへ
 
-		std::filesystem::path hlslPath = entry.path();                                     // .hlslのフルパスをを取得
-		std::filesystem::path filename = hlslPath.filename();                              // .hlslのファイル名を取得
-		std::filesystem::path csoPath = kFilePath / (filename.stem().wstring() + L".cso"); // .hlslの拡張子なしファイル名に.csoを付けてコンパイル名を取得
+		std::filesystem::path hlslPath = entry.path();                                                            // .hlslのフルパスをを取得
+		std::filesystem::path filename = hlslPath.filename();                                                     // .hlslのファイル名を取得
+		std::filesystem::path csoPath = std::filesystem::path(kFilePath) / (filename.stem().wstring() + L".cso"); // .hlslの拡張子なしファイル名に.csoを付けてコンパイル名を取得
 
 		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
 
@@ -195,8 +198,8 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 
 	// 使用したシェイダーの名前をテキストファイルに書き出す処理
 	// フォルダがない場合作成
-	if(!std::filesystem::exists(kAssetLogPath.parent_path())) { // ファイルがない場合作成する
-		if (!std::filesystem::create_directories(kAssetLogPath.parent_path())) {
+	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) { // ファイルがない場合作成する
+		if (!std::filesystem::create_directories(std::filesystem::path(kAssetLogPath).parent_path())) {
 			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
 			return false;
 		}

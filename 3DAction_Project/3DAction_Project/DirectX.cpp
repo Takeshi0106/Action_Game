@@ -1,21 +1,17 @@
 ﻿// 必須ヘッダー
 #include "DirectX.h"    // 自分のヘッダー
 
-// Windows・DirectX
-#include <Windows.h>                    // ウィンドウのハンドル用
-#include <d3d11.h>                      // DirectXの基本的なAPI
-#pragma comment (lib, "d3d11.lib")      // DirectXの基本APIを使用するためのライブラリー
-#include <wrl/client.h>                 // マイクロソフトが提供するスマートポインタ
+// Windows・DirectX用
+#include <Windows.h>                // ウィンドウのハンドル用
+#include <d3d11.h>                  // DirectXの基本的なAPI
+#pragma comment (lib, "d3d11.lib")  // DirectXの基本APIを使用するためのライブラリー
+#include <wrl/client.h>             // マイクロソフトが提供するスマートポインタ
 
 // 標準ライブラリ
 #include <cmath>        //デバッグ描画の色変更で使用しています　後で消す
 
 // デバッグ用出力
 #include "ReportMessage.h"
-
-#if defined(DEBUG) || defined(_DEBUG) // デバッグ時にヘッダーをコンパイル
-#include <cassert>
-#endif
 
 
 // =======================================

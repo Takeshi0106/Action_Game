@@ -15,7 +15,6 @@ bool VertexShaderData::Init(ID3D11Device* device, void* binary, size_t size)
         return false;
     }
 
-
     HRESULT hr = S_OK;
     
     hr = device->CreateVertexShader(

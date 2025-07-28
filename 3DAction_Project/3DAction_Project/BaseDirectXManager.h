@@ -1,6 +1,7 @@
 ﻿#pragma once
-#include <filesystem>           // ファイルパスなど　C++17以降
-#include <string>               // 文字列
+
+// 標準ヘッダー
+#include <string> // 文字列
 
 // ==================================================================
 // DirectXで使用するマネージャーの基底クラス
@@ -10,15 +11,15 @@
 class BaseDirectXManager
 {
 protected:
-	const  std::filesystem::path kFilePath;     // ファイルを参照しに行くパス
-	const  std::filesystem::path kAssetLogPath; // アセットのログ デバッグビルド時に書出し、リリースビルド時にアセットがあるかを確認する 
+	const  std::string kFilePath;     // ファイルを参照しに行くパス
+	const  std::string kAssetLogPath; // アセットのログ デバッグビルド時に書出し、リリースビルド時にアセットがあるかを確認する 
 
 public:
-	BaseDirectXManager(std::filesystem::path file, std::filesystem::path assetLog)
+	BaseDirectXManager(std::string file, std::string assetLog)
 		: kFilePath(file), kAssetLogPath(assetLog) {
 	}; // コンストラクタ
 
-	~BaseDirectXManager() = default;                                                                                              // デストラクタ
+	~BaseDirectXManager() = default;  // デストラクタ
 
 
 };

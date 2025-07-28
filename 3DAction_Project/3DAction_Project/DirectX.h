@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+// 標準ヘッダー
 #include <cstdint>   // 整数型 uintなど
 
 

@@ -1,17 +1,17 @@
 ﻿// 必須ヘッダー
-#include "PlatformWindowsSystem.h"   // 自分のヘッダー
+#include "PlatformWindowsSystem.h"  // 自分のヘッダー
 
 // Windowsヘッダー
-#include <Windows.h>                 // ウィンドウ作成用
+#include <Windows.h>  // ウィンドウ作成用
 
 // DirectXヘッダー
-#include "DirectX.h"                 // DirectX初期化用　後で描画マネージャーに任せるようにする
+#include "DirectX.h"  // DirectX初期化用　後で描画マネージャーに任せるようにする
 
 // 標準ヘッダー
 #include <cstdint>   // 整数型 uintなど
 
 // ゲーム用ヘッダー
-#include "Timer.h"                   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
+#include "Timer.h"   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
 
 // デバッグ用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
