@@ -29,9 +29,12 @@ std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManage
 // =================================================
 // プロトタイプ宣言
 // =================================================
-bool OutputCompileShader(const std::filesystem::path kFilePath,const std::filesystem::path name, 
-	const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob); // シェーダーをコンパイルして外部ファイルに書き出し引き数のblobにバイナリデータを入れる
-bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blob);    // パスから.csoを読み込んでくる関数
+bool OutputCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path name, // シェーダーをコンパイルして外部ファイルに書き出し引き数のblobにバイナリデータを入れる
+	const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob);
+bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blob);               // パスから.csoを読み込んでくる関数
+bool JudgeCompileShader(const std::filesystem::path kFilePath,                                    // コンパイルするシェイダーの種類を判定してコンパイル関数に渡す
+	const std::string filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob);
+
 
 #if defined(DEBUG) || defined(_DEBUG)
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath); // .hlslが更新されているかを確認する
@@ -304,6 +307,13 @@ bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blo
 	return true;
 }
 
+
+bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::string filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob)
+{
+
+
+	return true;
+}
 
 
 #if defined(DEBUG) || defined(_DEBUG)
