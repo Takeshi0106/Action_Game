@@ -10,6 +10,12 @@
 // =======================================================================
 bool VertexShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 {
+    if (!device || !binary || size == 0) {
+        ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        return false;
+    }
+
+
     HRESULT hr = S_OK;
     
     hr = device->CreateVertexShader(
@@ -28,6 +34,11 @@ bool VertexShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 // =======================================================================
 bool PixelShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 {
+    if (!device || !binary || size == 0) {
+        ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        return false;
+    }
+
     HRESULT hr = S_OK;;
 
     hr = device->CreatePixelShader(
@@ -46,6 +57,11 @@ bool PixelShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 // =======================================================================
 bool ComputeShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 {
+    if (!device || !binary || size == 0) {
+        ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        return false;
+    }
+
     HRESULT hr = S_OK;
 
     hr = device->CreateComputeShader(
