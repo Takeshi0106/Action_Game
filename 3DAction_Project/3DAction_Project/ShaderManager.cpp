@@ -161,25 +161,25 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 
 		// バイナリーデータをいれて、シェーダーを作成　配列に代入
 		if (filename.string().rfind("VS_", 0) == 0) {
-			auto vertex = std::make_unique<VertexShaderData>(filename.stem().string(), "main", "vs_5_0"); // 動的確保
-			IsSuccess = vertex->Init(device, blob.Get());                                                 // 初期化実行
-			m_Vertexs[filename.stem().string()] = std::move(vertex);                                      // メンバー配列に代入
+			auto vertex = std::make_unique<VertexShaderData>(filename.stem().string(), "main", "vs_5_0");  // 動的確保
+			IsSuccess = vertex->Init(device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize()); // 初期化実行
+			m_Vertexs[filename.stem().string()] = std::move(vertex);                                       // メンバー配列に代入
 
-			shaderNames.push_back(filename.stem().string());                                              // 名前を保存しておく
+			shaderNames.push_back(filename.stem().string());                                               // 名前を保存しておく
 		}
 		else if (filename.string().rfind("PS_", 0) == 0) {
 			auto pixel = std::make_unique<PixelShaderData>(filename.stem().string(), "main", "ps_5_0");      // 動的確保
-			IsSuccess = pixel->Init(device, blob.Get());                                                     // 初期化実行
+			IsSuccess = pixel->Init(device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize());    // 初期化実行
 			m_Pixels[filename.stem().string()] = std::move(pixel);                                           // メンバー配列に代入
 
-			shaderNames.push_back(filename.stem().string());                                              // 名前を保存しておく
+			shaderNames.push_back(filename.stem().string());                                                 // 名前を保存しておく
 		}
 		else if (filename.string().rfind("CS_", 0) == 0) {
 			auto compute = std::make_unique< ComputeShaderData>(filename.stem().string(), "main", "cs_5_0"); // 動的確保
-			IsSuccess = compute->Init(device, blob.Get());                                                   // 初期化実行
+			IsSuccess = compute->Init(device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize());  // 初期化実行
 			m_Computes[filename.stem().string()] = std::move(compute);                                       // メンバー配列に代入
 
-			shaderNames.push_back(filename.stem().string());                                              // 名前を保存しておく
+			shaderNames.push_back(filename.stem().string());                                                 // 名前を保存しておく
 		}
 		else {
 			ErrorLog::Log(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
@@ -335,6 +335,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 
 		// .hlslのほうが新しければ更新
 		if (shaTime > binTime) {
+			ErrorLog::Log(std::string(shaderPath.stem().string() + " が新しく更新されています").c_str());
 			return true;
 		}
 	}
@@ -344,6 +345,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 		return true;
 	}
 
+	ErrorLog::Log(std::string(shaderPath.stem().string() + " 更新する必要がないためコンパイルファイルを取得します  相対パス : " + binaryPath.string()).c_str());
 	return false;
 }
 

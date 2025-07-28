@@ -1,17 +1,20 @@
-﻿#include "ShaderData.h"
-#include "ReportMessage.h"
+﻿// 必須ヘッダー
+#include "ShaderData.h"    // 自分のヘッダー
+
+// デバッグ用・メッセージボックス出力用
+#include "ReportMessage.h" // ログ出力用
 
 
 // =======================================================================
 // 頂点シェイダー
 // =======================================================================
-bool VertexShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
+bool VertexShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 {
     HRESULT hr = S_OK;
     
     hr = device->CreateVertexShader(
-        blob->GetBufferPointer(),     // バイナリデータ
-        blob->GetBufferSize(),        // サイズ
+        binary,     // バイナリデータ
+        size,        // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
         m_VertexShader.GetAddressOf() // 出力先
     );
@@ -23,13 +26,13 @@ bool VertexShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 // =======================================================================
 // ピクセルシェイダー
 // =======================================================================
-bool PixelShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
+bool PixelShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 {
     HRESULT hr = S_OK;;
 
     hr = device->CreatePixelShader(
-        blob->GetBufferPointer(),  // バイナリデータ
-        blob->GetBufferSize(),     // サイズ
+        binary,  // バイナリデータ
+        size,     // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
         m_PixelShader.GetAddressOf()  // 出力先
     );
@@ -41,13 +44,13 @@ bool PixelShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 // =======================================================================
 // コンピュートシェイダー
 // =======================================================================
-bool ComputeShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
+bool ComputeShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 {
     HRESULT hr = S_OK;
 
     hr = device->CreateComputeShader(
-        blob->GetBufferPointer(),       // バイナリデータ
-        blob->GetBufferSize(),          // サイズ
+        binary,       // バイナリデータ
+        size,          // サイズ
         nullptr,                        // クラスリンク未使用ならnullptr
         m_ComputeShader.GetAddressOf()  // 出力先
     );

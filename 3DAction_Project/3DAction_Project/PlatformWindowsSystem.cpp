@@ -47,10 +47,21 @@ uint16_t          PlatformWindowsSystem::m_Width = 0;
 uint16_t          PlatformWindowsSystem::m_Height = 0;
 std::wstring      PlatformWindowsSystem::m_WindowName;
 std::wstring      PlatformWindowsSystem::m_WindowClassName;
+
+#if defined(DEBUG) || defined(_DEBUG)
 ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Asset/Debug/Shader",
-    "Debug/Log/Shader.txt",
+    "Asset/Debug/Shader",   // デバッグ時のコンパイルしたシェイダーを入れるパス
+    "Debug/Log/Shader.txt", // 使用したシェイダーの名前を書き出すログのパス　リリースビルド時にこれを使用して、全てのシェイダーを管理する
+    ""                      // デバッグ時は使用しないパス
 };
+#else
+ShaderManager PlatformWindowsSystem::m_ShaderManager = {
+    "Asset/Shader/Compile", // リリース時にコンパイルしたシェイダーを入れるパス
+    "Debug/Log/Shader.txt", // 全てのシェイダーの名前が入っているテキストのパス 　今はDebugにしているがリリースにするときは変更する
+    "Asset/Shader/Hlsl"     // HLSLを入れているフォルダー 
+};
+#endif
+
 
 
 // =====================================================
