@@ -300,5 +300,6 @@ void PlatformWindowsSystem::GameMain()
 // =====================================================
 void PlatformWindowsSystem::GameUninit()
 {
-    DirectX11::Uninit(); // Directの後処理
+    DirectX11::Uninit();      // Directの後処理
+    m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
 }

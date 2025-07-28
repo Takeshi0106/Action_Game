@@ -58,6 +58,17 @@ bool ShaderManager::Init(ID3D11Device* device)
 }
 
 
+// =================================================
+// 後処理
+// =================================================
+void ShaderManager::Uninit()
+{
+	m_Vertexs.clear();  // 中身を削除 unique_ptrのためDeleteされる
+	m_Pixels.clear();   // 中身を削除 unique_ptrのためDeleteされる
+	m_Computes.clear(); // 中身を削除 unique_ptrのためDeleteされる
+}
+
+
 // 頂点シェーダーを探す関数
 VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
 {
@@ -112,13 +123,25 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 
 			// ファイルの最初の名前でシェーダー判定
 			if (filename.string().rfind("VS_", 0) == 0) {
-				OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf()); // コンパイルして書き出す
+				if (!OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
+				{
+					ErrorLog::Log("頂点シェーダーのコンパイル失敗");
+					IsSuccess = false;
+				}
 			}
 			else if (filename.string().rfind("PS_", 0) == 0) {
-				OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf()); // コンパイルして書き出す
+				if(!OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) // コンパイルして書き出す
+				{
+					ErrorLog::Log("ピクセルシェーダーのコンパイル失敗");
+					IsSuccess = false;
+				}
 			}
 			else if (filename.string().rfind("CS_", 0) == 0) {
-				OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf()); // コンパイルして書き出す
+				if(!OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
+				{
+					ErrorLog::Log("コンピュートシェーダのコンパイル失敗");
+					IsSuccess = false;
+				}
 			}
 			else {
 				ErrorLog::Log(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
@@ -172,14 +195,14 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 
 	// 使用したシェイダーの名前をテキストファイルに書き出す処理
 	// フォルダがない場合作成
-	if(!std::filesystem::exists(m_DebugLogFilePath.parent_path())) { // ファイルがない場合作成する
-		if (!std::filesystem::create_directories(m_DebugLogFilePath.parent_path())) {
+	if(!std::filesystem::exists(kAssetLogPath.parent_path())) { // ファイルがない場合作成する
+		if (!std::filesystem::create_directories(kAssetLogPath.parent_path())) {
 			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
 			return false;
 		}
 	}
 
-	std::ofstream ofs(m_DebugLogFilePath, std::ios::binary | std::ios::out); // ファイルを開ける
+	std::ofstream ofs(kAssetLogPath, std::ios::binary | std::ios::out); // ファイルを開ける
 
 	for (const std::string& name : shaderNames) {
 		ofs << name << "\n";                                              // ファイルに書き込み

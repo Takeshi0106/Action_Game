@@ -39,6 +39,7 @@ public:
     } // コンストラクタ
 
     bool Init(ID3D11Device* device); // シェイダーを保存するクラス
+    void Uninit();
 
     // ゲッター
     static VertexShaderData* GetFindVertexShader(const std::string& name);

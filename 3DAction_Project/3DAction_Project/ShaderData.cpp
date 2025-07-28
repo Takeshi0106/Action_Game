@@ -10,7 +10,7 @@ bool VertexShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
     HRESULT hr = S_OK;
     
     hr = device->CreateVertexShader(
-        blob,                         // バイナリデータ
+        blob->GetBufferPointer(),     // バイナリデータ
         blob->GetBufferSize(),        // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
         m_VertexShader.GetAddressOf() // 出力先
@@ -27,14 +27,11 @@ bool PixelShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 {
     HRESULT hr = S_OK;;
 
-
-    ID3D11PixelShader* PixelShader; // ピクセルシェーダー
-
     hr = device->CreatePixelShader(
-        blob,                  // バイナリデータ
-        blob->GetBufferSize(), // サイズ
+        blob->GetBufferPointer(),  // バイナリデータ
+        blob->GetBufferSize(),     // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
-        &PixelShader  // 出力先
+        m_PixelShader.GetAddressOf()  // 出力先
     );
 
     return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "のピクセルシェーダーの初期化に失敗").c_str());
@@ -49,8 +46,8 @@ bool ComputeShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
     HRESULT hr = S_OK;
 
     hr = device->CreateComputeShader(
-        blob,                    // バイナリデータ
-        blob->GetBufferSize(),   // サイズ
+        blob->GetBufferPointer(),       // バイナリデータ
+        blob->GetBufferSize(),          // サイズ
         nullptr,                        // クラスリンク未使用ならnullptr
         m_ComputeShader.GetAddressOf()  // 出力先
     );
