@@ -34,11 +34,14 @@ private:
 #endif
 
 public:
-    void Init(ID3D11Device* device); // シェイダーを保存するクラス
+    ShaderManager(std::filesystem::path file, std::filesystem::path assetLog, std::filesystem::path debugPath)
+        :BaseDirectXManager(file, assetLog, debugPath) { } // コンストラクタ
+
+    bool Init(ID3D11Device* device); // シェイダーを保存するクラス
 
     // ゲッター
-    static VertexShaderData*  GetFindVertexShader (const std::string& name);
-    static PixelShaderData*   GetFindPixelShader  (const std::string& name);
+    static VertexShaderData* GetFindVertexShader(const std::string& name);
+    static PixelShaderData* GetFindPixelShader(const std::string& name);
     static ComputeShaderData* GetFindComputeShader(const std::string& name);
 };
 
