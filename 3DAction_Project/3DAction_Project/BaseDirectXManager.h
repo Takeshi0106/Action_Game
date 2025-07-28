@@ -15,7 +15,7 @@ protected:
 
 
 #if defined(DEBUG) || defined(_DEBUG)
-	std::filesystem::path m_DebugLogFilePath; // デバッグ用ログファイルパス
+	std::filesystem::path m_DebugLogFilePath; // デバッグ用ログファイルパス　定数にできないため、使用注意
 #endif
 
 public:
