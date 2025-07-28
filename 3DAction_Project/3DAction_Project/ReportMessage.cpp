@@ -38,7 +38,7 @@ namespace ErrorLog {
         if (FAILED(hr))
         {
 #if defined(DEBUG) || defined(_DEBUG)
-
+            std::cerr << message << std::endl;
             std::cerr << "Error HRESULT: " << hr << std::endl; // HRESULTエラーを出力
 #endif
 

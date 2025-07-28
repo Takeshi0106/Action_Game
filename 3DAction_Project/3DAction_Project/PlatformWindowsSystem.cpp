@@ -47,6 +47,10 @@ uint16_t          PlatformWindowsSystem::m_Width = 0;
 uint16_t          PlatformWindowsSystem::m_Height = 0;
 std::wstring      PlatformWindowsSystem::m_WindowName;
 std::wstring      PlatformWindowsSystem::m_WindowClassName;
+ShaderManager PlatformWindowsSystem::m_ShaderManager = {
+    "Asset/Debug/Shader",
+    "Debug/Log/Shader.txt",
+};
 
 
 // =====================================================
@@ -188,6 +192,10 @@ void PlatformWindowsSystem::GameLoop()
             }
         }
     }
+    else
+    {
+        ErrorLog::MessageBoxOutput("初期化に失敗しました");
+    }
 
     GameUninit();        // ゲームの後処理 多重に呼び出しても問題ないように作成
 }
@@ -253,6 +261,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 bool PlatformWindowsSystem::GameInit()
 {
     if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
+        ErrorLog::Log("DirectXの初期化に失敗しました");
+        return false; // 失敗したら戻る
+    }
+    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice()))
+    {
+        ErrorLog::Log("ShaderManagerの初期化に失敗しました");
         return false; // 失敗したら戻る
     }
 

@@ -27,7 +27,7 @@ private:
 	static uint16_t  m_Height;	            // ウィンドウの画面縦幅
 	static std::wstring m_WindowName;       // ウィンドウの名前
 	static std::wstring m_WindowClassName;  // ウィンドウのクラス名
-	static ShaderManager m_ShaderManager;
+	static ShaderManager m_ShaderManager;   // シェーダーを管理する
 
 	// オーバーライド関数
 	bool Init()     override;   // 初期化処理

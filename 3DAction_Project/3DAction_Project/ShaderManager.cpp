@@ -49,7 +49,7 @@ bool ShaderManager::Init(ID3D11Device* device)
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// デバッグ用初期化
-	IsSuccess = CompileAllHLSLFilesInDirectory(device); // デバッグ時のみ同じ階層にある 全ての.hlslをコンパイルする
+	IsSuccess = DebugInit(device); // デバッグ時のみ同じ階層にある 全ての.hlslをコンパイルする
 #else
 
 #endif
@@ -90,7 +90,7 @@ ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 #if defined(DEBUG) || defined(_DEBUG)
 
 // デバッグ時のみ有効にする関数
-bool ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // 同じ階層にある.hlslを全てコンパイルして書き出す 将来的には更新されているかを確認してコンパイルするかしないかを判定したい
+bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hlslを全てコンパイルして書き出す 将来的には更新されているかを確認してコンパイルするかしないかを判定したい
 {
 	std::filesystem::path currentFilePath = __FILE__;                       // このソースコードのパスを取得
 	std::filesystem::path currentDirectory = currentFilePath.parent_path(); // パスから自分の階層だけを抜き取る
@@ -112,13 +112,13 @@ bool ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // 同�
 
 			// ファイルの最初の名前でシェーダー判定
 			if (filename.string().rfind("VS_", 0) == 0) {
-				OutputCompileShader(kFilePath, filename.stem(), "main", "vs_5_0", blob.GetAddressOf());       // コンパイルして書き出す
+				OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf()); // コンパイルして書き出す
 			}
 			else if (filename.string().rfind("PS_", 0) == 0) {
-				OutputCompileShader(kFilePath, filename.stem(), "main", "ps_5_0", blob.GetAddressOf()); // コンパイルして書き出す
+				OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf()); // コンパイルして書き出す
 			}
 			else if (filename.string().rfind("CS_", 0) == 0) {
-				OutputCompileShader(kFilePath, filename.stem(), "main", "cs_5_0", blob.GetAddressOf()); // コンパイルして書き出す
+				OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf()); // コンパイルして書き出す
 			}
 			else {
 				ErrorLog::Log(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
@@ -171,14 +171,20 @@ bool ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // 同�
 	}
 
 	// 使用したシェイダーの名前をテキストファイルに書き出す処理
-
-
-		std::ofstream ofs(m_DebugLogFilePath, std::ios::binary|std::ios::out); // ファイルを開ける
-
-		for (const std::string& name : shaderNames) {
-			ofs << name << "\n";                                              // ファイルに書き込み
+	// フォルダがない場合作成
+	if(!std::filesystem::exists(m_DebugLogFilePath.parent_path())) { // ファイルがない場合作成する
+		if (!std::filesystem::create_directories(m_DebugLogFilePath.parent_path())) {
+			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
+			return false;
 		}
-		ofs.close();                                                          // ファイルを閉じる
+	}
+
+	std::ofstream ofs(m_DebugLogFilePath, std::ios::binary | std::ios::out); // ファイルを開ける
+
+	for (const std::string& name : shaderNames) {
+		ofs << name << "\n";                                              // ファイルに書き込み
+	}
+	ofs.close();                                                          // ファイルを閉じる
 
 	return true;
 
@@ -219,7 +225,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 		errorBlob.GetAddressOf()                // エラーメッセージを取得する
 	);
 
-	if (ErrorLog::IsSuccessHRESULTWithMessageBox(hr, std::string(name.string() + "のコンパイルに失敗").c_str())) {
+	if (!ErrorLog::IsSuccessHRESULTWithMessageBox(hr, std::string(name.string() + "のコンパイルに失敗").c_str())) {
 		ErrorLog::Log(static_cast<const char*>(errorBlob->GetBufferPointer()));
 		return false;
 	}
@@ -227,7 +233,14 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	std::string filename = name.stem().string();                                 // 拡張子なしの名前を取得
 	std::filesystem::path outputPath = kFilePath / (filename + ".cso");          // 出力パスを作成
 
-	std::filesystem::create_directories(outputPath.parent_path()); // パスからフォルダを確認 なければを作成してくれる
+	// フォルダがないときフォルダを作成
+	if (!std::filesystem::exists(outputPath.parent_path())) {
+		if (!std::filesystem::create_directories(outputPath.parent_path())) {
+			ErrorLog::Log("コンパイル : ログフォルダの作成に失敗しました");
+			return false; 
+		}
+	}
+
 
 	// 書き出し処理
 	std::ofstream ofs(outputPath, std::ios::binary | std::ios::out);

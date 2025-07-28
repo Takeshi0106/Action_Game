@@ -97,10 +97,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VS_Debug.hlsl">
+    <FxCompile Include="PS_Debug.hlsl">
       <Filter>Hlsl</Filter>
     </FxCompile>
-    <FxCompile Include="PS_Debug.hlsl">
+    <FxCompile Include="VS_Debug.hlsl">
       <Filter>Hlsl</Filter>
     </FxCompile>
   </ItemGroup>

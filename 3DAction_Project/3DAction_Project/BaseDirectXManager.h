@@ -19,12 +19,8 @@ protected:
 #endif
 
 public:
-	BaseDirectXManager(std::filesystem::path file, std::filesystem::path assetLog, std::filesystem::path debugPath)
-		: kFilePath(file), kAssetLogPath(assetLog) 
-	{
-#if defined(DEBUG) || defined(_DEBUG)
-		m_DebugLogFilePath = debugPath;
-#endif
+	BaseDirectXManager(std::filesystem::path file, std::filesystem::path assetLog)
+		: kFilePath(file), kAssetLogPath(assetLog) {
 	}; // コンストラクタ
 
 	~BaseDirectXManager() = default;                                                                                              // デストラクタ

@@ -25,16 +25,19 @@ bool VertexShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 // =======================================================================
 bool PixelShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 {
-    HRESULT hr = S_OK;
+    HRESULT hr = S_OK;;
+
+
+    ID3D11PixelShader* PixelShader; // ピクセルシェーダー
 
     hr = device->CreatePixelShader(
         blob,                  // バイナリデータ
         blob->GetBufferSize(), // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
-        m_PixelShader.GetAddressOf()  // 出力先
+        &PixelShader  // 出力先
     );
 
-    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "の頂点シェーダーの初期化に失敗").c_str());
+    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "のピクセルシェーダーの初期化に失敗").c_str());
 }
 
 
@@ -52,5 +55,5 @@ bool ComputeShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
         m_ComputeShader.GetAddressOf()  // 出力先
     );
 
-    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "の頂点シェーダーの初期化に失敗").c_str());
+    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "のコンピュートシェーダの初期化に失敗").c_str());
 }

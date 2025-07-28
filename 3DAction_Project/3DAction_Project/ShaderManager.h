@@ -29,13 +29,14 @@ private:
 
 #if defined(DEBUG) || defined(_DEBUG)
     // デバッグ時のみ有効にする関数
-    bool CompileAllHLSLFilesInDirectory(ID3D11Device* device); // 同じ階層にある.hlslを全てコンパイルして出力する関数
+    bool DebugInit(ID3D11Device* device); // 同じ階層にある.hlslを全てコンパイルして出力する関数
 
 #endif
 
 public:
-    ShaderManager(std::filesystem::path file, std::filesystem::path assetLog, std::filesystem::path debugPath)
-        :BaseDirectXManager(file, assetLog, debugPath) { } // コンストラクタ
+    ShaderManager(std::filesystem::path file, std::filesystem::path assetLog)
+        :BaseDirectXManager(file, assetLog) {
+    } // コンストラクタ
 
     bool Init(ID3D11Device* device); // シェイダーを保存するクラス
 
