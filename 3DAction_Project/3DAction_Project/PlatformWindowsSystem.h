@@ -14,6 +14,7 @@ struct APPLICATIONHANDLE;              // HINSTANCEのラップ構造体
 struct HWND__;
 using HWND = HWND__*;
 
+
 // =====================================================
 // ウィンドウプラットフォームの初期化・後処理クラス
 // =====================================================
@@ -32,7 +33,7 @@ private:
 	bool Init()     override;   // 初期化処理
 	void GameLoop() override;   // ゲームループ
 	void Uninit()   override;   // 後処理
-	void GameInit() override;   // ゲームの開始処理
+	bool GameInit() override;   // ゲームの開始処理
 	void GameMain() override;   // ゲームのメイン処理
 	void GameUninit() override; // ゲームの後処理
 

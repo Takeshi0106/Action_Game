@@ -9,23 +9,41 @@
 namespace ErrorLog {
 
     // HRESULTの成否とメッセージボックスとデバッグ時のみログを出力する
-    bool IsHRESULTFailedWithLog(long longHr, const char* message)
+    bool IsSuccessHRESULTWithMessageBox(long longHr, const char* message)
     {
         HRESULT hr = static_cast<HRESULT>(longHr); // HRESULTにキャストする コンパイル時に変換が決まる
+
+        if (FAILED(hr))
+        {
+            MessageBoxA(nullptr, message, "エラー", MB_OK | MB_ICONERROR); // メッセージボックスで出力
+#if defined(DEBUG) || defined(_DEBUG)
+
+            std::cerr << "Error HRESULT: " << hr << std::endl; // HRESULTエラーを出力
+#endif
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    // HRの判定と、文字出力
+    bool IsSuccessHRESULTWitchOutputToConsole(long longhr, const char* message)
+    {
+        HRESULT hr = static_cast<HRESULT>(longhr); // HRESULTにキャストする コンパイル時に変換が決まる
 
         if (FAILED(hr))
         {
 #if defined(DEBUG) || defined(_DEBUG)
 
             std::cerr << "Error HRESULT: " << hr << std::endl; // HRESULTエラーを出力
-
 #endif
-            MessageBoxA(nullptr, message, "エラー", MB_OK | MB_ICONERROR); // メッセージボックスで出力
 
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
 

@@ -8,8 +8,11 @@
 #include <wrl/client.h>                 // マイクロソフトが提供するスマートポインタ
 
 // 標準ライブラリ
-#include <cstdint>   // 整数型 uintなど
 #include <cmath>        //デバッグ描画の色変更で使用しています　後で消す
+
+// デバッグ用出力
+#include "ReportMessage.h"
+
 #if defined(DEBUG) || defined(_DEBUG) // デバッグ時にヘッダーをコンパイル
 #include <cassert>
 #endif
@@ -114,25 +117,29 @@ namespace DirectX11 {
 		// デバイスやスワップチェインの初期化
 		IsSuccess = DXCore::Init(windowHandle);
 		if(!IsSuccess){
-			MessageBoxA(NULL, "デバイスやスワップチェインの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
+			ErrorLog::MessageBoxOutput("デバイスやスワップチェインの初期化に失敗"); // メッセージボックス出力
+			Uninit(); // 初期化失敗時に後処理を呼び出す
 			return false;
 		}
 		// RTVとSRVの初期化
 		IsSuccess = SRV::Init();
 		if (!IsSuccess) {
-			MessageBoxA(NULL, "SRVの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
+			ErrorLog::MessageBoxOutput("SRVの初期化に失敗"); // メッセージボックス出力
+			Uninit(); // 初期化失敗時に後処理を呼び出す
 			return false;
 		}
 		// UAVの初期化
 		IsSuccess = UAV::Init();
 		if (!IsSuccess) {
-			MessageBoxA(NULL, "URVの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
+			ErrorLog::MessageBoxOutput("URVの初期化に失敗");
+			Uninit(); // 初期化失敗時に後処理を呼び出す
 			return false;
 		}
 		// 深度ステンシルの初期化
 		IsSuccess = DepthStencil::Init(DepthStencil::DepthStencilFormatType::Depth32Bit);
 		if (!IsSuccess) {
-			MessageBoxA(NULL, "深度ステンシルの初期化に失敗", "エラー", MB_OK | MB_ICONERROR);
+			ErrorLog::MessageBoxOutput("深度ステンシルの初期化に失敗");
+			Uninit(); // 初期化失敗時に後処理を呼び出す
 			return false;
 		}
 		// ビューポートの初期化
@@ -216,6 +223,7 @@ namespace DirectX11 {
             // -----------------------------------------------------
 			bool Init(HWND windowHandle)
 			{
+				bool IsInit = true;      // 初期化が成功したかを代入
 				HRESULT  hr;             // 初期化の 成功、失敗 を受け取る
 				D3D_FEATURE_LEVEL level; // スワップチェイン作成成功時に使われたDirectXのバージョンを入れる
 
@@ -282,15 +290,9 @@ namespace DirectX11 {
 						break; // ドライバが成功したらループを抜ける
 					}
 				}
-				if (FAILED(hr)) // 全てのドライバが失敗したらエラー
-				{
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "選択されたドライバで生成することが出来ませんでした。");
-#endif
-					return false;
-				}
-
-				return true;
+				IsInit = ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "選択されたドライバで生成することが出来ませんでした。"); // hrの成否判定とログを出力させる関数
+				
+				return IsInit;
 			}
 
 
@@ -318,30 +320,22 @@ namespace DirectX11 {
             // -----------------------------------------------------
 			bool Init()
 			{
+				bool IsInit = true;
 				HRESULT  hr = S_OK; // 初期化の 成功、失敗 を受け取る
 
 				// スワップチェインが生成したバックバッファを取得する
 				hr = d3dSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)d3dRTTforSRV.GetAddressOf());
-				if (FAILED(hr)){
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "SRVバックバッファを取得することが出来ませんでした。");
-#endif
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "SRVバックバッファを取得することが出来ませんでした。")) { // 成否判定とログ出力
 					return false;
 				}
 				// レンダラーターゲットを生成
 				hr = d3dDevice->CreateRenderTargetView(d3dRTTforSRV.Get(), nullptr, d3dRTV.GetAddressOf());
-				if (FAILED(hr)){
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "レンダラーターゲットビューを作成することが出来ませんでした");
-#endif
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "レンダラーターゲットビューを作成することが出来ませんでした")) { // 成否判定とログ出力
 					return false;
 				}
 				// シェーダーリソースの作成
 				hr = d3dDevice->CreateShaderResourceView(d3dRTTforSRV.Get(), nullptr, d3dRTSRV.GetAddressOf());
-				if (FAILED(hr)){
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "SRVが設定できませんでした");
-#endif
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "SRVが設定できませんでした")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -388,10 +382,7 @@ namespace DirectX11 {
 
 				// バッファを作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dRTTforUAV.GetAddressOf());
-				if (FAILED(hr)) {
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "UAVテクスチャの作成に失敗しました");
-#endif
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "UAVテクスチャの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -400,7 +391,11 @@ namespace DirectX11 {
 				uavDesc.Format             = textureDesc.Format;            // UAVテクスチャフォーマットを使用する
 				uavDesc.ViewDimension      = D3D11_UAV_DIMENSION_TEXTURE2D; // アクセスする値フラグを渡す
 				uavDesc.Texture2D.MipSlice = 0;                             // ミップマップレベル（０の場合 自動的に最大数使用してくれる）
-				d3dDevice->CreateUnorderedAccessView(d3dRTTforUAV.Get(), &uavDesc, d3dUAV.GetAddressOf()); // UAVを作成
+
+				hr = d3dDevice->CreateUnorderedAccessView(d3dRTTforUAV.Get(), &uavDesc, d3dUAV.GetAddressOf()); // UAVを作成
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "UAVの作成に失敗しました")) { // 成否判定とログ出力
+					return false;
+				}
 
 				return true;
 			}
@@ -466,10 +461,7 @@ namespace DirectX11 {
 
 				// 深度ステンシルテクスチャの作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dDepthTexture.GetAddressOf());
-				if(FAILED(hr)){ 
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "深度ステンシルテクスチャの作成に失敗しました");
-#endif
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "深度ステンシルテクスチャの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -480,10 +472,7 @@ namespace DirectX11 {
 
 				// 深度ステンシルビューの作成
 				hr = d3dDevice->CreateDepthStencilView(d3dDepthTexture.Get(), &depthViewDesc, d3dDSV.GetAddressOf());
-				if (FAILED(hr)) {
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "深度ステンシルビューの作成に失敗しました");
-#endif
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "深度ステンシルビューの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -495,10 +484,7 @@ namespace DirectX11 {
 
 				// シェーダーリソースビューを作成
 				hr = d3dDevice->CreateShaderResourceView(d3dDepthTexture.Get(), &depthSRVDesc, d3dDSRV.GetAddressOf());
-				if (FAILED(hr)) {
-#if defined(DEBUG) || defined(_DEBUG)
-					assert(false && "シェーダーリソースビューの作成に失敗しました");
-#endif
+				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "シェーダーリソースビューの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 

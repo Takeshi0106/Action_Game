@@ -1,13 +1,20 @@
-﻿#include "PlatformWindowsSystem.h"   
+﻿// 必須ヘッダー
+#include "PlatformWindowsSystem.h"   // 自分のヘッダー
+
+// Windowsヘッダー
 #include <Windows.h>                 // ウィンドウ作成用
 
-#include "Timer.h"                   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
+// DirectXヘッダー
 #include "DirectX.h"                 // DirectX初期化用　後で描画マネージャーに任せるようにする
 
+// 標準ヘッダー
+#include <cstdint>   // 整数型 uintなど
 
-#if defined(DEBUG) || defined(_DEBUG)
-#include <iostream> // デバッグ文字を出力ウィンドウに書き出す
-#endif
+// ゲーム用ヘッダー
+#include "Timer.h"                   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
+
+// デバッグ用ヘッダー
+#include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
 
 
 // =====================================================
@@ -79,7 +86,7 @@ PlatformWindowsSystem::~PlatformWindowsSystem()
 #if defined(DEBUG) || defined(_DEBUG)
     if (IsUninit)
     {
-        std::cout << "PlatformWindowsSystem : 後処理が実行されていません" << std::endl;
+        ErrorLog::Log("PlatformWindowsSystem : 後処理が実行されていません");
         Uninit();
     }
 #endif
@@ -108,7 +115,10 @@ bool PlatformWindowsSystem::Init()
     windClass.hIconSm = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);     // タスクバーに表示されるアイコン (標準アイコンで作成 .icoで変更可能)
 
     // ウィンドウの登録 失敗したらfalseを返す
-    if (!RegisterClassEx(&windClass)) { return false; } 
+    if (!RegisterClassEx(&windClass)) {
+        ErrorLog::Log("ウィンドウの登録に失敗しました"); // ログ出力
+        return false; 
+    } 
 
     // 描画する大きさを設定
     RECT rect = {};
@@ -135,7 +145,10 @@ bool PlatformWindowsSystem::Init()
         nullptr);                   // 追加パラメーター
 
     // ウィンドウを作成できたかのチェック
-    if (m_WinInstance == nullptr) { return false; }
+    if (m_WinInstance == nullptr) {
+        ErrorLog::Log("ウィンドウが作成されませんでした");
+        return false; 
+    }
 
     // ウィンドウを表示
     ShowWindow(m_WinInstance, SW_SHOWNORMAL);
@@ -158,24 +171,25 @@ void PlatformWindowsSystem::GameLoop()
 {
     MSG msg = {}; // メッセージ
 
-    GameInit(); // ゲームの初期化処理
-
-    while (true)
+    if (GameInit()) // ゲームの初期化処理
     {
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
+        while (true)
         {
-            if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
+            if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
+            {
+                if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
 
-            TranslateMessage(&msg); // キー入力などを文字列に変換する関数
-            DispatchMessage(&msg); // ウィンドウプロシージャにメッセージを送る
-        }
-        else
-        {
-            GameMain();
+                TranslateMessage(&msg); // キー入力などを文字列に変換する関数
+                DispatchMessage(&msg); // ウィンドウプロシージャにメッセージを送る
+            }
+            else
+            {
+                GameMain();
+            }
         }
     }
 
-    GameUninit();        // ゲームの後処理
+    GameUninit();        // ゲームの後処理 多重に呼び出しても問題ないように作成
 }
 
 
@@ -236,17 +250,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 // =====================================================
 // ゲームの初期化処理
 // =====================================================
-void PlatformWindowsSystem::GameInit()
+bool PlatformWindowsSystem::GameInit()
 {
     if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
-        return; // 失敗したら戻る
+        return false; // 失敗したら戻る
     }
 
     Timer::Init(); // タイマー初期化
     Timer::Start(); // タイマー開始
 
-    
-
+    return true;
 }
 
 

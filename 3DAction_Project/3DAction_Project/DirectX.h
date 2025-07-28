@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <cstdint>   // 整数型 uintなど
+
 
 // ==============================================
 // 前方宣言
@@ -10,8 +12,6 @@ using  HWND = HWND__*;
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
-// 整数型の前方宣言
-struct uint16_t;
 
 // ==============================================
 // DirectXの関数
