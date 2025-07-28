@@ -6,15 +6,14 @@
 #include <d3dcompiler.h>                // シェーダーをコンパイルするためのヘッダー
 #pragma comment(lib, "d3dcompiler.lib") // シェーダーをコンパイルするためのライブラリー
 #include <fstream>                      // 外部ファイルとして書出し
+#include <Windows.h>                    // デバイス受け取り
 
 // DirectX用
 #include <wrl/client.h>                 // DirectX用のスマートポインター
 
 // デバッグ情報ややエラー出力用
-#include <Windows.h>     // エラーとエラーの種類を受け取るためにある　後で書き換える
-#if defined(DEBUG) || defined(_DEBUG)
-#include <iostream> // ウィンドウに書き出すよう
-#endif
+#include "ReportMessage.h"
+
 
 // ================================================
 // 静的変数
@@ -77,10 +76,11 @@ ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 #if defined(DEBUG) || defined(_DEBUG)
 
 // デバッグ時のみ有効にする関数
-void ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // 同じ階層にある.hlslを全てコンパイルして書き出す 将来的には更新されているかを確認してコンパイルするかしないかを判定したい
+bool ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // 同じ階層にある.hlslを全てコンパイルして書き出す 将来的には更新されているかを確認してコンパイルするかしないかを判定したい
 {
 	std::filesystem::path currentFilePath = __FILE__;                       // このソースコードのパスを取得
 	std::filesystem::path currentDirectory = currentFilePath.parent_path(); // パスから自分の階層だけを抜き取る
+	bool IsSuccess = true; // 成否判定
 
 	// .hlslファイルを探す
 	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory)) // 階層内のファイルを全て取得しています
@@ -91,22 +91,32 @@ void ShaderManager::CompileAllHLSLFilesInDirectory(ID3D11Device* device) // 同�
 		std::filesystem::path filename = entry.path().filename();
 
 		if (filename.string().rfind("VS_", 0) == 0) {
-			OutputCompileShader(kFilePath, filename.stem(), "main", "vs_5_0", blob.GetAddressOf());                                      // コンパイルして書き出す
-			auto vertex = std::make_unique<VertexShaderData>(filename.stem().string(), "main", "vs_5_0", device, blob.Get()); // 動的確保
-			m_Vertexs[filename.stem().string()] = std::move(vertex);                                                          // メンバー配列に代入
+			OutputCompileShader(kFilePath, filename.stem(), "main", "vs_5_0", blob.GetAddressOf());       // コンパイルして書き出す
+			auto vertex = std::make_unique<VertexShaderData>(filename.stem().string(), "main", "vs_5_0"); // 動的確保
+			IsSuccess = vertex->Init(device, blob.Get());                                                 // 初期化実行
+			m_Vertexs[filename.stem().string()] = std::move(vertex);                                      // メンバー配列に代入
 		}
 		else if (filename.string().rfind("PS_", 0) == 0) {
 			OutputCompileShader(kFilePath, filename.stem().string(), "main", "ps_5_0", blob.GetAddressOf()); // コンパイルして書き出す
-			auto pixel = std::make_unique<PixelShaderData>(filename.stem().string(), "main", "ps_5_0", device, blob.Get());
-			m_Pixels[filename.stem().string()] = std::move(pixel);
+			auto pixel = std::make_unique<PixelShaderData>(filename.stem().string(), "main", "ps_5_0");      // 動的確保
+			IsSuccess = pixel->Init(device, blob.Get());                                                     // 初期化実行
+			m_Pixels[filename.stem().string()] = std::move(pixel);                                           // メンバー配列に代入
 		}
 		else if (filename.string().rfind("CS_", 0) == 0) {
-			OutputCompileShader(kFilePath, filename.stem().string(), "main", "cs_5_0", blob.GetAddressOf());                     // コンパイルして書き出す
-			auto compute = std::make_unique< ComputeShaderData>(filename.stem().string(), "main", "cs_5_0", device, blob.Get()); // 動的確保
-			m_Computes[filename.stem().string()] = std::move(compute);                                                           // メンバー配列に代入
+			OutputCompileShader(kFilePath, filename.stem().string(), "main", "cs_5_0", blob.GetAddressOf()); // コンパイルして書き出す
+			auto compute = std::make_unique< ComputeShaderData>(filename.stem().string(), "main", "cs_5_0"); // 動的確保
+			IsSuccess = compute->Init(device, blob.Get());                                                   // 初期化実行
+			m_Computes[filename.stem().string()] = std::move(compute);                                       // メンバー配列に代入
+		}
+
+		if (!IsSuccess){
+			ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
+			return false;
 		}
 
 	}
+
+	return true;
 
 }
 
@@ -145,15 +155,8 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 		errorBlob.GetAddressOf()                // エラーメッセージを取得する
 	);
 
-	if (FAILED(hr)) { // エラー取得時
-		std::string messegeError = name.string() + "のコンパイルに失敗";
-		MessageBoxA(nullptr, messegeError.c_str(), "エラー", MB_OK | MB_ICONERROR); // メッセージボックス
-
-#if defined(DEBUG) || defined(_DEBUG)
-		if (errorBlob != nullptr) {  // デバッグ時のみ詳細なエラー出力
-			std::cout << static_cast<const char*>(errorBlob->GetBufferPointer()) << std::endl;
-		}
-#endif
+	if (ErrorLog::IsSuccessHRESULTWithMessageBox(hr, std::string(name.string() + "のコンパイルに失敗").c_str())) {
+		ErrorLog::Log(static_cast<const char*>(errorBlob->GetBufferPointer()));
 		return false;
 	}
 

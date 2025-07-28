@@ -18,7 +18,9 @@ namespace ErrorLog {
             MessageBoxA(nullptr, message, "エラー", MB_OK | MB_ICONERROR); // メッセージボックスで出力
 #if defined(DEBUG) || defined(_DEBUG)
 
+            std::cerr << message << std::endl;
             std::cerr << "Error HRESULT: " << hr << std::endl; // HRESULTエラーを出力
+            std::cerr << std::endl;
 #endif
 
             return false;
@@ -29,7 +31,7 @@ namespace ErrorLog {
 
 
     // HRの判定と、文字出力
-    bool IsSuccessHRESULTWitchOutputToConsole(long longhr, const char* message)
+    bool IsSuccessHRESULTWithOutputToConsole(long longhr, const char* message)
     {
         HRESULT hr = static_cast<HRESULT>(longhr); // HRESULTにキャストする コンパイル時に変換が決まる
 

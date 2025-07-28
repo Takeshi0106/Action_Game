@@ -1,15 +1,11 @@
 ﻿#include "ShaderData.h"
-
-#if defined(DEBUG) || defined(_DEBUG)
-#include <iostream> // 文字出力
-#endif
+#include "ReportMessage.h"
 
 
 // =======================================================================
 // 頂点シェイダー
 // =======================================================================
-VertexShaderData::VertexShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob)
-    :BaseShaderData(name, entry, type) 
+bool VertexShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 {
     HRESULT hr = S_OK;
     
@@ -20,21 +16,14 @@ VertexShaderData::VertexShaderData(std::string name, std::string entry, std::str
         m_VertexShader.GetAddressOf() // 出力先
     );
 
-    if (FAILED(hr)) {
-#if defined(DEBUG) || defined(_DEBUG)
-        std::cout << std::to_string(hr) << std::endl; // hr出力　失敗情報が取得
-#endif
-        std::string msg = name + " の頂点シェーダーの初期化に失敗";
-        MessageBoxA(NULL, msg.c_str(), "エラー", MB_OK | MB_ICONERROR);
-    }
+    return ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "の頂点シェーダーの初期化に失敗").c_str());
 }
 
 
 // =======================================================================
 // ピクセルシェイダー
 // =======================================================================
-PixelShaderData::PixelShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob)
-    :BaseShaderData(name, entry, type) 
+bool PixelShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 {
     HRESULT hr = S_OK;
 
@@ -45,21 +34,14 @@ PixelShaderData::PixelShaderData(std::string name, std::string entry, std::strin
         m_PixelShader.GetAddressOf()  // 出力先
     );
 
-    if (FAILED(hr)) {
-#if defined(DEBUG) || defined(_DEBUG)
-        std::cout << std::to_string(hr) << std::endl; // hr出力　失敗情報が取得
-#endif
-        std::string msg = name + " のピクセルシェーダーの初期化に失敗";
-        MessageBoxA(NULL, msg.c_str(), "エラー", MB_OK | MB_ICONERROR);
-    }
+    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "の頂点シェーダーの初期化に失敗").c_str());
 }
 
 
 // =======================================================================
 // コンピュートシェイダー
 // =======================================================================
-ComputeShaderData::ComputeShaderData(std::string name, std::string entry, std::string type, ID3D11Device* device, ID3DBlob* blob)
-    :BaseShaderData(name, entry, type)
+bool ComputeShaderData::Init(ID3D11Device* device, ID3DBlob* blob)
 {
     HRESULT hr = S_OK;
 
@@ -70,11 +52,5 @@ ComputeShaderData::ComputeShaderData(std::string name, std::string entry, std::s
         m_ComputeShader.GetAddressOf()  // 出力先
     );
 
-    if (FAILED(hr)) {
-#if defined(DEBUG) || defined(_DEBUG)
-        std::cout << std::to_string(hr) << std::endl; // hr出力　失敗情報が取得
-#endif
-        std::string msg = name + " のコンピュートシェーダーの初期化に失敗";
-        MessageBoxA(NULL, msg.c_str(), "エラー", MB_OK | MB_ICONERROR);
-    }
+    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "の頂点シェーダーの初期化に失敗").c_str());
 }

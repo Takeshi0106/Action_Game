@@ -29,7 +29,7 @@ private:
 
 #if defined(DEBUG) || defined(_DEBUG)
     // デバッグ時のみ有効にする関数
-    void CompileAllHLSLFilesInDirectory(ID3D11Device* device); // 同じ階層にある.hlslを全てコンパイルして出力する関数
+    bool CompileAllHLSLFilesInDirectory(ID3D11Device* device); // 同じ階層にある.hlslを全てコンパイルして出力する関数
 
 #endif
 

@@ -290,7 +290,7 @@ namespace DirectX11 {
 						break; // ドライバが成功したらループを抜ける
 					}
 				}
-				IsInit = ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "選択されたドライバで生成することが出来ませんでした。"); // hrの成否判定とログを出力させる関数
+				IsInit = ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "選択されたドライバで生成することが出来ませんでした。"); // hrの成否判定とログを出力させる関数
 				
 				return IsInit;
 			}
@@ -325,17 +325,17 @@ namespace DirectX11 {
 
 				// スワップチェインが生成したバックバッファを取得する
 				hr = d3dSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)d3dRTTforSRV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "SRVバックバッファを取得することが出来ませんでした。")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "SRVバックバッファを取得することが出来ませんでした。")) { // 成否判定とログ出力
 					return false;
 				}
 				// レンダラーターゲットを生成
 				hr = d3dDevice->CreateRenderTargetView(d3dRTTforSRV.Get(), nullptr, d3dRTV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "レンダラーターゲットビューを作成することが出来ませんでした")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "レンダラーターゲットビューを作成することが出来ませんでした")) { // 成否判定とログ出力
 					return false;
 				}
 				// シェーダーリソースの作成
 				hr = d3dDevice->CreateShaderResourceView(d3dRTTforSRV.Get(), nullptr, d3dRTSRV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "SRVが設定できませんでした")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "SRVが設定できませんでした")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -382,7 +382,7 @@ namespace DirectX11 {
 
 				// バッファを作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dRTTforUAV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "UAVテクスチャの作成に失敗しました")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "UAVテクスチャの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -393,7 +393,7 @@ namespace DirectX11 {
 				uavDesc.Texture2D.MipSlice = 0;                             // ミップマップレベル（０の場合 自動的に最大数使用してくれる）
 
 				hr = d3dDevice->CreateUnorderedAccessView(d3dRTTforUAV.Get(), &uavDesc, d3dUAV.GetAddressOf()); // UAVを作成
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "UAVの作成に失敗しました")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "UAVの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -461,7 +461,7 @@ namespace DirectX11 {
 
 				// 深度ステンシルテクスチャの作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dDepthTexture.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "深度ステンシルテクスチャの作成に失敗しました")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "深度ステンシルテクスチャの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -472,7 +472,7 @@ namespace DirectX11 {
 
 				// 深度ステンシルビューの作成
 				hr = d3dDevice->CreateDepthStencilView(d3dDepthTexture.Get(), &depthViewDesc, d3dDSV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "深度ステンシルビューの作成に失敗しました")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "深度ステンシルビューの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
@@ -484,7 +484,7 @@ namespace DirectX11 {
 
 				// シェーダーリソースビューを作成
 				hr = d3dDevice->CreateShaderResourceView(d3dDepthTexture.Get(), &depthSRVDesc, d3dDSRV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWitchOutputToConsole(hr, "シェーダーリソースビューの作成に失敗しました")) { // 成否判定とログ出力
+				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "シェーダーリソースビューの作成に失敗しました")) { // 成否判定とログ出力
 					return false;
 				}
 
