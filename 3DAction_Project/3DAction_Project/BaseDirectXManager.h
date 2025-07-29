@@ -19,7 +19,8 @@ protected:
 	const  std::string kAssetLogPath; // アセットのログ デバッグビルド時に書出し、リリースビルド時にアセットがあるかを確認する 
 
 #if defined(DEBUG) || defined(_DEBUG)
-	bool WriteLog(const std::vector<std::string>& shaderNames); // オブジェクトの名前を配列に入れて渡し、書き出すクラス
+	std::vector<std::string> m_Names; // 名前取得用
+	bool WriteLog(); // オブジェクトの名前を配列に入れて渡し、書き出すクラス
 #endif
 
 public:

@@ -91,7 +91,10 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		}
 		m_Vertexs[shaderName] = std::move(vertex);                                       // メンバー配列に代入
 
-		m_ShaderNames.push_back(shaderName);                                             // 名前を保存しておく
+#if defined(DEBUG) || defined(_DEBUG)
+		m_Names.push_back(shaderName);                                               // 名前を保存しておく
+#endif
+
 	}
 	else if (shaderName.rfind("PS_", 0) == 0) {
 		auto pixel = std::make_unique<PixelShaderData>(shaderName, "main", "ps_5_0");      // 動的確保
@@ -101,7 +104,10 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		}
 		m_Pixels[shaderName] = std::move(pixel);                                           // メンバー配列に代入
 
-		m_ShaderNames.push_back(shaderName);                                               // 名前を保存しておく
+#if defined(DEBUG) || defined(_DEBUG)
+		m_Names.push_back(shaderName);                                               // 名前を保存しておく
+#endif
+
 	}
 	else if (shaderName.rfind("CS_", 0) == 0) {
 		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0"); // 動的確保
@@ -111,7 +117,10 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		}
 		m_Computes[shaderName] = std::move(compute);                                       // メンバー配列に代入
 
-		m_ShaderNames.push_back(shaderName);                                               // 名前を保存しておく
+#if defined(DEBUG) || defined(_DEBUG)
+		m_Names.push_back(shaderName);                                               // 名前を保存しておく
+#endif
+
 	}
 	else {
 		ErrorLog::Log(std::string(shaderName + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
@@ -158,6 +167,7 @@ ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 // リリース時は必要なシェーダー一覧を取得して、コンパイルされているかを確認
 bool ShaderManager::ReleaseInit(ID3D11Device* device)
 {
+
 
 	return true;
 }
@@ -339,7 +349,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 		blob.Reset(); // 一応、解放処理
 	}
 
-	if (!WriteLog(m_ShaderNames)) {// 配列をログにして書き出す
+	if (!WriteLog()) {// 配列をログにして書き出す
 		ErrorLog::Log("シェイーダーのログ書出しに失敗");
 		return false;
 	}

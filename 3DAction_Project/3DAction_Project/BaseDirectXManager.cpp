@@ -13,7 +13,7 @@
 
 
 // 名前の配列を渡して、ログを書き出す
-bool BaseDirectXManager::WriteLog(const std::vector<std::string>& shaderNames)
+bool BaseDirectXManager::WriteLog()
 {
 	// フォルダがない場合作成
 	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) { // ファイルがない場合作成する
@@ -25,7 +25,7 @@ bool BaseDirectXManager::WriteLog(const std::vector<std::string>& shaderNames)
 
 	std::ofstream ofs(kAssetLogPath, std::ios::binary | std::ios::out); // ファイルを開ける
 
-	for (const std::string& name : shaderNames) {
+	for (const std::string& name : m_Names) {
 		ofs << name << "\n";                                              // ファイルに書き込み
 	}
 	ofs.close();                                                          // ファイルを閉じる
