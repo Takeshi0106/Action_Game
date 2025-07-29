@@ -5,7 +5,8 @@
 // シェイダーコンパイル用ヘッダー
 #include <d3dcompiler.h>                // シェーダーをコンパイルするためのヘッダー
 #pragma comment(lib, "d3dcompiler.lib") // シェーダーをコンパイルするためのライブラリー
-#include <fstream>                      // 外部ファイルとして書出し
+#include <fstream>                      // 外部ファイルとして書出し・読み出し
+#include <sstream>                      // 外部ファイル読み出し用
 #include <Windows.h>                    // デバイス受け取り
 
 // DirectX用
@@ -24,6 +25,15 @@
 std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  ShaderManager::m_Vertexs;
 std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   ShaderManager::m_Pixels;
 std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManager::m_Computes;
+
+
+// ================================================
+// グローバル変数
+// ================================================
+namespace {
+	const std::string kShaderExtension = ".hlsl";
+	const std::string kCompileExtension = ".cso";
+}
 
 
 // =================================================
@@ -46,16 +56,20 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 // =================================================
 bool ShaderManager::Init(ID3D11Device* device)
 {
-	bool IsSuccess = true;
-
 #if defined(DEBUG) || defined(_DEBUG)
 	// デバッグ用初期化
-	IsSuccess = DebugInit(device); // デバッグ時のみ同じ階層にある 全ての.hlslをコンパイルする
+	if (!DebugInit(device)) { // デバッグ時のみ同じ階層にある 全ての.hlslをコンパイルする
+		ErrorLog::MessageBoxOutput("Debug : シェーダーマネージャーの初期化失敗");
+		return false;
+	}
 #else
-
+	if (!ReleaseInit(device)) {
+		ErrorLog::Log("シェーダ―マネージャー初期化失敗");
+		return false;
+	}
 #endif
 
-	return IsSuccess;
+	return true;
 }
 
 
@@ -68,6 +82,53 @@ void ShaderManager::Uninit()
 	m_Pixels.clear();   // 中身を削除 unique_ptrのためDeleteされる
 	m_Computes.clear(); // 中身を削除 unique_ptrのためDeleteされる
 }
+
+
+// ==================================================
+//	リリース初期化関数
+// ==================================================
+// 外部ファイル シェーダー表を取得して、コンパイルされているかを確認
+bool ShaderManager::ReleaseInit(ID3D11Device* device)
+{
+	std::ostringstream  shaderTable;  // 中身を入れる変数
+
+	std::ifstream ifs(kAssetLogPath, std::ios::binary); // ファイルを開ける
+	if (!ifs.is_open()) {
+		ErrorLog::MessageBoxOutput("シェイダー表を開けませんでした");
+		return false;
+	}
+
+	shaderTable << ifs.rdbuf();       // 外部ファイルを全て代入する
+	ifs.close();                      // ファイルを閉じる
+
+	std::istringstream iss(shaderTable.str()); // 読み取り用ストリーム
+	std::string line;                          // １行を入れる文字列
+
+	while (std::getline(iss, line)) { // １行ずつ取り出す
+		std::filesystem::path hlslPath = std::filesystem::path(kHlslFailePath) / (line + kShaderExtension); // シェーダーパスを作成
+		hlslPath = hlslPath.generic_string(); // 区切り文字を / で統一する　
+
+		std::filesystem::path compailPath = std::filesystem::path(kFilePath) / (line + kCompileExtension); // コンパイルパス作成
+		compailPath = compailPath.generic_string(); // 区切り文字を / で統一する
+
+		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
+
+		if (!LoadCompiledShaderBlob(compailPath, blob.GetAddressOf())) { // コンパイルしているファイルを読み込む処理
+			if (!JudgeCompileShader(kFilePath, hlslPath, blob)) { // 失敗したらコンパイル処理
+				ErrorLog::MessageBoxOutput((hlslPath.string() + " : コンパイルに失敗しました").c_str());
+				return false;
+			}
+		}
+
+		if (!JudgeBinaryMenber(line, device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) { // シェーダーを作成する
+			ErrorLog::MessageBoxOutput((hlslPath.string() + " : シェーダーの作成に失敗しました").c_str());
+			return false;
+		}
+	}
+
+	return true;
+}
+
 
 // ==================================================
 //	// バイナリーデータを仕分けして、メンバー配列に代入する関数
@@ -163,20 +224,10 @@ ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 }
 
 
-// リリース用シェイダー初期化関数
-// リリース時は必要なシェーダー一覧を取得して、コンパイルされているかを確認
-bool ShaderManager::ReleaseInit(ID3D11Device* device)
-{
-
-
-	return true;
-}
-
-
 // =================================================
 // シェーダーをコンパイルする関数
 // =================================================
-bool OutputCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path name, const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob)
+bool OutputCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path path, const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob)
 {
 	HRESULT hr = S_OK;                                      // 成功か失敗を返す
 	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;   // エラーを取得する
@@ -193,7 +244,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 #endif
 
 	hr = D3DCompileFromFile(
-		name.wstring().c_str(),                 // シェーダーのファイル名
+		path.wstring().c_str(),                 // シェーダーのパス
 		nullptr,                                // GPUで使用するマクロ定義（ない場合nullptr）
 		D3D_COMPILE_STANDARD_FILE_INCLUDE,      // HLSLで他のHLSLを読み込むフラグ
 		entryPoint.c_str(),                     // シェーダーないで最初に実行される関数の名前
@@ -204,13 +255,13 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 		errorBlob.GetAddressOf()                // エラーメッセージを取得する
 	);
 
-	if (!ErrorLog::IsSuccessHRESULTWithMessageBox(hr, std::string(name.string() + "のコンパイルに失敗").c_str())) {
+	if (!ErrorLog::IsSuccessHRESULTWithMessageBox(hr, std::string(path.string() + "のコンパイルに失敗").c_str())) {
 		ErrorLog::Log(static_cast<const char*>(errorBlob->GetBufferPointer()));
 		return false;
 	}
 
-	std::string filename = name.stem().string();                                 // 拡張子なしの名前を取得
-	std::filesystem::path outputPath = kFilePath / (filename + ".cso");          // 出力パスを作成
+	std::string filename = path.stem().string();                                   // 拡張子なしの名前を取得
+	std::filesystem::path outputPath = kFilePath / (filename + kCompileExtension); // 出力パスを作成
 
 	// フォルダがないときフォルダを作成
 	if (!std::filesystem::exists(outputPath.parent_path())) {
@@ -229,6 +280,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	}
 
 	ofs.write(static_cast<const char*>(compileBlob->GetBufferPointer()), compileBlob->GetBufferSize());   // バイナリデータを書き出す
+	ofs.flush();                                                                                          // すぐに書き込んでもらう
 	ofs.close();                                                                                          // ファイルを閉じる
 
 	*blob = compileBlob.Detach();
@@ -269,6 +321,12 @@ bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blo
 	}
 	// 中にバイナリーデータを書き込む
 	ifs.read(reinterpret_cast<char*>((*blob)->GetBufferPointer()), size);
+	if (!ifs) {
+		ErrorLog::Log(std::string(csoPath.string() + " : バイナリーデータの読み込みに失敗しました").c_str());
+		ifs.close();
+		return false;
+	}
+
 	ifs.close(); // ファイルを閉じる
 
 	return true;
@@ -278,21 +336,21 @@ bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blo
 bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob)
 {
 	// ファイルの最初の名前でシェーダー判定
-	if (filename.string().rfind("VS_", 0) == 0) {
+	if (filename.stem().string().rfind("VS_", 0) == 0) {
 		if (!OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
 		{
 			ErrorLog::Log(std::string("頂点シェーダー " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
 	}
-	else if (filename.string().rfind("PS_", 0) == 0) {
+	else if (filename.stem().string().rfind("PS_", 0) == 0) {
 		if (!OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) // コンパイルして書き出す
 		{
 			ErrorLog::Log(std::string("ピクセルシェーダー " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
 	}
-	else if (filename.string().rfind("CS_", 0) == 0) {
+	else if (filename.stem().string().rfind("CS_", 0) == 0) {
 		if (!OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
 		{
 			ErrorLog::Log(std::string("コンピュートシェーダ " + filename.string() + " のコンパイル失敗").c_str());
@@ -321,7 +379,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 	// .hlslファイルを探す
 	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory)) // 階層内のファイルを全て取得しています
 	{
-		if (!entry.is_regular_file() || entry.path().extension() != ".hlsl") { continue; } // ファイルでなかったり、拡張子が違ったりすれば次のループへ
+		if (!entry.is_regular_file() || entry.path().extension() != kShaderExtension) { continue; } // ファイルでなかったり、拡張子が違ったりすれば次のループへ
 
 		std::filesystem::path hlslPath = entry.path();                                                            // .hlslのフルパスをを取得
 		std::filesystem::path filename = hlslPath.filename();                                                     // .hlslのファイル名を取得
@@ -337,8 +395,10 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 		}
 		else {	// .cso を読み込む
 			if (!LoadCompiledShaderBlob(csoPath, blob.GetAddressOf())) { // コンパイルしているファイルを読み込む処理
-				ErrorLog::MessageBoxOutput((csoPath.string() + " : CSOの読み込みに失敗しました").c_str());
-				return false;
+				if (!JudgeCompileShader(kFilePath, filename, blob)) { // 失敗したらコンパイル処理
+					ErrorLog::MessageBoxOutput((filename.string() + " : コンパイルに失敗しました").c_str());
+					return false;
+				}
 			}
 		}
 
