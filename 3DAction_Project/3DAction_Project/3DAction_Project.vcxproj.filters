@@ -19,9 +19,6 @@
     <Filter Include="Hlsl">
       <UniqueIdentifier>{194a4f8a-d370-42ab-afab-1822f9a36484}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\Windews">
-      <UniqueIdentifier>{4e12890a-cbe3-4d48-ad82-b63805e872bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\DirectX\Manager">
       <UniqueIdentifier>{b485ea38-40c2-45b7-aa60-c162f0b52442}</UniqueIdentifier>
     </Filter>
@@ -31,11 +28,20 @@
     <Filter Include="Core\DirectX\Manager\ShaderManager\Shader">
       <UniqueIdentifier>{07e90396-7836-496f-9361-68a26f7d0442}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ReportMessage">
-      <UniqueIdentifier>{8ece8b84-d472-4735-bb54-33044975648a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\DirectX\Manager\ResourceManager">
       <UniqueIdentifier>{6a38eb7f-f505-4a60-8364-a613bc5a292f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\PlatformMath">
+      <UniqueIdentifier>{1d64735a-8e37-4399-b5b1-95fd596d47b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\PlatformSystem">
+      <UniqueIdentifier>{c605901f-c68a-4e4a-9892-86b316a750c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\PlatformSystem\Windews">
+      <UniqueIdentifier>{4e12890a-cbe3-4d48-ad82-b63805e872bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\ReportMessage">
+      <UniqueIdentifier>{8ece8b84-d472-4735-bb54-33044975648a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,14 +54,11 @@
     <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="PlatformSystem.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Core\Timer</Filter>
     </ClCompile>
     <ClCompile Include="PlatformWindowsSystem.cpp">
-      <Filter>Platform\Windews</Filter>
+      <Filter>Platform\PlatformSystem\Windews</Filter>
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Core\DirectX\Manager\ShaderManager</Filter>
@@ -64,10 +67,13 @@
       <Filter>Core\DirectX\Manager</Filter>
     </ClCompile>
     <ClCompile Include="ReportMessage.cpp">
-      <Filter>ReportMessage</Filter>
+      <Filter>Platform\ReportMessage</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Core\DirectX\Manager\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformSystem.cpp">
+      <Filter>Platform\PlatformSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,14 +89,11 @@
     <ClInclude Include="NonCopyable.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformSystem.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Core\Timer</Filter>
     </ClInclude>
     <ClInclude Include="PlatformWindowsSystem.h">
-      <Filter>Platform\Windews</Filter>
+      <Filter>Platform\PlatformSystem\Windews</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>Core\DirectX\Manager\ShaderManager</Filter>
@@ -99,10 +102,13 @@
       <Filter>Core\DirectX\Manager</Filter>
     </ClInclude>
     <ClInclude Include="ReportMessage.h">
-      <Filter>ReportMessage</Filter>
+      <Filter>Platform\ReportMessage</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Core\DirectX\Manager\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSystem.h">
+      <Filter>Platform\PlatformSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
