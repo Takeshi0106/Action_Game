@@ -108,8 +108,6 @@ namespace DirectX11 {
 		RenderWidth  = Width;
 		RenderHeight = Height;
 
-		bool IsSuccess = true; // 初期化の 成功、失敗 を受け取る
-
 		// デバイスやスワップチェインの初期化
 		if(!DXCore::Init(windowHandle)){
 			// メッセージボックス出力 環境の問題かもしれないためユーザーに分かるようにする
