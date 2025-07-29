@@ -130,7 +130,7 @@ namespace DirectX11 {
 			return false;
 		}
 		// ビューポートの初期化
-		ViewPort::Init();
+		ViewPort::SetViewPort();
 
 		return true;
 	}
@@ -169,6 +169,7 @@ namespace DirectX11 {
 	void EndDraw()
 	{
 		d3dSwapChain->Present(1, 0); // バッファを交換して画面に表示
+		ViewPort::SetViewPort();
 	}
 
 
@@ -504,7 +505,7 @@ namespace DirectX11 {
 			// -----------------------------------------------------
 			// ビューポートの初期化
 			// -----------------------------------------------------
-			void Init()
+			void SetViewPort()
 			{
 				D3D11_VIEWPORT viewPort = {}; 
 				viewPort.Width = RenderWidth;   // ビューポートの横幅
