@@ -14,6 +14,10 @@
 // 配列のヘッダー
 #include <unordered_map>        // ハッシュ値配列
 
+#if defined(DEBUG) || defined(_DEBUG)
+#include <vector>  // 名前を入れるよう入れる
+#endif
+
 
 // ==============================================
 // 前方宣言
@@ -39,6 +43,8 @@ private:
     static std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
 
 #if defined(DEBUG) || defined(_DEBUG)
+    std::vector<std::string> m_ShaderNames; // 名前取得用
+
     // デバッグ時にこのファイルと同じ階層にある.hlslを探して、コンパイルする必要があるかを確認し、
     // 必要があればコンパイル、無ければバイナリーデータを取得して、メンバー配列に代入する関数
     bool DebugInit(ID3D11Device* device);
@@ -47,6 +53,9 @@ private:
     // 全てのシェーダー情報が書かれている外部ファイルから、読込み
     // コンパイルされていなかったら、コンパイルしてメンバー配列に代入する関数
     bool ReleaseInit(ID3D11Device* device);
+
+    // バイナリーデータを仕分けして、メンバー配列に代入する関数 引き数で拡張子なしの名前を渡す
+    bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size);
 
 public:
     ShaderManager(std::string file, std::string assetLog, std::string hlslfaile)

@@ -69,6 +69,56 @@ void ShaderManager::Uninit()
 	m_Computes.clear(); // 中身を削除 unique_ptrのためDeleteされる
 }
 
+// ==================================================
+//	// バイナリーデータを仕分けして、メンバー配列に代入する関数
+// ==================================================
+bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size)
+{
+	bool IsSuccess = true;
+
+	// バイナリーデータをいれて、シェーダーを作成　配列に代入
+	if (shaderName.rfind("VS_", 0) == 0) {
+		auto vertex = std::make_unique<VertexShaderData>(shaderName, "main", "vs_5_0");  // 動的確保
+		if (!vertex->Init(device, binary, size)) {                                       // 初期化実行
+			ErrorLog::Log(std::string("頂点シェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
+			IsSuccess = false;
+		}
+		m_Vertexs[shaderName] = std::move(vertex);                                       // メンバー配列に代入
+
+		m_ShaderNames.push_back(shaderName);                                             // 名前を保存しておく
+	}
+	else if (shaderName.rfind("PS_", 0) == 0) {
+		auto pixel = std::make_unique<PixelShaderData>(shaderName, "main", "ps_5_0");      // 動的確保
+		if (!pixel->Init(device, binary, size)) {                                          // 初期化実行
+			ErrorLog::Log(std::string("ピクセルシェーダ― " + shaderName + " のクラスの初期化に失敗しました").c_str());
+			IsSuccess = false;
+		}
+		m_Pixels[shaderName] = std::move(pixel);                                           // メンバー配列に代入
+
+		m_ShaderNames.push_back(shaderName);                                               // 名前を保存しておく
+	}
+	else if (shaderName.rfind("CS_", 0) == 0) {
+		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0"); // 動的確保
+		if (!compute->Init(device, binary, size)) {                                        // 初期化実行
+			ErrorLog::Log(std::string("コンピュートシェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
+			IsSuccess = false;
+		}
+		m_Computes[shaderName] = std::move(compute);                                       // メンバー配列に代入
+
+		m_ShaderNames.push_back(shaderName);                                               // 名前を保存しておく
+	}
+	else {
+		ErrorLog::Log(std::string(shaderName + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
+		IsSuccess = false;
+	}
+
+	if (!IsSuccess) {
+		ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
+		return false;
+	}
+	return true;
+}
+
 
 // 頂点シェーダーを探す関数
 VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
@@ -107,7 +157,6 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 	std::filesystem::path currentFilePath = __FILE__;                       // このソースコードのパスを取得
 	std::filesystem::path currentDirectory = currentFilePath.parent_path(); // パスから自分の階層だけを抜き取る
 	bool IsSuccess = true; // 成否判定
-	std::vector<std::string> shaderNames; // 名前取得用
 
 	// .hlslファイルを探す
 	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory)) // 階層内のファイルを全て取得しています
@@ -133,41 +182,12 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 			}
 		}
 
-		// バイナリーデータをいれて、シェーダーを作成　配列に代入
-		if (filename.string().rfind("VS_", 0) == 0) {
-			auto vertex = std::make_unique<VertexShaderData>(filename.stem().string(), "main", "vs_5_0");  // 動的確保
-			IsSuccess = vertex->Init(device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize()); // 初期化実行
-			m_Vertexs[filename.stem().string()] = std::move(vertex);                                       // メンバー配列に代入
-
-			shaderNames.push_back(filename.stem().string());                                               // 名前を保存しておく
-		}
-		else if (filename.string().rfind("PS_", 0) == 0) {
-			auto pixel = std::make_unique<PixelShaderData>(filename.stem().string(), "main", "ps_5_0");      // 動的確保
-			IsSuccess = pixel->Init(device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize());    // 初期化実行
-			m_Pixels[filename.stem().string()] = std::move(pixel);                                           // メンバー配列に代入
-
-			shaderNames.push_back(filename.stem().string());                                                 // 名前を保存しておく
-		}
-		else if (filename.string().rfind("CS_", 0) == 0) {
-			auto compute = std::make_unique< ComputeShaderData>(filename.stem().string(), "main", "cs_5_0"); // 動的確保
-			IsSuccess = compute->Init(device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize());  // 初期化実行
-			m_Computes[filename.stem().string()] = std::move(compute);                                       // メンバー配列に代入
-
-			shaderNames.push_back(filename.stem().string());                                                 // 名前を保存しておく
-		}
-		else {
-			ErrorLog::Log(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
-			IsSuccess = false;
-		}
-		if (!IsSuccess) {
-			ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
-			return false;
-		}
+		JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize()); // バイナリーデータを渡して、シェイダーを作成する
 
 		blob.Reset(); // 一応、解放処理
 	}
 
-	if (!WriteLog(shaderNames)) {// 配列をログにして書き出す
+	if (!WriteLog(m_ShaderNames)) {// 配列をログにして書き出す
 		ErrorLog::Log("シェイーダーのログ書出しに失敗");
 		return false;
 	}
