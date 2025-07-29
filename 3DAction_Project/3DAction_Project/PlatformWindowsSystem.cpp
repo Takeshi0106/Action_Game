@@ -205,7 +205,7 @@ void PlatformWindowsSystem::GameLoop()
     }
     else
     {
-        ErrorLog::MessageBoxOutput("初期化に失敗しました");
+        ErrorLog::MessageBoxOutput("初期化に失敗したため、ゲームを終了します");
     }
 
     GameUninit();        // ゲームの後処理 多重に呼び出しても問題ないように作成

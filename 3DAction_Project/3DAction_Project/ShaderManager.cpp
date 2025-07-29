@@ -74,6 +74,12 @@ void ShaderManager::Uninit()
 // ==================================================
 bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size)
 {
+	if (std::filesystem::path(shaderName).has_extension()) // 拡張子チェック
+	{
+		ErrorLog::Log("拡張子が付いています　確認してください");
+		return false;
+	}
+
 	bool IsSuccess = true;
 
 	// バイナリーデータをいれて、シェーダーを作成　配列に代入
@@ -113,7 +119,6 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 	}
 
 	if (!IsSuccess) {
-		ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
 		return false;
 	}
 	return true;
@@ -182,8 +187,10 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 			}
 		}
 
-		JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize()); // バイナリーデータを渡して、シェイダーを作成する
-
+		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) { // バイナリーデータを渡して、シェイダーを作成する
+			ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
+			return false;
+		}
 		blob.Reset(); // 一応、解放処理
 	}
 
