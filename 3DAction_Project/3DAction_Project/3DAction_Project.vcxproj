@@ -117,7 +117,7 @@
       <Message>
       </Message>
       <Command>if not exist "$(ProjectDir)Asset\Shader\Hlsl" mkdir "$(ProjectDir)Asset\Shader\Hlsl"
-xcopy /Y "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\" </Command>
+xcopy /Y /D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,6 +143,7 @@ xcopy /Y "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\" </Command>
     <ClCompile Include="PlatformSystem.cpp" />
     <ClCompile Include="PlatformWindowsSystem.cpp" />
     <ClCompile Include="ReportMessage.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ShaderData.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -155,6 +156,7 @@ xcopy /Y "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\" </Command>
     <ClInclude Include="PlatformSystem.h" />
     <ClInclude Include="PlatformWindowsSystem.h" />
     <ClInclude Include="ReportMessage.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ShaderData.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Timer.h" />

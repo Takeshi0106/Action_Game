@@ -94,7 +94,7 @@ namespace DirectX11 {
 
 		// ビューポートの初期化・後処理 ---------------------------------------------------------------
 		namespace ViewPort {
-			void Init();   // 初期化
+			void SetViewPort();   // 初期化
 		}
 	}
 

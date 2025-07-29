@@ -34,6 +34,9 @@
     <Filter Include="ReportMessage">
       <UniqueIdentifier>{8ece8b84-d472-4735-bb54-33044975648a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\DirectX\Manager\ResourceManager">
+      <UniqueIdentifier>{6a38eb7f-f505-4a60-8364-a613bc5a292f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="ReportMessage.cpp">
       <Filter>ReportMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Core\DirectX\Manager\ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="ReportMessage.h">
       <Filter>ReportMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Core\DirectX\Manager\ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

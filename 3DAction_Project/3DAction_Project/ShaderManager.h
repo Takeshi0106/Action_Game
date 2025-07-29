@@ -15,7 +15,7 @@
 #include <unordered_map>        // ハッシュ値配列
 
 #if defined(DEBUG) || defined(_DEBUG)
-#include <vector>  // 名前を入れるよう入れる
+#include <vector>  // 使用したシェイダーの名前を入れる用
 #endif
 
 

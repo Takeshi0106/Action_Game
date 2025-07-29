@@ -154,56 +154,13 @@ ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 }
 
 
-#if defined(DEBUG) || defined(_DEBUG)
-
-// デバッグ時のみ有効にする関数
-bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hlslを全てコンパイルして書き出す 将来的には更新されているかを確認してコンパイルするかしないかを判定したい
+// リリース用シェイダー初期化関数
+// リリース時は必要なシェーダー一覧を取得して、コンパイルされているかを確認
+bool ShaderManager::ReleaseInit(ID3D11Device* device)
 {
-	std::filesystem::path currentFilePath = __FILE__;                       // このソースコードのパスを取得
-	std::filesystem::path currentDirectory = currentFilePath.parent_path(); // パスから自分の階層だけを抜き取る
-	bool IsSuccess = true; // 成否判定
-
-	// .hlslファイルを探す
-	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory)) // 階層内のファイルを全て取得しています
-	{
-		if (!entry.is_regular_file() || entry.path().extension() != ".hlsl") { continue; } // ファイルでなかったり、拡張子が違ったりすれば次のループへ
-
-		std::filesystem::path hlslPath = entry.path();                                                            // .hlslのフルパスをを取得
-		std::filesystem::path filename = hlslPath.filename();                                                     // .hlslのファイル名を取得
-		std::filesystem::path csoPath = std::filesystem::path(kFilePath) / (filename.stem().wstring() + L".cso"); // .hlslの拡張子なしファイル名に.csoを付けてコンパイル名を取得
-
-		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
-
-		if (IsShaderUpdateCheck(hlslPath, csoPath)) { // 更新日時を調べる
-			if (!JudgeCompileShader(kFilePath, filename, blob)) { // コンパイル処理
-				ErrorLog::MessageBoxOutput((filename.string() + " : コンパイルに失敗しました").c_str());
-				return false;
-			}
-		}
-		else {	// .cso を読み込む
-			if (!LoadCompiledShaderBlob(csoPath, blob.GetAddressOf())) { // コンパイルしているファイルを読み込む処理
-				ErrorLog::MessageBoxOutput((csoPath.string() + " : CSOの読み込みに失敗しました").c_str());
-				return false;
-			}
-		}
-
-		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) { // バイナリーデータを渡して、シェイダーを作成する
-			ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
-			return false;
-		}
-		blob.Reset(); // 一応、解放処理
-	}
-
-	if (!WriteLog(m_ShaderNames)) {// 配列をログにして書き出す
-		ErrorLog::Log("シェイーダーのログ書出しに失敗");
-		return false;
-	}
 
 	return true;
 }
-
-
-#endif
 
 
 // =================================================
@@ -341,7 +298,57 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 }
 
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(DEBUG) || defined(_DEBUG) // デバッグ時のみ有効にする関数
+
+// 同じ階層にある.hlslを全て探して、コンパイルするかを確認する関数
+// 最終更新日をコンパイルファイルと比較してコンパイルするかを決める
+bool ShaderManager::DebugInit(ID3D11Device* device)
+{
+	std::filesystem::path currentFilePath = __FILE__;                       // このソースコードのパスを取得
+	std::filesystem::path currentDirectory = currentFilePath.parent_path(); // パスから自分の階層だけを抜き取る
+	bool IsSuccess = true; // 成否判定
+
+	// .hlslファイルを探す
+	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory)) // 階層内のファイルを全て取得しています
+	{
+		if (!entry.is_regular_file() || entry.path().extension() != ".hlsl") { continue; } // ファイルでなかったり、拡張子が違ったりすれば次のループへ
+
+		std::filesystem::path hlslPath = entry.path();                                                            // .hlslのフルパスをを取得
+		std::filesystem::path filename = hlslPath.filename();                                                     // .hlslのファイル名を取得
+		std::filesystem::path csoPath = std::filesystem::path(kFilePath) / (filename.stem().wstring() + L".cso"); // .hlslの拡張子なしファイル名に.csoを付けてコンパイル名を取得
+
+		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
+
+		if (IsShaderUpdateCheck(hlslPath, csoPath)) { // 更新日時を調べる
+			if (!JudgeCompileShader(kFilePath, filename, blob)) { // コンパイル処理
+				ErrorLog::MessageBoxOutput((filename.string() + " : コンパイルに失敗しました").c_str());
+				return false;
+			}
+		}
+		else {	// .cso を読み込む
+			if (!LoadCompiledShaderBlob(csoPath, blob.GetAddressOf())) { // コンパイルしているファイルを読み込む処理
+				ErrorLog::MessageBoxOutput((csoPath.string() + " : CSOの読み込みに失敗しました").c_str());
+				return false;
+			}
+		}
+
+		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) { // バイナリーデータを渡して、シェイダーを作成する
+			ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
+			return false;
+		}
+		blob.Reset(); // 一応、解放処理
+	}
+
+	if (!WriteLog(m_ShaderNames)) {// 配列をログにして書き出す
+		ErrorLog::Log("シェイーダーのログ書出しに失敗");
+		return false;
+	}
+
+	return true;
+}
+
+// コンパイルファイルがない場合と,hlslが更新されていたらコンパイルされます
+// 最終更新日を比較して、コンパイルが必要かをチェックしています
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath)
 {
 	try {
