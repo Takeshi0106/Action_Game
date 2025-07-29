@@ -12,6 +12,8 @@
 #include "ReportMessage.h"
 
 
+
+#if defined(DEBUG) || defined(_DEBUG)
 // 名前の配列を渡して、ログを書き出す
 bool BaseDirectXManager::WriteLog()
 {
@@ -32,3 +34,4 @@ bool BaseDirectXManager::WriteLog()
 
 	return true;
 }
+#endif

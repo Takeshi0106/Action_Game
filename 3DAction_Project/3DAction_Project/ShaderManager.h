@@ -43,8 +43,6 @@ private:
     static std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
 
 #if defined(DEBUG) || defined(_DEBUG)
-    std::vector<std::string> m_ShaderNames; // 名前取得用
-
     // デバッグ時にこのファイルと同じ階層にある.hlslを探して、コンパイルする必要があるかを確認し、
     // 必要があればコンパイル、無ければバイナリーデータを取得して、メンバー配列に代入する関数
     bool DebugInit(ID3D11Device* device);
