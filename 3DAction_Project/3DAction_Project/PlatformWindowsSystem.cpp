@@ -1,11 +1,20 @@
-﻿#include "PlatformWindowsSystem.h"
-#include "Timer.h"
-#include "DirectX.h"
-#include "Shader.h"
+﻿// 必須ヘッダー
+#include "PlatformWindowsSystem.h"  // 自分のヘッダー
 
-#if defined(DEBUG) || defined(_DEBUG)
-#include <iostream>
-#endif
+// Windowsヘッダー
+#include <Windows.h>  // ウィンドウ作成用
+
+// DirectXヘッダー
+#include "DirectX.h"  // DirectX初期化用　後で描画マネージャーに任せるようにする
+
+// 標準ヘッダー
+#include <cstdint>   // 整数型 uintなど
+
+// ゲーム用ヘッダー
+#include "Timer.h"   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
+
+// デバッグ用ヘッダー
+#include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
 
 
 // =====================================================
@@ -24,29 +33,8 @@ public:
         hInstance = _hInstance;
         return *this;
     }
-    // 暗黙的に変換を禁止にする
-    explicit operator HINSTANCE() const { return hInstance; }
     // ラップしているHINSTANCEを返す
     HINSTANCE Get() const { return hInstance; }
-};
-
-struct WINDOWHANDLE {
-private: // 直接アクセス不可
-    HWND hWnd; // ウィンドウハンドル
-
-public:
-    // コンストラクタ
-    WINDOWHANDLE(const HWND& _hWnd) : hWnd(_hWnd) {}
-    // 代入演算子オーバーロード
-    WINDOWHANDLE& operator=(const HWND& _hWnd) 
-    {
-        hWnd = _hWnd;
-        return *this;
-    }
-    // 暗黙的に変換を禁止にする
-    explicit operator HWND() const { return hWnd; }
-    // ラップしているHWNDを返す
-    HWND Get() const { return hWnd; }
 };
 
 
@@ -54,11 +42,26 @@ public:
 // 静的メンバー変数
 // =====================================================
 APPLICATIONHANDLE PlatformWindowsSystem::m_AppInstance = nullptr;
-WINDOWHANDLE      PlatformWindowsSystem::m_WinInstance = nullptr;
+HWND              PlatformWindowsSystem::m_WinInstance = nullptr;
 uint16_t          PlatformWindowsSystem::m_Width = 0;
 uint16_t          PlatformWindowsSystem::m_Height = 0;
 std::wstring      PlatformWindowsSystem::m_WindowName;
 std::wstring      PlatformWindowsSystem::m_WindowClassName;
+
+#if defined(DEBUG) || defined(_DEBUG)
+ShaderManager PlatformWindowsSystem::m_ShaderManager = {
+    "Asset/Debug/Shader",   // デバッグ時のコンパイルしたシェイダーを入れるパス
+    "Debug/Log/Shader.txt", // 使用したシェイダーの名前を書き出すログのパス　リリースビルド時にこれを使用して、全てのシェイダーを管理する
+    ""                      // デバッグ時は使用しないパス
+};
+#else
+ShaderManager PlatformWindowsSystem::m_ShaderManager = {
+    "Asset/Shader/Compile", // リリース時にコンパイルしたシェイダーを入れるパス
+    "Debug/Log/Shader.txt", // 全てのシェイダーの名前が入っているテキストのパス 　今はDebugにしているがリリースにするときは変更する
+    "Asset/Shader/Hlsl"     // HLSLを入れているフォルダー 
+};
+#endif
+
 
 
 // =====================================================
@@ -98,7 +101,7 @@ PlatformWindowsSystem::~PlatformWindowsSystem()
 #if defined(DEBUG) || defined(_DEBUG)
     if (IsUninit)
     {
-        std::cout << "PlatformWindowsSystem : 後処理が実行されていません" << std::endl;
+        ErrorLog::Log("PlatformWindowsSystem : 後処理が実行されていません");
         Uninit();
     }
 #endif
@@ -127,7 +130,10 @@ bool PlatformWindowsSystem::Init()
     windClass.hIconSm = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);     // タスクバーに表示されるアイコン (標準アイコンで作成 .icoで変更可能)
 
     // ウィンドウの登録 失敗したらfalseを返す
-    if (!RegisterClassEx(&windClass)) { return false; } 
+    if (!RegisterClassEx(&windClass)) {
+        ErrorLog::Log("ウィンドウの登録に失敗しました"); // ログ出力
+        return false; 
+    } 
 
     // 描画する大きさを設定
     RECT rect = {};
@@ -154,16 +160,19 @@ bool PlatformWindowsSystem::Init()
         nullptr);                   // 追加パラメーター
 
     // ウィンドウを作成できたかのチェック
-    if (m_WinInstance.Get() == nullptr) { return false; }
+    if (m_WinInstance == nullptr) {
+        ErrorLog::Log("ウィンドウが作成されませんでした");
+        return false; 
+    }
 
     // ウィンドウを表示
-    ShowWindow(m_WinInstance.Get(), SW_SHOWNORMAL);
+    ShowWindow(m_WinInstance, SW_SHOWNORMAL);
 
     // ウィンドウを更新
-    UpdateWindow(m_WinInstance.Get());
+    UpdateWindow(m_WinInstance);
 
     // ウィンドウに入力情報を取得させる
-    SetFocus(m_WinInstance.Get());
+    SetFocus(m_WinInstance);
 
     // 正常終了.
     return true;
@@ -177,32 +186,25 @@ void PlatformWindowsSystem::GameLoop()
 {
     MSG msg = {}; // メッセージ
 
-    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance.Get())) { // DirectXの初期化
-        return; // 失敗したら戻る
-    }
-    GameInit(); // ゲームの初期化処理
-
-    while (true)
+    if (GameInit()) // ゲームの初期化処理
     {
-#if defined(DEBUG) || defined(_DEBUG)
-        Timer::Debug_CheckUpdate(); // タイマーデバッグ
-#endif
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
+        while (true)
         {
-            if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
+            if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
+            {
+                if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
 
-            TranslateMessage(&msg); // キー入力などを文字列に変換する関数
-            DispatchMessage(&msg); // ウィンドウプロシージャにメッセージを送る
+                TranslateMessage(&msg); // キー入力などを文字列に変換する関数
+                DispatchMessage(&msg); // ウィンドウプロシージャにメッセージを送る
+            }
+            else
+            {
+                GameMain();
+            }
         }
-        else
-        {
-            GameMain();
-        }
-        Timer::LastUpdate(); // タイマー更新処理
     }
 
-    GameUninit();        // ゲームの後処理
-    DirectX11::Uninit(); // Directの後処理
+    GameUninit();        // ゲームの後処理 多重に呼び出しても問題ないように作成
 }
 
 
@@ -263,24 +265,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 // =====================================================
 // ゲームの初期化処理
 // =====================================================
-void PlatformWindowsSystem::GameInit()
+bool PlatformWindowsSystem::GameInit()
 {
+    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
+        ErrorLog::MessageBoxOutput("DirectXの初期化に失敗しました");
+        return false; // 失敗したら戻る
+    }
+    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice()))
+    {
+        ErrorLog::MessageBoxOutput("ShaderManagerの初期化に失敗しました");
+        return false; // 失敗したら戻る
+    }
+
     Timer::Init(); // タイマー初期化
     Timer::Start(); // タイマー開始
 
-    
-    // デバッグ用 頂点シェーダ読込み
-    bool     hr = true;
-
-    hr = OutputCompileShader(ShaderInfo{ "VS_Debug.hlsl", "VSFunc", ShaderType::VERTEX_5_0 },"Asset/Shader/");
-    if (!hr) {
-        MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
-    }
-    hr = OutputCompileShader(ShaderInfo{ "PS_Debug.hlsl", "PSFunc", ShaderType::PIXEL_5_0 }, "Asset/Shader/");
-    if (!hr) {
-        MessageBoxA(NULL, "頂点シェーダー作製失敗", "エラー", MB_OK | MB_ICONERROR);
-    }
-
+    return true;
 }
 
 
@@ -289,12 +289,16 @@ void PlatformWindowsSystem::GameInit()
 // =====================================================
 void PlatformWindowsSystem::GameMain()
 {
+    Timer::Debug_CheckUpdate(); // タイマーデバッグ
+
     // デバッグ時 
     DirectX11::BeginDraw(); // 描画の開始処理
 
     DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
 
     DirectX11::EndDraw(); // 描画の終わり処理
+
+    Timer::LastUpdate(); // タイマー更新処理
 }
 
 
@@ -303,5 +307,6 @@ void PlatformWindowsSystem::GameMain()
 // =====================================================
 void PlatformWindowsSystem::GameUninit()
 {
-
+    DirectX11::Uninit();      // Directの後処理
+    m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
 }

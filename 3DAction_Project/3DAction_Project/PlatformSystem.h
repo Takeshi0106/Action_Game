@@ -20,7 +20,7 @@ protected:
 	virtual bool Init() = 0;	    // 初期化 (戻り値で初期化成功かを返す)
 	virtual void Uninit() = 0;		// 後処理
 	virtual void GameLoop() = 0;    // ゲームループ
-	virtual void GameInit() = 0;    // ゲーム初期化
+	virtual bool GameInit() = 0;    // ゲーム初期化
 	virtual void GameMain() = 0;    // ゲームメイン
 	virtual void GameUninit() = 0;  // ゲーム後処理
 

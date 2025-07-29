@@ -9,7 +9,7 @@ struct PSInput
 };
 
 // エントリーポイント
-float4 PSFunc(PSInput output) : SV_TARGET0
+float4 main(PSInput output) : SV_TARGET0
 {
     return float4(0.25f, 1.0f, 0.25f, 1.0f);
 }

@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+// プラットフォームのヘッダー
 #include "PlatformWindowsSystem.h"
 
 // ウィンドウの大きさ

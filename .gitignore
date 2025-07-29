@@ -419,3 +419,4 @@ FodyWeavers.xsd
 
 # 自分用除外
 *.cso
+3DAction_Project/3DAction_Project/Asset/
