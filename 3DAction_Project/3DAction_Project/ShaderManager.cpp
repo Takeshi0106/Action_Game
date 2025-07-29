@@ -33,7 +33,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob);
 bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blob);               // パスから.csoを読み込んでくる関数
 bool JudgeCompileShader(const std::filesystem::path kFilePath,                                    // コンパイルするシェイダーの種類を判定してコンパイル関数に渡す
-	const std::string filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob);
+	const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob);
 
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -121,40 +121,13 @@ bool ShaderManager::DebugInit(ID3D11Device* device) // 同じ階層にある.hls
 		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
 
 		if (IsShaderUpdateCheck(hlslPath, csoPath)) { // 更新日時を調べる
-
-			// ファイルの最初の名前でシェーダー判定
-			if (filename.string().rfind("VS_", 0) == 0) {
-				if (!OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
-				{
-					ErrorLog::Log("頂点シェーダーのコンパイル失敗");
-					IsSuccess = false;
-				}
-			}
-			else if (filename.string().rfind("PS_", 0) == 0) {
-				if(!OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) // コンパイルして書き出す
-				{
-					ErrorLog::Log("ピクセルシェーダーのコンパイル失敗");
-					IsSuccess = false;
-				}
-			}
-			else if (filename.string().rfind("CS_", 0) == 0) {
-				if(!OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
-				{
-					ErrorLog::Log("コンピュートシェーダのコンパイル失敗");
-					IsSuccess = false;
-				}
-			}
-			else {
-				ErrorLog::Log(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
-				IsSuccess = false;
-			}
-			if (!IsSuccess) {
-				ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
+			if (!JudgeCompileShader(kFilePath, filename, blob)) { // コンパイル処理
+				ErrorLog::MessageBoxOutput((filename.string() + " : コンパイルに失敗しました").c_str());
 				return false;
 			}
 		}
 		else {	// .cso を読み込む
-			if (!LoadCompiledShaderBlob(csoPath, blob.GetAddressOf())) {
+			if (!LoadCompiledShaderBlob(csoPath, blob.GetAddressOf())) { // コンパイルしているファイルを読み込む処理
 				ErrorLog::MessageBoxOutput((csoPath.string() + " : CSOの読み込みに失敗しました").c_str());
 				return false;
 			}
@@ -308,9 +281,34 @@ bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blo
 }
 
 
-bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::string filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob)
+bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob)
 {
-
+	// ファイルの最初の名前でシェーダー判定
+	if (filename.string().rfind("VS_", 0) == 0) {
+		if (!OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
+		{
+			ErrorLog::Log(std::string("頂点シェーダー " + filename.string() + " のコンパイル失敗").c_str());
+			return false;
+		}
+	}
+	else if (filename.string().rfind("PS_", 0) == 0) {
+		if (!OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) // コンパイルして書き出す
+		{
+			ErrorLog::Log(std::string("ピクセルシェーダー " + filename.string() + " のコンパイル失敗").c_str());
+			return false;
+		}
+	}
+	else if (filename.string().rfind("CS_", 0) == 0) {
+		if (!OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
+		{
+			ErrorLog::Log(std::string("コンピュートシェーダ " + filename.string() + " のコンパイル失敗").c_str());
+			return false;
+		}
+	}
+	else {
+		ErrorLog::Log(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
+		return  false;
+	}
 
 	return true;
 }
