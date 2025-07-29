@@ -203,10 +203,6 @@ void PlatformWindowsSystem::GameLoop()
             }
         }
     }
-    else
-    {
-        ErrorLog::MessageBoxOutput("初期化に失敗したため、ゲームを終了します");
-    }
 
     GameUninit();        // ゲームの後処理 多重に呼び出しても問題ないように作成
 }
@@ -272,12 +268,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 bool PlatformWindowsSystem::GameInit()
 {
     if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
-        ErrorLog::Log("DirectXの初期化に失敗しました");
+        ErrorLog::MessageBoxOutput("DirectXの初期化に失敗しました");
         return false; // 失敗したら戻る
     }
     if (!m_ShaderManager.Init(DirectX11::Get::GetDevice()))
     {
-        ErrorLog::Log("ShaderManagerの初期化に失敗しました");
+        ErrorLog::MessageBoxOutput("ShaderManagerの初期化に失敗しました");
         return false; // 失敗したら戻る
     }
 

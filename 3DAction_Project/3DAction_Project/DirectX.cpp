@@ -111,37 +111,30 @@ namespace DirectX11 {
 		bool IsSuccess = true; // 初期化の 成功、失敗 を受け取る
 
 		// デバイスやスワップチェインの初期化
-		IsSuccess = DXCore::Init(windowHandle);
-		if(!IsSuccess){
-			ErrorLog::MessageBoxOutput("デバイスやスワップチェインの初期化に失敗"); // メッセージボックス出力
-			Uninit(); // 初期化失敗時に後処理を呼び出す
+		if(!DXCore::Init(windowHandle)){
+			// メッセージボックス出力 環境の問題かもしれないためユーザーに分かるようにする
+			ErrorLog::MessageBoxOutput("デバイスやスワップチェインの初期化に失敗");
 			return false;
 		}
 		// RTVとSRVの初期化
-		IsSuccess = SRV::Init();
-		if (!IsSuccess) {
-			ErrorLog::MessageBoxOutput("SRVの初期化に失敗"); // メッセージボックス出力
-			Uninit(); // 初期化失敗時に後処理を呼び出す
+		if (!SRV::Init()) {
+			ErrorLog::Log("SRVの初期化に失敗"); 
 			return false;
 		}
 		// UAVの初期化
-		IsSuccess = UAV::Init();
-		if (!IsSuccess) {
-			ErrorLog::MessageBoxOutput("URVの初期化に失敗");
-			Uninit(); // 初期化失敗時に後処理を呼び出す
+		if (!UAV::Init()) {
+			ErrorLog::Log("URVの初期化に失敗");
 			return false;
 		}
 		// 深度ステンシルの初期化
-		IsSuccess = DepthStencil::Init(DepthStencil::DepthStencilFormatType::Depth32Bit);
-		if (!IsSuccess) {
-			ErrorLog::MessageBoxOutput("深度ステンシルの初期化に失敗");
-			Uninit(); // 初期化失敗時に後処理を呼び出す
+		if (!DepthStencil::Init(DepthStencil::DepthStencilFormatType::Depth32Bit)) {
+			ErrorLog::Log("深度ステンシルの初期化に失敗");
 			return false;
 		}
 		// ビューポートの初期化
 		ViewPort::Init();
 
-		return IsSuccess;
+		return true;
 	}
 
 
