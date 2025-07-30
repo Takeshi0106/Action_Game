@@ -423,47 +423,59 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 // リフレクション関数
 // ============================================================
 bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& outBuffers) {
-	Microsoft::WRL::ComPtr<ID3D11ShaderReflection> reflector; // リフレクション
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderReflection> reflector; // リフレクション作成
+
 	HRESULT hr = D3DReflect(blob, blobSize, IID_PPV_ARGS(&reflector)); // バイナリーを解析
-	if (ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "リファレンス失敗")) { // 失敗したかの判定
+	if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "リファレンス失敗")) { // 失敗したかの判定
 		return false;
 	}
 
-	D3D11_SHADER_DESC shaderDesc = {}; 
+	D3D11_SHADER_DESC shaderDesc = {};
 	reflector->GetDesc(&shaderDesc);// 定数バッファの情報を取得
 
-	for (int i = 0; i < (int)shaderDesc.ConstantBuffers; ++i) { // 定数バッファの数だけループする
+	for (int i = 0; i < (int)shaderDesc.ConstantBuffers; i++)
+	{ // 定数バッファの数だけループする
+
 		ID3D11ShaderReflectionConstantBuffer* cb = reflector->GetConstantBufferByIndex(i); // i番目の定数バッファ情報を取得
 
 		D3D11_SHADER_BUFFER_DESC bufferDesc = {};
-		cb->GetDesc(&bufferDesc); //名前やサイズを取得
+		cb->GetDesc(&bufferDesc); // 定数バッファの名前とサイズを取得
 
-		// バインドポイントを取得（bindSlot）
+		// 同じ定数バッファのレジスタ番号を探す処理
 		int bindPoint = UINT_MAX;
-		for (UINT b = 0; b < shaderDesc.BoundResources; ++b) {
-			D3D11_SHADER_INPUT_BIND_DESC bindDesc = {};
-			reflector->GetResourceBindingDesc(b, &bindDesc);
 
-			if (bindDesc.Type == D3D_SIT_CBUFFER &&
-				bindDesc.Name != nullptr &&
-				bufferDesc.Name != nullptr &&
-				std::string(bindDesc.Name) == bufferDesc.Name)
-			{
-				bindPoint = bindDesc.BindPoint; // バインドスロット情報を取得
+		for (int b = 0; b < int(shaderDesc.BoundResources); b++)  // バインド情報を取得する
+		{
+			D3D11_SHADER_INPUT_BIND_DESC bindDesc = {};
+			reflector->GetResourceBindingDesc(b, &bindDesc); // バインド情報を入れる
+
+			if (bindDesc.Name == nullptr || bufferDesc.Name == nullptr) {
+				ErrorLog::Log("リフレクションした情報に名前が入っていませんでした");
+				return false;
+			}
+
+			// ローカル変数に代入
+			std::string bindName = bindDesc.Name;
+			std::string bufferName = bufferDesc.Name;
+
+			// 定数バッファかの確認、レジスタ番号とサイズが同じ定数バッファから取得した物かチェック
+			if (bindDesc.Type == D3D_SIT_CBUFFER && bindName == bufferName) {
+				bindPoint = bindDesc.BindPoint; // レジスタ番号を代入
 				break;
 			}
 		}
 
-		if (bindPoint != UINT_MAX && bufferDesc.Name != nullptr 
-			&& bufferDesc.Name[0] != '\0') { // バインドスロットが見つからなかったとき、Nameに何も入っていないときは失敗
+		// 配列に代入
+		if (bindPoint != UINT_MAX) {
 			ConstantBufferInfo info;
 			info.name = bufferDesc.Name;
 			info.bindSlot = bindPoint;
 			info.size = bufferDesc.Size;
 			outBuffers.push_back(info);
 		}
-		else{
-			ErrorLog::Log("バインド番号もしくは名前が取得できませんでした");
+		else {
+			ErrorLog::Log("バインド番号が見つかりませんでした");
 			return false;
 		}
 	}
@@ -506,6 +518,17 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 					return false;
 				}
 			}
+		}
+
+		std::vector<ConstantBufferInfo> info;
+		if (!Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), info)) {
+			ErrorLog::MessageBoxOutput("リフレクションした情報が得られませんでした");
+			return false;
+		}
+
+		for (int i = 0; info.size() > i; i++)
+		{
+			ErrorLog::Log((info[i].name).c_str());
 		}
 
 		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) { // バイナリーデータを渡して、シェイダーを作成する
