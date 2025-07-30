@@ -4,15 +4,13 @@
 // シェイダーコンパイル用ヘッダー
 #include <d3dcompiler.h>                // シェーダーをコンパイルするためのヘッダー
 #pragma comment(lib, "d3dcompiler.lib") // シェーダーをコンパイルするためのライブラリー
+#include <Windows.h>                    // デバイス受け取り
+// ファイル出力、読込み用ヘッダー
+#include <filesystem>                   // ファイルパスなどを楽に扱える　C++17以降
 #include <fstream>                      // 外部ファイルとして書出し・読み出し
 #include <sstream>                      // 外部ファイル読み出し用
-#include <Windows.h>                    // デバイス受け取り
-// DirectX用
+// DirectX用スマートポインター
 #include <wrl/client.h>  // DirectX用のスマートポインター
-// ファイルパス用ヘッダー
-#include <filesystem>  // ファイルパスなどを楽に扱える　C++17以降
-// 定数バッファマネージャー
-#include "ConstantBufferManager.h"
 // デバッグ情報ややエラー出力用
 #include "ReportMessage.h"
 
