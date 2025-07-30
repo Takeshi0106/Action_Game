@@ -47,7 +47,7 @@ public:
 	VertexShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {}   // コンストラクタ
 	~VertexShaderData() = default;                                                                                   // デストラクタ
 
-	bool Init(ID3D11Device* device, void* binary, size_t size); // 初期化
+	bool CreateShader(ID3D11Device* device, void* binary, size_t size); // 初期化
 	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }                                                 // シェーダーのゲッター
 };
 
@@ -61,7 +61,7 @@ public:
 	PixelShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {}  // コンストラクタ
 	~PixelShaderData() = default;                                                                               // デストラクタ
 
-	bool Init(ID3D11Device* device, void* binary, size_t size); // 初期化
+	bool CreateShader(ID3D11Device* device, void* binary, size_t size); // 初期化
 	ID3D11PixelShader* GetShader() { return m_PixelShader.Get(); }                                              // シェーダーのゲッター
 };
 
@@ -75,6 +75,6 @@ public:
 	ComputeShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {} // コンストラクタ
 	~ComputeShaderData() = default;                                                                             // デストラクタ
 
-	bool Init(ID3D11Device* device, void* binary, size_t size); // 初期化
+	bool CreateShader(ID3D11Device* device, void* binary, size_t size); // 初期化
 	ID3D11ComputeShader* GetShader() { return m_ComputeShader.Get(); }                                          // シェーダーのゲッター
 };
