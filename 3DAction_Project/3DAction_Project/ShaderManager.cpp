@@ -29,6 +29,11 @@ std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManage
 namespace {
 	const std::string kShaderExtension = ".hlsl";
 	const std::string kCompileExtension = ".cso";
+
+	const std::string kShaderName = "ShaderName :";
+	const std::string kCBufferName = "CBufferName :";
+	const std::string kBindSlot="BindSlot :";
+	const std::string kSize = "Size :";
 }
 
 
@@ -37,9 +42,13 @@ namespace {
 // =================================================
 // 定数バッファ情報の構造体
 struct ConstantBufferInfo {
-	std::string name = "";
-	int bindSlot = 0;
-	size_t size = 0;
+	std::string name = ""; // 定数バッファの名前
+	int bindSlot = 0;      // レジスタ番号
+	size_t size = 0;       // 大きさ１６の倍数にする
+};
+struct OutputLog {
+	std::string shaderName = ""; // シェーダーの名前
+	std::vector<ConstantBufferInfo> info;     // 情報
 };
 
 
@@ -493,6 +502,8 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 	std::filesystem::path currentFilePath = __FILE__;                       // このソースコードのパスを取得
 	std::filesystem::path currentDirectory = currentFilePath.parent_path(); // パスから自分の階層だけを抜き取る
 	bool IsSuccess = true; // 成否判定
+	std::vector<OutputLog> shaderInfo; //情報を入れる
+	int cnt = -1;
 
 	// .hlslファイルを探す
 	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory)) // 階層内のファイルを全て取得しています
@@ -520,15 +531,11 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 			}
 		}
 
-		std::vector<ConstantBufferInfo> info;
-		if (!Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), info)) {
+		std::vector<ConstantBufferInfo> conInfo;
+
+		if (!Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), conInfo)) {
 			ErrorLog::MessageBoxOutput("リフレクションした情報が得られませんでした");
 			return false;
-		}
-
-		for (int i = 0; info.size() > i; i++)
-		{
-			ErrorLog::Log((info[i].name).c_str());
 		}
 
 		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) { // バイナリーデータを渡して、シェイダーを作成する
@@ -536,8 +543,41 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 			return false;
 		}
 
+		OutputLog log;
+		log.shaderName = filename.stem().string();
+		log.info = std::move(conInfo); // 情報をコピーまたはムーブ
+
+		shaderInfo.push_back(std::move(log));
+
 		blob.Reset(); // 一応、解放処理
 	}
+
+	// フォルダがない場合作成
+	if (!std::filesystem::exists(std::filesystem::path(kShader_ConstantInfoPath).parent_path())) { // ファイルがない場合作成する
+		if (!std::filesystem::create_directories(std::filesystem::path(kShader_ConstantInfoPath).parent_path())) {
+			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
+			return false;
+		}
+	}
+	// ファイルを開ける
+	std::ofstream ofs(kShader_ConstantInfoPath, std::ios::binary | std::ios::out);
+	if (!ofs.is_open()) {
+		ErrorLog::Log("使用したシェイダーログ : ファイルのオープンに失敗しました");
+		return false;
+	}
+	// リフレクション情報を書き出し
+	for (const auto& shader : shaderInfo) {
+		ofs << kShaderName << shader.shaderName << "\n";
+
+		for (const auto& cbuffer : shader.info) {
+			ofs << "  " << kCBufferName << cbuffer.name << "\n";
+			ofs << "    " << kBindSlot << cbuffer.bindSlot << "\n";
+			ofs << "    " << kSize << cbuffer.size << "\n";
+		}
+		ofs << "\n"; // シェーダーごとの区切り
+	}
+	ofs.close();
+
 
 	if (!WriteLog()) {// 配列をログにして書き出す
 		ErrorLog::Log("シェイーダーのログ書出しに失敗");
