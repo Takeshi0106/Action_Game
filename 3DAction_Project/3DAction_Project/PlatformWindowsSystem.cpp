@@ -1,20 +1,18 @@
 ﻿// 必須ヘッダー
 #include "PlatformWindowsSystem.h"  // 自分のヘッダー
-
-// Windowsヘッダー
-#include <Windows.h>  // ウィンドウ作成用
-
-// DirectXヘッダー
+// Windowsヘッダー / DirectXヘッダー
 #include "DirectX.h"  // DirectX初期化用　後で描画マネージャーに任せるようにする
-
+#include <Windows.h>  // ウィンドウ作成用
 // 標準ヘッダー
 #include <cstdint>   // 整数型 uintなど
-
-// ゲーム用ヘッダー
-#include "Timer.h"   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
-
 // デバッグ用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
+
+// GameMain用ヘッダー
+#include "Timer.h"   // デバッグ用
+// DrawManagerで使用するヘッダー
+#include "ShaderManager.h"  // シェイダーマネージャー
+#include "ConstantBufferManager.h" // 定数バッファマネージャー
 
 
 // =====================================================
@@ -61,6 +59,7 @@ ShaderManager PlatformWindowsSystem::m_ShaderManager = {
     "Asset/Shader/Hlsl"     // HLSLを入れているフォルダー 
 };
 #endif
+ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager;
 
 
 

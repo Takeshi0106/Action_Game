@@ -7,9 +7,6 @@
 #include <cstdint>          // 整数
 #include <string>           // 文字列
 
-// GameMainで使用するヘッダー
-#include "ShaderManager.h"  // メンバー変数として保持するシェイダーマネージャー もしかしたら描画マネージャーの中に入れる可能性あり
-
 
 // =====================================================
 // 前方宣言　Windows.hを.cpp内だけでインクルードする
@@ -19,6 +16,10 @@ struct APPLICATIONHANDLE;              // HINSTANCEのラップ構造体
 // ウィンドウハンドルの前方宣言
 struct HWND__;
 using HWND = HWND__*;
+
+// DrawManagerに置き換える
+class ShaderManager;          // シェーダーマネージャー
+class ConstantBufferManager;  // 定数バッファマネージャー
 
 
 // =====================================================
@@ -33,7 +34,11 @@ private:
 	static uint16_t  m_Height;	            // ウィンドウの画面縦幅
 	static std::wstring m_WindowName;       // ウィンドウの名前
 	static std::wstring m_WindowClassName;  // ウィンドウのクラス名
-	static ShaderManager m_ShaderManager;   // シェーダーを管理する
+
+	// DrawManagerに置き換える
+	static ShaderManager m_ShaderManager;                 // シェーダーを管理する
+	static ConstantBufferManager m_ConstantBufferManager; // 定数バッファマネージャー
+
 
 	// オーバーライド関数
 	bool Init()     override;   // 初期化処理

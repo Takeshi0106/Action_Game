@@ -10,11 +10,12 @@
 // 配列のヘッダー
 #include <unordered_map>        // ハッシュ値配列
 
-
 // ==============================================
 // 前方宣言
 // ==============================================
-struct ID3D11Device;     // DirectXのデバイス
+struct ID3D11Device;         // DirectXのデバイス
+class ConstantBufferManager; // 定数バッファマネージャー
+// メンバー配列に入れるクラス
 class VertexShaderData;  // 頂点シェーダー
 class PixelShaderData;   // ピクセルシェーダ
 class ComputeShaderData; // コンピュートシェーダ
@@ -46,7 +47,7 @@ private:
     bool ReleaseInit(ID3D11Device* device);
 
     // バイナリーデータを仕分けして、メンバー配列に代入する関数 引き数で拡張子なしの名前を渡す
-    bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size);
+    bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize);
 
 public:
     ShaderManager(const char* file, const char* assetLog, const char* hlslfaile) // コンストラクタ

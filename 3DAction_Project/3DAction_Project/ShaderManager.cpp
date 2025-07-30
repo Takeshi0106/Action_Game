@@ -1,22 +1,20 @@
 ﻿// 必須ヘッダー
 #include "ShaderManager.h" // 自分のヘッダー
 #include "ShaderData.h"    // シェイダーデータクラス
-
 // シェイダーコンパイル用ヘッダー
 #include <d3dcompiler.h>                // シェーダーをコンパイルするためのヘッダー
 #pragma comment(lib, "d3dcompiler.lib") // シェーダーをコンパイルするためのライブラリー
 #include <fstream>                      // 外部ファイルとして書出し・読み出し
 #include <sstream>                      // 外部ファイル読み出し用
 #include <Windows.h>                    // デバイス受け取り
-
 // DirectX用
 #include <wrl/client.h>  // DirectX用のスマートポインター
-
-// デバッグ情報ややエラー出力用
-#include "ReportMessage.h"
-
 // ファイルパス用ヘッダー
 #include <filesystem>  // ファイルパスなどを楽に扱える　C++17以降
+// 定数バッファマネージャー
+#include "ConstantBufferManager.h"
+// デバッグ情報ややエラー出力用
+#include "ReportMessage.h"
 
 
 // ================================================
@@ -37,6 +35,16 @@ namespace {
 
 
 // =================================================
+// メンバー配列
+// =================================================
+struct ConstantBufferInfo {
+	std::string name;
+	UINT size;
+	UINT bindSlot;
+};
+
+
+// =================================================
 // プロトタイプ宣言
 // =================================================
 bool OutputCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path name, // シェーダーをコンパイルして外部ファイルに書き出し引き数のblobにバイナリデータを入れる
@@ -44,7 +52,6 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blob);               // パスから.csoを読み込んでくる関数
 bool JudgeCompileShader(const std::filesystem::path kFilePath,                                    // コンパイルするシェイダーの種類を判定してコンパイル関数に渡す
 	const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob);
-
 
 #if defined(DEBUG) || defined(_DEBUG)
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath); // .hlslが更新されているかを確認する
@@ -195,6 +202,9 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 }
 
 
+// ===============================================
+// シェーダーを探して、返す関数
+// ===============================================
 // 頂点シェーダーを探す関数
 VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
 {
@@ -293,7 +303,9 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 }
 
 
+// ============================================================================
 // コンパイルして外部に書き出したファイルをBlobに取り込む関数
+// ============================================================================
 bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blob)
 {
 	// ファイルを開ける
@@ -333,6 +345,9 @@ bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blo
 }
 
 
+// ==================================================================
+// コンパイルするシェーダーの種類を判定する
+// ==================================================================
 bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob)
 {
 	// ファイルの最初の名前でシェーダー判定
@@ -406,6 +421,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 			ErrorLog::MessageBoxOutput("シェイダーの初期化に失敗しました");
 			return false;
 		}
+
 		blob.Reset(); // 一応、解放処理
 	}
 
@@ -416,6 +432,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 
 	return true;
 }
+
 
 // コンパイルファイルがない場合と,hlslが更新されていたらコンパイルされます
 // 最終更新日を比較して、コンパイルが必要かをチェックしています

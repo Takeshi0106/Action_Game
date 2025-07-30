@@ -17,13 +17,13 @@ std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBuf
 // 前方宣言
 // ======================================
 struct ConstantBufferData { // 定数バッファデータ
-	std::string name = "";                                         // デバッグ用に名前を保存
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer = nullptr; // 定数バッファ
 	size_t size = 0;                                               // サイズ
+	int registerNumber = -1;                                                 // スロット
 
 	// コンストラクタ
-	ConstantBufferData(const std::string& n, Microsoft::WRL::ComPtr<ID3D11Buffer> buf, size_t s)
-		: name(n), constantBuffer(buf), size(s) {
+	ConstantBufferData(Microsoft::WRL::ComPtr<ID3D11Buffer> buf, size_t _size, int slot)
+		: constantBuffer(buf), size(_size), registerNumber(slot) {
 	}
 };
 
@@ -31,12 +31,11 @@ struct ConstantBufferData { // 定数バッファデータ
 // =======================================
 // 定数バッファ作成
 // =======================================
-bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t size, ID3D11Device* device)
+bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device)
 {
 	if (m_ConstantBuffer.count(name)) {
 		return true; // 同じ名前があるときは戻る
 	}
-
 
 	D3D11_BUFFER_DESC desc{}; // 初期化
 	desc.ByteWidth = static_cast<UINT>((size + 15) / 16 * 16); // 16バイト単位にする アライメント
@@ -55,7 +54,7 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t
 	}
 
 	// 情報を構造体にまとめてマップに保存
-	auto data = std::make_unique<ConstantBufferData>(name, buffer, size);
+	auto data = std::make_unique<ConstantBufferData>(buffer, size, slot);
 	m_ConstantBuffer[name] = std::move(data);
 
 	return true;
@@ -104,4 +103,36 @@ ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& na
 	}
 
 	return nullptr;
+}
+
+
+bool ConstantBufferManager::BindVS(const std::string& name, ID3D11DeviceContext* context)
+{
+	auto it = m_ConstantBuffer.find(name); // 探す
+	if (it == m_ConstantBuffer.end()) { // あったかどうかの確認
+		ErrorLog::Log(("定数バッファが見つかりません: " + name).c_str());
+		return false;
+	}
+	context->VSSetConstantBuffers(it->second->registerNumber, 1, it->second->constantBuffer.GetAddressOf()); // バインドする
+	return true;
+}
+bool ConstantBufferManager::BindPS(const std::string& name, ID3D11DeviceContext* context)
+{
+	auto it = m_ConstantBuffer.find(name); // 探す
+	if (it == m_ConstantBuffer.end()) { // あったかどうかの確認
+		ErrorLog::Log(("定数バッファが見つかりません: " + name).c_str());
+		return false;
+	}
+	context->PSSetConstantBuffers(it->second->registerNumber, 1, it->second->constantBuffer.GetAddressOf()); // バインドする
+	return true;
+}
+bool ConstantBufferManager::BindCS(const std::string& name, ID3D11DeviceContext* context)
+{
+	auto it = m_ConstantBuffer.find(name); // 探す
+	if (it == m_ConstantBuffer.end()) { // あったかどうかの確認
+		ErrorLog::Log(("定数バッファが見つかりません: " + name).c_str());
+		return false;
+	}
+	context->CSSetConstantBuffers(it->second->registerNumber, 1, it->second->constantBuffer.GetAddressOf()); // バインドする
+	return true;
 }
