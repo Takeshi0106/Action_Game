@@ -14,7 +14,7 @@
 
 
 #if defined(DEBUG) || defined(_DEBUG)
-// 名前の配列を渡して、ログを書き出す
+// 配列に名前を入れておいて、ログを書き出す　デバッグ時のみ
 bool BaseDirectXManager::WriteLog()
 {
 	// フォルダがない場合作成

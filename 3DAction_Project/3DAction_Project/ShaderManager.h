@@ -1,5 +1,20 @@
 ﻿#pragma once
 
+// =============================================================
+// コンストラクタの引数情報
+// デバッグ
+// １　デバッグコンパイルファイルパス
+// ２　シェーダーの名前ログ
+// ３　HLSLパス　デバッグ時無効
+// ４　リファレクション書出し
+// 
+// リリース
+// １　リリースコンパイルファイルパス
+// ２　HLSLパス　HLSLがおいてあるファイル
+// ３　リファレクション読込み
+// =============================================================
+
+
 // ==============================================================
 // Pimpl（ポインタto実装）イディオム で実装し直しても良いかも
 // ==============================================================
@@ -9,6 +24,8 @@
 #include <memory>               // スマートポインター
 // 配列のヘッダー
 #include <unordered_map>        // ハッシュ値配列
+// 基底ヘッダー
+#include <string>
 
 // ==============================================
 // 前方宣言
@@ -24,14 +41,14 @@ class ComputeShaderData; // コンピュートシェーダ
 
 // ===================================================================================================
 // シェーダーを管理するクラス  （シェイダーのコンパイル、バイナリーファイルのロード、キャッシュ、破棄）
-// 初期化時に定数バッファマネージャーのポインターを取得して、リファレクションした定数バッファの内容を渡す
-// unordered_map(std::string,shader) 配列で作成すして、検索する
+// Debug時にシェーダーをリフレクションして書き出す
 // ===================================================================================================
 class ShaderManager : public BaseDirectXManager
 {
 private:
     // メンバー変数
-    const char* kHlslFailePath;    // .hlslが入っているフォルダーのパス
+    const char* kHlslFailePath;       // .hlslが入っているフォルダーのパス
+    const char* kShader_ConstantInfoPath; // シェーダーや定数バッファの情報が入っている
 
     static std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
     static std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
@@ -51,8 +68,15 @@ private:
     bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize);
 
 public:
-    ShaderManager(const char* file, const char* assetLog, const char* hlslfaile) // コンストラクタ
-        :BaseDirectXManager(file, assetLog), kHlslFailePath(hlslfaile) {}
+#if defined(DEBUG) || defined(_DEBUG)
+    ShaderManager(const char* file, const char* assetLog, const char* hlslPath, const char* infoFaile) // コンストラクタ
+        :BaseDirectXManager(file, assetLog), kHlslFailePath(hlslPath), kShader_ConstantInfoPath(infoFaile) {
+    }
+#else
+    ShaderManager(const char* file, const char* hlslfaile, const char* Infofaile) // コンストラクタ
+        : BaseDirectXManager(file), kHlslFailePath(hlslfaile), kShader_ConstantInfoPath(Infofaile) {
+    }
+#endif
 
     bool Init(ID3D11Device* device); // シェーダークラスを作成
     void Uninit();                   // メンバー配列を削除

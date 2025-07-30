@@ -99,7 +99,7 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device)
 {
 	std::ostringstream  shaderTable;  // 中身を入れる変数
 
-	std::ifstream ifs(kAssetLogPath, std::ios::binary); // ファイルを開ける
+	std::ifstream ifs(kShader_ConstantInfoPath, std::ios::binary); // ファイルを開ける
 	if (!ifs.is_open()) {
 		ErrorLog::MessageBoxOutput("シェイダー表を開けませんでした");
 		return false;

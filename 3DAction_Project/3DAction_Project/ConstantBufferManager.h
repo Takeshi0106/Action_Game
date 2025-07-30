@@ -1,4 +1,17 @@
 ﻿#pragma once
+// ===========================================
+// コンストラクタの引数情報
+// デバッグ
+// １　リファレクションパス
+// ２　シェーダーの名前ログ
+// 
+// リリース
+// １　リファレクションパス
+// ===========================================
+
+
+// 基底クラスヘッダー
+#include "BaseDirectXManager.h"
 // 標準ヘッダー
 #include <string>
 // スマートポインターヘッダー
@@ -17,16 +30,24 @@ struct ConstantBufferData;  // 定数バッファ構造体 (定数バッファ�
 
 
 // ======================================
-// 定数バッファマネージャ
+// 定数バッファマネージャ 
+// ファイルパスに定数バッファの情報が入っているファイルのパスを入れる
 // シェーダ―マネージャーにポインターを渡し
 // 定数バッファを作成する（単一結合）
 // ======================================
-class ConstantBufferManager
+class ConstantBufferManager : public BaseDirectXManager
 {
 private:
 	static std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffer; // 定数バッファメンバー配列
 
 public:
+#if defined(DEBUG) || defined(_DEBUG)
+	ConstantBufferManager(const char* file, const char* assetLog) : BaseDirectXManager(file, assetLog) {}
+#else
+	ConstantBufferManager(const char* file) : BaseDirectXManager(file) {}
+#endif
+
+
 	bool CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device); // 定数バッファ作成
 	bool UpdateConstantBuffer(const std::string& name, const void* data, size_t dataSize, ID3D11DeviceContext* context); // 定数バッファを更新
 	ID3D11Buffer* GetFindConstantBuffer(const std::string& name); // 定数バッファを探して、戻り値で返す

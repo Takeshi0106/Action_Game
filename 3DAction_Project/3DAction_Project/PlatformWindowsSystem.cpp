@@ -48,18 +48,32 @@ std::wstring      PlatformWindowsSystem::m_WindowClassName;
 
 #if defined(DEBUG) || defined(_DEBUG)
 ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Asset/Debug/Shader",   // デバッグ時のコンパイルしたシェイダーを入れるパス
-    "Debug/Log/Shader.txt", // 使用したシェイダーの名前を書き出すログのパス　リリースビルド時にこれを使用して、全てのシェイダーを管理する
-    ""                      // デバッグ時は使用しないパス
+    "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
+    "Debug/Log/Shader.tex",          // 使用したシェイダーの名前を書き出すログのパス
+    "",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
+    "Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
 };
+
+ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
+    "Asset/Info/ShaderReflection.tet", // リファレクション情報が入っているファイル
+    "Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
+};
+
 #else
+// デバッグ、リリースビルドによってコンストラクタのファイルパスが変更されるためヘッダーを確認しに行ってください
 ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Asset/Shader/Compile", // リリース時にコンパイルしたシェイダーを入れるパス
-    "Debug/Log/Shader.txt", // 全てのシェイダーの名前が入っているテキストのパス 　今はDebugにしているがリリースにするときは変更する
-    "Asset/Shader/Hlsl"     // HLSLを入れているフォルダー 
+    "Asset/Shader/Compile",           // リリース時にコンパイルしたシェイダーを入れるパス
+    "Asset/Shader/Hlsl",              // HLSLを入れているフォルダー 
+    "Asset/Info/ShaderReflection.tt"  // リフレクション情報が入っているパス
 };
+
+ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
+    "Debug/Log/Shader.tex"           // リフレクション情報が入っているパス
+};
+
+
 #endif
-ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager;
+
 
 
 
