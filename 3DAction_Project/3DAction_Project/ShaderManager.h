@@ -14,6 +14,7 @@
 // 前方宣言
 // ==============================================
 struct ID3D11Device;         // DirectXのデバイス
+struct ID3D11DeviceContext;
 class ConstantBufferManager; // 定数バッファマネージャー
 // メンバー配列に入れるクラス
 class VertexShaderData;  // 頂点シェーダー
@@ -60,5 +61,9 @@ public:
     static VertexShaderData*  GetFindVertexShader (const std::string& name); // 頂点シェーダー　　　の名前を入れて、戻り値で返す
     static PixelShaderData*   GetFindPixelShader  (const std::string& name); // ピクセルシェーダ―　の名前を入れて、戻り値で返す
     static ComputeShaderData* GetFindComputeShader(const std::string& name); // コンピュートシェーダの名前を入れて、戻り値で返す
+
+    void BindVertexShaderSet(const std::string name, ID3D11DeviceContext* context);
+    void BindPixelShaderSet(const std::string name, ID3D11DeviceContext* context);
+    void BindComputeShaderSet(const std::string name, ID3D11DeviceContext* context);
 };
 
