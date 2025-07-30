@@ -8,7 +8,7 @@
 // =======================================================================
 // 頂点シェイダー
 // =======================================================================
-bool VertexShaderData::Init(ID3D11Device* device, void* binary, size_t size)
+bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size)
 {
     if (!device || !binary || size == 0) {
         ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
@@ -31,7 +31,7 @@ bool VertexShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 // =======================================================================
 // ピクセルシェイダー
 // =======================================================================
-bool PixelShaderData::Init(ID3D11Device* device, void* binary, size_t size)
+bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size)
 {
     if (!device || !binary || size == 0) {
         ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
@@ -54,7 +54,7 @@ bool PixelShaderData::Init(ID3D11Device* device, void* binary, size_t size)
 // =======================================================================
 // コンピュートシェイダー
 // =======================================================================
-bool ComputeShaderData::Init(ID3D11Device* device, void* binary, size_t size)
+bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size)
 {
     if (!device || !binary || size == 0) {
         ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());

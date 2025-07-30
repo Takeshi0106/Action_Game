@@ -146,7 +146,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 	// バイナリーデータをいれて、シェーダーを作成　配列に代入
 	if (shaderName.rfind("VS_", 0) == 0) {
 		auto vertex = std::make_unique<VertexShaderData>(shaderName, "main", "vs_5_0");  // 動的確保
-		if (!vertex->Init(device, binary, size)) {                                       // 初期化実行
+		if (!vertex->CreateShader(device, binary, size)) {                                       // 初期化実行
 			ErrorLog::Log(std::string("頂点シェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			IsSuccess = false;
 		}
@@ -159,7 +159,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 	}
 	else if (shaderName.rfind("PS_", 0) == 0) {
 		auto pixel = std::make_unique<PixelShaderData>(shaderName, "main", "ps_5_0");      // 動的確保
-		if (!pixel->Init(device, binary, size)) {                                          // 初期化実行
+		if (!pixel->CreateShader(device, binary, size)) {                                          // 初期化実行
 			ErrorLog::Log(std::string("ピクセルシェーダ― " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			IsSuccess = false;
 		}
@@ -172,7 +172,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 	}
 	else if (shaderName.rfind("CS_", 0) == 0) {
 		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0"); // 動的確保
-		if (!compute->Init(device, binary, size)) {                                        // 初期化実行
+		if (!compute->CreateShader(device, binary, size)) {                                        // 初期化実行
 			ErrorLog::Log(std::string("コンピュートシェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			IsSuccess = false;
 		}
