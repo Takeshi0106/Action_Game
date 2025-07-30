@@ -35,10 +35,11 @@ namespace {
 // =================================================
 // メンバー配列
 // =================================================
+// 定数バッファ情報の構造体
 struct ConstantBufferInfo {
-	std::string name;
-	UINT size;
-	UINT bindSlot;
+	std::string name = "";
+	int bindSlot = 0;
+	size_t size = 0;
 };
 
 
@@ -50,6 +51,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 bool LoadCompiledShaderBlob(const std::filesystem::path& csoPath, ID3DBlob** blob);               // パスから.csoを読み込んでくる関数
 bool JudgeCompileShader(const std::filesystem::path kFilePath,                                    // コンパイルするシェイダーの種類を判定してコンパイル関数に渡す
 	const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob);
+bool Reflect(void* blob, size_t blobsize, std::vector<ConstantBufferInfo>& outbuffer);              // リフレクション
 
 #if defined(DEBUG) || defined(_DEBUG)
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath); // .hlslが更新されているかを確認する
@@ -411,6 +413,59 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 	else {
 		ErrorLog::Log(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
 		return  false;
+	}
+
+	return true;
+}
+
+
+// ============================================================
+// リフレクション関数
+// ============================================================
+bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& outBuffers) {
+	Microsoft::WRL::ComPtr<ID3D11ShaderReflection> reflector; // リフレクション
+	HRESULT hr = D3DReflect(blob, blobSize, IID_PPV_ARGS(&reflector)); // バイナリーを解析
+	if (ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "リファレンス失敗")) { // 失敗したかの判定
+		return false;
+	}
+
+	D3D11_SHADER_DESC shaderDesc = {}; 
+	reflector->GetDesc(&shaderDesc);// 定数バッファの情報を取得
+
+	for (int i = 0; i < (int)shaderDesc.ConstantBuffers; ++i) { // 定数バッファの数だけループする
+		ID3D11ShaderReflectionConstantBuffer* cb = reflector->GetConstantBufferByIndex(i); // i番目の定数バッファ情報を取得
+
+		D3D11_SHADER_BUFFER_DESC bufferDesc = {};
+		cb->GetDesc(&bufferDesc); //名前やサイズを取得
+
+		// バインドポイントを取得（bindSlot）
+		int bindPoint = UINT_MAX;
+		for (UINT b = 0; b < shaderDesc.BoundResources; ++b) {
+			D3D11_SHADER_INPUT_BIND_DESC bindDesc = {};
+			reflector->GetResourceBindingDesc(b, &bindDesc);
+
+			if (bindDesc.Type == D3D_SIT_CBUFFER &&
+				bindDesc.Name != nullptr &&
+				bufferDesc.Name != nullptr &&
+				std::string(bindDesc.Name) == bufferDesc.Name)
+			{
+				bindPoint = bindDesc.BindPoint; // バインドスロット情報を取得
+				break;
+			}
+		}
+
+		if (bindPoint != UINT_MAX && bufferDesc.Name != nullptr 
+			&& bufferDesc.Name[0] != '\0') { // バインドスロットが見つからなかったとき、Nameに何も入っていないときは失敗
+			ConstantBufferInfo info;
+			info.name = bufferDesc.Name;
+			info.bindSlot = bindPoint;
+			info.size = bufferDesc.Size;
+			outBuffers.push_back(info);
+		}
+		else{
+			ErrorLog::Log("バインド番号もしくは名前が取得できませんでした");
+			return false;
+		}
 	}
 
 	return true;
