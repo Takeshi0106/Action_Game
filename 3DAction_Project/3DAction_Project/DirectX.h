@@ -1,13 +1,7 @@
 ﻿#pragma once
-
-// ================================================
-// DirectXの初期化関数群
-// SRVやUAVなどは別で作成する
-// RTも最終描画用で１つしか持たない
-// ================================================
-
 // 標準ヘッダー
 #include <cstdint>   // 整数型 uintなど
+
 
 // ==============================================
 // 前方宣言
@@ -20,11 +14,14 @@ struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
 
-// ==============================================
-// DirectXの関数
-// ==============================================
+
+// ================================================
+// DirectXの初期化関数群
+// SRVやUAVなどは別で作成する
+// RTも最終描画用で１つしか持たない
+// ================================================
 namespace DirectX11 {
-	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle); // DirectXの初期化
+	bool Init(unsigned short Width, unsigned short Height, HWND windowHandle); // DirectXの初期化
 	void Uninit();                                                 // DirectXの初期化
 
 	void BeginDraw(); // 描画バッファと深度バッファの初期化処理

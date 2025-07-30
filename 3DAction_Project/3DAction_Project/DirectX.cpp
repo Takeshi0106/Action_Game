@@ -8,6 +8,7 @@
 #include <wrl/client.h>             // マイクロソフトが提供するスマートポインタ
 
 // 標準ライブラリ
+#include <cstdint>      // 整数型 uintなど
 #include <cmath>        //デバッグ描画の色変更で使用しています　後で消す
 
 // デバッグ用出力
@@ -102,7 +103,7 @@ namespace DirectX11 {
 	// =====================================================
 	// DirectX 初期化処理
 	// =====================================================
-	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle)
+	bool Init(unsigned short Width, unsigned short Height, HWND windowHandle)
 	{
 		// 描画する大きさを代入する
 		RenderWidth  = Width;

@@ -43,6 +43,9 @@
     <Filter Include="Platform\ReportMessage">
       <UniqueIdentifier>{8ece8b84-d472-4735-bb54-33044975648a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\DirectX\Manager\ConstantBufferManager">
+      <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="PlatformSystem.cpp">
       <Filter>Platform\PlatformSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferManager.cpp">
+      <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="PlatformSystem.h">
       <Filter>Platform\PlatformSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferManager.h">
+      <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

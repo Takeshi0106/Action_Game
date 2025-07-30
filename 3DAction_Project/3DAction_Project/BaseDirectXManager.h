@@ -1,10 +1,8 @@
 ﻿#pragma once
 
-// 標準ヘッダー
-#include <string> // 文字列
-
 #if defined(DEBUG) || defined(_DEBUG)
 #include <vector>  // デバッグ時にシェイダーの名前を保存しておく用
+#include <string>  // オブジェクトの名前出力用
 #endif
 
 // ==================================================================
@@ -15,8 +13,8 @@
 class BaseDirectXManager
 {
 protected:
-	const  std::string kFilePath;     // ファイルを参照しに行くパス
-	const  std::string kAssetLogPath; // アセットのログ デバッグビルド時に書出し、リリースビルド時にアセットがあるかを確認する 
+	const  char* kFilePath;     // ファイルを参照しに行くパス
+	const  char* kAssetLogPath; // アセットのログ デバッグビルド時に書出し、リリースビルド時にアセットがあるかを確認する 
 
 #if defined(DEBUG) || defined(_DEBUG)
 	std::vector<std::string> m_Names; // 名前取得用
@@ -24,7 +22,7 @@ protected:
 #endif
 
 public:
-	BaseDirectXManager(std::string file, std::string assetLog)
+	BaseDirectXManager(const char* file, const char* assetLog)
 		: kFilePath(file), kAssetLogPath(assetLog) {
 	}; // コンストラクタ
 

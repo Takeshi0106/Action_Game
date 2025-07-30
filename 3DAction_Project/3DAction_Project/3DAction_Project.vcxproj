@@ -138,6 +138,7 @@ xcopy /Y /D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseDirectXManager.cpp" />
+    <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PlatformSystem.cpp" />
@@ -150,6 +151,7 @@ xcopy /Y /D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseDirectXManager.h" />
+    <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="NonCopyable.h" />

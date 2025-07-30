@@ -2,21 +2,13 @@
 
 // ==============================================================
 // Pimpl（ポインタto実装）イディオム で実装し直しても良いかも
-// 
 // ==============================================================
-
 // 基底クラスヘッダー
 #include "BaseDirectXManager.h" // マネージャークラス（基底クラス）
-
 // スマートポインターのヘッダー
 #include <memory>               // スマートポインター
-
 // 配列のヘッダー
 #include <unordered_map>        // ハッシュ値配列
-
-#if defined(DEBUG) || defined(_DEBUG)
-#include <vector>  // 使用したシェイダーの名前を入れる用
-#endif
 
 
 // ==============================================
@@ -29,7 +21,7 @@ class ComputeShaderData; // コンピュートシェーダ
 
 
 // ===================================================================================================
-// シェーダーを管理するクラス  （シェイダーのコンパイル、バイナリーファイルのロード、キャッシュ）
+// シェーダーを管理するクラス  （シェイダーのコンパイル、バイナリーファイルのロード、キャッシュ、破棄）
 // 初期化時に定数バッファマネージャーのポインターを取得して、リファレクションした定数バッファの内容を渡す
 // unordered_map(std::string,shader) 配列で作成すして、検索する
 // ===================================================================================================
@@ -37,7 +29,7 @@ class ShaderManager : public BaseDirectXManager
 {
 private:
     // メンバー変数
-    const std::string kHlslFailePath;    // .hlslが入っているフォルダーのパス
+    const char* kHlslFailePath;    // .hlslが入っているフォルダーのパス
 
     static std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
     static std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
@@ -57,16 +49,15 @@ private:
     bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size);
 
 public:
-    ShaderManager(std::string file, std::string assetLog, std::string hlslfaile)
-        :BaseDirectXManager(file, assetLog), kHlslFailePath(hlslfaile) {
-    } // コンストラクタ
+    ShaderManager(const char* file, const char* assetLog, const char* hlslfaile) // コンストラクタ
+        :BaseDirectXManager(file, assetLog), kHlslFailePath(hlslfaile) {}
 
-    bool Init(ID3D11Device* device); // シェイダーを保存するクラス
-    void Uninit();
+    bool Init(ID3D11Device* device); // シェーダークラスを作成
+    void Uninit();                   // メンバー配列を削除
 
     // ゲッター
-    static VertexShaderData* GetFindVertexShader(const std::string& name);
-    static PixelShaderData* GetFindPixelShader(const std::string& name);
-    static ComputeShaderData* GetFindComputeShader(const std::string& name);
+    static VertexShaderData*  GetFindVertexShader (const std::string& name); // 頂点シェーダー　　　の名前を入れて、戻り値で返す
+    static PixelShaderData*   GetFindPixelShader  (const std::string& name); // ピクセルシェーダ―　の名前を入れて、戻り値で返す
+    static ComputeShaderData* GetFindComputeShader(const std::string& name); // コンピュートシェーダの名前を入れて、戻り値で返す
 };
 
