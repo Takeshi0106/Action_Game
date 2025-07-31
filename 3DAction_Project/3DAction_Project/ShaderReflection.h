@@ -30,10 +30,6 @@ struct ShaderInfo {
 // ==================================================
 // リファレンスしたシェーダー外部情報を読込み
 bool ShaderInfoInput(const char* kShader_ConstantInfoPath, std::vector<ShaderInfo>& outShaderInfo);
-// 外部ファイルを引き数のstring に代入する関数
-bool LoadFile(const char* path, std::string& outContent);
-// Stringを渡して、配列に代入する処理
-bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& outShaderInfo);
 
 #if defined(DEBUG) || defined(_DEBUG)
 // デバッグ用関数　デバッグ時のみれふぁレクションを行う

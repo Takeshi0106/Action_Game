@@ -42,9 +42,9 @@ private:
 
 public:
 #if defined(DEBUG) || defined(_DEBUG)
-	ConstantBufferManager(const char* file, const char* assetLog) : BaseDirectXManager(file, assetLog) {}
+	ConstantBufferManager(const char* assetLog) : BaseDirectXManager(assetLog) {}
 #else
-	ConstantBufferManager(const char* file) : BaseDirectXManager(file) {}
+	ConstantBufferManager() {}
 #endif
 
 

@@ -111,11 +111,6 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 			IsSuccess = false;
 		}
 		m_Vertexs[shaderName] = std::move(vertex);                                       // メンバー配列に代入
-
-#if defined(DEBUG) || defined(_DEBUG)
-		m_Names.push_back(shaderName); // 名前を保存しておく
-#endif
-
 	}
 	else if (shaderName.rfind("PS_", 0) == 0) {
 		auto pixel = std::make_unique<PixelShaderData>(shaderName, "main", "ps_5_0");      // 動的確保
@@ -124,11 +119,6 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 			IsSuccess = false;
 		}
 		m_Pixels[shaderName] = std::move(pixel);                                           // メンバー配列に代入
-
-#if defined(DEBUG) || defined(_DEBUG)
-		m_Names.push_back(shaderName); // 名前を保存しておく
-#endif
-
 	}
 	else if (shaderName.rfind("CS_", 0) == 0) {
 		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0"); // 動的確保
@@ -137,16 +127,13 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 			IsSuccess = false;
 		}
 		m_Computes[shaderName] = std::move(compute); // メンバー配列に代入
-
-#if defined(DEBUG) || defined(_DEBUG)
-		m_Names.push_back(shaderName);  // 名前を保存しておく
-#endif
-
 	}
 	else {
 		ErrorLog::Log(std::string(shaderName + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
 		IsSuccess = false;
 	}
+
+	DebugSetName(shaderName.c_str());  // 名前を保存しておくデバッグ用
 
 	if (!IsSuccess) {
 		return false;
@@ -315,7 +302,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		// .hlslのファイル名を取得
 		std::filesystem::path filename = hlslPath.filename();
 		// コンパイルファイルパスを取得
-		std::filesystem::path csoPath = std::filesystem::path(kFilePath) / (filename.stem().wstring() + L".cso");
+		std::filesystem::path csoPath = std::filesystem::path(kCSOFilePath) / (filename.stem().wstring() + L".cso");
 
 		// バイナリーデータ入れる
 		Microsoft::WRL::ComPtr<ID3DBlob> blob;
@@ -325,7 +312,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		if (IsShaderUpdateCheck(hlslPath, csoPath))
 		{
 			// コンパイルする処理
-			if (!JudgeCompileShader(kFilePath, filename, blob)) {
+			if (!JudgeCompileShader(kCSOFilePath, filename, blob)) {
 				ErrorLog::MessageBoxOutput((filename.string() + " : コンパイルに失敗しました").c_str());
 				return false;
 			}
@@ -336,7 +323,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 			if (!LoadCompiledShader(csoPath, blob.GetAddressOf()))
 			{
 				// 失敗したらコンパイル処理
-				if (!JudgeCompileShader(kFilePath, filename, blob)) {
+				if (!JudgeCompileShader(kCSOFilePath, filename, blob)) {
 					ErrorLog::MessageBoxOutput((filename.string() + " : コンパイルに失敗しました").c_str());
 					return false;
 				}
@@ -453,7 +440,7 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 		hlslPath = hlslPath.generic_string(); // 区切り文字を / で統一する　
 
 		// コンパイルパス作成
-		std::filesystem::path compailPath = std::filesystem::path(kFilePath) / (allShaderInfo[i].shaderName + kCompileExtension);
+		std::filesystem::path compailPath = std::filesystem::path(kCSOFilePath) / (allShaderInfo[i].shaderName + kCompileExtension);
 		compailPath = compailPath.generic_string(); // 区切り文字を / で統一する
 
 		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
@@ -462,7 +449,7 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 		if (!LoadCompiledShader(compailPath, blob.GetAddressOf()))
 		{
 			// 失敗したらコンパイル処理
-			if (!JudgeCompileShader(kFilePath, hlslPath, blob)) {
+			if (!JudgeCompileShader(kCSOFilePath, hlslPath, blob)) {
 				ErrorLog::MessageBoxOutput((hlslPath.string() + " : コンパイルに失敗しました").c_str());
 				return false;
 			}

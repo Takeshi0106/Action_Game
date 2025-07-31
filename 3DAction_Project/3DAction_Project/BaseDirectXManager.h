@@ -13,24 +13,26 @@
 class BaseDirectXManager
 {
 protected:
-	const  char* kFilePath;     // ファイルを参照しに行くパス
 
 #if defined(DEBUG) || defined(_DEBUG)
 	const  char* kAssetLogPath; // アセットのログ デバッグビルド時に書出し
 
 	std::vector<std::string> m_Names; // 名前取得用
 	bool WriteLog(); // オブジェクトの名前を配列に入れて渡し、書き出すクラス
+
+	void DebugSetName(const char* name);
+#else
+	inline void DebugSetName(const char* name) {}
 #endif
+
 
 public:
 #if defined(DEBUG) || defined(_DEBUG)
-	BaseDirectXManager(const char* file, const char* assetLog)
-		: kFilePath(file), kAssetLogPath(assetLog) {
+	BaseDirectXManager(const char* assetLog)
+		: kAssetLogPath(assetLog) {
 	}; // コンストラクタ
 #else
-	BaseDirectXManager(const char* file)
-		: kFilePath(file){
-	}; // コンストラクタ
+	BaseDirectXManager(){} // コンストラクタ
 #endif
 	~BaseDirectXManager() = default;  // デストラクタ
 

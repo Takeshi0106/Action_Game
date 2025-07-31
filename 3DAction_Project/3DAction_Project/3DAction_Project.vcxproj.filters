@@ -46,13 +46,13 @@
     <Filter Include="Core\DirectX\Manager\ConstantBufferManager">
       <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderHelp">
+    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderUtils">
       <UniqueIdentifier>{3307b22f-9a32-477f-89ed-a9bb36abf1bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderCompil">
+    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderCompil">
       <UniqueIdentifier>{6ad274d1-c662-4366-ae63-d0a62acecc89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderReflection">
+    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderReflection">
       <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -91,10 +91,10 @@
       <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
     </ClCompile>
     <ClCompile Include="ShaderCompil.cpp">
-      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderCompil</Filter>
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderCompil</Filter>
     </ClCompile>
     <ClCompile Include="ShaderReflection.cpp">
-      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderReflection</Filter>
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderReflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,10 +135,10 @@
       <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
     </ClInclude>
     <ClInclude Include="ShaderCompil.h">
-      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderCompil</Filter>
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderCompil</Filter>
     </ClInclude>
     <ClInclude Include="ShaderReflection.h">
-      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderReflection</Filter>
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderReflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

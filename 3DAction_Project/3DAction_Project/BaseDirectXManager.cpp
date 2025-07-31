@@ -34,4 +34,10 @@ bool BaseDirectXManager::WriteLog()
 
 	return true;
 }
+
+void BaseDirectXManager::DebugSetName(const char* name)
+{
+	m_Names.push_back(name);
+}
+
 #endif

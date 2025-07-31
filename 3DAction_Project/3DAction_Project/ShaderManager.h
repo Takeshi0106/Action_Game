@@ -62,6 +62,7 @@ private:
     // ---------------------------------
 
     // ファイルパス
+    const char* kCSOFilePath;     // .CSOを参照しに行くパス
     const char* kHlslFailePath;  // .hlslが入っているフォルダーのパス
     const char* kShaderInfoPath; // シェーダーや定数バッファの情報が入っている
 
@@ -91,14 +92,14 @@ public:
 #if defined(DEBUG) || defined(_DEBUG)
     // デバッグ時のコンストラクタ　
     // リリース時との違い　使用したオブジェクトパスを出力できるようにしている
-    ShaderManager(const char* file, const char* assetLog, const char* hlslPath, const char* infoFaile)
-        :BaseDirectXManager(file, assetLog), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
+    ShaderManager(const char* assetLog, const char* CSOPath, const char* hlslPath, const char* infoFaile)
+        :BaseDirectXManager(assetLog), kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
     }
 
 #else
     // リリース時のコンストラクタ
-    ShaderManager(const char* file, const char* hlslfaile, const char* Infofaile)
-        : BaseDirectXManager(file), kHlslFailePath(hlslfaile), kShaderInfoPath(Infofaile) {
+    ShaderManager(const char* CSOPath, const char* hlslfaile, const char* Infofaile)
+        : kCSOFilePath(CSOPath), kHlslFailePath(hlslfaile), kShaderInfoPath(Infofaile) {
     }
 
 #endif

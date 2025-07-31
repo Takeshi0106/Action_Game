@@ -48,14 +48,13 @@ std::wstring      PlatformWindowsSystem::m_WindowClassName;
 
 #if defined(DEBUG) || defined(_DEBUG)
 ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
     "Debug/Log/Shader.txt",          // 使用したシェイダーの名前を書き出すログのパス
+    "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
     "",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
     "Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
 };
 
 ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
-    "Asset/Info/ShaderReflection.tet", // リファレクション情報が入っているファイル
     "Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
 };
 
@@ -67,9 +66,7 @@ ShaderManager PlatformWindowsSystem::m_ShaderManager = {
     "Asset/Info/ShaderReflection.txt"  // リフレクション情報が入っているパス
 };
 
-ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
-    "Debug/Log/Shader.tex"           // リフレクション情報が入っているパス
-};
+ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager;
 
 
 #endif
