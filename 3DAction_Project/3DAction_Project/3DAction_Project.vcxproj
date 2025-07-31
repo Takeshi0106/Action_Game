@@ -117,7 +117,7 @@
       <Message>
       </Message>
       <Command>if not exist "$(ProjectDir)Asset\Shader\Hlsl" mkdir "$(ProjectDir)Asset\Shader\Hlsl"
-xcopy /Y /D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
+xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

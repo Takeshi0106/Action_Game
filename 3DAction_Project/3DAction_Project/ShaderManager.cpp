@@ -304,6 +304,10 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		// コンパイルファイルパスを取得
 		std::filesystem::path csoPath = std::filesystem::path(kCSOFilePath) / (filename.stem().wstring() + L".cso");
 
+		// 区切り文字を統一
+		hlslPath = hlslPath.generic_string();
+		csoPath = csoPath.generic_string();
+
 		// バイナリーデータ入れる
 		Microsoft::WRL::ComPtr<ID3DBlob> blob;
 
@@ -470,10 +474,10 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 		}
 
 		// 定数バッファを作成
-		for (int j = 0; j < allShaderInfo[i].info.size(); j++)
+		for (int j = 0; j < allShaderInfo[i].CBInfo.size(); j++)
 		{
-			CBManager.CreateConstantBuffer(allShaderInfo[i].info[j].name, allShaderInfo[i].info[j].size,
-				allShaderInfo[i].info[j].registerNumber, device);
+			CBManager.CreateConstantBuffer(allShaderInfo[i].CBInfo[j].name, allShaderInfo[i].CBInfo[j].size,
+				allShaderInfo[i].CBInfo[j].registerNumber, device);
 		}
 	}
 
