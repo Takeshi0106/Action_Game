@@ -82,7 +82,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	// 所有権を渡す
 	*blob = compileBlob.Detach();
 
-	ErrorLog::Log((filename + "シェーダーをコンパイルして書き出しました").c_str());
+	Debug::NormalLog((filename + "シェーダーをコンパイルして書き出しました").c_str());
 
 	// 一応明示的に解放　
 	errorBlob.Reset();
@@ -128,7 +128,7 @@ bool LoadCompiledShader(const std::filesystem::path& csoPath, ID3DBlob** blob)
 		return false;
 	}
 
-	ErrorLog::Log((csoPath.string() + "シェーダーを読み込みました。").c_str());
+	Debug::NormalLog((csoPath.string() + "シェーダーを読み込みました。").c_str());
 
 	ifs.close(); // ファイルを閉じる
 

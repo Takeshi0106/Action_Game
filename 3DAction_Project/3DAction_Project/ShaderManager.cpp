@@ -420,7 +420,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 	}
 
 	// デバッグ用にログ出力
-	ErrorLog::Log(std::string(shaderPath.stem().string() + " 更新する必要がないためコンパイルファイルを取得します  相対パス : " + binaryPath.string()).c_str());
+	Debug::NormalLog(std::string(shaderPath.stem().string() + " 更新する必要がないためコンパイルファイルを取得します  相対パス : " + binaryPath.string()).c_str());
 
 	return false;
 }

@@ -1,9 +1,6 @@
 ﻿#include "ReportMessage.h"
 #include <Windows.h> // メッセージボックス出力、HRESULT出力
-
-// #if defined(DEBUG) || defined(_DEBUG)
 #include <iostream> // デバッグ文字を出力ウィンドウに書き出す
-// #endif
 
 
 namespace ErrorLog {
@@ -55,14 +52,19 @@ namespace ErrorLog {
         MessageBoxA(nullptr, message, "エラー", MB_OK | MB_ICONERROR); // メッセージボックスを出力
     }
 
-
-// #if defined(DEBUG) || defined(_DEBUG)
     // インラインできるようにする
-    void Log(const char* message) 
+    void Log(const char* message)
     {
         std::cerr << message << std::endl;
     }
-// #endif
+}
 
+namespace Debug {
 
+#if defined(DEBUG) || defined(_DEBUG)
+    void NormalLog(const char* message)
+    {
+        std::cout << message << std::endl;
+    }
+#endif
 }
