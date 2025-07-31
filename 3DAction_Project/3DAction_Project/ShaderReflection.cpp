@@ -32,6 +32,17 @@ namespace {
 }
 
 
+// ==================================================
+// プロトタイプ宣言
+// ==================================================
+
+// 読み込む関数
+// 外部ファイルを引き数のstring に代入する関数
+bool LoadFile(const char* path, std::string& outContent);
+// Stringを渡して、配列に代入する処理
+bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& outShaderInfo);
+
+
 // =================================================
 // 読込み関数
 // =================================================
@@ -259,9 +270,10 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 }
 
 
-// ============================================================
+#if defined(DEBUG) || defined(_DEBUG)
+// ============================================
 // リフレクション関数
-// ============================================================
+// ============================================
 bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInfo)
 {
 	/// リフレクション作成
@@ -402,3 +414,5 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 
 	return true;
 }
+
+#endif
