@@ -332,11 +332,18 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 
 		// リフレクション情報を入れる配列
 		std::vector<ConstantBufferInfo> conInfo;
+		std::vector<InputLayoutInfo> ilInfo;
 
 		// リフレクション情報を代入
-		if (!Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), conInfo)) {
+		if (!Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), conInfo, ilInfo)) {
 			ErrorLog::MessageBoxOutput("リフレクションした情報が得られませんでした");
 			return false;
+		}
+
+		// 頂点シェーダー以外の時入力レイアウトを削除する
+		if (filename.string().find("VS") != 0)
+		{
+			ilInfo.clear();
 		}
 
 		// シェイダーを作成する
@@ -347,7 +354,8 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 
 		// 配列に代入
 		allShaderInfo[index].shaderName = filename.stem().string();
-		allShaderInfo[index].info = std::move(conInfo);
+		allShaderInfo[index].CBInfo = std::move(conInfo);
+		allShaderInfo[index].ILInfo = std::move(ilInfo);
 
 		// 一応、解放処理
 		blob.Reset();

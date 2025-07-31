@@ -5,6 +5,9 @@
 #include <d3d11shader.h>
 #include <d3dcompiler.h>
 
+// DirectX用ヘッダー
+#include <dxgiformat.h>
+
 // ファイル出力、読込み用ヘッダー
 #include <filesystem>
 #include <fstream>                      // 外部ファイルとして書出し・読み出し
@@ -22,8 +25,18 @@
 namespace {
 
 	// リファレンス情報書き込み、読込み用
+	// シェーダー関連
 	const std::string kShaderCount = "ShaderCount :";
 	const std::string kShaderName = "ShaderName :";
+
+	// 入力レイアウト関連
+	const std::string kInputLayoutCount         = "InputLayoutCount :";
+	const std::string kInputLayoutSemanticName  = "InputLayoutSemanticName :";  // セマンティック名
+	const std::string kInputLayoutSemanticIndex = "InputLayoutSemanticIndex :"; // セマンティックインデックス
+	const std::string kInputLayoutInputSlot     = "InputLayoutInputSlot :";     // 入力スロット番号
+	const std::string kInputLayoutFormat        = "InputLayoutFormat :";        // フォーマット
+
+	// 定数バッファ関連
 	const std::string kCBufferCount = "CBufferCount :";
 	const std::string kCBufferName = "CBufferName :";
 	const std::string kRegisterNumber = "RegisterNumber :";
@@ -196,7 +209,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 				// キャスト
 				int cBufferCount = std::stoi(std::string(info));
 				// ベクトルのサイズを取得
-				loadShaderInfo[shaderIndex].info.resize(cBufferCount);
+				loadShaderInfo[shaderIndex].CBInfo.resize(cBufferCount);
 			}
 			catch (...)
 			{
@@ -215,7 +228,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 			cBufferIndex++; // 定数バッファの添え字を更新
 
 			// 定数バッファの名前を取得
-			loadShaderInfo[shaderIndex].info[cBufferIndex].name = info;
+			loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].name = info;
 		}
 
 		// レジスタ番号を取得
@@ -230,7 +243,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 				// キャスト
 				int registerNumber = std::stoi(std::string(info));
 				// レジスタの取得
-				loadShaderInfo[shaderIndex].info[cBufferIndex].registerNumber = registerNumber;
+				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].registerNumber = registerNumber;
 			}
 			catch (...)
 			{
@@ -250,7 +263,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 				// キャスト
 				size_t size = static_cast<size_t>(std::stoul(std::string(info)));
 				// レジスタの取得
-				loadShaderInfo[shaderIndex].info[cBufferIndex].size = size;
+				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].size = size;
 			}
 			catch (...)
 			{
@@ -274,7 +287,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 // ============================================
 // リフレクション関数
 // ============================================
-bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInfo)
+bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInfo, std::vector<InputLayoutInfo>& ILinfo)
 {
 	/// リフレクション作成
 	Microsoft::WRL::ComPtr<ID3D11ShaderReflection> reflector;
@@ -291,6 +304,42 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 
 	// 配列のサイズを設定
 	CBInfo.resize(shaderDesc.ConstantBuffers);
+	ILinfo.resize(shaderDesc.InputParameters);
+
+	// シェーダーステージを文字列で取得
+	std::string creator(shaderDesc.Creator);
+
+	// 入力レイアウトを取得する
+	for (int k = 0; k < int(shaderDesc.InputParameters); k++)
+	{
+		// 入力情報を取得
+		D3D11_SIGNATURE_PARAMETER_DESC paramDesc = {};
+		reflector->GetInputParameterDesc(k, &paramDesc);
+
+
+		ILinfo[k].semanticName = paramDesc.SemanticName;
+		ILinfo[k].semanticIndex = paramDesc.SemanticIndex;
+		ILinfo[k].inputSlot = 0; // 通常は0（複数ストリームなら調整）
+
+		// ComponentMask から DXGI_FORMAT を推定
+		if (paramDesc.Mask == 1) {
+			ILinfo[k].format = DXGI_FORMAT_R32_FLOAT;
+		}
+		else if (paramDesc.Mask <= 3) {
+			ILinfo[k].format = DXGI_FORMAT_R32G32_FLOAT;
+		}
+		else if (paramDesc.Mask <= 7) {
+			ILinfo[k].format = DXGI_FORMAT_R32G32B32_FLOAT;
+		}
+		else if (paramDesc.Mask <= 15) {
+			ILinfo[k].format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		}
+		else {
+			ErrorLog::Log("未知のフォーマットです");
+			return false;
+		}
+	}
+
 
 	// シェーダー内の定数バッファの数だけループする
 	for (int i = 0; i < (int)shaderDesc.ConstantBuffers; i++)
@@ -389,11 +438,30 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 	{
 		// シェーダーの名前
 		ofs << kShaderName << shader.shaderName << "\n";
+
+		// 入力レイアウトの数
+		ofs << kInputLayoutCount << shader.ILInfo.size() << "\n";
+		
+
+		// 入力情報の数だけループ
+		for (const auto& iLayout : shader.ILInfo)
+		{
+			// 入力レイアウトの名前
+			ofs << "  " << kInputLayoutSemanticName << iLayout.semanticName << "\n";
+			// 入力レイアウトのインデックス
+			ofs << "    " << kInputLayoutSemanticIndex << iLayout.semanticIndex << "\n";
+			// 入力レイアウトのスロット番号
+			ofs << "    " << kInputLayoutInputSlot << iLayout.inputSlot << "\n";
+			// 入力レイアウトのフォーマット
+			ofs << "    " << kInputLayoutFormat << iLayout.format << "\n";
+		}
+
+
 		// 定数バッファの数
-		ofs << kCBufferCount << shader.info.size() << "\n";
+		ofs << kCBufferCount << shader.CBInfo.size() << "\n";
 
 		// 定数バッファの数だけループする
-		for (const auto& cbuffer : shader.info)
+		for (const auto& cbuffer : shader.CBInfo)
 		{
 			// 空白を分けて見やすいようにしています
 
