@@ -46,6 +46,15 @@
     <Filter Include="Core\DirectX\Manager\ConstantBufferManager">
       <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderHelp">
+      <UniqueIdentifier>{3307b22f-9a32-477f-89ed-a9bb36abf1bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderCompil">
+      <UniqueIdentifier>{6ad274d1-c662-4366-ae63-d0a62acecc89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderReflection">
+      <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp">
@@ -80,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderCompil.cpp">
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderCompil</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderReflection.cpp">
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderReflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +133,12 @@
     </ClInclude>
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderCompil.h">
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderCompil</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderReflection.h">
+      <Filter>Core\DirectX\Manager\ShaderManager\ShaderHelp\ShaderReflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

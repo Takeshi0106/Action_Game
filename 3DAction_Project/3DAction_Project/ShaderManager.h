@@ -6,13 +6,22 @@
 // １　デバッグコンパイルファイルパス
 // ２　シェーダーの名前ログ
 // ３　HLSLパス　デバッグ時無効
-// ４　リファレクション書出し
+// ４　リフレクション書出し
 // 
 // リリース
 // １　リリースコンパイルファイルパス
 // ２　HLSLパス　HLSLがおいてあるファイル
-// ３　リファレクション読込み
+// ３　リフレクション読込み
 // =============================================================
+
+
+/*
+ファイル分け
+
+1. コンパイル
+2. リフレクション
+3. Managerに分ける
+*/
 
 
 // ==============================================================
@@ -30,9 +39,11 @@
 // ==============================================
 // 前方宣言
 // ==============================================
-struct ID3D11Device;         // DirectXのデバイス
-struct ID3D11DeviceContext;
 class ConstantBufferManager; // 定数バッファマネージャー
+
+struct ID3D11Device;         // DirectXのデバイス
+struct ID3D11DeviceContext;  // DirectXのコンテキスト
+
 // メンバー配列に入れるクラス
 class VertexShaderData;  // 頂点シェーダー
 class PixelShaderData;   // ピクセルシェーダ
@@ -46,46 +57,62 @@ class ComputeShaderData; // コンピュートシェーダ
 class ShaderManager : public BaseDirectXManager
 {
 private:
+    // ---------------------------------
     // メンバー変数
-    const char* kHlslFailePath;       // .hlslが入っているフォルダーのパス
-    const char* kShader_ConstantInfoPath; // シェーダーや定数バッファの情報が入っている
+    // ---------------------------------
 
+    // ファイルパス
+    const char* kHlslFailePath;  // .hlslが入っているフォルダーのパス
+    const char* kShaderInfoPath; // シェーダーや定数バッファの情報が入っている
+
+    // シェーダー保存配列
     static std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
     static std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
     static std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
 
+
+    // 関数
 #if defined(DEBUG) || defined(_DEBUG)
     // デバッグ時にこのファイルと同じ階層にある.hlslを探して、コンパイルする必要があるかを確認し、
     // 必要があればコンパイル、無ければバイナリーデータを取得して、メンバー配列に代入する関数
-    bool DebugInit(ID3D11Device* device);
-#endif
+    bool DebugInit(ID3D11Device* device, ConstantBufferManager& CBManager);
 
+#else
     // 全てのシェーダー情報が書かれている外部ファイルから、読込み
     // コンパイルされていなかったら、コンパイルしてメンバー配列に代入する関数
-    bool ReleaseInit(ID3D11Device* device);
+    bool ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBManager);
+
+#endif
 
     // バイナリーデータを仕分けして、メンバー配列に代入する関数 引き数で拡張子なしの名前を渡す
     bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize);
 
 public:
 #if defined(DEBUG) || defined(_DEBUG)
-    ShaderManager(const char* file, const char* assetLog, const char* hlslPath, const char* infoFaile) // コンストラクタ
-        :BaseDirectXManager(file, assetLog), kHlslFailePath(hlslPath), kShader_ConstantInfoPath(infoFaile) {
+    // デバッグ時のコンストラクタ　
+    // リリース時との違い　使用したオブジェクトパスを出力できるようにしている
+    ShaderManager(const char* file, const char* assetLog, const char* hlslPath, const char* infoFaile)
+        :BaseDirectXManager(file, assetLog), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
     }
+
 #else
-    ShaderManager(const char* file, const char* hlslfaile, const char* Infofaile) // コンストラクタ
-        : BaseDirectXManager(file), kHlslFailePath(hlslfaile), kShader_ConstantInfoPath(Infofaile) {
+    // リリース時のコンストラクタ
+    ShaderManager(const char* file, const char* hlslfaile, const char* Infofaile)
+        : BaseDirectXManager(file), kHlslFailePath(hlslfaile), kShaderInfoPath(Infofaile) {
     }
+
 #endif
 
-    bool Init(ID3D11Device* device); // シェーダークラスを作成
-    void Uninit();                   // メンバー配列を削除
+    // 初期化・後処理
+    bool Init(ID3D11Device* device, ConstantBufferManager& CBManager);
+    void Uninit();
 
-    // ゲッター
-    static VertexShaderData*  GetFindVertexShader (const std::string& name); // 頂点シェーダー　　　の名前を入れて、戻り値で返す
-    static PixelShaderData*   GetFindPixelShader  (const std::string& name); // ピクセルシェーダ―　の名前を入れて、戻り値で返す
-    static ComputeShaderData* GetFindComputeShader(const std::string& name); // コンピュートシェーダの名前を入れて、戻り値で返す
+    // シェーダーのゲッター  名前を入れて、返す
+    static VertexShaderData*  GetFindVertexShader (const std::string& name);
+    static PixelShaderData*   GetFindPixelShader  (const std::string& name);
+    static ComputeShaderData* GetFindComputeShader(const std::string& name);
 
+    // シェーダーをセットする関数
     void BindVertexShaderSet(const std::string name, ID3D11DeviceContext* context);
     void BindPixelShaderSet(const std::string name, ID3D11DeviceContext* context);
     void BindComputeShaderSet(const std::string name, ID3D11DeviceContext* context);

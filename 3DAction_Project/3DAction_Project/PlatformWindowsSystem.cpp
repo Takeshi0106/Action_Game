@@ -64,7 +64,7 @@ ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
 ShaderManager PlatformWindowsSystem::m_ShaderManager = {
     "Asset/Shader/Compile",           // リリース時にコンパイルしたシェイダーを入れるパス
     "Asset/Shader/Hlsl",              // HLSLを入れているフォルダー 
-    "Asset/Info/ShaderReflection.tt"  // リフレクション情報が入っているパス
+    "Asset/Info/ShaderReflection.txt"  // リフレクション情報が入っているパス
 };
 
 ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
@@ -284,7 +284,7 @@ bool PlatformWindowsSystem::GameInit()
         ErrorLog::MessageBoxOutput("DirectXの初期化に失敗しました");
         return false; // 失敗したら戻る
     }
-    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice()))
+    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice(), m_ConstantBufferManager))
     {
         ErrorLog::MessageBoxOutput("ShaderManagerの初期化に失敗しました");
         return false; // 失敗したら戻る
