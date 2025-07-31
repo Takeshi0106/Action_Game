@@ -286,14 +286,6 @@ bool PlatformWindowsSystem::GameInit()
         ErrorLog::MessageBoxOutput("ShaderManagerの初期化に失敗しました");
         return false; // 失敗したら戻る
     }
-    if (!m_ConstantBufferManager.CreateConstantBuffer("VSInput", sizeof(float[4]), 0, DirectX11::Get::GetDevice())) {
-        ErrorLog::MessageBoxOutput("定数バッファ作製失敗");
-        return false; // 失敗したら戻る
-    }
-    if (!m_ConstantBufferManager.CreateConstantBuffer("PSInput", sizeof(float[4]), 0, DirectX11::Get::GetDevice())) {
-        ErrorLog::MessageBoxOutput("定数バッファ作製失敗");
-        return false; // 失敗したら戻る
-    }
 
     Timer::Init(); // タイマー初期化
     Timer::Start(); // タイマー開始
@@ -314,11 +306,11 @@ void PlatformWindowsSystem::GameMain()
     // デバッグ時 
     DirectX11::BeginDraw(); // 描画の開始処理
 
-    m_ConstantBufferManager.BindVS("VSInput", DirectX11::Get::GetContext());
-    m_ConstantBufferManager.BindPS("PSInput", DirectX11::Get::GetContext());
-    m_ConstantBufferManager.UpdateConstantBuffer("PSInput", a, sizeof(a), DirectX11::Get::GetContext());
-    m_ShaderManager.BindVertexShaderSet("VS_Debug", DirectX11::Get::GetContext());
-    m_ShaderManager.BindPixelShaderSet("PS_Debug", DirectX11::Get::GetContext());
+    // m_ConstantBufferManager.BindVS("Transform", DirectX11::Get::GetContext());
+    // m_ConstantBufferManager.BindVS("DebugParams", DirectX11::Get::GetContext());
+    // m_ConstantBufferManager.UpdateConstantBuffer("PSInput", a, sizeof(a), DirectX11::Get::GetContext());
+    // m_ShaderManager.BindVertexShaderSet("VS_Debug", DirectX11::Get::GetContext());
+    // m_ShaderManager.BindPixelShaderSet("PS_Debug", DirectX11::Get::GetContext());
 
     DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
 

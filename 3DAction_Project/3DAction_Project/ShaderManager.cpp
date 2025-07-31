@@ -461,6 +461,12 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 			return false;
 		}
 
+		// 定数バッファを作成
+		for (int j = 0; j < allShaderInfo[i].info.size(); j++)
+		{
+			CBManager.CreateConstantBuffer(allShaderInfo[i].info[j].name, allShaderInfo[i].info[j].size,
+				allShaderInfo[i].info[j].registerNumber, device);
+		}
 	}
 
 	return true;

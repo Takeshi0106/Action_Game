@@ -34,8 +34,10 @@ struct ConstantBufferData { // 定数バッファデータ
 bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device)
 {
 	if (m_ConstantBuffer.count(name)) {
-		return true; // 同じ名前があるときは戻る
+		return false; // 同じ名前があるときは戻る
 	}
+
+	ErrorLog::Log(name.c_str());
 
 	D3D11_BUFFER_DESC desc{}; // 初期化
 	desc.ByteWidth = static_cast<UINT>((size + 15) / 16 * 16); // 16バイト単位にする アライメント
