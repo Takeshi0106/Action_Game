@@ -20,7 +20,7 @@ bool BaseDirectXManager::WriteLog()
 	// フォルダがない場合作成
 	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) { // ファイルがない場合作成する
 		if (!std::filesystem::create_directories(std::filesystem::path(kAssetLogPath).parent_path())) {
-			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
+			ErrorLog::OutputToConsole("使用したシェイダーログ : ログフォルダの作成に失敗しました");
 			return false;
 		}
 	}

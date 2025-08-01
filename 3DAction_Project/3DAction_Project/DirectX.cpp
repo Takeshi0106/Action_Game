@@ -35,10 +35,13 @@ namespace DirectX11 {
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext>       d3dDeviceContext = nullptr; // 描画コマンドをGPUに送る
 		Microsoft::WRL::ComPtr<IDXGISwapChain>            d3dSwapChain     = nullptr; // バッファを制御する
 
-		// SRV用　読み取り専用
-		namespace SRV {
+		// 最後の画面描画用
+		namespace FinalRender {
+			// 最終的な画面を保存するバッファ
 			Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforSRV = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ
+			// 最終的に描画するためのView
 			Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    d3dRTV       = nullptr; // レンダーターゲットビュー  描画結果を描画対象として渡す
+			// ポストエフェクト用
 			Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  d3dRTSRV     = nullptr; // シェーダーに計算した描画結果を渡す (読み取り専用)
 		}
 
@@ -76,7 +79,7 @@ namespace DirectX11 {
 		}
 
 		// RTVとSRVの初期化・後処理 ---------------------------------------------------------
-		namespace SRV {
+		namespace FinalRender {
 			bool Init();   // 初期化
 			void Uninit(); // 後処理
 		}
@@ -103,7 +106,7 @@ namespace DirectX11 {
 	// =====================================================
 	// DirectX 初期化処理
 	// =====================================================
-	bool Init(unsigned short Width, unsigned short Height, HWND windowHandle)
+	bool Init(unsigned int Width, unsigned int Height, HWND windowHandle)
 	{
 		// 描画する大きさを代入する
 		RenderWidth  = Width;
@@ -112,26 +115,28 @@ namespace DirectX11 {
 		// デバイスやスワップチェインの初期化
 		if(!DXCore::Init(windowHandle)){
 			// メッセージボックス出力 環境の問題かもしれないためユーザーに分かるようにする
-			ErrorLog::MessageBoxOutput("デバイスやスワップチェインの初期化に失敗");
+			ErrorLog::OutputToMessageBox("デバイスやスワップチェインの初期化に失敗");
 			return false;
 		}
 		// RTVとSRVの初期化
-		if (!SRV::Init()) {
-			ErrorLog::Log("SRVの初期化に失敗"); 
+		if (!FinalRender::Init()) {
+			ErrorLog::OutputToConsole("SRVの初期化に失敗"); 
 			return false;
 		}
 		// UAVの初期化
 		if (!UAV::Init()) {
-			ErrorLog::Log("URVの初期化に失敗");
+			ErrorLog::OutputToConsole("URVの初期化に失敗");
 			return false;
 		}
 		// 深度ステンシルの初期化
 		if (!DepthStencil::Init(DepthStencil::DepthStencilFormatType::Depth32Bit)) {
-			ErrorLog::Log("深度ステンシルの初期化に失敗");
+			ErrorLog::OutputToConsole("深度ステンシルの初期化に失敗");
 			return false;
 		}
 		// ビューポートの初期化
 		ViewPort::SetViewPort();
+
+		DebugLog::OutputToConsole("DirectXの初期化に成功しました");
 
 		return true;
 	}
@@ -144,7 +149,7 @@ namespace DirectX11 {
 	{
 		DepthStencil::Uninit();
 		UAV         ::Uninit();
-		SRV         ::Uninit();
+		FinalRender ::Uninit();
 		DXCore      ::Uninit();
 	}
 
@@ -155,11 +160,11 @@ namespace DirectX11 {
 	void BeginDraw()
 	{
 		// レンダーターゲットと深度ステンシルビューをセット
-		d3dDeviceContext->OMSetRenderTargets(1, SRV::d3dRTV.GetAddressOf(), DepthStencil::d3dDSV.Get());
+		d3dDeviceContext->OMSetRenderTargets(1, FinalRender::d3dRTV.GetAddressOf(), DepthStencil::d3dDSV.Get());
 
 		float clearColor[4] = { 0.1f, 0.3f, 0.7f, 1.0f }; // 塗りつぶす色
 		// レンダーターゲットと深度バッファをクリア
-		d3dDeviceContext->ClearRenderTargetView(SRV::d3dRTV.Get(), clearColor);
+		d3dDeviceContext->ClearRenderTargetView(FinalRender::d3dRTV.Get(), clearColor);
 		d3dDeviceContext->ClearDepthStencilView(DepthStencil::d3dDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 	}
 
@@ -183,7 +188,7 @@ namespace DirectX11 {
 		float clearColor[4] = { std::fmod(time, 1.0f), 0.3f, 0.7f, 1.0f };
 
 		// レンダーターゲットと深度バッファをクリア
-		d3dDeviceContext->ClearRenderTargetView(SRV::d3dRTV.Get(), clearColor);
+		d3dDeviceContext->ClearRenderTargetView(FinalRender::d3dRTV.Get(), clearColor);
 	}
 
 
@@ -212,7 +217,6 @@ namespace DirectX11 {
             // -----------------------------------------------------
 			bool Init(HWND windowHandle)
 			{
-				bool IsInit = true;      // 初期化が成功したかを代入
 				HRESULT  hr;             // 初期化の 成功、失敗 を受け取る
 				D3D_FEATURE_LEVEL level; // スワップチェイン作成成功時に使われたDirectXのバージョンを入れる
 
@@ -279,9 +283,15 @@ namespace DirectX11 {
 						break; // ドライバが成功したらループを抜ける
 					}
 				}
-				IsInit = ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "選択されたドライバで生成することが出来ませんでした。"); // hrの成否判定とログを出力させる関数
+
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("選択されたドライバで生成することが出来ませんでした。");
+					return false;
+				}
+
+				DebugLog::OutputToConsole("デバイス・スワップチェインの初期化に成功");
 				
-				return IsInit;
+				return true;
 			}
 
 
@@ -302,31 +312,37 @@ namespace DirectX11 {
 		// *********************************************************************************
 		// RTVとSRVの初期化・後処理 
 		// *********************************************************************************
-		namespace SRV {
+		namespace FinalRender {
 
 			// -----------------------------------------------------
             // RTV・SRVの初期化
             // -----------------------------------------------------
 			bool Init()
 			{
-				bool IsInit = true;
 				HRESULT  hr = S_OK; // 初期化の 成功、失敗 を受け取る
 
 				// スワップチェインが生成したバックバッファを取得する
 				hr = d3dSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)d3dRTTforSRV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "SRVバックバッファを取得することが出来ませんでした。")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("SRVバックバッファを取得することが出来ませんでした。");
 					return false;
 				}
+
 				// レンダラーターゲットを生成
 				hr = d3dDevice->CreateRenderTargetView(d3dRTTforSRV.Get(), nullptr, d3dRTV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "レンダラーターゲットビューを作成することが出来ませんでした")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("レンダラーターゲットビューを作成することが出来ませんでした");
 					return false;
 				}
+
 				// シェーダーリソースの作成
 				hr = d3dDevice->CreateShaderResourceView(d3dRTTforSRV.Get(), nullptr, d3dRTSRV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "SRVが設定できませんでした")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("SRVが設定できませんでした");
 					return false;
 				}
+
+				DebugLog::OutputToConsole("RT、RTV,SRV	の初期化に成功");
 
 				return true;
 			}
@@ -371,7 +387,8 @@ namespace DirectX11 {
 
 				// バッファを作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dRTTforUAV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "UAVテクスチャの作成に失敗しました")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("UAVテクスチャの作成に失敗しました");
 					return false;
 				}
 
@@ -382,9 +399,12 @@ namespace DirectX11 {
 				uavDesc.Texture2D.MipSlice = 0;                             // ミップマップレベル（０の場合 自動的に最大数使用してくれる）
 
 				hr = d3dDevice->CreateUnorderedAccessView(d3dRTTforUAV.Get(), &uavDesc, d3dUAV.GetAddressOf()); // UAVを作成
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "UAVの作成に失敗しました")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("UAVの作成に失敗しました");
 					return false;
 				}
+
+				DebugLog::OutputToConsole("UAVの初期化に成功");
 
 				return true;
 			}
@@ -450,7 +470,8 @@ namespace DirectX11 {
 
 				// 深度ステンシルテクスチャの作成
 				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dDepthTexture.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "深度ステンシルテクスチャの作成に失敗しました")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("深度ステンシルテクスチャの作成に失敗しました");
 					return false;
 				}
 
@@ -461,7 +482,8 @@ namespace DirectX11 {
 
 				// 深度ステンシルビューの作成
 				hr = d3dDevice->CreateDepthStencilView(d3dDepthTexture.Get(), &depthViewDesc, d3dDSV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "深度ステンシルビューの作成に失敗しました")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("深度ステンシルビューの作成に失敗しました");
 					return false;
 				}
 
@@ -473,11 +495,14 @@ namespace DirectX11 {
 
 				// シェーダーリソースビューを作成
 				hr = d3dDevice->CreateShaderResourceView(d3dDepthTexture.Get(), &depthSRVDesc, d3dDSRV.GetAddressOf());
-				if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "シェーダーリソースビューの作成に失敗しました")) { // 成否判定とログ出力
+				if (FAILED(hr)) {
+					ErrorLog::OutputToConsole("シェーダーリソースビューの作成に失敗しました");
 					return false;
 				}
 
-				d3dDeviceContext->OMSetRenderTargets(1, SRV::d3dRTV.GetAddressOf(), d3dDSV.Get());
+				d3dDeviceContext->OMSetRenderTargets(1, FinalRender::d3dRTV.GetAddressOf(), d3dDSV.Get());
+
+				DebugLog::OutputToConsole("深度ステンシルの初期化に成功");
 
 				return true;
 			}

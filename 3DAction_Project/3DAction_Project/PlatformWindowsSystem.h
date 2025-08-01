@@ -1,11 +1,17 @@
 ﻿#pragma once
 
+// ==========================================
+// このクラスの説明
+// ==========================================
+// Windows用のプラットフォーム設計
+// 描画マネージャーはDirectXを使用しています
+
+
+// ==========================================
+// ヘッダー
+// ==========================================
 // 基底クラスのヘッダー
 #include "PlatformSystem.h"
-
-// 標準ヘッダー
-#include <cstdint>          // 整数
-#include <string>           // 文字列
 
 
 // =====================================================
@@ -17,9 +23,10 @@ struct APPLICATIONHANDLE;              // HINSTANCEのラップ構造体
 struct HWND__;
 using HWND = HWND__*;
 
-// DrawManagerに置き換える
+// DrawManagerに置き換える　---------------------------------
 class ShaderManager;          // シェーダーマネージャー
 class ConstantBufferManager;  // 定数バッファマネージャー
+// ----------------------------------------------------------
 
 
 // =====================================================
@@ -28,12 +35,12 @@ class ConstantBufferManager;  // 定数バッファマネージャー
 class PlatformWindowsSystem : public PlatformSystem
 {
 private:
-	static APPLICATIONHANDLE m_AppInstance; // アプリケーションのハンドル
-	static HWND m_WinInstance;              // ウィンドウハンドル
-	static uint16_t  m_Width;	            // ウィンドウの画面横幅 
-	static uint16_t  m_Height;	            // ウィンドウの画面縦幅
-	static std::wstring m_WindowName;       // ウィンドウの名前
-	static std::wstring m_WindowClassName;  // ウィンドウのクラス名
+	static APPLICATIONHANDLE m_AppInstance;     // アプリケーションのハンドル
+	static HWND              m_WinInstance;     // ウィンドウハンドル
+	static unsigned int      m_Width;	        // ウィンドウの画面横幅 
+	static unsigned int      m_Height;	        // ウィンドウの画面縦幅
+	const wchar_t*          m_WindowName;      // ウィンドウの名前
+	const wchar_t*          m_WindowClassName; // ウィンドウのクラス名
 
 	// DrawManagerに置き換える
 	static ShaderManager m_ShaderManager;                 // シェーダーを管理する
@@ -50,10 +57,10 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	PlatformWindowsSystem(uint16_t Width, uint16_t Height, std::wstring WindowClassName, std::wstring WindowName);
+	PlatformWindowsSystem(unsigned int Width, unsigned int Height, const wchar_t* WindowClassName, const wchar_t* WindowName);
 	~PlatformWindowsSystem();
 
 	// ゲッター
-	static uint16_t GetWidthSize() { return m_Width; }       // ウィンドウの横幅を戻り値で返す
-	static uint16_t GetHeightSize() { return m_Height; }	 // ウィンドウの縦幅を戻り値で返す
+	static unsigned int GetWidthSize() { return m_Width; }       // ウィンドウの横幅を戻り値で返す
+	static unsigned int GetHeightSize() { return m_Height; }	 // ウィンドウの縦幅を戻り値で返す
 };

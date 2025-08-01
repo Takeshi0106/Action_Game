@@ -11,7 +11,7 @@
 bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
         return false;
     }
 
@@ -24,7 +24,12 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
         m_VertexShader.GetAddressOf() // 出力先
     );
 
-    return ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "の頂点シェーダーの初期化に失敗").c_str());
+    if (FAILED(hr)) {
+        ErrorLog::OutputToConsole(std::string(m_Name + "の頂点シェーダーの初期化に失敗").c_str());
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -34,7 +39,7 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
 bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
         return false;
     }
 
@@ -47,7 +52,12 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
         m_PixelShader.GetAddressOf()  // 出力先
     );
 
-    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "のピクセルシェーダーの初期化に失敗").c_str());
+    if (FAILED(hr)) {
+        ErrorLog::OutputToConsole(std::string(m_Name + "のピクセルシェーダーの初期化に失敗").c_str());
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -57,7 +67,7 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
 bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::Log(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
         return false;
     }
 
@@ -70,5 +80,10 @@ bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t 
         m_ComputeShader.GetAddressOf()  // 出力先
     );
 
-    return  ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(m_Name + "のコンピュートシェーダの初期化に失敗").c_str());
+    if (FAILED(hr)) {
+        ErrorLog::OutputToConsole(std::string(m_Name + "のコンピュートシェーダの初期化に失敗").c_str());
+        return false;
+    }
+
+    return  true;
 }

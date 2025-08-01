@@ -66,7 +66,7 @@ bool ShaderInfoInput(const char* kShader_ConstantInfoPath, std::vector<ShaderInf
 
 	// ファイルパスの情報をStringに入れる処理
 	if (!LoadFile(kShader_ConstantInfoPath, allShaderInfo)) {
-		ErrorLog::Log("リフレクション情報ロード失敗");
+		ErrorLog::OutputToConsole("リフレクション情報ロード失敗");
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool ShaderInfoInput(const char* kShader_ConstantInfoPath, std::vector<ShaderInf
 	std::string_view dataView(allShaderInfo);
 
 	if (!ParseShaderInfo(allShaderInfo, loadAllShaderInfo)) {
-		ErrorLog::Log("リフレクション情報の読み込みに失敗");
+		ErrorLog::OutputToConsole("リフレクション情報の読み込みに失敗");
 		return false;
 	}
 
@@ -90,7 +90,7 @@ bool LoadFile(const char* path, std::string& outContent)
 	// ファイルを開ける
 	std::ifstream ifs(path, std::ios::in);
 	if (!ifs.is_open()) {
-		ErrorLog::Log((std::string(path) + " ファイルのオープンに失敗しました").c_str());
+		ErrorLog::OutputToConsole((std::string(path) + " ファイルのオープンに失敗しました").c_str());
 		return false;
 	}
 
@@ -127,7 +127,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 	// 最初の行（シェーダーの数）を取得
 	size_t nextPos = dataView.find('\n', pos);
 	if (nextPos == std::string_view::npos) {
-		ErrorLog::MessageBoxOutput("シェーダー情報が取得できませんでした");
+		ErrorLog::OutputToMessageBox("シェーダー情報が取得できませんでした");
 		return false;
 	}
 
@@ -148,7 +148,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 	}
 	catch (...)
 	{
-		ErrorLog::Log("シェーダーの数を取得できませんでした");
+		ErrorLog::OutputToConsole("シェーダーの数を取得できませんでした");
 		return false;
 	}
 
@@ -213,7 +213,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 			}
 			catch (...)
 			{
-				ErrorLog::Log("定数バッファの数を取得できませんでした");
+				ErrorLog::OutputToConsole("定数バッファの数を取得できませんでした");
 				return false;
 			}
 		}
@@ -247,7 +247,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 			}
 			catch (...)
 			{
-				ErrorLog::Log("レジスタ番号を取得できませんでした");
+				ErrorLog::OutputToConsole("レジスタ番号を取得できませんでした");
 				return false;
 			}
 
@@ -267,7 +267,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 			}
 			catch (...)
 			{
-				ErrorLog::Log("定数バッファのサイズを取得できませんでした");
+				ErrorLog::OutputToConsole("定数バッファのサイズを取得できませんでした");
 				return false;
 			}
 		}
@@ -294,7 +294,8 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 
 	// バイナリーデータを解析
 	HRESULT hr = D3DReflect(blob, blobSize, IID_PPV_ARGS(&reflector));
-	if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "リファレンス失敗")) {
+	if (FAILED(hr)) {
+		ErrorLog::OutputToConsole("リファレンス失敗 :" + hr);
 		return false;
 	}
 
@@ -335,7 +336,7 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 			ILinfo[k].format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		}
 		else {
-			ErrorLog::Log("未知のフォーマットです");
+			ErrorLog::OutputToConsole("未知のフォーマットです");
 			return false;
 		}
 	}
@@ -353,7 +354,7 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 
 		// 名前が付けられていない定数バッファがあれば、プロジェクトを停止させる
 		if (bufferDesc.Name == nullptr || std::strlen(bufferDesc.Name) == 0) {
-			ErrorLog::Log("定数バッファの情報に名前が入っていませんでした");
+			ErrorLog::OutputToConsole("定数バッファの情報に名前が入っていませんでした");
 			return false;
 		}
 
@@ -378,7 +379,7 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 
 			// 名前が使われていない定数バッファがあれば、プロジェクトを停止させる
 			if (bindDesc.Name == nullptr || std::strlen(bindDesc.Name) == 0) {
-				ErrorLog::Log("リフレクションした情報に名前が入っていませんでした");
+				ErrorLog::OutputToConsole("リフレクションした情報に名前が入っていませんでした");
 				return false;
 			}
 
@@ -399,7 +400,7 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 			CBInfo[i].size = bufferDesc.Size;;
 		}
 		else {
-			ErrorLog::Log("バインド番号が見つかりませんでした");
+			ErrorLog::OutputToConsole("バインド番号が見つかりませんでした");
 			return false;
 		}
 	}
@@ -416,7 +417,7 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 	// フォルダがない場合作成
 	if (!std::filesystem::exists(std::filesystem::path(kShaderInfoPath).parent_path())) {
 		if (!std::filesystem::create_directories(std::filesystem::path(kShaderInfoPath).parent_path())) {
-			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
+			ErrorLog::OutputToConsole("使用したシェイダーログ : ログフォルダの作成に失敗しました");
 			return false;
 		}
 	}
@@ -424,7 +425,7 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 	// ファイルを開ける
 	std::ofstream ofs(kShaderInfoPath, std::ios::binary | std::ios::out);
 	if (!ofs.is_open()) {
-		ErrorLog::Log("使用したシェイダーログ : ファイルのオープンに失敗しました");
+		ErrorLog::OutputToConsole("使用したシェイダーログ : ファイルのオープンに失敗しました");
 		return false;
 	}
 

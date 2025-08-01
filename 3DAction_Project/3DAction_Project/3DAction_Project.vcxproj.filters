@@ -78,7 +78,7 @@
     <ClCompile Include="BaseDirectXManager.cpp">
       <Filter>Core\DirectX\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="ReportMessage.cpp">
+    <ClCompile Include="DirectX_ReportMessage.cpp">
       <Filter>Platform\ReportMessage</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">

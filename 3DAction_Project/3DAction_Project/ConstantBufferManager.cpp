@@ -49,7 +49,8 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t
 	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
 	HRESULT hr = device->CreateBuffer(&desc, nullptr, buffer.GetAddressOf());
 
-	if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, std::string(("定数バッファの作成失敗: " + name)).c_str())) { // 作成失敗
+	if (FAILED(hr)) {
+		ErrorLog::OutputToConsole(std::string(("定数バッファの作成失敗: " + name)).c_str());
 		return false;
 	}
 
@@ -68,18 +69,19 @@ bool ConstantBufferManager::UpdateConstantBuffer(const std::string& name, const 
 {
 	auto it = m_ConstantBuffer.find(name); // 定数バッファを探す
 	if (it == m_ConstantBuffer.end()) { // 見つからないときの処理
-		ErrorLog::Log(("定数バッファが見つかりません: " + name).c_str());
+		ErrorLog::OutputToConsole(("定数バッファが見つかりません: " + name).c_str());
 		return false;
 	}
 
 	if (dataSize > it->second->size) { // 定数バッファサイズを比較
-		ErrorLog::Log(("データサイズがバッファサイズを超えています: " + name).c_str());
+		ErrorLog::OutputToConsole(("データサイズがバッファサイズを超えています: " + name).c_str());
 		return false;
 	}
 
 	D3D11_MAPPED_SUBRESOURCE mapped; // 定数バッファを更新するための、メモリ領域を受け取る
 	HRESULT hr = context->Map(it->second->constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped); //CPUから定数バッファにアクセスできるようにする
-	if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, ("Map失敗: " + name).c_str())) { // アクセス失敗
+	if (FAILED(hr)) {
+		ErrorLog::OutputToConsole(("Map失敗: " + name).c_str());
 		return false;
 	}
 
@@ -99,7 +101,7 @@ ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& na
 		return it->second->constantBuffer.Get(); // 定数バッファを返す
 	}
 	else {
-		ErrorLog::Log(std::string(" 定数バッファ : " + name + " が見つかりませんでした").c_str());
+		ErrorLog::OutputToConsole(std::string(" 定数バッファ : " + name + " が見つかりませんでした").c_str());
 	}
 
 	return nullptr;
@@ -110,7 +112,7 @@ bool ConstantBufferManager::BindVS(const std::string& name, ID3D11DeviceContext*
 {
 	auto it = m_ConstantBuffer.find(name); // 探す
 	if (it == m_ConstantBuffer.end()) { // あったかどうかの確認
-		ErrorLog::Log(("定数バッファが見つかりません: " + name).c_str());
+		ErrorLog::OutputToConsole(("定数バッファが見つかりません: " + name).c_str());
 		return false;
 	}
 	context->VSSetConstantBuffers(it->second->registerNumber, 1, it->second->constantBuffer.GetAddressOf()); // バインドする
@@ -120,7 +122,7 @@ bool ConstantBufferManager::BindPS(const std::string& name, ID3D11DeviceContext*
 {
 	auto it = m_ConstantBuffer.find(name); // 探す
 	if (it == m_ConstantBuffer.end()) { // あったかどうかの確認
-		ErrorLog::Log(("定数バッファが見つかりません: " + name).c_str());
+		ErrorLog::OutputToConsole(("定数バッファが見つかりません: " + name).c_str());
 		return false;
 	}
 	context->PSSetConstantBuffers(it->second->registerNumber, 1, it->second->constantBuffer.GetAddressOf()); // バインドする
@@ -130,7 +132,7 @@ bool ConstantBufferManager::BindCS(const std::string& name, ID3D11DeviceContext*
 {
 	auto it = m_ConstantBuffer.find(name); // 探す
 	if (it == m_ConstantBuffer.end()) { // あったかどうかの確認
-		ErrorLog::Log(("定数バッファが見つかりません: " + name).c_str());
+		ErrorLog::OutputToConsole(("定数バッファが見つかりません: " + name).c_str());
 		return false;
 	}
 	context->CSSetConstantBuffers(it->second->registerNumber, 1, it->second->constantBuffer.GetAddressOf()); // バインドする

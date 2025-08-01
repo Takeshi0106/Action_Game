@@ -13,10 +13,10 @@ int main(void)
 #endif
 
 	// ウィンドウズプラットフォームを作成
-	PlatformWindowsSystem system{ SCREEN_WIDTH,SCREEN_HEIGHT,WINDOW_NAME,WINDOW_CLASS_NAME };
+	PlatformWindowsSystem system(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_NAME, WINDOW_CLASS_NAME);
 	system.Execute(); // 起動
 
-	ErrorLog::Log("正常に終了しました");
+	DebugLog::OutputToConsole("正常に終了しました");
 
 	return 0;
 }

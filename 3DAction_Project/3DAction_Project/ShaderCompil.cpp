@@ -47,8 +47,8 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 		compileBlob.GetAddressOf(),             // コンパイルしたシェーダーを取得する
 		errorBlob.GetAddressOf()                // エラーメッセージを取得する
 	);
-	if (!ErrorLog::IsSuccessHRESULTWithMessageBox(hr, std::string(path.string() + "のコンパイルに失敗").c_str())) {
-		ErrorLog::Log(static_cast<const char*>(errorBlob->GetBufferPointer()));
+	if (FAILED(hr)) {
+		ErrorLog::OutputToConsole((path.string() + "のコンパイルに失敗" + std::string(static_cast<const char*>(errorBlob->GetBufferPointer()))).c_str());
 		return false;
 	}
 
@@ -60,7 +60,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	// フォルダがないときフォルダを作成
 	if (!std::filesystem::exists(outputPath.parent_path())) {
 		if (!std::filesystem::create_directories(outputPath.parent_path())) {
-			ErrorLog::Log("コンパイル : ログフォルダの作成に失敗しました");
+			ErrorLog::OutputToConsole("コンパイル : ログフォルダの作成に失敗しました");
 			return false;
 		}
 	}
@@ -82,7 +82,7 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	// 所有権を渡す
 	*blob = compileBlob.Detach();
 
-	Debug::NormalLog((filename + "シェーダーをコンパイルして書き出しました").c_str());
+	DebugLog::OutputToConsole((filename + "シェーダーをコンパイルして書き出しました").c_str());
 
 	// 一応明示的に解放　
 	errorBlob.Reset();
@@ -100,14 +100,14 @@ bool LoadCompiledShader(const std::filesystem::path& csoPath, ID3DBlob** blob)
 	// ファイルを開ける
 	std::ifstream ifs(csoPath, std::ios::binary | std::ios::ate); // 読み取り専用
 	if (!ifs) {
-		ErrorLog::Log(std::string(csoPath.string() + "　：　開けませんでした").c_str());
+		ErrorLog::OutputToConsole(std::string(csoPath.string() + "　：　開けませんでした").c_str());
 		return false;
 	}
 
 	// ファイルサイズを取得する
 	std::streamsize size = ifs.tellg();
 	if (size <= 0) {
-		ErrorLog::Log(std::string(csoPath.string() + " : ファイルサイズ取得に失敗しました").c_str());
+		ErrorLog::OutputToConsole(std::string(csoPath.string() + " : ファイルサイズ取得に失敗しました").c_str());
 		return false;
 	}
 
@@ -116,19 +116,21 @@ bool LoadCompiledShader(const std::filesystem::path& csoPath, ID3DBlob** blob)
 
 	// ID3DBlobを作成する
 	HRESULT hr = D3DCreateBlob(static_cast<SIZE_T>(size), blob);
-	if (!ErrorLog::IsSuccessHRESULTWithOutputToConsole(hr, "バイナリーデータの作製に失敗しました")) {
+	if (FAILED(hr)) {
+		ErrorLog::OutputToConsole("バイナリーデータの作製に失敗しました");
 		ifs.close(); // ファイルを閉じる
 		return false;
 	}
+
 	// 中にバイナリーデータを書き込む
 	ifs.read(reinterpret_cast<char*>((*blob)->GetBufferPointer()), size);
 	if (!ifs) {
-		ErrorLog::Log(std::string(csoPath.string() + " : バイナリーデータの読み込みに失敗しました").c_str());
+		ErrorLog::OutputToConsole(std::string(csoPath.string() + " : バイナリーデータの読み込みに失敗しました").c_str());
 		ifs.close();
 		return false;
 	}
 
-	Debug::NormalLog((csoPath.string() + "シェーダーを読み込みました。").c_str());
+	DebugLog::OutputToConsole((csoPath.string() + "シェーダーを読み込みました。").c_str());
 
 	ifs.close(); // ファイルを閉じる
 
