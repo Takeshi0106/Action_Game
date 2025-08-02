@@ -31,18 +31,6 @@
     <Filter Include="Core\DirectX\Manager\ResourceManager">
       <UniqueIdentifier>{6a38eb7f-f505-4a60-8364-a613bc5a292f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\PlatformMath">
-      <UniqueIdentifier>{1d64735a-8e37-4399-b5b1-95fd596d47b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\PlatformSystem">
-      <UniqueIdentifier>{c605901f-c68a-4e4a-9892-86b316a750c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\PlatformSystem\Windews">
-      <UniqueIdentifier>{4e12890a-cbe3-4d48-ad82-b63805e872bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\ReportMessage">
-      <UniqueIdentifier>{8ece8b84-d472-4735-bb54-33044975648a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\DirectX\Manager\ConstantBufferManager">
       <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
     </Filter>
@@ -54,6 +42,36 @@
     </Filter>
     <Filter Include="Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderReflection">
       <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{2b3a7e76-5e53-42fe-bf7a-3fd9df18a022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows\System">
+      <UniqueIdentifier>{d73c0497-5e3a-4387-9248-7f81b27ff52c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows\ReportMessage">
+      <UniqueIdentifier>{a63fa5dc-98e1-4943-8208-cf39569f8522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows\Input">
+      <UniqueIdentifier>{bc186f21-dee6-4bb2-a164-941e29bd0756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows\Math">
+      <UniqueIdentifier>{e853e91e-255f-4673-ae59-a0da11edc8d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Base">
+      <UniqueIdentifier>{6630a200-9640-4918-82d7-b2c21ec55e30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Base\PlatformSystem">
+      <UniqueIdentifier>{65ac5411-2b6d-42b4-8d0e-eb197d4e8193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Base\ReportMessage">
+      <UniqueIdentifier>{f310d8f3-b1f4-442a-99b8-8925988e5413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Base\PlatformInput">
+      <UniqueIdentifier>{8aeb14b8-05d4-4dfb-b8cd-bb34b3e25c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Base\PlatformMath">
+      <UniqueIdentifier>{1d64735a-8e37-4399-b5b1-95fd596d47b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,23 +87,14 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Core\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="PlatformWindowsSystem.cpp">
-      <Filter>Platform\PlatformSystem\Windews</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Core\DirectX\Manager\ShaderManager</Filter>
     </ClCompile>
     <ClCompile Include="BaseDirectXManager.cpp">
       <Filter>Core\DirectX\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX_ReportMessage.cpp">
-      <Filter>Platform\ReportMessage</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Core\DirectX\Manager\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformSystem.cpp">
-      <Filter>Platform\PlatformSystem</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
@@ -96,6 +105,15 @@
     <ClCompile Include="ShaderReflection.cpp">
       <Filter>Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderReflection</Filter>
     </ClCompile>
+    <ClCompile Include="PlatformSystem.cpp">
+      <Filter>Platform\Base\PlatformSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformWindowsSystem.cpp">
+      <Filter>Platform\Windows\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows_ReportMessage.cpp">
+      <Filter>Platform\Windows\ReportMessage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX.h">
@@ -104,17 +122,11 @@
     <ClInclude Include="ShaderData.h">
       <Filter>Core\DirectX\Manager\ShaderManager\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="NonCopyable.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Core\Timer</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformWindowsSystem.h">
-      <Filter>Platform\PlatformSystem\Windews</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>Core\DirectX\Manager\ShaderManager</Filter>
@@ -122,14 +134,8 @@
     <ClInclude Include="BaseDirectXManager.h">
       <Filter>Core\DirectX\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="ReportMessage.h">
-      <Filter>Platform\ReportMessage</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Core\DirectX\Manager\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformSystem.h">
-      <Filter>Platform\PlatformSystem</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>Core\DirectX\Manager\ConstantBufferManager</Filter>
@@ -139,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="ShaderReflection.h">
       <Filter>Core\DirectX\Manager\ShaderManager\ShaderUtils\ShaderReflection</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSystem.h">
+      <Filter>Platform\Base\PlatformSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ReportMessage.h">
+      <Filter>Platform\Base\ReportMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformWindowsSystem.h">
+      <Filter>Platform\Windows\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
