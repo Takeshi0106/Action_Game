@@ -1,16 +1,17 @@
-﻿// 必須ヘッダー
+﻿
+// =============================================================
+// ヘッダー
+// =============================================================
+// 必須ヘッダー
 #include "DirectX.h"    // 自分のヘッダー
-
 // Windows・DirectX用
 #include <Windows.h>                // ウィンドウのハンドル用
 #include <d3d11.h>                  // DirectXの基本的なAPI
 #pragma comment (lib, "d3d11.lib")  // DirectXの基本APIを使用するためのライブラリー
 #include <wrl/client.h>             // マイクロソフトが提供するスマートポインタ
-
 // 標準ライブラリ
 #include <cstdint>      // 整数型 uintなど
 #include <cmath>        //デバッグ描画の色変更で使用しています　後で消す
-
 // デバッグ用出力
 #include "ReportMessage.h"
 
@@ -18,7 +19,6 @@
 // =======================================
 // DirectX の処理
 // =======================================
-
 namespace DirectX11 {
 
 	// =====================================================
@@ -196,9 +196,9 @@ namespace DirectX11 {
     // DirectX のゲッター
     // =====================================================
 	namespace Get {
-		ID3D11Device* GetDevice() { return d3dDevice.Get(); }
-		ID3D11DeviceContext* GetContext() { return d3dDeviceContext.Get(); }
-		IDXGISwapChain* GetSwapChain() { return d3dSwapChain.Get(); }
+		ID3D11Device*        GetDevice()    { return d3dDevice.Get(); }
+		ID3D11DeviceContext* GetContext()   { return d3dDeviceContext.Get(); }
+		IDXGISwapChain*      GetSwapChain() { return d3dSwapChain.Get(); }
 	}
 
 

@@ -2,7 +2,7 @@
 // ===============================================
 // 【クラス概要】
 // Windowsプラットフォームの初期化
-// Windowの作成、後処理などを行う
+// ウィンドウの作成、後処理などを行う
 // ===============================================
 
 
@@ -56,10 +56,8 @@ public:
 // =====================================================
 APPLICATIONHANDLE PlatformWindowsSystem::m_AppInstance = nullptr;
 HWND              PlatformWindowsSystem::m_WinInstance = nullptr;
-unsigned int      PlatformWindowsSystem::m_Width = 0;
-unsigned int      PlatformWindowsSystem::m_Height = 0;
 
-#if defined(DEBUG) || defined(_DEBUG)
+// デバッグ用　DrawManagerに移動する
 ShaderManager PlatformWindowsSystem::m_ShaderManager = {
     "Debug/Log/Shader.txt",          // 使用したシェイダーの名前を書き出すログのパス
     "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
@@ -70,21 +68,6 @@ ShaderManager PlatformWindowsSystem::m_ShaderManager = {
 ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
     "Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
 };
-
-#else
-// デバッグ、リリースビルドによってコンストラクタのファイルパスが変更されるためヘッダーを確認しに行ってください
-ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Asset/Shader/Compile",           // リリース時にコンパイルしたシェイダーを入れるパス
-    "Asset/Shader/Hlsl",              // HLSLを入れているフォルダー 
-    "Asset/Info/ShaderReflection.txt"  // リフレクション情報が入っているパス
-};
-
-ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager;
-
-
-#endif
-
-
 
 
 // =====================================================
@@ -101,18 +84,6 @@ namespace {
 // プロトタイプ宣言
 // =====================================================
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
-
-
-// =====================================================
-// コンストラクタ
-// =====================================================
-PlatformWindowsSystem::PlatformWindowsSystem(unsigned int Width, unsigned int Height, const wchar_t* WindowClassName, const wchar_t* WindowName)
-    :m_WindowClassName(WindowClassName),m_WindowName(WindowName)
-{
-    // 初期化
-    m_Width = Width;
-    m_Height = Height;
-}
 
 
 // =====================================================
@@ -248,44 +219,6 @@ void PlatformWindowsSystem::Uninit()
 
 
 // =====================================================
-// ウィンドウプロシージャ
-// =====================================================
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
-{
-    switch (msg)
-    {
-    case WM_DESTROY: // ウィンドウ破棄
-        PostQuitMessage(0); // 終了処理
-        break;
-
-    case WM_CLOSE:
-    {
-        int res = MessageBoxA(NULL, "終了しますか？", "確認", MB_OKCANCEL);
-        if (res == IDOK) // メッセージボックス
-        {
-            DestroyWindow(hWnd); // ウィンドウ削除
-        }
-        break;
-    }
-
-    case WM_KEYDOWN:
-        if (LOWORD(wp) == VK_ESCAPE)
-        {
-            PostMessage(hWnd, WM_CLOSE, wp, lp);//ウィンドウプロシージャにWM_CLOSEを送る
-        }
-        break;
-
-    default:
-        return DefWindowProc(hWnd, msg, wp, lp);
-        break;
-
-    }
-
-    return 0;
-}
-
-
-// =====================================================
 // ゲームの初期化処理
 // =====================================================
 bool PlatformWindowsSystem::GameInit()
@@ -340,4 +273,42 @@ void PlatformWindowsSystem::GameUninit()
 {
     DirectX11::Uninit();      // Directの後処理
     m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
+}
+
+
+// =====================================================
+// ウィンドウプロシージャ
+// =====================================================
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
+{
+    switch (msg)
+    {
+    case WM_DESTROY: // ウィンドウ破棄
+        PostQuitMessage(0); // 終了処理
+        break;
+
+    case WM_CLOSE:
+    {
+        int res = MessageBoxA(NULL, "終了しますか？", "確認", MB_OKCANCEL);
+        if (res == IDOK) // メッセージボックス
+        {
+            DestroyWindow(hWnd); // ウィンドウ削除
+        }
+        break;
+    }
+
+    case WM_KEYDOWN:
+        if (LOWORD(wp) == VK_ESCAPE)
+        {
+            PostMessage(hWnd, WM_CLOSE, wp, lp);//ウィンドウプロシージャにWM_CLOSEを送る
+        }
+        break;
+
+    default:
+        return DefWindowProc(hWnd, msg, wp, lp);
+        break;
+
+    }
+
+    return 0;
 }

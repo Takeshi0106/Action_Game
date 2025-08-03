@@ -7,12 +7,6 @@
 namespace Timer
 {
 	// =======================================================
-	// 前方宣言
-	// =======================================================
-	struct TimePoint; // LARGE_INTEGERを隠す
-
-
-	// =======================================================
     // 関数
     // =======================================================
 	void Init();    // 初期化
@@ -26,11 +20,28 @@ namespace Timer
 	inline void Debug_CheckUpdate() {} // コンパイル時に展開されるように
 #endif
 
-	void LastUpdate(); // ゲームループの一番最後で呼び出す処理
+	// ゲームループの一番最後で呼び出す処理
+	void LastUpdate();
 	
-	float GetDeltaTime(); // 1フレームの経過時間を返す
-	float GetElapsedTime(const TimePoint& startTime); // 引き数で渡した時間からの経過時間を戻り値で返す
-	float GetElapsedTime(); // 計測開始からの経過時間を戻り値で返す
+	// 1フレームの経過時間を返す
+	float GetDeltaTime();
+	// 計測開始からの経過時間を戻り値で返す
+	float GetElapsedTime(); 
+
+
+	// ---------------------------------------------------
+	// 自分で追加できるタイム関数群
+	// ---------------------------------------------------
+	namespace Label {
+		// タイマー開始
+		void StartTimer(const char* name);
+		// 経過時間取得
+		float GetElapsedTimer(const char* name);
+		// タイマー削除
+		bool RemoveTimer(const char* name);
+		// 全削除（リセット）
+		void ClearTimers();
+	}
 
 
 };

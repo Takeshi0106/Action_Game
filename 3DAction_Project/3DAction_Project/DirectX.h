@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 // ==============================================
-// 関数群の説明
+// 【関数概要】
+// DirectXの初期化、後処理関数
 // ==============================================
-//DirectXの初期化、後処理関数
 
 
 // ==============================================
@@ -39,8 +39,8 @@ namespace DirectX11
 	// ゲッター関数
 	namespace Get 
 	{
-		ID3D11Device* GetDevice();
+		ID3D11Device*        GetDevice();
 		ID3D11DeviceContext* GetContext();
-		IDXGISwapChain* GetSwapChain();
+		IDXGISwapChain*      GetSwapChain();
 	}
 }

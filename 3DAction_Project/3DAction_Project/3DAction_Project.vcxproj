@@ -151,7 +151,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="ShaderData.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="ShaderReflection.cpp" />
-    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Windows_Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseDirectXManager.h" />

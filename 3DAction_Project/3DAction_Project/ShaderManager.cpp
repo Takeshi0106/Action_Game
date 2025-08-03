@@ -2,24 +2,18 @@
 // ===========================================
 // ヘッダー
 // ===========================================
-
 // 必須ヘッダー
 #include "ShaderManager.h"         // 自分のヘッダー
 #include "ShaderData.h"            // シェイダーデータクラス
 #include "ConstantBufferManager.h" // CBのマネージャー
-
 // 情報を保存する配列
 #include <vector> // 読み出したファイルを保存する配列
-
 // DirectX用スマートポインター
 #include <wrl/client.h>  // DirectX用のスマートポインター
-
 // シェイダーコンパイル用ヘッダー
 #include "ShaderCompil.h"
-
 // シェーダーリファレクション用ヘッダー
 #include "ShaderReflection.h"
-
 // デバッグ情報ややエラー出力用
 #include "ReportMessage.h"
 
@@ -370,15 +364,6 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 
 	// 出力関数
 	ShaderInfoOutput(kShaderInfoPath, allShaderInfo);
-
-	// 使用した情報の名前をログにして書き出す
-	if (!WriteLog()) {
-		ErrorLog::OutputToConsole("シェイーダーのログ書出しに失敗");
-		return false;
-	}
-
-	// デバッグ用
-
 
 	return true;
 }

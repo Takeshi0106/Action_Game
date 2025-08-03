@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 // ==================================================================
-// このクラスの説明
-// ==================================================================
+// 【クラス概要】
 // DirectXマネージャーの基底クラス
 // デバッグ時に使用した名前を出力するように設定
+// ==================================================================
 
 
 // ==================================================================
@@ -23,29 +23,38 @@
 
 class BaseDirectXManager
 {
-protected:
-
 #if defined(DEBUG) || defined(_DEBUG)
-	const  char* kAssetLogPath; // アセットのログ デバッグビルド時に書出し
+protected:
+	// アセットのログ デバッグビルド時に書出し
+	const  char* kAssetLogPath;
+	// 名前取得用
+	std::vector<std::string> m_Names;
 
-	std::vector<std::string> m_Names; // 名前取得用
-	bool WriteLog(); // オブジェクトの名前を配列に入れて渡し、書き出すクラス
 
+	// オブジェクトの名前を配列に入れて渡し、書き出すクラス
+	bool WriteLog();
+	// オブジェクトの名前をセットする
 	void DebugSetName(const char* name);
-#else
-	inline void DebugSetName(const char* name) {}
-#endif
-
 
 public:
-#if defined(DEBUG) || defined(_DEBUG)
+	// コンストラクタ
 	BaseDirectXManager(const char* assetLog)
 		: kAssetLogPath(assetLog) {
-	}; // コンストラクタ
+	}
+	// デストラクタ　
+	virtual ~BaseDirectXManager() { WriteLog(); }
+
 #else
-	BaseDirectXManager(){} // コンストラクタ
-#endif
+protected:
+	// インラインでビルドしないように
+	inline void DebugSetName(const char* name) {}
+
+public:
+	// 引き数をセットしない
+	BaseDirectXManager(const char* assetLog) {} // コンストラクタ
+
 	~BaseDirectXManager() = default;  // デストラクタ
+#endif
 
 
 };

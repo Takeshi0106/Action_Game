@@ -1,27 +1,19 @@
 ﻿#pragma once
 
 // =============================================================
-// コンストラクタの引数情報
-// デバッグ
-// １　デバッグコンパイルファイルパス
-// ２　シェーダーの名前ログ
-// ３　HLSLパス　デバッグ時無効
-// ４　リフレクション書出し
+// 【クラス概要】
 // 
-// リリース
-// １　リリースコンパイルファイルパス
-// ２　HLSLパス　HLSLがおいてあるファイル
-// ３　リフレクション読込み
+// ・デバッグ時
+// 　■同じ階層内の.hlslを全て調べて、.cso がない場合　または
+// 　　.csoとの最終更新日を比較して、コンパイルが必要かチェックする
+// 　■リフレクションして、情報を取得、ログに書出しをする
+// 　■リフレクションした情報から、定数バッファを作成、外部ファイルに書出し
+// 
+// ・リリース時
+// 　■リフレクション外部情報を読み込んで、全ての.csoがコンパイルされているかチェック
+// 　　されていない場合、hlslファイルから.csoをコンパイルする
+// 　■リフレクション外部情報を使用して、定数バッファを作成する
 // =============================================================
-
-
-/*
-ファイル分け
-
-1. コンパイル
-2. リフレクション
-3. Managerに分ける
-*/
 
 
 // ==============================================================
@@ -35,6 +27,7 @@
 #include <unordered_map>        // ハッシュ値配列
 // 基底ヘッダー
 #include <string>
+
 
 // ==============================================
 // 前方宣言
@@ -89,20 +82,12 @@ private:
     bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize);
 
 public:
-#if defined(DEBUG) || defined(_DEBUG)
-    // デバッグ時のコンストラクタ　
-    // リリース時との違い　使用したオブジェクトパスを出力できるようにしている
+    // コンストラクタ
     ShaderManager(const char* assetLog, const char* CSOPath, const char* hlslPath, const char* infoFaile)
         :BaseDirectXManager(assetLog), kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
     }
-
-#else
-    // リリース時のコンストラクタ
-    ShaderManager(const char* CSOPath, const char* hlslfaile, const char* Infofaile)
-        : kCSOFilePath(CSOPath), kHlslFailePath(hlslfaile), kShaderInfoPath(Infofaile) {
-    }
-
-#endif
+    // デストラクタ
+    ~ShaderManager() = default;
 
     // 初期化・後処理
     bool Init(ID3D11Device* device, ConstantBufferManager& CBManager);

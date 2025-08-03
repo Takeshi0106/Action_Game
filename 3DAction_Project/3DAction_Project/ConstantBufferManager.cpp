@@ -19,7 +19,7 @@ std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBuf
 struct ConstantBufferData { // 定数バッファデータ
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer = nullptr; // 定数バッファ
 	size_t size = 0;                                               // サイズ
-	int registerNumber = -1;                                                 // スロット
+	int registerNumber = -1;                                       // スロット
 
 	// コンストラクタ
 	ConstantBufferData(Microsoft::WRL::ComPtr<ID3D11Buffer> buf, size_t _size, int slot)
@@ -57,6 +57,9 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t
 	// 情報を構造体にまとめてマップに保存
 	auto data = std::make_unique<ConstantBufferData>(buffer, size, slot);
 	m_ConstantBuffer[name] = std::move(data);
+
+	// デバッグ用に名前を保存しておく
+	DebugSetName(name.c_str());
 
 	return true;
 }
@@ -108,6 +111,9 @@ ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& na
 }
 
 
+// =======================================
+// シェーダーをバインドする
+// =======================================
 bool ConstantBufferManager::BindVS(const std::string& name, ID3D11DeviceContext* context)
 {
 	auto it = m_ConstantBuffer.find(name); // 探す

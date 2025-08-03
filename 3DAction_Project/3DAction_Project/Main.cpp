@@ -1,22 +1,14 @@
 ﻿
 
 // =========================================================
-// 【注意】
-// マルチスレッドに対応できていません
-// 使用しないように注意してください
-// =========================================================
-
-
-// =========================================================
 // ヘッダー
 // =========================================================
 // プラットフォームのヘッダー
 #include "PlatformWindowsSystem.h"
-
-#if defined(DEBUG) || defined(_DEBUG)
 // エラーメッセージ出力用
 #include "ReportMessage.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
 // メモリーリーク検出用
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -25,13 +17,13 @@
 
 
 // =========================================================
-// 初期化用変数
+// ウィンドウの初期化用変数
 // =========================================================
 namespace {
 	constexpr unsigned int   SCREEN_WIDTH        = 1280;
 	constexpr unsigned int   SCREEN_HEIGHT       = 720;
-	constexpr wchar_t        WINDOW_CLASS_NAME[] = L"MyWindowClass";
-	constexpr wchar_t        WINDOW_NAME[]       = L"MyGameWindow";
+	constexpr wchar_t        WINDOW_NAME[]       = L"GameWindow";
+	constexpr wchar_t        WINDOW_CLASS_NAME[] = L"ゲーム";
 }
 
 
