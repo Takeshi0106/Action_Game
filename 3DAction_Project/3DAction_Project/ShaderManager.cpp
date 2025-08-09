@@ -33,7 +33,6 @@ std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManage
 bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob);
 
 #if defined(DEBUG) || defined(_DEBUG)
-// デバッグ用関数
 
 // .hlslの最終更新日を確認して、更新されているかをチェックする
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath);
@@ -89,49 +88,65 @@ void ShaderManager::Uninit()
 // ==================================================
 bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size)
 {
-	if (std::filesystem::path(shaderName).has_extension()) // 拡張子チェック
+	// 拡張子チェック
+	if (std::filesystem::path(shaderName).has_extension())
 	{
 		ErrorLog::OutputToConsole("拡張子が付いています　確認してください");
 		return false;
 	}
 
-	bool IsSuccess = true;
-
 	// バイナリーデータをいれて、シェーダーを作成　配列に代入
-	if (shaderName.rfind("VS_", 0) == 0) {
-		auto vertex = std::make_unique<VertexShaderData>(shaderName, "main", "vs_5_0");  // 動的確保
-		if (!vertex->CreateShader(device, binary, size)) {                                       // 初期化実行
+	if (shaderName.rfind("VS_", 0) == 0) 
+	{
+		// 動的確保
+		auto vertex = std::make_unique<VertexShaderData>(shaderName, "main", "vs_5_0");
+
+		// シェーダー作成
+		if (!vertex->CreateShader(device, binary, size)) {
 			ErrorLog::OutputToConsole(std::string("頂点シェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
-			IsSuccess = false;
+			return false;
 		}
-		m_Vertexs[shaderName] = std::move(vertex);                                       // メンバー配列に代入
+
+		// メンバー配列に代入
+		m_Vertexs[shaderName] = std::move(vertex);
 	}
-	else if (shaderName.rfind("PS_", 0) == 0) {
-		auto pixel = std::make_unique<PixelShaderData>(shaderName, "main", "ps_5_0");      // 動的確保
-		if (!pixel->CreateShader(device, binary, size)) {                                          // 初期化実行
+	else if (shaderName.rfind("PS_", 0) == 0) 
+	{
+		// 動的確保
+		auto pixel = std::make_unique<PixelShaderData>(shaderName, "main", "ps_5_0");
+
+		// シェーダー作成
+		if (!pixel->CreateShader(device, binary, size)) {
 			ErrorLog::OutputToConsole(std::string("ピクセルシェーダ― " + shaderName + " のクラスの初期化に失敗しました").c_str());
-			IsSuccess = false;
+			return false;
 		}
-		m_Pixels[shaderName] = std::move(pixel);                                           // メンバー配列に代入
+
+		// メンバー配列に代入
+		m_Pixels[shaderName] = std::move(pixel);
 	}
-	else if (shaderName.rfind("CS_", 0) == 0) {
-		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0"); // 動的確保
-		if (!compute->CreateShader(device, binary, size)) {                                        // 初期化実行
+	else if (shaderName.rfind("CS_", 0) == 0) 
+	{
+		// 動的確保
+		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0");
+
+		// シェーダー作成
+		if (!compute->CreateShader(device, binary, size)) {
 			ErrorLog::OutputToConsole(std::string("コンピュートシェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
-			IsSuccess = false;
+			return false;
 		}
-		m_Computes[shaderName] = std::move(compute); // メンバー配列に代入
-	}
-	else {
-		ErrorLog::OutputToConsole(std::string(shaderName + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
-		IsSuccess = false;
-	}
 
-	DebugSetName(shaderName.c_str());  // 名前を保存しておくデバッグ用
-
-	if (!IsSuccess) {
+		// メンバー配列に代入
+		m_Computes[shaderName] = std::move(compute);
+	}
+	else 
+	{
+		ErrorLog::OutputToConsole(std::string(shaderName + " : 先頭にシェーダーの種類が記載されていません").c_str());
 		return false;
 	}
+
+	// 名前を保存しておくデバッグ用
+	DebugSetName(shaderName.c_str());
+
 	return true;
 }
 
@@ -143,7 +158,7 @@ void ShaderManager::BindVertexShaderSet(const std::string name, ID3D11DeviceCont
 {
 	auto vs = m_Vertexs.find(name);
 
-	if (vs != m_Vertexs.end()) { // あった場合
+	if (vs != m_Vertexs.end()) {
 		context->VSSetShader(vs->second->GetShader(), nullptr, 0);
 	}
 	else{
@@ -154,7 +169,7 @@ void ShaderManager::BindPixelShaderSet(const std::string name, ID3D11DeviceConte
 {
 	auto ps = m_Pixels.find(name);
 
-	if (ps != m_Pixels.end()) { // あった場合
+	if (ps != m_Pixels.end()) {
 		context->PSSetShader(ps->second->GetShader(), nullptr, 0);
 	}
 	else {
@@ -165,7 +180,7 @@ void ShaderManager::BindComputeShaderSet(const std::string name, ID3D11DeviceCon
 {
 	auto cs = m_Computes.find(name);
 
-	if (cs != m_Computes.end()) { // あった場合
+	if (cs != m_Computes.end()) {
 		context->CSSetShader(cs->second->GetShader(), nullptr, 0);
 	}
 	else {
@@ -182,70 +197,77 @@ void ShaderManager::BindComputeShaderSet(const std::string name, ID3D11DeviceCon
 VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
 {
 	auto it = m_Vertexs.find(name);
+	
 	if (it != m_Vertexs.end()) {
 		return it->second.get();
 	}
-	return nullptr; // 見つからなかった
+
+	return nullptr;
 }
 
 // ピクセルシェーダを探す関数
 PixelShaderData* ShaderManager::GetFindPixelShader(const std::string& name)
 {
 	auto it = m_Pixels.find(name);
+
 	if (it != m_Pixels.end()) {
 		return it->second.get();
 	}
-	return nullptr; // 見つからなかった
+
+	return nullptr;
 }
 
 // コンピュートシェーダを探す関数
 ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 {
 	auto it = m_Computes.find(name);
+
 	if (it != m_Computes.end()) {
 		return it->second.get(); 
 	}
-	return nullptr; // 見つからなかった
+
+	return nullptr;
 }
 
 
-	// ==================================================================
-	// コンパイルするシェーダーの種類を判定する
-	// ==================================================================
+// ==================================================================
+// コンパイルするシェーダーの種類を判定する
+// ==================================================================
 bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob)
 {
 	// ファイルの最初の名前でシェーダー判定
-	if (filename.stem().string().rfind("VS_", 0) == 0) {
-		if (!OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
-		{
+	if (filename.stem().string().rfind("VS_", 0) == 0) 
+	{
+		// コンパイルして書き出す
+		if (!OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) {
 			ErrorLog::OutputToConsole(std::string("頂点シェーダー " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
 	}
-	else if (filename.stem().string().rfind("PS_", 0) == 0) {
-		if (!OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) // コンパイルして書き出す
-		{
+	else if (filename.stem().string().rfind("PS_", 0) == 0) 
+	{
+		// コンパイルして書き出す
+		if (!OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) {
 			ErrorLog::OutputToConsole(std::string("ピクセルシェーダー " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
 	}
-	else if (filename.stem().string().rfind("CS_", 0) == 0) {
-		if (!OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) // コンパイルして書き出す
-		{
+	else if (filename.stem().string().rfind("CS_", 0) == 0)
+	{
+		// コンパイルして書き出す
+		if (!OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) {
 			ErrorLog::OutputToConsole(std::string("コンピュートシェーダ " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
 	}
-	else {
-		ErrorLog::OutputToConsole(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str()); // ログ出力
+	else 
+	{
+		ErrorLog::OutputToConsole(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str());
 		return  false;
 	}
 
 	return true;
 }
-
-
-
 
 
 #if defined(DEBUG) || defined(_DEBUG) 
