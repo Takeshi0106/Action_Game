@@ -5,11 +5,11 @@
 // 入力情報（頂点シェーダー用）
 struct VSInput
 {
-    float3 Position : POSITION; // 位置座標
-    float3 Normal : NORMAL; // 法線ベクトル
-    float4 Color : COLOR; // 頂点カラー（RGBA）
+    float3 Position : POSITION0; // 位置座標
+    float3 Normal   : NORMAL0;   // 法線ベクトル
+    float4 Color    : COLOR0;    // 頂点カラー（RGBA）
     float2 TexCoord : TEXCOORD0; // テクスチャ座標
-    float3 Tangent : TANGENT; // 接ベクトル（必要に応じて）
+    float3 Tangent  : TANGENT0;  // 接ベクトル（必要に応じて）
 };
 
 // 出力情報

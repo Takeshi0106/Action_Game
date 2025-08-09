@@ -165,6 +165,7 @@ void ShaderManager::BindVertexShaderSet(const std::string name, ID3D11DeviceCont
 		ErrorLog::OutputToConsole(("頂点シェーダ " + name + " がありませんでした").c_str());
 	}
 }
+
 void ShaderManager::BindPixelShaderSet(const std::string name, ID3D11DeviceContext* context)
 {
 	auto ps = m_Pixels.find(name);
@@ -176,6 +177,7 @@ void ShaderManager::BindPixelShaderSet(const std::string name, ID3D11DeviceConte
 		ErrorLog::OutputToConsole(("ピクセルシェーダ― " + name + " がありませんでした").c_str());
 	}
 }
+
 void ShaderManager::BindComputeShaderSet(const std::string name, ID3D11DeviceContext* context)
 {
 	auto cs = m_Computes.find(name);
@@ -414,7 +416,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 		if (shaTime > binTime) 
 		{
 			// デバッグ用にログ出力
-			ErrorLog::OutputToConsole((shaderPath.string() + " が新しく更新されています").c_str());
+			DebugLog::OutputToConsole((shaderPath.string() + " が新しく更新されています").c_str());
 			return true;
 		}
 
