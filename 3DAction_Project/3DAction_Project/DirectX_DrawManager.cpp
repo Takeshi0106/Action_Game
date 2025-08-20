@@ -18,13 +18,25 @@
 // ==========================================
 // 静的メンバー変数
 // ==========================================
-// デバッグ用　DrawManagerに移動する
+#if defined(DEBUG) || defined(_DEBUG)
+
 ShaderManager DirectX_DrawManager::m_ShaderManager = {
-    "Debug/Log/Shader.txt",          // 使用したシェイダーの名前を書き出すログのパス
+    "Debug/Log/Shader.txt",           // 使用したシェイダーの名前を書き出すログのパス
     "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
     "",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
     "Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
 };
+
+#else
+
+ShaderManager DirectX_DrawManager::m_ShaderManager = {
+    "Debug/Log/Shader.txt",             // 使用したシェイダーの名前を書き出すログのパス
+    "Asset/Shader/Compile",             // デバッグ時のコンパイルしたシェイダーを入れるパス
+    "Asset/Shader/Hlsl",                // Debug時には使用しないパス　(.hlslがある場所を示すパス)
+    "Asset/Info/ShaderReflection.txt"   // リフレクションした情報を出力するファイルパス
+};
+
+#endif
 
 ConstantBufferManager DirectX_DrawManager::m_CBManager = {
     "Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
