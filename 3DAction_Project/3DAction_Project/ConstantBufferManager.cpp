@@ -34,6 +34,7 @@ struct ConstantBufferData { // 定数バッファデータ
 bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device)
 {
 	if (m_ConstantBuffer.count(name)) {
+		WarningLog::OutputToConsole((name + " 同じ名前の定数バッファが作成されようとしました").c_str());
 		return false; // 同じ名前があるときは戻る
 	}
 

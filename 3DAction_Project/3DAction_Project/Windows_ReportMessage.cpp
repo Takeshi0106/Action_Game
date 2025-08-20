@@ -16,17 +16,27 @@
 #include <iostream>  // コンソールに書き出す
 
 
+namespace {
+    // カラーコードリセット用
+    constexpr const char* RESET = "\x1b[0m";
+}
+
+
 // ======================================
-// エラーログ（致命的または警告）
+// エラーログ（致命的な警告）
 // ======================================
 namespace ErrorLog
 {
+    // カラーコード
+    constexpr const char* RED = "\x1b[31m";
+
+
     // ====================================================
     // コンソールにメッセージを出力
     // ====================================================
     void OutputToConsole(const char* message)
     {
-        std::cerr << "ERROR :" << message << std::endl;
+        std::cerr << RED << "ERROR :" << message << RESET << std::endl;
     }
 
 
@@ -41,6 +51,35 @@ namespace ErrorLog
 
 }
 
+
+// ===========================================
+// 警告ログ (致命的ではないエラーログ)
+// ===========================================
+namespace WarningLog
+{
+    // ANSIカラーコード
+    constexpr const char* YELLOW = "\x1b[33m";
+
+
+    // ====================================================
+    // コンソールにメッセージを出力
+    // ====================================================
+    void OutputToConsole(const char* message)
+    {
+        std::cerr << YELLOW << "WARNING :" << message << RESET << std::endl;
+    }
+
+
+    // =====================================================
+    // メッセージボックスでメッセージを表示
+    // =====================================================
+    void OutputToMessageBox(const char* message)
+    {
+        MessageBoxA(nullptr, message, "Warning", MB_ICONERROR | MB_OK);
+    }
+
+
+}
 
 
 #if defined(DEBUG) || defined(_DEBUG)

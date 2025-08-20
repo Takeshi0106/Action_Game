@@ -13,16 +13,28 @@
 
 
 // ======================================
-// エラーログ（致命的または警告）
+// エラーログ（致命的な警告用）
 // ======================================
 namespace ErrorLog 
 {
     // コンソールにメッセージを出力
     void OutputToConsole(const char* message);
-
     // メッセージボックスでメッセージを表示
     void OutputToMessageBox(const char* message);
 }
+
+
+// =======================================
+// 警告ログ (致命的ではない警告用)
+// =======================================
+namespace WarningLog
+{
+    // コンソールにメッセージを出力
+    void OutputToConsole(const char* message);
+    // メッセージボックスで出力
+    void OutputToMessageBox(const char* message);
+}
+
 
 // ==============================================================
 // デバッグログ

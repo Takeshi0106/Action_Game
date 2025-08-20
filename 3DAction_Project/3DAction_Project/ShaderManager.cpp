@@ -362,7 +362,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 			return false;
 		}
 
-		// 頂点シェーダー以外の時入力レイアウトを削除する
+		// 念のため頂点シェーダー以外の時入力レイアウトを削除する
 		if (filename.string().find("VS") != 0)
 		{
 			ilInfo.clear();
@@ -372,6 +372,14 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) {
 			ErrorLog::OutputToMessageBox("シェイダーの初期化に失敗しました");
 			return false;
+		}
+
+		// 定数バッファを作成する
+		for (int i = 0; i < conInfo.size(); i++)
+		{
+			if (!CBManager.CreateConstantBuffer(conInfo[i].name, conInfo[i].size, conInfo[i].registerNumber, device)) {
+				WarningLog::OutputToConsole("定数バッファ作製失敗 問題ないか確認してください");
+			}
 		}
 
 		// 配列に代入
