@@ -1,15 +1,55 @@
 ﻿#pragma once
 
-namespace ErrorLog {
-bool IsSuccessHRESULTWithMessageBox(long hr, const char* message); // HRESULTとメッセージボックスで出力するメッセージを引き数で渡す　失敗時に戻り値はtrueを返す
-bool IsSuccessHRESULTWithOutputToConsole(long hr, const char* message); // hrの判定と、失敗時にデバッグ時のみコンソールに出力
-void MessageBoxOutput(const char* message);                // メッセージボックスを出力させる
 
+// ==========================================================================
+// 【関数概要】
+// エラー時やデバッグ時にログを出力する補助関数群
+// 
+// 【設計意図】
+// ・プラットフォームごとに.cppを切り替えることで、GameMainなどでも共通的に使用可能
+// ・ErrorLogは常時出力、DebugLogはリリースビルド時に無効化される設計
+// ・DebugLogの関数はリリース時にインライン化されず空関数となることで、負荷ゼロを実現
+// ==========================================================================
+
+
+// ======================================
+// エラーログ（致命的な警告用）
+// ======================================
+namespace ErrorLog 
+{
+    // コンソールにメッセージを出力
+    void OutputToConsole(const char* message);
+    // メッセージボックスでメッセージを表示
+    void OutputToMessageBox(const char* message);
+}
+
+
+// =======================================
+// 警告ログ (致命的ではない警告用)
+// =======================================
+namespace WarningLog
+{
+    // コンソールにメッセージを出力
+    void OutputToConsole(const char* message);
+    // メッセージボックスで出力
+    void OutputToMessageBox(const char* message);
+}
+
+
+// ==============================================================
+// デバッグログ
+// ここにある関数はリリース時はインラインでビルドを行わないように
+// ==============================================================
+namespace DebugLog
+{
 #if defined(DEBUG) || defined(_DEBUG)
-void Log(const char* message); // 実態を.cpp に記載する
+    // コンソールにメッセージ出力
+    void OutputToConsole(const char* message);
+
 #else
-inline void Log(const char* message){} // インラインにしてなにも処理されないようにする
+    // リリース時はインラインでビルドしないように
+    inline void OutputToConsole(const char* message) {
+    }
+
 #endif
-
-
 }

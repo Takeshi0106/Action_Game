@@ -112,12 +112,14 @@
     <PostBuildEvent>
       <Message>
       </Message>
+      <Command>if not exist "$(ProjectDir)Asset\Shader\Hlsl" mkdir "$(ProjectDir)Asset\Shader\Hlsl"
+xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Message>
       </Message>
-      <Command>if not exist "$(ProjectDir)Asset\Shader\Hlsl" mkdir "$(ProjectDir)Asset\Shader\Hlsl"
-xcopy /Y /D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,27 +140,33 @@ xcopy /Y /D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseDirectXManager.cpp" />
+    <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PlatformSystem.cpp" />
     <ClCompile Include="PlatformWindowsSystem.cpp" />
-    <ClCompile Include="ReportMessage.cpp" />
+    <ClCompile Include="Windows_ReportMessage.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ShaderCompil.cpp" />
     <ClCompile Include="ShaderData.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
-    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="ShaderReflection.cpp" />
+    <ClCompile Include="Windows_Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseDirectXManager.h" />
+    <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="DirectX.h" />
-    <ClInclude Include="Main.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="PlatformSystem.h" />
     <ClInclude Include="PlatformWindowsSystem.h" />
     <ClInclude Include="ReportMessage.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ShaderCompil.h" />
     <ClInclude Include="ShaderData.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="ShaderReflection.h" />
+    <ClInclude Include="ShaderStructs.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

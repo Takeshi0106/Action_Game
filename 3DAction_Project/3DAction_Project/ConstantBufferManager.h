@@ -1,0 +1,59 @@
+﻿#pragma once
+// ===========================================
+// 【クラス概要】
+// 定数バッファの作成、管理、削除を行うマネージャー
+// ===========================================
+
+
+// =======================================
+// ヘッダー
+// =======================================
+// 基底クラスヘッダー
+#include "BaseDirectXManager.h"
+// 標準ヘッダー
+#include <string>
+// スマートポインターヘッダー
+#include <memory> // スマートポインター
+// 配列のヘッダー
+#include <unordered_map> // ハッシュ値検索
+
+
+// ======================================
+// 前方宣言
+// ======================================
+struct ID3D11Device;        // DirectXのデバイス
+struct ID3D11DeviceContext; // DirectXのデバイスコンテキスト
+struct ID3D11Buffer;        // 定数バッファ
+struct ConstantBufferData;  // 定数バッファ構造体 (定数バッファとサイズを持つ)
+
+
+// ======================================
+// 定数バッファマネージャ 
+// ファイルパスに定数バッファの情報が入っているファイルのパスを入れる
+// シェーダ―マネージャーにポインターを渡し
+// 定数バッファを作成する（単一結合）
+// ======================================
+class ConstantBufferManager : public BaseDirectXManager
+{
+private:
+	static std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffer; // 定数バッファメンバー配列
+
+public:
+	// コンストラクタ
+	ConstantBufferManager(const char* assetLog) : BaseDirectXManager(assetLog) {}
+	// デストラクタ
+	~ConstantBufferManager() = default;
+
+	// 定数バッファ作成
+	bool CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device);
+	// 定数バッファを更新
+	bool UpdateConstantBuffer(const std::string& name, const void* data, size_t dataSize, ID3D11DeviceContext* context);
+	// 定数バッファを探して、戻り値で返す
+	ID3D11Buffer* GetFindConstantBuffer(const std::string& name);
+
+	// シェーダーをバインドする
+	bool BindVS(const std::string& name, ID3D11DeviceContext* context);
+	bool BindPS(const std::string& name, ID3D11DeviceContext* context);
+	bool BindCS(const std::string& name, ID3D11DeviceContext* context);
+};
+

@@ -1,26 +1,26 @@
 ﻿
+// ====================================================
+// ヘッダー
+// ====================================================
 // 必須ヘッダー
 #include "BaseDirectXManager.h" // 自分のヘッダー
-
 // ファイルパス用ヘッダー
 #include <filesystem>  // ファイルパスなどを楽に扱える　C++17以降
-
 // ファイル読込み、書出し
 #include <fstream> // 外部ファイルとして書出し
-
 // デバッグログやメッセージボックス出力用
 #include "ReportMessage.h"
 
 
 
 #if defined(DEBUG) || defined(_DEBUG)
-// 名前の配列を渡して、ログを書き出す
+// 配列に名前を入れておいて、ログを書き出す　デバッグ時のみ
 bool BaseDirectXManager::WriteLog()
 {
 	// フォルダがない場合作成
 	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) { // ファイルがない場合作成する
 		if (!std::filesystem::create_directories(std::filesystem::path(kAssetLogPath).parent_path())) {
-			ErrorLog::Log("使用したシェイダーログ : ログフォルダの作成に失敗しました");
+			ErrorLog::OutputToConsole("使用したシェイダーログ : ログフォルダの作成に失敗しました");
 			return false;
 		}
 	}
@@ -34,4 +34,10 @@ bool BaseDirectXManager::WriteLog()
 
 	return true;
 }
+
+void BaseDirectXManager::DebugSetName(const char* name)
+{
+	m_Names.push_back(name);
+}
+
 #endif

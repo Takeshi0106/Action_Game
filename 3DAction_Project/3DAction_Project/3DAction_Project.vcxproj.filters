@@ -1,116 +1,176 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Main">
+    <Filter Include="0_Main">
       <UniqueIdentifier>{27cea455-6d1f-4715-a5f0-914789bc7745}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{d10edca7-4758-4eda-aad4-696676e55158}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\DirectX">
-      <UniqueIdentifier>{956532da-11eb-446a-aa56-f84748cfbaa0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform">
+    <Filter Include="1_Platform">
       <UniqueIdentifier>{444d5151-fce7-4107-8539-d76aa28f92df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Timer">
+    <Filter Include="1_Platform\Windows">
+      <UniqueIdentifier>{2b3a7e76-5e53-42fe-bf7a-3fd9df18a022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\3_Input">
+      <UniqueIdentifier>{bc186f21-dee6-4bb2-a164-941e29bd0756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\0_System">
+      <UniqueIdentifier>{d73c0497-5e3a-4387-9248-7f81b27ff52c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\1_ReportMessage">
+      <UniqueIdentifier>{a63fa5dc-98e1-4943-8208-cf39569f8522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\2_Math">
+      <UniqueIdentifier>{e853e91e-255f-4673-ae59-a0da11edc8d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\4_Timer">
       <UniqueIdentifier>{7b4f348f-0d22-445f-a581-94055d072da4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Hlsl">
+    <Filter Include="1_Platform\Base">
+      <UniqueIdentifier>{6630a200-9640-4918-82d7-b2c21ec55e30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\0_PlatformSystem">
+      <UniqueIdentifier>{65ac5411-2b6d-42b4-8d0e-eb197d4e8193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\1_ReportMessage">
+      <UniqueIdentifier>{f310d8f3-b1f4-442a-99b8-8925988e5413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\2_PlatformMath">
+      <UniqueIdentifier>{1d64735a-8e37-4399-b5b1-95fd596d47b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\4_PlatformTime">
+      <UniqueIdentifier>{984b64ae-e14c-4800-a73d-5cc57574cea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\3_PlatformInput">
+      <UniqueIdentifier>{8aeb14b8-05d4-4dfb-b8cd-bb34b3e25c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core">
+      <UniqueIdentifier>{d10edca7-4758-4eda-aad4-696676e55158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3_Hlsl">
       <UniqueIdentifier>{194a4f8a-d370-42ab-afab-1822f9a36484}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\Windews">
-      <UniqueIdentifier>{4e12890a-cbe3-4d48-ad82-b63805e872bb}</UniqueIdentifier>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core">
+      <UniqueIdentifier>{ba54c2db-b7b6-4d96-b01a-e999173877ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Manager">
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager">
       <UniqueIdentifier>{b485ea38-40c2-45b7-aa60-c162f0b52442}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Manager\ShaderManager">
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager">
       <UniqueIdentifier>{06acb924-c94c-4191-ad05-e23f7fa0df66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Manager\ShaderManager\Shader">
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader">
       <UniqueIdentifier>{07e90396-7836-496f-9361-68a26f7d0442}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ReportMessage">
-      <UniqueIdentifier>{8ece8b84-d472-4735-bb54-33044975648a}</UniqueIdentifier>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\ShaderUtils">
+      <UniqueIdentifier>{3307b22f-9a32-477f-89ed-a9bb36abf1bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\DirectX\Manager\ResourceManager">
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\ShaderUtils\ShaderCompil">
+      <UniqueIdentifier>{6ad274d1-c662-4366-ae63-d0a62acecc89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\ShaderUtils\ShaderReflection">
+      <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ResourceManager">
       <UniqueIdentifier>{6a38eb7f-f505-4a60-8364-a613bc5a292f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ConstantBufferManager">
+      <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderStructs">
+      <UniqueIdentifier>{939007d9-4472-4e3a-9c06-8090c0f96201}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DirectX.cpp">
-      <Filter>Core\DirectX</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderData.cpp">
-      <Filter>Core\DirectX\Manager\ShaderManager\Shader</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Main</Filter>
+      <Filter>0_Main</Filter>
     </ClCompile>
-    <ClCompile Include="PlatformSystem.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Core\Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformWindowsSystem.cpp">
-      <Filter>Platform\Windews</Filter>
+    <ClCompile Include="Windows_Timer.cpp">
+      <Filter>1_Platform\Windows\4_Timer</Filter>
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
-      <Filter>Core\DirectX\Manager\ShaderManager</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager</Filter>
     </ClCompile>
     <ClCompile Include="BaseDirectXManager.cpp">
-      <Filter>Core\DirectX\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="ReportMessage.cpp">
-      <Filter>ReportMessage</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Core\DirectX\Manager\ResourceManager</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ConstantBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderCompil.cpp">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\ShaderUtils\ShaderCompil</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderReflection.cpp">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\ShaderUtils\ShaderReflection</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformSystem.cpp">
+      <Filter>1_Platform\Base\0_PlatformSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformWindowsSystem.cpp">
+      <Filter>1_Platform\Windows\0_System</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows_ReportMessage.cpp">
+      <Filter>1_Platform\Windows\1_ReportMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX.cpp">
+      <Filter>1_Platform\Windows\5_DirectX_Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectX.h">
-      <Filter>Core\DirectX</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderData.h">
-      <Filter>Core\DirectX\Manager\ShaderManager\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Main.h">
-      <Filter>Main</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader</Filter>
     </ClInclude>
     <ClInclude Include="NonCopyable.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformSystem.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Core\Timer</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformWindowsSystem.h">
-      <Filter>Platform\Windews</Filter>
+      <Filter>2_Core</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
-      <Filter>Core\DirectX\Manager\ShaderManager</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager</Filter>
     </ClInclude>
     <ClInclude Include="BaseDirectXManager.h">
-      <Filter>Core\DirectX\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="ReportMessage.h">
-      <Filter>ReportMessage</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Core\DirectX\Manager\ResourceManager</Filter>
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferManager.h">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ConstantBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderCompil.h">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\ShaderUtils\ShaderCompil</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderReflection.h">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\ShaderUtils\ShaderReflection</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSystem.h">
+      <Filter>1_Platform\Base\0_PlatformSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ReportMessage.h">
+      <Filter>1_Platform\Base\1_ReportMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformWindowsSystem.h">
+      <Filter>1_Platform\Windows\0_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>1_Platform\Base\4_PlatformTime</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX.h">
+      <Filter>1_Platform\Windows\5_DirectX_Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderStructs.h">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderStructs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PS_Debug.hlsl">
-      <Filter>Hlsl</Filter>
+      <Filter>3_Hlsl</Filter>
     </FxCompile>
     <FxCompile Include="VS_Debug.hlsl">
-      <Filter>Hlsl</Filter>
+      <Filter>3_Hlsl</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

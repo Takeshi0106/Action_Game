@@ -1,20 +1,33 @@
-﻿// 必須ヘッダー
+﻿
+// ===============================================
+// 【クラス概要】
+// Windowsプラットフォームの初期化
+// ウィンドウの作成、後処理などを行う
+// ===============================================
+
+
+// ===============================================
+// ヘッダー
+// ===============================================
+// 必須ヘッダー
 #include "PlatformWindowsSystem.h"  // 自分のヘッダー
-
-// Windowsヘッダー
+// ウィンドウ作成用のヘッダー
 #include <Windows.h>  // ウィンドウ作成用
-
-// DirectXヘッダー
-#include "DirectX.h"  // DirectX初期化用　後で描画マネージャーに任せるようにする
-
 // 標準ヘッダー
 #include <cstdint>   // 整数型 uintなど
-
-// ゲーム用ヘッダー
-#include "Timer.h"   // デバッグ用　     後でGameMainに持たせてフレームを管理するようにする
-
-// デバッグ用ヘッダー
+// ログ出力用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
+
+
+// デバッグ用でおいているヘッダー ----------------------------------------------
+// DirectXヘッダー
+#include "DirectX.h"  // DirectX初期化用　後で描画マネージャーに任せるようにする
+// GameMain用ヘッダー
+#include "Timer.h"   // デバッグ用
+// DrawManagerで使用するヘッダー
+#include "ShaderManager.h"  // シェイダーマネージャー
+#include "ConstantBufferManager.h" // 定数バッファマネージャー
+// -----------------------------------------------------------------------------
 
 
 // =====================================================
@@ -43,25 +56,18 @@ public:
 // =====================================================
 APPLICATIONHANDLE PlatformWindowsSystem::m_AppInstance = nullptr;
 HWND              PlatformWindowsSystem::m_WinInstance = nullptr;
-uint16_t          PlatformWindowsSystem::m_Width = 0;
-uint16_t          PlatformWindowsSystem::m_Height = 0;
-std::wstring      PlatformWindowsSystem::m_WindowName;
-std::wstring      PlatformWindowsSystem::m_WindowClassName;
 
-#if defined(DEBUG) || defined(_DEBUG)
+// デバッグ用　DrawManagerに移動する
 ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Asset/Debug/Shader",   // デバッグ時のコンパイルしたシェイダーを入れるパス
-    "Debug/Log/Shader.txt", // 使用したシェイダーの名前を書き出すログのパス　リリースビルド時にこれを使用して、全てのシェイダーを管理する
-    ""                      // デバッグ時は使用しないパス
+    "Debug/Log/Shader.txt",          // 使用したシェイダーの名前を書き出すログのパス
+    "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
+    "",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
+    "Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
 };
-#else
-ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Asset/Shader/Compile", // リリース時にコンパイルしたシェイダーを入れるパス
-    "Debug/Log/Shader.txt", // 全てのシェイダーの名前が入っているテキストのパス 　今はDebugにしているがリリースにするときは変更する
-    "Asset/Shader/Hlsl"     // HLSLを入れているフォルダー 
-};
-#endif
 
+ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
+    "Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
+};
 
 
 // =====================================================
@@ -81,19 +87,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 
 
 // =====================================================
-// コンストラクタ
-// =====================================================
-PlatformWindowsSystem::PlatformWindowsSystem(uint16_t Width, uint16_t Height, std::wstring WindowClassName, std::wstring WindowName)
-{
-    // 初期化
-    m_Width = Width;
-    m_Height = Height;
-    m_WindowClassName = WindowClassName;
-    m_WindowName = WindowName;
-}
-
-
-// =====================================================
 // デストラクタ
 // =====================================================
 PlatformWindowsSystem::~PlatformWindowsSystem()
@@ -101,7 +94,7 @@ PlatformWindowsSystem::~PlatformWindowsSystem()
 #if defined(DEBUG) || defined(_DEBUG)
     if (IsUninit)
     {
-        ErrorLog::Log("PlatformWindowsSystem : 後処理が実行されていません");
+        ErrorLog::OutputToConsole("PlatformWindowsSystem : 後処理が実行されていません");
         Uninit();
     }
 #endif
@@ -126,12 +119,12 @@ bool PlatformWindowsSystem::Init()
     windClass.hCursor = LoadCursor(m_AppInstance.Get(), IDC_ARROW);         // クロスカーソル表示する （デザイン）
     windClass.hbrBackground = GetSysColorBrush(COLOR_BACKGROUND);           // システムのデフォルト背景色でウィンドウの背景を塗る
     windClass.lpszMenuName = nullptr;                                       // ウィンドウのメニューを作成しない
-    windClass.lpszClassName = m_WindowClassName.c_str();                    // ウィンドウの名前設定
+    windClass.lpszClassName = m_WindowClassName;                            // ウィンドウの名前設定
     windClass.hIconSm = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);     // タスクバーに表示されるアイコン (標準アイコンで作成 .icoで変更可能)
 
     // ウィンドウの登録 失敗したらfalseを返す
     if (!RegisterClassEx(&windClass)) {
-        ErrorLog::Log("ウィンドウの登録に失敗しました"); // ログ出力
+        ErrorLog::OutputToConsole("ウィンドウの登録に失敗しました");
         return false; 
     } 
 
@@ -141,14 +134,15 @@ bool PlatformWindowsSystem::Init()
     rect.bottom = static_cast<LONG>(m_Height); // 縦
 
     // ウィンドウの大きさを計算　（描画する大きさ＋枠）
-    DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;; // 枠を設定 (標準なウィンドウ、タイトルバーあり、システムメニューあり)
+    // 枠を設定 (標準なウィンドウ、タイトルバーあり、システムメニューあり)
+    DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;
     AdjustWindowRect(&rect, style, FALSE); // rectに計算した大きさを代入
 
     // ウィンドウ作成
     m_WinInstance = CreateWindowEx(
         0,                          // ウィンドウの動作や見た目（デフォルト）
-        m_WindowClassName.c_str(),  // ウィンドウのクラス名
-        m_WindowName.c_str(),       // ウィンドウのタイトルバーで表示される名前
+        m_WindowClassName,          // ウィンドウのクラス名
+        m_WindowName,               // ウィンドウのタイトルバーで表示される名前
         style,                      // ウィンドウのスタイル
         CW_USEDEFAULT,              // ウィンドウの表示位置をOSに決めてもらう
         CW_USEDEFAULT,              // ウィンドウの表示位置をOSに決めてもらう
@@ -161,7 +155,7 @@ bool PlatformWindowsSystem::Init()
 
     // ウィンドウを作成できたかのチェック
     if (m_WinInstance == nullptr) {
-        ErrorLog::Log("ウィンドウが作成されませんでした");
+        ErrorLog::OutputToConsole("ウィンドウが作成されませんでした");
         return false; 
     }
 
@@ -216,11 +210,69 @@ void PlatformWindowsSystem::Uninit()
     // ウィンドウの登録を解除
     if (m_AppInstance.Get() != nullptr)
     {
-        UnregisterClass(m_WindowClassName.c_str(), m_AppInstance.Get());
+        UnregisterClass(m_WindowClassName, m_AppInstance.Get());
     }
 
     m_AppInstance = nullptr;
     m_WinInstance = nullptr;
+}
+
+
+// =====================================================
+// ゲームの初期化処理
+// =====================================================
+bool PlatformWindowsSystem::GameInit()
+{
+    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
+        ErrorLog::OutputToMessageBox("DirectXの初期化に失敗しました");
+        return false; // 失敗したら戻る
+    }
+    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice(), m_ConstantBufferManager))
+    {
+        ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
+        return false; // 失敗したら戻る
+    }
+
+    Timer::Init(); // タイマー初期化
+    Timer::Start(); // タイマー開始
+
+    return true;
+}
+
+
+// =====================================================
+// ゲームの更新処理
+// =====================================================
+void PlatformWindowsSystem::GameMain()
+{
+    float a[4] = { 1.0f,0.1f,1.0f,0.1f };
+
+    Timer::Debug_CheckUpdate(); // タイマーデバッグ
+
+    // デバッグ時 
+    DirectX11::BeginDraw(); // 描画の開始処理
+
+    // m_ConstantBufferManager.BindVS("Transform", DirectX11::Get::GetContext());
+    // m_ConstantBufferManager.BindVS("DebugParams", DirectX11::Get::GetContext());
+    // m_ConstantBufferManager.UpdateConstantBuffer("PSInput", a, sizeof(a), DirectX11::Get::GetContext());
+    // m_ShaderManager.BindVertexShaderSet("VS_Debug", DirectX11::Get::GetContext());
+    // m_ShaderManager.BindPixelShaderSet("PS_Debug", DirectX11::Get::GetContext());
+
+    DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
+
+    DirectX11::EndDraw(); // 描画の終わり処理
+
+    Timer::LastUpdate(); // タイマー更新処理
+}
+
+
+// =====================================================
+// ゲームの後処理
+// =====================================================
+void PlatformWindowsSystem::GameUninit()
+{
+    DirectX11::Uninit();      // Directの後処理
+    m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
 }
 
 
@@ -259,54 +311,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
     }
 
     return 0;
-}
-
-
-// =====================================================
-// ゲームの初期化処理
-// =====================================================
-bool PlatformWindowsSystem::GameInit()
-{
-    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
-        ErrorLog::MessageBoxOutput("DirectXの初期化に失敗しました");
-        return false; // 失敗したら戻る
-    }
-    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice()))
-    {
-        ErrorLog::MessageBoxOutput("ShaderManagerの初期化に失敗しました");
-        return false; // 失敗したら戻る
-    }
-
-    Timer::Init(); // タイマー初期化
-    Timer::Start(); // タイマー開始
-
-    return true;
-}
-
-
-// =====================================================
-// ゲームの更新処理
-// =====================================================
-void PlatformWindowsSystem::GameMain()
-{
-    Timer::Debug_CheckUpdate(); // タイマーデバッグ
-
-    // デバッグ時 
-    DirectX11::BeginDraw(); // 描画の開始処理
-
-    DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
-
-    DirectX11::EndDraw(); // 描画の終わり処理
-
-    Timer::LastUpdate(); // タイマー更新処理
-}
-
-
-// =====================================================
-// ゲームの後処理
-// =====================================================
-void PlatformWindowsSystem::GameUninit()
-{
-    DirectX11::Uninit();      // Directの後処理
-    m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
 }
