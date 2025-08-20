@@ -39,6 +39,8 @@ public:
 	std::string GetName()       const { return m_Name; }
 	std::string GetEntryPoint() const { return m_EntryPoint; }
 	std::string GetTypeModel()  const { return m_ShaderTypeModel; }
+	// 定数バッファ情報
+	const std::vector<ConstantBufferInfo>& GetCBInfo() const { return CBInfo; }
 };
 
 
@@ -54,9 +56,12 @@ public:
 	~VertexShaderData() = default;                                                                                   // デストラクタ
 
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
-		const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo); // シェーダー作成
+	const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo); // シェーダー作成
 
+	// ゲッター
 	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }  // シェーダーのゲッター
+	// 入力レイアウト情報（頂点シェーダーのみ）
+	const std::vector<InputLayoutInfo>& GetILInfo() const { return ILInfo; }
 };
 
 

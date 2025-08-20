@@ -103,10 +103,5 @@ public:
     static VertexShaderData*  GetFindVertexShader (const std::string& name);
     static PixelShaderData*   GetFindPixelShader  (const std::string& name);
     static ComputeShaderData* GetFindComputeShader(const std::string& name);
-
-    // シェーダーをセットする関数
-    void BindVertexShaderSet(const std::string name, ID3D11DeviceContext* context);
-    void BindPixelShaderSet(const std::string name, ID3D11DeviceContext* context);
-    void BindComputeShaderSet(const std::string name, ID3D11DeviceContext* context);
 };
 

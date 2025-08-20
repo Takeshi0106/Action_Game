@@ -153,46 +153,6 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 
 
 // ===============================================
-// シェーダーをセットする関数
-// ===============================================
-void ShaderManager::BindVertexShaderSet(const std::string name, ID3D11DeviceContext* context)
-{
-	auto vs = m_Vertexs.find(name);
-
-	if (vs != m_Vertexs.end()) {
-		context->VSSetShader(vs->second->GetShader(), nullptr, 0);
-	}
-	else{
-		ErrorLog::OutputToConsole(("頂点シェーダ " + name + " がありませんでした").c_str());
-	}
-}
-
-void ShaderManager::BindPixelShaderSet(const std::string name, ID3D11DeviceContext* context)
-{
-	auto ps = m_Pixels.find(name);
-
-	if (ps != m_Pixels.end()) {
-		context->PSSetShader(ps->second->GetShader(), nullptr, 0);
-	}
-	else {
-		ErrorLog::OutputToConsole(("ピクセルシェーダ― " + name + " がありませんでした").c_str());
-	}
-}
-
-void ShaderManager::BindComputeShaderSet(const std::string name, ID3D11DeviceContext* context)
-{
-	auto cs = m_Computes.find(name);
-
-	if (cs != m_Computes.end()) {
-		context->CSSetShader(cs->second->GetShader(), nullptr, 0);
-	}
-	else {
-		ErrorLog::OutputToConsole(("コンピュートシェーダ " + name + " がありませんでした").c_str());
-	}
-}
-
-
-// ===============================================
 // シェーダーを探して、返す関数
 // ===============================================
 
