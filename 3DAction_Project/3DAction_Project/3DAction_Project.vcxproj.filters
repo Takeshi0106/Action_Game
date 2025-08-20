@@ -76,6 +76,9 @@
     <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ConstantBufferManager">
       <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderStructs">
+      <UniqueIdentifier>{939007d9-4472-4e3a-9c06-8090c0f96201}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="DirectX.h">
       <Filter>1_Platform\Windows\5_DirectX_Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderStructs.h">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderStructs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "ShaderStructs.h"
 
 // ============================================================
 // リフレクションを行う
@@ -12,23 +13,6 @@
 // =================================================
 // 構造体
 // =================================================
-
-// 定数バッファの情報構造体
-struct ConstantBufferInfo {
-	std::string name = "";  // 定数バッファの名前
-	int registerNumber = 0; // レジスタ番号
-	size_t size = 0;        // 大きさ１６の倍数にする
-};
-
-// 入力レイアウト構造体
-struct InputLayoutInfo
-{
-	std::string semanticName = ""; // セマンティックの名前
-	int semanticIndex = 0;         // セマンティックの番号
-	int inputSlot = 0;             // スロット番号
-	int format = 0;                // データの形式 (DXGI)
-};
-
 // シェーダーの情報構造体
 struct ShaderInfo {
 	std::string shaderName = "";            // シェーダーの名前

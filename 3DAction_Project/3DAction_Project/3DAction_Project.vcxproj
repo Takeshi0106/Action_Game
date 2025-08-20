@@ -166,6 +166,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="ShaderData.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShaderReflection.h" />
+    <ClInclude Include="ShaderStructs.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
