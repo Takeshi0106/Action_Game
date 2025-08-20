@@ -25,21 +25,21 @@ namespace {
 
 	// リファレンス情報書き込み、読込み用
 	// シェーダー関連
-	const std::string kShaderCount = "ShaderCount :";
-	const std::string kShaderName = "ShaderName :";
+	const std::string kShaderCount = "ShaderCount :"; // シェーダーの数
+	const std::string kShaderName = "ShaderName :";   // シェーダーの名前
 
 	// 入力レイアウト関連
-	const std::string kInputLayoutCount         = "InputLayoutCount :";
+	const std::string kInputLayoutCount         = "InputLayoutCount :";         // 入力レイアウトの数
 	const std::string kInputLayoutSemanticName  = "InputLayoutSemanticName :";  // セマンティック名
 	const std::string kInputLayoutSemanticIndex = "InputLayoutSemanticIndex :"; // セマンティックインデックス
 	const std::string kInputLayoutInputSlot     = "InputLayoutInputSlot :";     // 入力スロット番号
 	const std::string kInputLayoutFormat        = "InputLayoutFormat :";        // フォーマット
 
 	// 定数バッファ関連
-	const std::string kCBufferCount = "CBufferCount :";
-	const std::string kCBufferName = "CBufferName :";
-	const std::string kRegisterNumber = "RegisterNumber :";
-	const std::string kSize = "Size :";
+	const std::string kCBufferCount = "CBufferCount :";     // 定数バッファの数
+	const std::string kCBufferName = "CBufferName :";       // 定数バッファの名前
+	const std::string kRegisterNumber = "RegisterNumber :"; // レジスタ番号
+	const std::string kSize = "Size :";                     // バイト数 (16の倍数単位)
 
 }
 
