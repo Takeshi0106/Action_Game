@@ -1,16 +1,16 @@
-﻿// 必須ヘッダー
+﻿
+// ===========================================
+// ヘッダー
+// ===========================================
+// 必須ヘッダー
 #include "ShaderCompil.h"
-
 // シェイダーコンパイル用ヘッダー
 #include <d3dcompiler.h>                // シェーダーをコンパイルするためのヘッダー
 #pragma comment(lib, "d3dcompiler.lib") // シェーダーをコンパイルするためのライブラリー
-
 // DirectX用スマートポインター
 #include <wrl/client.h>  // DirectX用のスマートポインター
-
 // ファイル出力、読込み用ヘッダー
 #include <fstream>                      // 外部ファイルとして書出し・読み出し
-
 // デバッグ情報ややエラー出力用
 #include "ReportMessage.h"
 
