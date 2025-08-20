@@ -54,7 +54,7 @@ public:
 	~VertexShaderData() = default;                                                                                   // デストラクタ
 
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
-		std::vector<ConstantBufferInfo>& _CBInfo, std::vector<InputLayoutInfo>& _ILInfo); // シェーダー作成
+		const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo); // シェーダー作成
 
 	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }  // シェーダーのゲッター
 };
@@ -70,7 +70,7 @@ public:
 	~PixelShaderData() = default;                                                                               // デストラクタ
 
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
-		std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
+		const std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
 
 	ID3D11PixelShader* GetShader() { return m_PixelShader.Get(); }  // シェーダーのゲッター
 };
@@ -86,7 +86,7 @@ public:
 	~ComputeShaderData() = default;                                                                             // デストラクタ
 
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
-		std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
+		const std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
 
 	ID3D11ComputeShader* GetShader() { return m_ComputeShader.Get(); } // シェーダーのゲッター
 };

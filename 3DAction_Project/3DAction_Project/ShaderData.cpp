@@ -14,13 +14,13 @@
 #if defined(DEBUG) || defined(_DEBUG)
 
 // 入力レイアウトの名前を出力させる関数
-void OutputILname(std::vector<InputLayoutInfo>& ILInfo);
+void OutputILname(const std::vector<InputLayoutInfo>& ILInfo);
 // 定数バッファの名前を出力させる関数
-void OutputCBname(std::vector<ConstantBufferInfo> &CBInfo);
+void OutputCBname(const std::vector<ConstantBufferInfo> &CBInfo);
 
 #else
-inline void OutputILname(std::vector<InputLayoutInfo>& ILInfo) {}
-inline void OutputCBname(std::vector<ConstantBufferInfo> CBInfo) {}
+inline void OutputILname(const std::vector<InputLayoutInfo>& ILInfo) {}
+inline void OutputCBname(const std::vector<ConstantBufferInfo> &CBInfo) {}
 
 #endif
 
@@ -29,7 +29,7 @@ inline void OutputCBname(std::vector<ConstantBufferInfo> CBInfo) {}
 // 頂点シェイダー
 // =======================================================================
 bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
-    std::vector<ConstantBufferInfo>& _CBInfo, std::vector<InputLayoutInfo>& _ILInfo)
+    const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo)
 {
     if (!device || !binary || size == 0) {
         ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
@@ -52,13 +52,15 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
 
     // シェーダーが使用する情報を代入する
     CBInfo = _CBInfo;
-    ILInfo = std::move(_ILInfo);
+    ILInfo = _ILInfo;
 
     // デバッグ用に名前を出力
+    DebugLog::OutputToConsole("");
     DebugLog::OutputToConsole(m_Name.c_str());
     OutputILname(ILInfo);
     OutputCBname(CBInfo);
-
+    DebugLog::OutputToConsole("");
+    
     return true;
 }
 
@@ -67,7 +69,7 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
 // ピクセルシェイダー
 // =======================================================================
 bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
-    std::vector<ConstantBufferInfo>& _CBInfo)
+    const std::vector<ConstantBufferInfo>& _CBInfo)
 {
     if (!device || !binary || size == 0) {
         ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
@@ -92,8 +94,10 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
     CBInfo = _CBInfo;
 
     // デバッグ用に名前を出力
+    DebugLog::OutputToConsole("");
     DebugLog::OutputToConsole(m_Name.c_str());
     OutputCBname(CBInfo);
+    DebugLog::OutputToConsole("");
 
     return true;
 }
@@ -103,7 +107,7 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
 // コンピュートシェイダー
 // =======================================================================
 bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
-    std::vector<ConstantBufferInfo> &_CBInfo)
+    const std::vector<ConstantBufferInfo> &_CBInfo)
 {
     if (!device || !binary || size == 0) {
         ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
@@ -128,8 +132,10 @@ bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t 
     CBInfo = _CBInfo;
 
     // デバッグ用に名前を出力
+    DebugLog::OutputToConsole("");
     DebugLog::OutputToConsole(m_Name.c_str());
     OutputCBname(CBInfo);
+    DebugLog::OutputToConsole("");
 
     return  true;
 }
@@ -138,7 +144,7 @@ bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t 
 #if defined(DEBUG) || defined(_DEBUG)
 
 // 入力レイアウトの名前を出力させる
-void OutputILname(std::vector<InputLayoutInfo>& ILInfo)
+void OutputILname(const std::vector<InputLayoutInfo>& ILInfo)
 {
     DebugLog::OutputToConsole("入力レイアウト情報");
 
@@ -155,7 +161,7 @@ void OutputILname(std::vector<InputLayoutInfo>& ILInfo)
 
 
 // 定数バッファを出力させる
-void OutputCBname(std::vector<ConstantBufferInfo> &_CBInfo)
+void OutputCBname(const std::vector<ConstantBufferInfo> &_CBInfo)
 {
     DebugLog::OutputToConsole("定数バッファ情報");
 
