@@ -4,14 +4,9 @@
 #include <vector>
 
 // ============================================================
-// リファレンスを行う
-// リファレンスしたデータを書き出す・読み込む関数群
+// リフレクションを行う
+// リフレクションしたデータを書き出す・読み込む関数群
 // ============================================================
-
-
-// ==================================================
-// 前方宣言
-// ==================================================
 
 
 // =================================================
@@ -28,17 +23,17 @@ struct ConstantBufferInfo {
 // 入力レイアウト構造体
 struct InputLayoutInfo
 {
-	std::string semanticName = "";
-	int semanticIndex = 0;
-	int inputSlot = 0;
-	int format = 0;
+	std::string semanticName = ""; // セマンティックの名前
+	int semanticIndex = 0;         // セマンティックの番号
+	int inputSlot = 0;             // スロット番号
+	int format = 0;                // データの形式 (DXGI)
 };
 
-// シェーダー　の情報構造体
+// シェーダーの情報構造体
 struct ShaderInfo {
-	std::string shaderName = "";          // シェーダーの名前
+	std::string shaderName = "";            // シェーダーの名前
 	std::vector<ConstantBufferInfo> CBInfo; // 定数バッファ情報
-	std::vector<InputLayoutInfo> ILInfo; // 入力レイアウトの情報
+	std::vector<InputLayoutInfo> ILInfo;    // 入力レイアウトの情報
 };
 
 
@@ -46,10 +41,10 @@ struct ShaderInfo {
 // 関数
 // ==================================================
 // リファレンスしたシェーダー外部情報を読込み
-bool ShaderInfoInput(const char* kShader_ConstantInfoPath, std::vector<ShaderInfo>& outShaderInfo);
+bool ShaderInfoInput(const char* kShaderInfoPath, std::vector<ShaderInfo>& outShaderInfo);
 
 #if defined(DEBUG) || defined(_DEBUG)
-// デバッグ用関数　デバッグ時のみれふぁレクションを行う
+// デバッグ用関数　デバッグ時のみを行う
 
 // リフレクションした情報をShaderInfo配列に入れる
 bool Reflect(void* blob, size_t blobsize, std::vector<ConstantBufferInfo>& CBInfo, std::vector<InputLayoutInfo>& ILInfo);

@@ -308,7 +308,7 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 	ILinfo.resize(shaderDesc.InputParameters);
 
 	// シェーダーステージを文字列で取得
-	std::string creator(shaderDesc.Creator);
+	std::string creator = shaderDesc.Creator;
 
 	// 入力レイアウトを取得する
 	for (int k = 0; k < int(shaderDesc.InputParameters); k++)
@@ -317,10 +317,9 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 		D3D11_SIGNATURE_PARAMETER_DESC paramDesc = {};
 		reflector->GetInputParameterDesc(k, &paramDesc);
 
-
 		ILinfo[k].semanticName = paramDesc.SemanticName;
 		ILinfo[k].semanticIndex = paramDesc.SemanticIndex;
-		ILinfo[k].inputSlot = 0; // 通常は0（複数ストリームなら調整）
+		ILinfo[k].inputSlot = 0; // 通常は0
 
 		// ComponentMask から DXGI_FORMAT を推定
 		if (paramDesc.Mask == 1) {
