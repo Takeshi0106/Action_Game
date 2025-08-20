@@ -1,20 +1,19 @@
-﻿// 必須ヘッダー
+﻿
+// ===========================================
+// ヘッダー
+// ===========================================
+// 必須ヘッダー
 #include "ShaderReflection.h"
-
 // リフレクション用ヘッダー
 #include <d3d11shader.h>
 #include <d3dcompiler.h>
-
 // DirectX用ヘッダー
 #include <dxgiformat.h>
-
 // ファイル出力、読込み用ヘッダー
 #include <filesystem>
 #include <fstream>                      // 外部ファイルとして書出し・読み出し
-
 // DirectX用スマートポインター
 #include <wrl/client.h>  // DirectX用のスマートポインター
-
 // ログ出力
 #include "ReportMessage.h"
 
