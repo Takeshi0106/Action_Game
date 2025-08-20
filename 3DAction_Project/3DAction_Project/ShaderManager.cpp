@@ -86,7 +86,8 @@ void ShaderManager::Uninit()
 // ==================================================
 //	// バイナリーデータを仕分けして、メンバー配列に代入する関数
 // ==================================================
-bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size)
+bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size,
+	std::vector<ConstantBufferInfo>& CBInfo, std::vector<InputLayoutInfo>& ILInfo)
 {
 	// 拡張子チェック
 	if (std::filesystem::path(shaderName).has_extension())
@@ -96,13 +97,13 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 	}
 
 	// バイナリーデータをいれて、シェーダーを作成　配列に代入
-	if (shaderName.rfind("VS_", 0) == 0) 
+	if (shaderName.rfind("VS_", 0) == 0)
 	{
 		// 動的確保
 		auto vertex = std::make_unique<VertexShaderData>(shaderName, "main", "vs_5_0");
 
 		// シェーダー作成
-		if (!vertex->CreateShader(device, binary, size)) {
+		if (!vertex->CreateShader(device, binary, size,CBInfo,ILInfo)) {
 			ErrorLog::OutputToConsole(std::string("頂点シェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -110,13 +111,13 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		// メンバー配列に代入
 		m_Vertexs[shaderName] = std::move(vertex);
 	}
-	else if (shaderName.rfind("PS_", 0) == 0) 
+	else if (shaderName.rfind("PS_", 0) == 0)
 	{
 		// 動的確保
 		auto pixel = std::make_unique<PixelShaderData>(shaderName, "main", "ps_5_0");
 
 		// シェーダー作成
-		if (!pixel->CreateShader(device, binary, size)) {
+		if (!pixel->CreateShader(device, binary, size, CBInfo)) {
 			ErrorLog::OutputToConsole(std::string("ピクセルシェーダ― " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -124,13 +125,13 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		// メンバー配列に代入
 		m_Pixels[shaderName] = std::move(pixel);
 	}
-	else if (shaderName.rfind("CS_", 0) == 0) 
+	else if (shaderName.rfind("CS_", 0) == 0)
 	{
 		// 動的確保
 		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0");
 
 		// シェーダー作成
-		if (!compute->CreateShader(device, binary, size)) {
+		if (!compute->CreateShader(device, binary, size,CBInfo)) {
 			ErrorLog::OutputToConsole(std::string("コンピュートシェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -138,7 +139,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		// メンバー配列に代入
 		m_Computes[shaderName] = std::move(compute);
 	}
-	else 
+	else
 	{
 		ErrorLog::OutputToConsole(std::string(shaderName + " : 先頭にシェーダーの種類が記載されていません").c_str());
 		return false;
@@ -369,7 +370,8 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		}
 
 		// シェイダーを作成する
-		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) {
+		if (!JudgeBinaryMenber(filename.stem().string(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(),
+			conInfo, ilInfo)) {
 			ErrorLog::OutputToMessageBox("シェイダーの初期化に失敗しました");
 			return false;
 		}
@@ -485,7 +487,8 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 		}
 
 		// シェーダーを作成する
-		if (!JudgeBinaryMenber(allShaderInfo[i].shaderName, device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize())) {
+		if (!JudgeBinaryMenber(allShaderInfo[i].shaderName, device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(),
+			allShaderInfo[i].CBInfo, allShaderInfo[i].ILInfo)) {
 			ErrorLog::OutputToMessageBox((hlslPath.string() + " : シェーダーの作成に失敗しました").c_str());
 			return false;
 		}

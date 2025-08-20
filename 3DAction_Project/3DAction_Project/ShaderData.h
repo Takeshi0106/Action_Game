@@ -8,6 +8,9 @@
 #include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
 // 名前などのデバッグ情報取得用
 #include <string>        // 名前など
+// シェーダーに持たせる情報
+#include "ShaderStructs.h" // 定数バッファや入力レイアウトの構造体が定義
+#include <vector>          // 配列
 
 
 // ====================================================================
@@ -22,6 +25,8 @@ protected:
 	std::string           m_Name;            // シェーダーの名前　＊ログ出力用
 	std::string           m_EntryPoint;      // シェーダーのエントリーポイント
 	std::string           m_ShaderTypeModel; // シェーダータイプとモデルを入れる
+
+	std::vector<ConstantBufferInfo> CBInfo;  // シェーダーと紐づく定数バッファを代入する
 
 	// コンストラクタ
 	BaseShaderData(std::string name, std::string entry, std::string type)
@@ -40,14 +45,18 @@ public:
 // 頂点シェーダクラス
 class  VertexShaderData : public BaseShaderData {
 private:
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_VertexShader; // ピクセルシェーダー
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_VertexShader; // 頂点シェーダー
+
+	std::vector<InputLayoutInfo> ILInfo; // シェーダーの入力レイアウト情報を入れる配列
 
 public:
 	VertexShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {}   // コンストラクタ
 	~VertexShaderData() = default;                                                                                   // デストラクタ
 
-	bool CreateShader(ID3D11Device* device, void* binary, size_t size); // 初期化
-	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }                                                 // シェーダーのゲッター
+	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
+		std::vector<ConstantBufferInfo>& _CBInfo, std::vector<InputLayoutInfo>& _ILInfo); // シェーダー作成
+
+	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }  // シェーダーのゲッター
 };
 
 
@@ -60,8 +69,10 @@ public:
 	PixelShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {}  // コンストラクタ
 	~PixelShaderData() = default;                                                                               // デストラクタ
 
-	bool CreateShader(ID3D11Device* device, void* binary, size_t size); // 初期化
-	ID3D11PixelShader* GetShader() { return m_PixelShader.Get(); }                                              // シェーダーのゲッター
+	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
+		std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
+
+	ID3D11PixelShader* GetShader() { return m_PixelShader.Get(); }  // シェーダーのゲッター
 };
 
 
@@ -74,6 +85,8 @@ public:
 	ComputeShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {} // コンストラクタ
 	~ComputeShaderData() = default;                                                                             // デストラクタ
 
-	bool CreateShader(ID3D11Device* device, void* binary, size_t size); // 初期化
-	ID3D11ComputeShader* GetShader() { return m_ComputeShader.Get(); }                                          // シェーダーのゲッター
+	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
+		std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
+
+	ID3D11ComputeShader* GetShader() { return m_ComputeShader.Get(); } // シェーダーのゲッター
 };

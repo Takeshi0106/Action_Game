@@ -25,6 +25,7 @@
 #include <memory>               // スマートポインター
 // 配列のヘッダー
 #include <unordered_map>        // ハッシュ値配列
+#include <vector>               // 情報を渡す配列
 // 基底ヘッダー
 #include <string>
 
@@ -41,6 +42,10 @@ struct ID3D11DeviceContext;  // DirectXのコンテキスト
 class VertexShaderData;  // 頂点シェーダー
 class PixelShaderData;   // ピクセルシェーダ
 class ComputeShaderData; // コンピュートシェーダ
+
+// シェーダに渡す定数バッファや入力レイアウトの情報構造体
+struct ConstantBufferInfo; // 定数バッファの情報構造体
+struct InputLayoutInfo;    // 入力レイアウト構造体
 
 
 // ===================================================================================================
@@ -79,7 +84,8 @@ private:
 #endif
 
     // バイナリーデータを仕分けして、メンバー配列に代入する関数 引き数で拡張子なしの名前を渡す
-    bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize);
+    bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize,
+        std::vector<ConstantBufferInfo>& CBInfo, std::vector<InputLayoutInfo>& ILInfo);
 
 public:
     // コンストラクタ
