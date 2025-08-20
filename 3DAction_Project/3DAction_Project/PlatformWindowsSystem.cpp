@@ -15,19 +15,10 @@
 #include <Windows.h>  // ウィンドウ作成用
 // 標準ヘッダー
 #include <cstdint>   // 整数型 uintなど
+// 描画マネージャー
+#include "DirectX_DrawManager.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
-
-
-// デバッグ用でおいているヘッダー ----------------------------------------------
-// DirectXヘッダー
-#include "DirectX.h"  // DirectX初期化用　後で描画マネージャーに任せるようにする
-// GameMain用ヘッダー
-#include "Timer.h"   // デバッグ用
-// DrawManagerで使用するヘッダー
-#include "ShaderManager.h"  // シェイダーマネージャー
-#include "ConstantBufferManager.h" // 定数バッファマネージャー
-// -----------------------------------------------------------------------------
 
 
 // =====================================================
@@ -57,17 +48,7 @@ public:
 APPLICATIONHANDLE PlatformWindowsSystem::m_AppInstance = nullptr;
 HWND              PlatformWindowsSystem::m_WinInstance = nullptr;
 
-// デバッグ用　DrawManagerに移動する
-ShaderManager PlatformWindowsSystem::m_ShaderManager = {
-    "Debug/Log/Shader.txt",          // 使用したシェイダーの名前を書き出すログのパス
-    "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
-    "",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
-    "Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
-};
-
-ConstantBufferManager PlatformWindowsSystem::m_ConstantBufferManager = {
-    "Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
-};
+DirectX_DrawManager PlatformWindowsSystem::m_DrawManager;
 
 
 // =====================================================
@@ -223,18 +204,8 @@ void PlatformWindowsSystem::Uninit()
 // =====================================================
 bool PlatformWindowsSystem::GameInit()
 {
-    if (!DirectX11::Init(m_Width, m_Height, m_WinInstance)) { // DirectXの初期化
-        ErrorLog::OutputToMessageBox("DirectXの初期化に失敗しました");
-        return false; // 失敗したら戻る
-    }
-    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice(), m_ConstantBufferManager))
-    {
-        ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
-        return false; // 失敗したら戻る
-    }
-
-    Timer::Init(); // タイマー初期化
-    Timer::Start(); // タイマー開始
+    // 描画マネージャーの初期化
+    m_DrawManager.Init(m_Width,m_Height,m_WinInstance);
 
     return true;
 }
@@ -245,24 +216,8 @@ bool PlatformWindowsSystem::GameInit()
 // =====================================================
 void PlatformWindowsSystem::GameMain()
 {
-    float a[4] = { 1.0f,0.1f,1.0f,0.1f };
-
-    Timer::Debug_CheckUpdate(); // タイマーデバッグ
-
-    // デバッグ時 
-    DirectX11::BeginDraw(); // 描画の開始処理
-
-    // m_ConstantBufferManager.BindVS("Transform", DirectX11::Get::GetContext());
-    // m_ConstantBufferManager.BindVS("DebugParams", DirectX11::Get::GetContext());
-    // m_ConstantBufferManager.UpdateConstantBuffer("PSInput", a, sizeof(a), DirectX11::Get::GetContext());
-    // m_ShaderManager.BindVertexShaderSet("VS_Debug", DirectX11::Get::GetContext());
-    // m_ShaderManager.BindPixelShaderSet("PS_Debug", DirectX11::Get::GetContext());
-
-    DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
-
-    DirectX11::EndDraw(); // 描画の終わり処理
-
-    Timer::LastUpdate(); // タイマー更新処理
+    // 描画マネージャーのデバッグ描画
+    m_DrawManager.DebugDraw();
 }
 
 
@@ -271,8 +226,8 @@ void PlatformWindowsSystem::GameMain()
 // =====================================================
 void PlatformWindowsSystem::GameUninit()
 {
-    DirectX11::Uninit();      // Directの後処理
-    m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
+    // 描画マネージャーの後処理
+    m_DrawManager.Uninit();
 }
 
 
