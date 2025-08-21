@@ -227,7 +227,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 			cBufferIndex++; // 定数バッファの添え字を更新
 
 			// 定数バッファの名前を取得
-			loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].name = info;
+			loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].SetName(std::string(info));
 		}
 
 		// レジスタ番号を取得
@@ -242,7 +242,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 				// キャスト
 				int registerNumber = std::stoi(std::string(info));
 				// レジスタの取得
-				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].registerNumber = registerNumber;
+				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].SetRegisterNumber(registerNumber);
 			}
 			catch (...)
 			{
@@ -262,7 +262,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 				// キャスト
 				size_t size = static_cast<size_t>(std::stoul(std::string(info)));
 				// レジスタの取得
-				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].size = size;
+				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].SetSize(size);
 			}
 			catch (...)
 			{
@@ -316,22 +316,22 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 		D3D11_SIGNATURE_PARAMETER_DESC paramDesc = {};
 		reflector->GetInputParameterDesc(k, &paramDesc);
 
-		ILinfo[k].semanticName = paramDesc.SemanticName;
-		ILinfo[k].semanticIndex = paramDesc.SemanticIndex;
-		ILinfo[k].inputSlot = 0; // 通常は0
+		ILinfo[k].SetSemanticName(paramDesc.SemanticName);
+		ILinfo[k].SetSemanticIndex(int(paramDesc.SemanticIndex));
+		ILinfo[k].SetInputSlot(0); // 通常は0
 
 		// ComponentMask から DXGI_FORMAT を推定
 		if (paramDesc.Mask == 1) {
-			ILinfo[k].format = DXGI_FORMAT_R32_FLOAT;
+			ILinfo[k].SetFormat(int(DXGI_FORMAT_R32_FLOAT));
 		}
 		else if (paramDesc.Mask <= 3) {
-			ILinfo[k].format = DXGI_FORMAT_R32G32_FLOAT;
+			ILinfo[k].SetFormat(int(DXGI_FORMAT_R32G32_FLOAT));
 		}
 		else if (paramDesc.Mask <= 7) {
-			ILinfo[k].format = DXGI_FORMAT_R32G32B32_FLOAT;
+			ILinfo[k].SetFormat(int(DXGI_FORMAT_R32G32B32_FLOAT));
 		}
 		else if (paramDesc.Mask <= 15) {
-			ILinfo[k].format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			ILinfo[k].SetFormat(int(DXGI_FORMAT_R32G32B32A32_FLOAT));
 		}
 		else {
 			ErrorLog::OutputToConsole("未知のフォーマットです");
@@ -393,9 +393,9 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 
 		// 配列に情報を代入する
 		if (registerNumber != -1) {
-			CBInfo[i].name = bufferName;
-			CBInfo[i].registerNumber = registerNumber;
-			CBInfo[i].size = bufferDesc.Size;;
+			CBInfo[i].SetName(bufferName);
+			CBInfo[i].SetRegisterNumber(registerNumber);
+			CBInfo[i].SetSize(bufferDesc.Size);
 		}
 		else {
 			ErrorLog::OutputToConsole("バインド番号が見つかりませんでした");
@@ -446,13 +446,13 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 		for (const auto& iLayout : shader.ILInfo)
 		{
 			// 入力レイアウトの名前
-			ofs << "  " << kInputLayoutSemanticName << iLayout.semanticName << "\n";
+			ofs << "  " << kInputLayoutSemanticName << iLayout.GetSemanticName() << "\n";
 			// 入力レイアウトのインデックス
-			ofs << "    " << kInputLayoutSemanticIndex << iLayout.semanticIndex << "\n";
+			ofs << "    " << kInputLayoutSemanticIndex << iLayout.GetSemanticIndex() << "\n";
 			// 入力レイアウトのスロット番号
-			ofs << "    " << kInputLayoutInputSlot << iLayout.inputSlot << "\n";
+			ofs << "    " << kInputLayoutInputSlot << iLayout.GetInputSlot() << "\n";
 			// 入力レイアウトのフォーマット
-			ofs << "    " << kInputLayoutFormat << iLayout.format << "\n";
+			ofs << "    " << kInputLayoutFormat << iLayout.GetFormat() << "\n";
 		}
 
 
@@ -465,11 +465,11 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 			// 空白を分けて見やすいようにしています
 
 			// 定数バッファの名前
-			ofs << "  " << kCBufferName << cbuffer.name << "\n";
+			ofs << "  " << kCBufferName << cbuffer.GetName() << "\n";
 			// 定数バッファのレジスタ番号
-			ofs << "    " << kRegisterNumber << cbuffer.registerNumber << "\n";
+			ofs << "    " << kRegisterNumber << cbuffer.GetRegisterNumber() << "\n";
 			// 定数バッファの大きさ
-			ofs << "    " << kSize << cbuffer.size << "\n";
+			ofs << "    " << kSize << cbuffer.GetSize() << "\n";
 		}
 
 		// シェーダーごとに改行

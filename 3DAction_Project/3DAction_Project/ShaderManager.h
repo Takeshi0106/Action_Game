@@ -47,8 +47,8 @@ class PixelShaderData;   // ピクセルシェーダ
 class ComputeShaderData; // コンピュートシェーダ
 
 // シェーダに渡す定数バッファや入力レイアウトの情報構造体
-struct ConstantBufferInfo; // 定数バッファの情報構造体
-struct InputLayoutInfo;    // 入力レイアウト構造体
+class ConstantBufferInfo; // 定数バッファの情報構造体
+class InputLayoutInfo;    // 入力レイアウト構造体
 
 
 // ===================================================================================================

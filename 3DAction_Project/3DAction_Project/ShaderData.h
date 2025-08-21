@@ -9,7 +9,8 @@
 // 名前などのデバッグ情報取得用
 #include <string>        // 名前など
 // シェーダーに持たせる情報
-#include "ShaderStructs.h" // 定数バッファや入力レイアウトの構造体が定義
+#include "ConstantBufferInfo.h" // 定数バッファの情報
+#include "InputLayoutInfo.h"    // 入力レイアウトの情報
 #include <vector>          // 配列
 
 
@@ -49,7 +50,7 @@ class  VertexShaderData : public BaseShaderData {
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_VertexShader; // 頂点シェーダー
 
-	std::vector<InputLayoutInfo> ILInfo; // シェーダーの入力レイアウト情報を入れる配列
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_ILayout; // シェーダーの入力レイアウト情報を入れる配列
 
 public:
 	VertexShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {}   // コンストラクタ
@@ -61,7 +62,7 @@ public:
 	// ゲッター
 	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }  // シェーダーのゲッター
 	// 入力レイアウト情報（頂点シェーダーのみ）
-	const std::vector<InputLayoutInfo>& GetILInfo() const { return ILInfo; }
+	const Microsoft::WRL::ComPtr<ID3D11InputLayout>& GetILInfo() const { return m_ILayout; }
 };
 
 

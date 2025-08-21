@@ -339,7 +339,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		// 定数バッファを作成する
 		for (int i = 0; i < conInfo.size(); i++)
 		{
-			if (!CBManager.CreateConstantBuffer(conInfo[i].name, conInfo[i].size, conInfo[i].registerNumber, device)) {
+			if (!CBManager.CreateConstantBuffer(conInfo[i].GetName(), conInfo[i].GetSize(), conInfo[i].GetRegisterNumber(), device)) {
 				WarningLog::OutputToConsole("定数バッファ作製失敗 問題ないか確認してください");
 			}
 		}
