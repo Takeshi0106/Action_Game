@@ -54,7 +54,7 @@ namespace SaveUtils {
         std::string space(spaceNumber, ' ');
 
         block += space + blockName + " " + kBlockStart;      // ブロック開始
-        block += space + kBlockNumber + std::to_string(blockNumber) + "\n"; // 要素数
+        block += space + kBlockNumber + std::to_string(blockNumber) + "\n\n"; // 要素数
         block += data;                                      // ブロック内データ
         block += space + kBlockEnd;                         // ブロック終了
 
