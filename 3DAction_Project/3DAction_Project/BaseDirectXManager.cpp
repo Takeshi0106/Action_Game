@@ -4,10 +4,8 @@
 // ====================================================
 // 必須ヘッダー
 #include "BaseDirectXManager.h" // 自分のヘッダー
-// ファイルパス用ヘッダー
-#include <filesystem>  // ファイルパスなどを楽に扱える　C++17以降
-// ファイル読込み、書出し
-#include <fstream> // 外部ファイルとして書出し
+// 外部ファイルに書出し
+#include "FileUtils.h"
 // デバッグログやメッセージボックス出力用
 #include "ReportMessage.h"
 
@@ -18,19 +16,10 @@
 // 外部ファイルに使用したオブジェクト名を入れる
 bool BaseDirectXManager::WriteLog()
 {
-	// フォルダがない場合作成
-	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) {
-		if (!std::filesystem::create_directories(std::filesystem::path(kAssetLogPath).parent_path())) {
-			ErrorLog::OutputToConsole("使用したシェイダーログ : ログフォルダの作成に失敗しました");
-			return false;
-		}
+	if (!FileUtis::WriteFile(kAssetLogPath, m_UseObjectList)) {
+		ErrorLog::OutputToConsole("ログファイルの書出しに失敗しました");
+		return false;
 	}
-
-	std::ofstream ofs(kAssetLogPath, std::ios::binary | std::ios::out); // ファイルを開ける
-
-	ofs << m_UseObjectList; // 書き込む
-
-	ofs.close(); // ファイルを閉じる
 
 	return true;
 }

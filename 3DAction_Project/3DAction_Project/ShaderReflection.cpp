@@ -9,15 +9,14 @@
 #include <d3dcompiler.h>
 // DirectX用ヘッダー
 #include <dxgiformat.h>
-// ファイル出力、読込み用ヘッダー
-#include <filesystem>
-#include <fstream>                      // 外部ファイルとして書出し・読み出し
 // DirectX用スマートポインター
 #include <wrl/client.h>  // DirectX用のスマートポインター
+// セーブロードパーッケージ関数
+#include "SaveLoadUtils.h"
+// 外部ファイルに書出し
+#include "FileUtils.h"
 // ログ出力
 #include "ReportMessage.h"
-// セーブロード用
-#include "SaveLoadUtils.h"
 
 
 // ================================================
@@ -35,12 +34,9 @@ namespace {
 // ==================================================
 // プロトタイプ宣言
 // ==================================================
-
 // 読み込む関数
-// 外部ファイルを引き数のstring に代入する関数
-bool LoadFile(const char* path, std::string& outContent);
 // Stringを渡して、配列に代入する処理
-bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& outShaderInfo);
+inline bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& outShaderInfo);
 
 
 // =================================================
@@ -52,13 +48,10 @@ bool ShaderInfoInput(const char* kShader_ConstantInfoPath, std::vector<ShaderInf
 	std::string allShaderInfo;
 
 	// ファイルパスの情報をStringに入れる処理
-	if (!LoadFile(kShader_ConstantInfoPath, allShaderInfo)) {
+	if (!FileUtis::ReadFile(kShader_ConstantInfoPath, allShaderInfo)) {
 		ErrorLog::OutputToConsole("リフレクション情報ロード失敗");
 		return false;
 	}
-
-	// allShaderInfo を参照する変数
-	std::string_view dataView(allShaderInfo);
 
 	if (!ParseShaderInfo(allShaderInfo, loadAllShaderInfo)) {
 		ErrorLog::OutputToConsole("リフレクション情報の読み込みに失敗");
@@ -69,50 +62,15 @@ bool ShaderInfoInput(const char* kShader_ConstantInfoPath, std::vector<ShaderInf
 }
 
 
-// ==============================================
-// 引数のStringに取得した情報を入れる処理
-// ==============================================
-bool LoadFile(const char* path, std::string& outContent)
-{
-	// ファイルを開ける
-	std::ifstream ifs(path, std::ios::in);
-	if (!ifs.is_open()) {
-		ErrorLog::OutputToConsole((std::string(path) + " ファイルのオープンに失敗しました").c_str());
-		return false;
-	}
-
-	// ファイルサイズを取得
-	
-	// 末尾に移動
-	ifs.seekg(0, std::ios::end);
-	// 全体のサイズを取得
-	size_t fileSize = static_cast<size_t>(ifs.tellg());
-	// 先頭に戻す
-	ifs.seekg(0, std::ios::beg);
-
-	// ファイル内容を格納する文字列を確保
-	outContent.resize(fileSize);
-
-	// 代入する
-	ifs.read(outContent.data(), fileSize);
-
-	// ファイルを閉じる
-	ifs.close();
-
-	return true;
-}
-
-
 // ================================================
 // String_viewを渡して、配列に代入する処理
 // ================================================
-bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& loadShaderInfo)
+inline bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& loadShaderInfo)
 {
-	std::string data(dataView);
-	std::vector<std::string_view> blocks;
+	std::vector<std::string_view> blocks; // ブロックを入れる
 
 	// ブロックごとに分ける
-	if (!LoadUtils::ExtractSubBlocks(data, kShaderStart, blocks)) {
+	if (!LoadUtils::ExtractSubBlocks(dataView, kShaderStart, blocks)) {
 		ErrorLog::OutputToConsole("シェーダー情報をブロックに出来ませんでした");
 		return false;
 	}
@@ -263,15 +221,7 @@ bool Reflect(void* blob, size_t blobSize, std::vector<ConstantBufferInfo>& CBInf
 // ================================================
 bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shaderInfo)
 {
-	// フォルダがない場合作成
-	if (!std::filesystem::exists(std::filesystem::path(kShaderInfoPath).parent_path())) {
-		if (!std::filesystem::create_directories(std::filesystem::path(kShaderInfoPath).parent_path())) {
-			ErrorLog::OutputToConsole("使用したシェイダーログ : ログフォルダの作成に失敗しました");
-			return false;
-		}
-	}
-
-	// セーブ情報を書き出す
+	// セーブ情報を取得
 	std::string data;
 	for (int i = 0; i < (int)shaderInfo.size(); i++)
 	{
@@ -280,17 +230,11 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 	}
 	data = SaveUtils::FormatBlock(kShaderStart, (int)shaderInfo.size(), data, 0);
 
-	// ファイルを開ける
-	std::ofstream ofs(kShaderInfoPath, std::ios::binary | std::ios::out);
-	if (!ofs.is_open()) {
-		ErrorLog::OutputToConsole("使用したシェイダーログ : ファイルのオープンに失敗しました");
+	// ファイルに書出し
+	if (!FileUtis::WriteFile(kShaderInfoPath, data)) {
+		ErrorLog::OutputToConsole("リファレンス情報を書き出すことに失敗しました");
 		return false;
 	}
-
-	ofs << data;
-
-	// ファイルを閉じる
-	ofs.close();
 
 	return true;
 }

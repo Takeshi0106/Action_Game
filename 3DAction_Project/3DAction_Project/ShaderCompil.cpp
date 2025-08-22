@@ -10,7 +10,8 @@
 // DirectX用スマートポインター
 #include <wrl/client.h>  // DirectX用のスマートポインター
 // ファイル出力、読込み用ヘッダー
-#include <fstream>                      // 外部ファイルとして書出し・読み出し
+#include <fstream> // 外部ファイルとして書出し・読み出し
+#include "FileUtils.h"　// 外部ファイルに書出し
 // デバッグ情報ややエラー出力用
 #include "ReportMessage.h"
 
@@ -57,27 +58,16 @@ bool OutputCompileShader(const std::filesystem::path kFilePath, const std::files
 	// 出力パスを作成
 	std::filesystem::path outputPath = kFilePath / (filename + kCompileExtension);
 
-	// フォルダがないときフォルダを作成
-	if (!std::filesystem::exists(outputPath.parent_path())) {
-		if (!std::filesystem::create_directories(outputPath.parent_path())) {
-			ErrorLog::OutputToConsole("コンパイル : ログフォルダの作成に失敗しました");
-			return false;
-		}
-	}
+	// 書き出す内容を作成
+	std::string_view blobData(
+		static_cast<const char*>(compileBlob->GetBufferPointer()),
+		compileBlob->GetBufferSize()
+	);
 
-	// 書き出し処理
-	std::ofstream ofs(outputPath, std::ios::binary | std::ios::out);
-	if (!ofs) {
+	// 外部ファイルに書出し
+	if (!FileUtis::WriteFile(outputPath.string(), blobData)) {
 		MessageBoxA(nullptr, "CSOファイルの書き込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
-		return false;
 	}
-
-	// バイナリデータを書き出す
-	ofs.write(static_cast<const char*>(compileBlob->GetBufferPointer()), compileBlob->GetBufferSize());
-	// すぐに書き込んでもらう
-	ofs.flush();
-	// ファイルを閉じる
-	ofs.close();
 
 	// 所有権を渡す
 	*blob = compileBlob.Detach();

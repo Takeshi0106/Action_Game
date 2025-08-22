@@ -12,8 +12,11 @@
 // =====================================================
 // ヘッダー
 // =====================================================
+// 文字列ヘッダー
 #include <string>
+// 配列ヘッダー
 #include <vector>
+// 情報を入れるクラス
 #include "ConstantBufferInfo.h"
 #include "InputLayoutInfo.h"
 #include "ShaderInfo.h"
