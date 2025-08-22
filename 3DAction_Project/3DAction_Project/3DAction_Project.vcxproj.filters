@@ -88,6 +88,9 @@
     <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\InputLayoutInfo">
       <UniqueIdentifier>{1d534925-b48d-469f-844d-389acb132409}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ShaderInfo">
+      <UniqueIdentifier>{669f7f66-33ac-4c56-9a71-29dcf76c1f44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -130,9 +133,6 @@
       <Filter>1_Platform\Windows\5_DirectX_Core</Filter>
     </ClCompile>
     <ClCompile Include="DirectX_DrawManager.cpp" />
-    <ClCompile Include="ShaderMetadata.cpp">
-      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata</Filter>
-    </ClCompile>
     <ClCompile Include="ConstantBufferInfo.cpp">
       <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ConstantBufferInfo</Filter>
     </ClCompile>
@@ -141,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="InputLayoutInfo.cpp">
       <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\InputLayoutInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderInfo.cpp">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ShaderInfo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +186,6 @@
     <ClInclude Include="DirectX.h">
       <Filter>1_Platform\Windows\5_DirectX_Core</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderMetadata.h">
-      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX_DrawManager.h" />
     <ClInclude Include="ConstantBufferInfo.h">
       <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ConstantBufferInfo</Filter>
@@ -198,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="InputLayoutInfo.h">
       <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\InputLayoutInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderInfo.h">
+      <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ShaderInfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
