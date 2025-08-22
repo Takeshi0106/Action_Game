@@ -12,13 +12,14 @@
 #include "ReportMessage.h"
 
 
-
-#if defined(DEBUG) || defined(_DEBUG)
-// 配列に名前を入れておいて、ログを書き出す　デバッグ時のみ
+// ===================================================
+// 関数
+// ===================================================
+// 外部ファイルに使用したオブジェクト名を入れる
 bool BaseDirectXManager::WriteLog()
 {
 	// フォルダがない場合作成
-	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) { // ファイルがない場合作成する
+	if (!std::filesystem::exists(std::filesystem::path(kAssetLogPath).parent_path())) {
 		if (!std::filesystem::create_directories(std::filesystem::path(kAssetLogPath).parent_path())) {
 			ErrorLog::OutputToConsole("使用したシェイダーログ : ログフォルダの作成に失敗しました");
 			return false;
@@ -27,17 +28,15 @@ bool BaseDirectXManager::WriteLog()
 
 	std::ofstream ofs(kAssetLogPath, std::ios::binary | std::ios::out); // ファイルを開ける
 
-	for (const std::string& name : m_Names) {
-		ofs << name << "\n";                                              // ファイルに書き込み
-	}
-	ofs.close();                                                          // ファイルを閉じる
+	ofs << m_UseObjectList; // 書き込む
+
+	ofs.close(); // ファイルを閉じる
 
 	return true;
 }
 
+// 名前を保存しておく
 void BaseDirectXManager::DebugSetName(const char* name)
 {
-	m_Names.push_back(name);
+	m_UseObjectList += std::string(name) + "\n";
 }
-
-#endif

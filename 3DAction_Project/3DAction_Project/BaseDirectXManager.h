@@ -10,28 +10,34 @@
 // ==================================================================
 // ヘッダー
 // ==================================================================
+#include <string> // 使用した情報を入れる　リリース時も使用する
+
+
+// ==================================================================
+// グローバル変数
+// ==================================================================
+namespace {
 #if defined(DEBUG) || defined(_DEBUG)
-#include <vector>  // デバッグ時にシェイダーの名前を保存しておく用
-#include <string>  // オブジェクトの名前出力用
+	const std::string Type = "Debug";
+#else
+	const std::string Type = "Release";
 #endif
+}
 
 
 // ==================================================================
 // DirectXで使用するマネージャーの基底クラス
 // シェーダー・テクスチャ・オブジェクトなどに派生させる
 // ==================================================================
-
 class BaseDirectXManager
 {
-#if defined(DEBUG) || defined(_DEBUG)
 protected:
 	// アセットのログ デバッグビルド時に書出し
 	const  char* kAssetLogPath;
-	// 名前取得用
-	std::vector<std::string> m_Names;
+	// 使用したオブジェクトを入れる
+	std::string m_UseObjectList;
 
-
-	// オブジェクトの名前を配列に入れて渡し、書き出すクラス
+	// 外部ファイルに使用したオブジェクトのリストを書き出す
 	bool WriteLog();
 	// オブジェクトの名前をセットする
 	void DebugSetName(const char* name);
@@ -40,22 +46,9 @@ public:
 	// コンストラクタ
 	BaseDirectXManager(const char* assetLog)
 		: kAssetLogPath(assetLog) {
+		m_UseObjectList += Type + "\n";
 	}
 	// デストラクタ　
 	virtual ~BaseDirectXManager() { WriteLog(); }
-
-#else
-protected:
-	// インラインでビルドしないように
-	inline void DebugSetName(const char* name) {}
-
-public:
-	// 引き数をセットしない
-	BaseDirectXManager(const char* assetLog) {} // コンストラクタ
-
-	~BaseDirectXManager() = default;  // デストラクタ
-#endif
-
-
 };
 
