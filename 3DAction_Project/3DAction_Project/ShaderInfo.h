@@ -43,8 +43,8 @@ public:
 
 	// セッター
 	void SetShaderName(const std::string& name) { m_ShaderName = name; }
-	void SetConstantBufferInfo(std::vector<ConstantBufferInfo> cB) { m_CBInfo = std::move(cB); }
-	void SetInputLayoutInfo(std::vector<InputLayoutInfo> iL) { m_ILInfo = std::move(iL); }
+	void SetConstantBufferInfo(std::vector<ConstantBufferInfo>& cB) { m_CBInfo = std::move(cB); }
+	void SetInputLayoutInfo(std::vector<InputLayoutInfo>& iL) { m_ILInfo = std::move(iL); }
 
 	// ゲッター
 	const std::string& GetShaderName() const { return m_ShaderName; }

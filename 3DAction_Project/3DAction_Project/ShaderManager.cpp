@@ -345,9 +345,9 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		}
 
 		// 配列に代入
-		allShaderInfo[index].shaderName = filename.stem().string();
-		allShaderInfo[index].CBInfo = std::move(conInfo);
-		allShaderInfo[index].ILInfo = std::move(ilInfo);
+		allShaderInfo[index].SetShaderName(filename.stem().string());
+		allShaderInfo[index].SetConstantBufferInfo(conInfo);
+		allShaderInfo[index].SetInputLayoutInfo(ilInfo);
 
 		// 一応、解放処理
 		blob.Reset();

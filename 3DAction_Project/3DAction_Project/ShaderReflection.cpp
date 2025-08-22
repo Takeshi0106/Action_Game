@@ -16,6 +16,8 @@
 #include <wrl/client.h>  // DirectX用のスマートポインター
 // ログ出力
 #include "ReportMessage.h"
+// セーブロード用
+#include "SaveLoadUtils.h"
 
 
 // ================================================
@@ -25,21 +27,7 @@ namespace {
 
 	// リファレンス情報書き込み、読込み用
 	// シェーダー関連
-	const std::string kShaderCount = "ShaderCount :"; // シェーダーの数
-	const std::string kShaderName = "ShaderName :";   // シェーダーの名前
-
-	// 入力レイアウト関連
-	const std::string kInputLayoutCount         = "InputLayoutCount :";         // 入力レイアウトの数
-	const std::string kInputLayoutSemanticName  = "InputLayoutSemanticName :";  // セマンティック名
-	const std::string kInputLayoutSemanticIndex = "InputLayoutSemanticIndex :"; // セマンティックインデックス
-	const std::string kInputLayoutInputSlot     = "InputLayoutInputSlot :";     // 入力スロット番号
-	const std::string kInputLayoutFormat        = "InputLayoutFormat :";        // フォーマット
-
-	// 定数バッファ関連
-	const std::string kCBufferCount = "CBufferCount :";     // 定数バッファの数
-	const std::string kCBufferName = "CBufferName :";       // 定数バッファの名前
-	const std::string kRegisterNumber = "RegisterNumber :"; // レジスタ番号
-	const std::string kSize = "Size :";                     // バイト数 (16の倍数単位)
+	const std::string kShaderStart = "Shader"; // シェーダーの数
 
 }
 
@@ -120,162 +108,25 @@ bool LoadFile(const char* path, std::string& outContent)
 // ================================================
 bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& loadShaderInfo)
 {
-	// 今の行を入れる
-	size_t pos = 0;
+	std::string data(dataView);
+	std::vector<std::string> blocks;
 
-	// 最初の行（シェーダーの数）を取得
-	size_t nextPos = dataView.find('\n', pos);
-	if (nextPos == std::string_view::npos) {
-		ErrorLog::OutputToMessageBox("シェーダー情報が取得できませんでした");
+	// ブロックごとに分ける
+	if (!LoadUtils::ExtractBlocks(data, kShaderStart, blocks)) {
+		ErrorLog::OutputToConsole("シェーダー情報をブロックに出来ませんでした");
 		return false;
 	}
 
-	// １行を取り出す
-	std::string_view line = dataView.substr(pos, nextPos - pos);
+	// リサイズする
+	loadShaderInfo.resize(blocks.size());
 
-	// kShaderCount の長さ分スキップ
-	std::string_view info = line.substr(strlen(kShaderCount.c_str()));
-
-	// 例外が発生する可能性がある
-	try
+	// シェーダーに情報を入れていく
+	for (int i = 0; (int)blocks.size(); i++)
 	{
-		// キャスト
-		int shaderCount = std::stoi(std::string(info));
-
-		// サイズを取得する
-		loadShaderInfo.resize(shaderCount);
-	}
-	catch (...)
-	{
-		ErrorLog::OutputToConsole("シェーダーの数を取得できませんでした");
-		return false;
-	}
-
-	// 次の位置を設定
-	pos = nextPos + 1;
-
-	int shaderIndex = -1;  // シェーダーの添え字
-	int cBufferIndex = -1; // 定数バッファの添え字
-
-	// 行の数だけループ
-	while (true)
-	{
-		// 1行分のサイズを入れる
-		nextPos = dataView.find('\n', pos);
-
-		// 1行を取り出す
-		std::string_view line =
-			(nextPos == std::string_view::npos)
-			// 改行が見つからなかったら今の位置から最後までを入れる
-			? dataView.substr(pos)
-			// 今の位置から次の位置までを入れる
-			: dataView.substr(pos, nextPos - pos);
-
-		// 文字列内に空白かタブがあった時削除する
-		while (!line.empty() && (line.front() == ' ' || line.front() == '\t'))
-		{
-			line.remove_prefix(1);
+		if (!loadShaderInfo[i].Deserialize(blocks[i])) {
+			ErrorLog::OutputToConsole("シェーダー情報を読み込むことが出来ませんでした");
+			return false;
 		}
-
-		// ---------------------------------------------------------------------
-		// 文字列の型を戻して、配列に代入する処理
-		// ---------------------------------------------------------------------
-		// シェーダーの名前を取得
-		if (line.size() >= kShaderName.size() &&
-			line.substr(0, kShaderName.size()) == kShaderName)
-		{
-			// kShaderName の長さ分スキップ
-			info = line.substr(strlen(kShaderName.c_str()));
-
-			shaderIndex++; // シェーダーの添え字を更新
-
-			// シェーダーの名前を取得
-			loadShaderInfo[shaderIndex].shaderName = info;
-		}
-
-		// 定数バッファの数を取得
-		else if (line.size() >= kCBufferCount.size() &&
-			line.substr(0, kCBufferCount.size()) == kCBufferCount)
-		{
-			// kCBufferCount の長さ分スキップ
-			info = line.substr(strlen(kCBufferCount.c_str()));
-
-			// 定数バッファ更新
-			cBufferIndex = -1;
-
-			try
-			{
-				// キャスト
-				int cBufferCount = std::stoi(std::string(info));
-				// ベクトルのサイズを取得
-				loadShaderInfo[shaderIndex].CBInfo.resize(cBufferCount);
-			}
-			catch (...)
-			{
-				ErrorLog::OutputToConsole("定数バッファの数を取得できませんでした");
-				return false;
-			}
-		}
-
-		// 定数バッファの名前を取得
-		else if (line.size() >= kCBufferName.size() &&
-			line.substr(0, kCBufferName.size()) == kCBufferName)
-		{
-			// kCBufferName の長さ分スキップ
-			info = line.substr(strlen(kCBufferName.c_str()));
-
-			cBufferIndex++; // 定数バッファの添え字を更新
-
-			// 定数バッファの名前を取得
-			loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].SetName(std::string(info));
-		}
-
-		// レジスタ番号を取得
-		else if (line.size() >= kRegisterNumber.size() &&
-			line.substr(0, kRegisterNumber.size()) == kRegisterNumber)
-		{
-			// kRegisterNumber の長さ分スキップ
-			info = line.substr(strlen(kRegisterNumber.c_str()));
-
-			try
-			{
-				// キャスト
-				int registerNumber = std::stoi(std::string(info));
-				// レジスタの取得
-				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].SetRegisterNumber(registerNumber);
-			}
-			catch (...)
-			{
-				ErrorLog::OutputToConsole("レジスタ番号を取得できませんでした");
-				return false;
-			}
-
-		}
-		else if (line.size() >= kSize.size() &&
-			line.substr(0, kSize.size()) == kSize)
-		{
-			// kRegisterNumber の長さ分スキップ
-			info = line.substr(strlen(kSize.c_str()));
-
-			try
-			{
-				// キャスト
-				size_t size = static_cast<size_t>(std::stoul(std::string(info)));
-				// レジスタの取得
-				loadShaderInfo[shaderIndex].CBInfo[cBufferIndex].SetSize(size);
-			}
-			catch (...)
-			{
-				ErrorLog::OutputToConsole("定数バッファのサイズを取得できませんでした");
-				return false;
-			}
-		}
-
-		// 改行が見つからなければ、ループを抜ける
-		if (nextPos == std::string_view::npos) { break; }
-
-		// 次の位置を設定
-		pos = nextPos + 1;
 	}
 
 	return true;
@@ -420,6 +271,14 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 		}
 	}
 
+	// セーブ情報を書き出す
+	std::string data;
+	for (int i = 0; i < (int)shaderInfo.size(); i++)
+	{
+		data += SaveUtils::MakeNotNameBlock(shaderInfo[i].Serialize(0), 1);
+	}
+	data = SaveUtils::MakeBlock(kShaderStart, (int)shaderInfo.size(), data, 0);
+
 	// ファイルを開ける
 	std::ofstream ofs(kShaderInfoPath, std::ios::binary | std::ios::out);
 	if (!ofs.is_open()) {
@@ -427,54 +286,7 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 		return false;
 	}
 
-	// シェーダーの数を記載
-	ofs << kShaderCount << shaderInfo.size() << "\n";
-	// 見やすいように改行
-	ofs << "\n";
-
-	// リフレクション情報を書き出し
-	for (const auto& shader : shaderInfo)
-	{
-		// シェーダーの名前
-		ofs << kShaderName << shader.shaderName << "\n";
-
-		// 入力レイアウトの数
-		ofs << kInputLayoutCount << shader.ILInfo.size() << "\n";
-		
-
-		// 入力情報の数だけループ
-		for (const auto& iLayout : shader.ILInfo)
-		{
-			// 入力レイアウトの名前
-			ofs << "  " << kInputLayoutSemanticName << iLayout.GetSemanticName() << "\n";
-			// 入力レイアウトのインデックス
-			ofs << "    " << kInputLayoutSemanticIndex << iLayout.GetSemanticIndex() << "\n";
-			// 入力レイアウトのスロット番号
-			ofs << "    " << kInputLayoutInputSlot << iLayout.GetInputSlot() << "\n";
-			// 入力レイアウトのフォーマット
-			ofs << "    " << kInputLayoutFormat << iLayout.GetFormat() << "\n";
-		}
-
-
-		// 定数バッファの数
-		ofs << kCBufferCount << shader.CBInfo.size() << "\n";
-
-		// 定数バッファの数だけループする
-		for (const auto& cbuffer : shader.CBInfo)
-		{
-			// 空白を分けて見やすいようにしています
-
-			// 定数バッファの名前
-			ofs << "  " << kCBufferName << cbuffer.GetName() << "\n";
-			// 定数バッファのレジスタ番号
-			ofs << "    " << kRegisterNumber << cbuffer.GetRegisterNumber() << "\n";
-			// 定数バッファの大きさ
-			ofs << "    " << kSize << cbuffer.GetSize() << "\n";
-		}
-
-		// シェーダーごとに改行
-		ofs << "\n";
-	}
+	ofs << data;
 
 	// ファイルを閉じる
 	ofs.close();

@@ -16,17 +16,7 @@
 #include <vector>
 #include "ConstantBufferInfo.h"
 #include "InputLayoutInfo.h"
-
-
-// =================================================
-// 構造体
-// =================================================
-// シェーダーの情報構造体
-struct ShaderInfo {
-	std::string shaderName = "";            // シェーダーの名前
-	std::vector<ConstantBufferInfo> CBInfo; // 定数バッファ情報
-	std::vector<InputLayoutInfo> ILInfo;    // 入力レイアウトの情報
-};
+#include "ShaderInfo.h"
 
 
 // ==================================================
