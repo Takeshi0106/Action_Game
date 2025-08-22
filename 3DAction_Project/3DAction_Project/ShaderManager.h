@@ -88,7 +88,7 @@ private:
 
     // バイナリーデータを仕分けして、メンバー配列に代入する関数 引き数で拡張子なしの名前を渡す
     bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize,
-        std::vector<ConstantBufferInfo>& CBInfo, std::vector<InputLayoutInfo>& ILInfo);
+        const std::vector<ConstantBufferInfo>& CBInfo, const std::vector<InputLayoutInfo>& ILInfo);
 
 public:
     // コンストラクタ

@@ -121,7 +121,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 	loadShaderInfo.resize(blocks.size());
 
 	// シェーダーに情報を入れていく
-	for (int i = 0; (int)blocks.size(); i++)
+	for (int i = 0; i < (int)blocks.size(); i++)
 	{
 		if (!loadShaderInfo[i].Deserialize(blocks[i])) {
 			ErrorLog::OutputToConsole("シェーダー情報を読み込むことが出来ませんでした");

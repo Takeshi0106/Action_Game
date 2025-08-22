@@ -17,9 +17,9 @@
 // =========================================
 namespace {
 	// セーブ時に使用するデータタイプ文字列
-	const std::string kCBufferName = "CBufferName :";       // 定数バッファの名前
-	const std::string kRegisterNumber = "RegisterNumber :"; // レジスタ番号
-	const std::string kSize = "Size :";                     // バイト数 (16の倍数単位)
+	const std::string kCBufferName = "CBufferName";       // 定数バッファの名前
+	const std::string kRegisterNumber = "RegisterNumber"; // レジスタ番号
+	const std::string kSize = "Size";                     // バイト数 (16の倍数単位)
 }
 
 

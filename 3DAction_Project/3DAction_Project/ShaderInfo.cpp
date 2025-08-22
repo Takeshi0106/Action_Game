@@ -12,13 +12,14 @@
 #include "ReportMessage.h"
 // 配列
 #include <vector>
+#include <unordered_map>
 
 
 // =========================================
 // グローバル変数
 // =========================================
 namespace {
-	const std::string kShaderName = "ShaderName :"; // シェーダーの名前
+	const std::string kShaderName = "ShaderName"; // シェーダーの名前
 
     const std::string kInputStart       = "InputLayout";    //入力レイアウト開始文字
     const std::string kCBufferStart     = "ConstantBuffer"; //定数バッファ開始文字
@@ -93,7 +94,8 @@ bool ShaderInfo::Deserialize(const std::string& data)
         // シェーダー名
         if (line.rfind(kShaderName, 0) == 0)
         {
-            shaderNameStr = line.substr(kShaderName.size());
+            std::unordered_map < std::string, std::string > data = LoadUtils::ParseStringData(line);
+            shaderNameStr = data[kShaderName];
             type = BlockType::NOT;
         }
         // 入力レイアウト

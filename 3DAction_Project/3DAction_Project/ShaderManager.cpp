@@ -87,7 +87,7 @@ void ShaderManager::Uninit()
 //	// バイナリーデータを仕分けして、メンバー配列に代入する関数
 // ==================================================
 bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t size,
-	std::vector<ConstantBufferInfo>& CBInfo, std::vector<InputLayoutInfo>& ILInfo)
+	const std::vector<ConstantBufferInfo>& CBInfo, const std::vector<InputLayoutInfo>& ILInfo)
 {
 	// 拡張子チェック
 	if (std::filesystem::path(shaderName).has_extension())
@@ -427,11 +427,11 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 	for (int i = 0; i < allShaderInfo.size(); i++)
 	{
 		// シェーダーパスを作成
-		std::filesystem::path hlslPath = std::filesystem::path(kHlslFailePath) / (allShaderInfo[i].shaderName + kShaderExtension);
+		std::filesystem::path hlslPath = std::filesystem::path(kHlslFailePath) / (allShaderInfo[i].GetShaderName() + kShaderExtension);
 		hlslPath = hlslPath.generic_string(); // 区切り文字を / で統一する　
 
 		// コンパイルパス作成
-		std::filesystem::path compailPath = std::filesystem::path(kCSOFilePath) / (allShaderInfo[i].shaderName + kCompileExtension);
+		std::filesystem::path compailPath = std::filesystem::path(kCSOFilePath) / (allShaderInfo[i].GetShaderName() + kCompileExtension);
 		compailPath = compailPath.generic_string(); // 区切り文字を / で統一する
 
 		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
@@ -447,17 +447,19 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 		}
 
 		// シェーダーを作成する
-		if (!JudgeBinaryMenber(allShaderInfo[i].shaderName, device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(),
-			allShaderInfo[i].CBInfo, allShaderInfo[i].ILInfo)) {
+		if (!JudgeBinaryMenber(allShaderInfo[i].GetShaderName(), device, blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(),
+			allShaderInfo[i].GetConstantBufferInfo(), allShaderInfo[i].GetInputLayoutInfo())) {
 			ErrorLog::OutputToMessageBox((hlslPath.string() + " : シェーダーの作成に失敗しました").c_str());
 			return false;
 		}
 
 		// 定数バッファを作成
-		for (int j = 0; j < allShaderInfo[i].CBInfo.size(); j++)
+		for (int j = 0; j < allShaderInfo[i].GetConstantBufferInfo().size(); j++)
 		{
-			CBManager.CreateConstantBuffer(allShaderInfo[i].CBInfo[j].name, allShaderInfo[i].CBInfo[j].size,
-				allShaderInfo[i].CBInfo[j].registerNumber, device);
+			CBManager.CreateConstantBuffer(allShaderInfo[i].GetConstantBufferInfo()[j].GetName(), 
+				allShaderInfo[i].GetConstantBufferInfo()[j].GetSize(),
+				allShaderInfo[i].GetConstantBufferInfo()[j].GetRegisterNumber(), 
+				device);
 		}
 	}
 

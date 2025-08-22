@@ -17,10 +17,10 @@
 // =========================================
 namespace {
     // セーブ時に使用するデータタイプ文字列
-    const std::string kInputLayoutSemanticName  = "InputLayoutSemanticName :";  // セマンティック名
-    const std::string kInputLayoutSemanticIndex = "InputLayoutSemanticIndex :"; // セマンティックインデックス
-    const std::string kInputLayoutInputSlot     = "InputLayoutInputSlot :";     // 入力スロット番号
-    const std::string kInputLayoutFormat        = "InputLayoutFormat :";        // フォーマット
+    const std::string kInputLayoutSemanticName  = "InputLayoutSemanticName";  // セマンティック名
+    const std::string kInputLayoutSemanticIndex = "InputLayoutSemanticIndex"; // セマンティックインデックス
+    const std::string kInputLayoutInputSlot     = "InputLayoutInputSlot";     // 入力スロット番号
+    const std::string kInputLayoutFormat        = "InputLayoutFormat";        // フォーマット
 }
 
 

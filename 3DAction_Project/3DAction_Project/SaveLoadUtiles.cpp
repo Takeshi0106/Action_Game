@@ -145,6 +145,11 @@ namespace LoadUtils {
 
         blocks.resize(blockNumber); // 配列をリサイズする
 
+        // ブロック情報がなければ戻る
+        if (blockNumber == 0) {
+            return true;
+        }
+
         // ブロック情報の開始位置を探す
         size_t blockInfoStartPos = data.find(kBlockStart, numberEnd); // ブロック数の位置を探す
         if (blockInfoStartPos == std::string::npos) {
