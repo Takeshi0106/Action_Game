@@ -10,6 +10,8 @@
 #include <stdexcept>
 // エラー出力関数
 #include "ReportMessage.h"
+// 配列
+#include <vector>
 
 
 // =========================================
@@ -95,13 +97,13 @@ bool ShaderInfo::Deserialize(const std::string& data)
             type = BlockType::NOT;
         }
         // 入力レイアウト
-        else if (line.rfind("InputLayout", 0) == 0)
+        else if (line.rfind(kInputStart, 0) == 0)
         {
             inputLayoutBlock += line + "\n";
             type = BlockType::ILAYOUT;
         }
         // 定数バッファ
-        else if (line.rfind("ConstantBuffer", 0) == 0)
+        else if (line.rfind(kCBufferStart, 0) == 0)
         {
             constantBufferBlock += line + "\n";
             type = BlockType::CBUFFER;
@@ -129,6 +131,43 @@ bool ShaderInfo::Deserialize(const std::string& data)
 
         pos = (nextPos == std::string::npos) ? dataSize : nextPos + 1;
     }
+
+    // 入力情報を読み込む
+    std::vector<std::string> ILStringData;
+    if (!LoadUtils::ExtractBlocks(inputLayoutBlock, kInputStart, ILStringData)) {
+        ErrorLog::OutputToConsole("ShaderInfo : 入力ブロックデータを読み込むことが出来ませんでした。");
+        return false;
+    }
+    m_ILInfo.resize(ILStringData.size()); // サイズを決める
+
+    // 代入させる
+    for (int i = 0; i < ILStringData.size(); i++)
+    {
+        if (!m_ILInfo[i].Deserialize(ILStringData[i])) {
+            ErrorLog::OutputToConsole("入力レイアウト : 文字列を読み込むことが出来ませんでした");
+            return false;
+        }
+    }
+
+    // 定数バッファ情報を読み込む
+    std::vector<std::string> CBStringData;
+    if (!LoadUtils::ExtractBlocks(constantBufferBlock, kCBufferStart, CBStringData)) {
+        ErrorLog::OutputToConsole("ShaderInfo : 定数バッファブロックデータを読み込むことが出来ませんでした。");
+        return false;
+    }
+    m_CBInfo.resize(CBStringData.size()); // サイズを決める
+
+    // 代入させる
+    for (int i = 0; i < CBStringData.size(); i++)
+    {
+        if (!m_CBInfo[i].Deserialize(CBStringData[i])) {
+            ErrorLog::OutputToConsole("定数バッファ : 文字列を読み込むことが出来ませんでした");
+            return false;
+        }
+    }
+
+    // 名前を代入
+    m_ShaderName = shaderNameStr;
 
     return true;
 }

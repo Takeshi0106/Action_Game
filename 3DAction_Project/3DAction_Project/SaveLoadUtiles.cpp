@@ -113,9 +113,8 @@ namespace LoadUtils {
 
 
     // ブロックの中身を取得する（指定した blockName の直下ブロックをすべて返す）
-    std::vector<std::string> ExtractBlocks(const std::string& data, const std::string& blockName)
+    bool ExtractBlocks(const std::string& data, const std::string& blockName, std::vector<std::string>& blocks)
     {
-        std::vector<std::string> blocks; // 情報ブロックを入れる配列
         size_t pos = 0; // 今の位置
         size_t dataSize = data.size(); // データの大きさ
         int blockNumber = 0; // ブロック数を入れる
@@ -124,20 +123,21 @@ namespace LoadUtils {
         size_t startNamePos = data.find(blockName, pos);
         if (startNamePos == std::string::npos) {
             ErrorLog::OutputToConsole("ブロック名が見つかりませんでした");
-            return blocks;
+            return false;
         }
 
         // ブロック情報の数を取得する
         size_t BlockNumberPos = data.find(kBlockNumber, startNamePos); // ブロック数の位置を探す
         if (BlockNumberPos == std::string::npos) {
             ErrorLog::OutputToConsole("ブロック情報の数が見つかりませんでした");
+            return false;
         }
 
         size_t numberStart = BlockNumberPos + kBlockNumber.size(); // ブロック数の開始位置を求める
         size_t numberEnd = data.find_first_of("\r\n ", numberStart); // ブロック数の最後位置を求める
         if (numberEnd == std::string::npos) {
             ErrorLog::OutputToConsole("ブロック数の後に改行、空白などがありません");
-            return blocks;
+            return false;
         }
 
         std::string numberStr = data.substr(numberStart, numberEnd - numberStart); // 開始と終わりまでの文字列を代入
@@ -149,6 +149,7 @@ namespace LoadUtils {
         size_t blockInfoStartPos = data.find(kBlockStart, numberEnd); // ブロック数の位置を探す
         if (blockInfoStartPos == std::string::npos) {
             ErrorLog::OutputToConsole("ブロック情報の開示位置が見つかりませんでした");
+            return false;
         }
 
         // ブロック情報を抜き出して、配列に代入させる
@@ -163,7 +164,7 @@ namespace LoadUtils {
 
             if (nextEndPos == std::string::npos) {
                 ErrorLog::OutputToConsole("区切り終わり位置がありませんでした");
-                break;
+                return false;
             }
 
             // ブロック情報の開始に対応する終わり区切り文字の位置を探す
@@ -189,7 +190,7 @@ namespace LoadUtils {
 
                 if (nextEndPos == std::string::npos) {
                     ErrorLog::OutputToConsole("終わり区切り文字が見つかりませんでした");
-                    break;
+                    return false;
                 }
             }
 
@@ -207,7 +208,7 @@ namespace LoadUtils {
             }
         }
 
-        return blocks;
+        return true;
     }
 
 

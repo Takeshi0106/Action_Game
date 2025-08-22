@@ -37,6 +37,6 @@ namespace LoadUtils {
 	// 文字列を解析して、データの種類をキーにしてデータを配列に代入する　(１行ずつ)
 	std::unordered_map<std::string, std::string> ParseStringData(const std::string& data);
 	// ブロック名が入っているデータを渡し、ブロック情報をブロックごとに配列に入れて返す関数
-	std::vector<std::string> ExtractBlocks(const std::string& data, const std::string& blockName);
+	bool ExtractBlocks(const std::string& data, const std::string& blockName, std::vector<std::string>& blocks);
 }
 
