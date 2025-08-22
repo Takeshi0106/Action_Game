@@ -109,10 +109,10 @@ bool LoadFile(const char* path, std::string& outContent)
 bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& loadShaderInfo)
 {
 	std::string data(dataView);
-	std::vector<std::string> blocks;
+	std::vector<std::string_view> blocks;
 
 	// ブロックごとに分ける
-	if (!LoadUtils::ExtractBlocks(data, kShaderStart, blocks)) {
+	if (!LoadUtils::ExtractSubBlocks(data, kShaderStart, blocks)) {
 		ErrorLog::OutputToConsole("シェーダー情報をブロックに出来ませんでした");
 		return false;
 	}
@@ -123,7 +123,7 @@ bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& 
 	// シェーダーに情報を入れていく
 	for (int i = 0; i < (int)blocks.size(); i++)
 	{
-		if (!loadShaderInfo[i].Deserialize(blocks[i])) {
+		if (!loadShaderInfo[i].Deserialize(std::string(blocks[i]))) {
 			ErrorLog::OutputToConsole("シェーダー情報を読み込むことが出来ませんでした");
 			return false;
 		}

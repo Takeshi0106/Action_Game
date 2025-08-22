@@ -18,6 +18,7 @@
 // ヘッダー
 // =============================
 #include <string> // 文字列を使用するためのもの
+#include <string_view> // 文字列参照
 
 
 // ==============================
@@ -35,6 +36,6 @@ public:
 	// セーブするデータを文字列にして返す関数
 	virtual std::string Serialize(int space) const = 0;
 	// 文字列からメンバー変数に代入する関数
-	virtual bool Deserialize(const std::string& data) = 0;
+	virtual bool Deserialize(const std::string_view& data) = 0;
 };
 

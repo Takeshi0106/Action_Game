@@ -10,6 +10,8 @@
 #include <stdexcept>
 // エラー出力関数
 #include "ReportMessage.h"
+// 文字列参照
+#include <string_view>
 
 
 // =========================================
@@ -42,10 +44,10 @@ std::string ConstantBufferInfo::Serialize(int spaceNumber) const
 // ======================================
 // 文字列を受け取り、メンバー変数に代入する関数
 // ======================================
-bool ConstantBufferInfo::Deserialize(const std::string& data)
+bool ConstantBufferInfo::Deserialize(const std::string_view& data)
 {
     // データを取得する
-    std::unordered_map<std::string, std::string> stringData = LoadUtils::AllExtractTypeInfo(data);
+    std::unordered_map<std::string_view, std::string_view> stringData = LoadUtils::AllExtractTypeInfo(data);
 
     // データをキャストして内容を取得する
     // 定数バッファ名
@@ -63,7 +65,7 @@ bool ConstantBufferInfo::Deserialize(const std::string& data)
     if (it != stringData.end()) {
         // キャストに成功失敗したかの確認
         try {
-            m_RegisterNumber = std::stoi(it->second);
+            m_RegisterNumber = std::stoi(std::string(it->second));
         }
         catch (const std::invalid_argument&) {
             ErrorLog::OutputToConsole("定数バッファ：RegisterNumber のキャストに失敗しました");
@@ -80,7 +82,7 @@ bool ConstantBufferInfo::Deserialize(const std::string& data)
     if (it != stringData.end()) {
         // キャストに成功失敗したかの確認
         try {
-            m_Size = static_cast<size_t>(std::stoul(it->second));
+            m_Size = static_cast<size_t>(std::stoul(std::string(it->second)));
         }
         catch (const std::invalid_argument&) {
             ErrorLog::OutputToConsole("定数バッファ：Size のキャストに失敗しました");

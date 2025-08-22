@@ -10,6 +10,7 @@
 // ヘッダー
 // =======================================
 #include <string> // 文字列を扱うためのヘッダー
+#include <string_view> /// 文字列参照
 #include "BaseSaveLoadObject.h" // セーブロードを行うオブジェクトの基底クラス
 
 
@@ -31,7 +32,7 @@ public:
 
 	// セーブ・ロード
 	std::string Serialize(int space)const override;
-	bool Deserialize(const std::string& data) override;
+	bool Deserialize(const std::string_view& data) override;
 
 	// セッター
 	void SetSemanticName(const std::string& name) { m_SemanticName = name; }

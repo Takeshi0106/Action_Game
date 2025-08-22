@@ -16,6 +16,7 @@
 #include <string>        // 文字列
 #include <unordered_map> // 配列
 #include <vector>        // 配列
+#include <string_view>   // 文字列参照　コピーコストを減らす
 
 
 // ==========================================
@@ -35,11 +36,13 @@ namespace SaveUtils {
 // ロード時の関数
 // ==========================================
 namespace LoadUtils {
-	// 1行を渡して、データの中身を返す関数
-	std::string ExtractTypeInfoLine(const std::string& line);
-	// 文字列を解析して、データの種類をキーにしてデータを配列に代入する
-	std::unordered_map<std::string, std::string> AllExtractTypeInfo(const std::string& data);
+	// データの種類を渡して中身を返す関数
+	bool ExtractTypeInfo(const std::string_view& data, const std::string& type, std::string_view& info);
+	// 文字列を解析して、データの種類をキーにしてデータを配列に代入する String_Viewを返すため、元のdataがある場合使える
+	std::unordered_map<std::string_view, std::string_view> AllExtractTypeInfo(const std::string_view& data);
+	// データ内から、ブロック名を取り出して、blockに代入する
+	bool ExtractBlocks(const std::string_view& data, const std::string& blockName, std::string_view& block);
 	// ブロック名が入っているデータを渡し、ブロック情報をブロックごとに配列に入れて返す関数
-	bool ExtractBlocks(const std::string& data, const std::string& blockName, std::vector<std::string>& blocks);
+	bool ExtractSubBlocks(const std::string_view& data, const std::string& blockName, std::vector<std::string_view>& blocks);
 }
 

@@ -10,6 +10,8 @@
 #include <stdexcept>
 // エラー出力関数
 #include "ReportMessage.h"
+// 文字列参照
+#include <string_view>
 
 
 // =========================================
@@ -44,10 +46,10 @@ std::string InputLayoutInfo::Serialize(int spaceNumber) const
 // ======================================
 // 文字列を受け取り、メンバー変数に代入する関数
 // ======================================
-bool InputLayoutInfo::Deserialize(const std::string& data)
+bool InputLayoutInfo::Deserialize(const std::string_view& data)
 {
     // データを取得する
-    std::unordered_map<std::string, std::string> stringData = LoadUtils::AllExtractTypeInfo(data);
+    std::unordered_map<std::string_view, std::string_view> stringData = LoadUtils::AllExtractTypeInfo(data);
 
     // データをキャストして内容を取得する
     // セマンティック名
@@ -64,7 +66,7 @@ bool InputLayoutInfo::Deserialize(const std::string& data)
     it = stringData.find(kInputLayoutSemanticIndex);
     if (it != stringData.end()) {
         try {
-            m_SemanticIndex = std::stoul(it->second);
+            m_SemanticIndex = std::stoul(std::string(it->second));
         }
         catch (const std::invalid_argument&) {
             ErrorLog::OutputToConsole("入力レイアウト：SemanticIndex のキャストに失敗しました");
@@ -80,7 +82,7 @@ bool InputLayoutInfo::Deserialize(const std::string& data)
     it = stringData.find(kInputLayoutInputSlot);
     if (it != stringData.end()) {
         try {
-            m_InputSlot = std::stoul(it->second);
+            m_InputSlot = std::stoul(std::string(it->second));
         }
         catch (const std::invalid_argument&) {
             ErrorLog::OutputToConsole("入力レイアウト：InputSlot のキャストに失敗しました");
@@ -96,7 +98,7 @@ bool InputLayoutInfo::Deserialize(const std::string& data)
     it = stringData.find(kInputLayoutFormat);
     if (it != stringData.end()) {
         try {
-            m_Format = std::stoul(it->second);
+            m_Format = std::stoul(std::string(it->second));
         }
         catch (const std::invalid_argument&) {
             ErrorLog::OutputToConsole("入力レイアウト：Format のキャストに失敗しました");

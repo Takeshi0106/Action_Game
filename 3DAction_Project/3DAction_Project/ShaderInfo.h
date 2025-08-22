@@ -16,7 +16,8 @@
 // 入力レイアウトクラス
 #include "InputLayoutInfo.h"
 // 文字列
-#include <string>
+#include <string>      // 文字列
+#include <string_view> // 文字列参照
 // 配列
 #include <vector>
 
@@ -39,7 +40,7 @@ public:
 
 	// セーブ・ロード
 	std::string Serialize(int space)const override;
-	bool Deserialize(const std::string& data) override;
+	bool Deserialize(const std::string_view& data) override;
 
 	// セッター
 	void SetShaderName(const std::string& name) { m_ShaderName = name; }

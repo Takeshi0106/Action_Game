@@ -12,6 +12,7 @@
 #include "ReportMessage.h"
 // 配列
 #include <vector>
+#include <unordered_map>
 
 
 // =========================================
@@ -68,106 +69,62 @@ std::string ShaderInfo::Serialize(int spaceNumber) const
 // ==================================
 // ロード
 // ==================================
-bool ShaderInfo::Deserialize(const std::string& data)
+bool ShaderInfo::Deserialize(const std::string_view& data)
 {
-    std::string shaderNameStr;
-    std::string inputLayoutBlock;
-    std::string constantBufferBlock;
+    // ブロックを入れる配列
+    std::string_view shaderNameStr;
+    std::string_view inputLayoutBlock;
+    std::string_view constantBufferBlock;
 
-    BlockType type = BlockType::NOT;
+    // シェーダー名取り出し
+    LoadUtils::ExtractTypeInfo(data, kShaderName, shaderNameStr);
 
-    size_t pos = 0;
-    size_t dataSize = data.size();
-
-    while (pos < dataSize)
-    {
-        size_t nextPos = data.find('\n', pos);
-        std::string line = (nextPos == std::string::npos) ? data.substr(pos) : data.substr(pos, nextPos - pos);
-
-        // 先頭空白削除
-        while (!line.empty() && line.front() == ' ')
-        {
-            line.erase(line.begin());
-        }
-
-        // シェーダー名
-        if (line.rfind(kShaderName, 0) == 0)
-        {
-            shaderNameStr = LoadUtils::ExtractTypeInfoLine(line);
-            type = BlockType::NOT;
-        }
-        // 入力レイアウト
-        else if (line.rfind(kInputStart, 0) == 0)
-        {
-            inputLayoutBlock += line + "\n";
-            type = BlockType::ILAYOUT;
-        }
-        // 定数バッファ
-        else if (line.rfind(kCBufferStart, 0) == 0)
-        {
-            constantBufferBlock += line + "\n";
-            type = BlockType::CBUFFER;
-        }
-        else
-        {
-            // 現在のタイプに代入
-            switch (type)
-            {
-                // 入力レイアウト
-            case BlockType::ILAYOUT:
-                inputLayoutBlock += line + "\n";
-                break;
-
-                // 定数バッファ
-            case BlockType::CBUFFER:
-                constantBufferBlock += line + "\n";
-                break;
-
-            default:
-                break;
-
-            }
-        }
-
-        pos = (nextPos == std::string::npos) ? dataSize : nextPos + 1;
+    // 入力インプットブロックを取り出し
+    if (!LoadUtils::ExtractBlocks(data, kInputStart, inputLayoutBlock)) {
+        ErrorLog::OutputToConsole("入力レイアウトブロックを取り出せませんでした");
+        return false;
     }
 
-    // 入力情報を読み込む
-    std::vector<std::string> ILStringData;
-    if (!LoadUtils::ExtractBlocks(inputLayoutBlock, kInputStart, ILStringData)) {
+    // 定数バッファブロックを取り出し
+    if (!LoadUtils::ExtractBlocks(data, kCBufferStart, constantBufferBlock)) {
+        ErrorLog::OutputToConsole("定数バッファブロックを取り出せませんでした");
+        return false;
+    }
+
+    // 名前を代入
+    m_ShaderName = shaderNameStr;
+
+    // 入力レイアウト情報を読み込む
+    std::vector<std::string_view> ILStringData;
+    if (!LoadUtils::ExtractSubBlocks(inputLayoutBlock, kInputStart, ILStringData)) {
         ErrorLog::OutputToConsole("ShaderInfo : 入力ブロックデータを読み込むことが出来ませんでした。");
         return false;
     }
     m_ILInfo.resize(ILStringData.size()); // サイズを決める
 
-    // 代入させる
     for (int i = 0; i < ILStringData.size(); i++)
     {
-        if (!m_ILInfo[i].Deserialize(ILStringData[i])) {
+        if (!m_ILInfo[i].Deserialize(std::string(ILStringData[i]))) {
             ErrorLog::OutputToConsole("入力レイアウト : 文字列を読み込むことが出来ませんでした");
             return false;
         }
     }
 
     // 定数バッファ情報を読み込む
-    std::vector<std::string> CBStringData;
-    if (!LoadUtils::ExtractBlocks(constantBufferBlock, kCBufferStart, CBStringData)) {
+    std::vector<std::string_view> CBStringData;
+    if (!LoadUtils::ExtractSubBlocks(constantBufferBlock, kCBufferStart, CBStringData)) {
         ErrorLog::OutputToConsole("ShaderInfo : 定数バッファブロックデータを読み込むことが出来ませんでした。");
         return false;
     }
     m_CBInfo.resize(CBStringData.size()); // サイズを決める
 
-    // 代入させる
     for (int i = 0; i < CBStringData.size(); i++)
     {
-        if (!m_CBInfo[i].Deserialize(CBStringData[i])) {
+        if (!m_CBInfo[i].Deserialize(std::string(CBStringData[i]))) {
             ErrorLog::OutputToConsole("定数バッファ : 文字列を読み込むことが出来ませんでした");
             return false;
         }
     }
-
-    // 名前を代入
-    m_ShaderName = shaderNameStr;
 
     return true;
 }
