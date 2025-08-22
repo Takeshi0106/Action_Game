@@ -36,7 +36,7 @@ bool BaseDirectXManager::WriteLog()
 }
 
 // 名前を保存しておく
-void BaseDirectXManager::DebugSetName(const char* name)
+void BaseDirectXManager::Log(const char* name)
 {
 	m_UseObjectList += std::string(name) + "\n";
 }

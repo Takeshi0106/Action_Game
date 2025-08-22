@@ -146,7 +146,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 	}
 
 	// 名前を保存しておくデバッグ用
-	DebugSetName(shaderName.c_str());
+	Log(shaderName.c_str());
 
 	return true;
 }

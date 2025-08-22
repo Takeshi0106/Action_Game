@@ -40,7 +40,7 @@ protected:
 	// 外部ファイルに使用したオブジェクトのリストを書き出す
 	bool WriteLog();
 	// オブジェクトの名前をセットする
-	void DebugSetName(const char* name);
+	void Log(const char* name);
 
 public:
 	// コンストラクタ

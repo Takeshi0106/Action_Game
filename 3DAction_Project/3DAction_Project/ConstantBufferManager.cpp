@@ -64,7 +64,7 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t
 	m_ConstantBuffer[name] = std::move(data);
 
 	// デバッグ用に名前を保存しておく
-	DebugSetName(name.c_str());
+	Log(name.c_str());
 
 	return true;
 }
