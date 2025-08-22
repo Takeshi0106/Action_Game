@@ -144,6 +144,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX_DrawManager.cpp" />
+    <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="InputLayoutInfo.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PlatformSystem.cpp" />
@@ -165,6 +166,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="DirectX_DrawManager.h" />
+    <ClInclude Include="FileUtils.h" />
     <ClInclude Include="InputLayoutInfo.h" />
     <ClInclude Include="SaveLoadUtils.h" />
     <ClInclude Include="NonCopyable.h" />

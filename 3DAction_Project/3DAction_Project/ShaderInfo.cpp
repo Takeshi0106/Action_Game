@@ -12,7 +12,6 @@
 #include "ReportMessage.h"
 // 配列
 #include <vector>
-#include <unordered_map>
 
 
 // =========================================
@@ -44,23 +43,23 @@ std::string ShaderInfo::Serialize(int spaceNumber) const
     std::string saveData; // データを入れる
 
     // セーブする情報を作成
-    saveData += SaveUtils::MakeSaveData(kShaderName, m_ShaderName, spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kShaderName, m_ShaderName, spaceNumber);
 
     // 入力レイアウトの情報
     std::string ILData;
     for (int i = 0; i < (int)m_ILInfo.size(); i++)
     {
-        ILData += SaveUtils::MakeNotNameBlock(m_ILInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1); // 内容
+        ILData += SaveUtils::FormatAnonymousBlock(m_ILInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1); // 内容
     }
-    saveData += SaveUtils::MakeBlock(kInputStart, (int)m_ILInfo.size(), ILData, spaceNumber);
+    saveData += SaveUtils::FormatBlock(kInputStart, (int)m_ILInfo.size(), ILData, spaceNumber);
 
     // 定数バッファの情報
     std::string CBData;
     for (int i = 0; i < (int)m_CBInfo.size(); i++)
     {
-        CBData += SaveUtils::MakeNotNameBlock(m_CBInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1); // 内容
+        CBData += SaveUtils::FormatAnonymousBlock(m_CBInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1); // 内容
     }
-    saveData += SaveUtils::MakeBlock(kCBufferStart, (int)m_CBInfo.size(), CBData, spaceNumber);
+    saveData += SaveUtils::FormatBlock(kCBufferStart, (int)m_CBInfo.size(), CBData, spaceNumber);
 
     return saveData;
 }
@@ -94,8 +93,7 @@ bool ShaderInfo::Deserialize(const std::string& data)
         // シェーダー名
         if (line.rfind(kShaderName, 0) == 0)
         {
-            std::unordered_map < std::string, std::string > data = LoadUtils::ParseStringData(line);
-            shaderNameStr = data[kShaderName];
+            shaderNameStr = LoadUtils::ExtractTypeInfoLine(line);
             type = BlockType::NOT;
         }
         // 入力レイアウト

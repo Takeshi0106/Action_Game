@@ -27,7 +27,7 @@ namespace {
 // =========================================
 namespace SaveUtils {
 	// データの種類とデータ文字列を受け取り、キーを付けて文字列にして返す
-	std::string MakeSaveData(const std::string& dataType, const std::string& data, int spaceNumber)
+	std::string MakeTypeInfo(const std::string& dataType, const std::string& data, int spaceNumber)
 	{
 		std::string saveData(spaceNumber, ' '); // 空白を開ける
 
@@ -38,7 +38,7 @@ namespace SaveUtils {
 
 
     // ブロックごとにする
-    std::string MakeNotNameBlock(const std::string& data, int spaceNumber) 
+    std::string FormatAnonymousBlock(const std::string& data, int spaceNumber)
     {
         std::string block;
         std::string space(spaceNumber, ' ');
@@ -48,7 +48,7 @@ namespace SaveUtils {
 
 
     // ブロックごとに作成
-    std::string MakeBlock(const std::string& blockName, const int blockNumber, const std::string& data, int spaceNumber)
+    std::string FormatBlock(const std::string& blockName, const int blockNumber, const std::string& data, int spaceNumber)
     {
         std::string block;
         std::string space(spaceNumber, ' ');
@@ -69,8 +69,31 @@ namespace SaveUtils {
 // ロード関数
 // =========================================
 namespace LoadUtils {
+    // １行を解析して情報を返す関数
+    std::string ExtractTypeInfoLine(const std::string& line)
+    {
+        std::string info(line);
+
+        // 先頭の空白を削除
+        while (!info.empty() && info.front() == ' ')
+        {
+            info.erase(info.begin());
+        }
+
+        // キーと値を分割
+        size_t delimPos = info.find(kKey); // 区切り文字が出てくる位置を検索
+
+        if (delimPos == std::string::npos)
+        {
+            ErrorLog::OutputToConsole("情報がありません");
+        }
+
+        return info.substr(delimPos + kKey.size());
+    }
+
+
 	// 文字列を解析して、データの種類をキーにしてデータを配列に代入する
-	std::unordered_map<std::string, std::string> ParseStringData(const std::string& data)
+	std::unordered_map<std::string, std::string> AllExtractTypeInfo(const std::string& data)
 	{
         std::unordered_map<std::string, std::string> dataInfo; // データを入れる配列
         size_t pos = 0; // 今の位置

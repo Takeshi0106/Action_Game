@@ -91,6 +91,9 @@
     <Filter Include="1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ShaderInfo">
       <UniqueIdentifier>{669f7f66-33ac-4c56-9a71-29dcf76c1f44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2_Core\Faile">
+      <UniqueIdentifier>{95ead3f2-344a-4d81-9eef-39297f6a26e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -144,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="ShaderInfo.cpp">
       <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ShaderInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>2_Core\Faile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="ShaderInfo.h">
       <Filter>1_Platform\Windows\5_DirectX_Core\Manager\ShaderManager\Shader\ShaderMetadata\ShaderInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>2_Core\Faile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

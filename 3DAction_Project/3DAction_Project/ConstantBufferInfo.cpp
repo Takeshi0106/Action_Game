@@ -31,9 +31,9 @@ std::string ConstantBufferInfo::Serialize(int spaceNumber) const
     std::string saveData; // データを入れる
 
     // セーブする情報を作成
-    saveData += SaveUtils::MakeSaveData(kCBufferName, m_Name, spaceNumber);
-    saveData += SaveUtils::MakeSaveData(kRegisterNumber, std::to_string(m_RegisterNumber), spaceNumber);
-    saveData += SaveUtils::MakeSaveData(kSize, std::to_string(m_Size), spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kCBufferName, m_Name, spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kRegisterNumber, std::to_string(m_RegisterNumber), spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kSize, std::to_string(m_Size), spaceNumber);
 
     return saveData;
 }
@@ -45,7 +45,7 @@ std::string ConstantBufferInfo::Serialize(int spaceNumber) const
 bool ConstantBufferInfo::Deserialize(const std::string& data)
 {
     // データを取得する
-    std::unordered_map<std::string, std::string> stringData = LoadUtils::ParseStringData(data);
+    std::unordered_map<std::string, std::string> stringData = LoadUtils::AllExtractTypeInfo(data);
 
     // データをキャストして内容を取得する
     // 定数バッファ名

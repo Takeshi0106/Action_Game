@@ -32,10 +32,10 @@ std::string InputLayoutInfo::Serialize(int spaceNumber) const
     std::string saveData; // データを入れる
 
     // セーブする情報を作成
-    saveData += SaveUtils::MakeSaveData(kInputLayoutSemanticName , m_SemanticName                 , spaceNumber);
-    saveData += SaveUtils::MakeSaveData(kInputLayoutSemanticIndex, std::to_string(m_SemanticIndex), spaceNumber);
-    saveData += SaveUtils::MakeSaveData(kInputLayoutInputSlot    , std::to_string(m_InputSlot)    , spaceNumber);
-    saveData += SaveUtils::MakeSaveData(kInputLayoutFormat       , std::to_string(m_Format)       , spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kInputLayoutSemanticName , m_SemanticName                 , spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kInputLayoutSemanticIndex, std::to_string(m_SemanticIndex), spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kInputLayoutInputSlot    , std::to_string(m_InputSlot)    , spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kInputLayoutFormat       , std::to_string(m_Format)       , spaceNumber);
 
     return saveData;
 }
@@ -47,7 +47,7 @@ std::string InputLayoutInfo::Serialize(int spaceNumber) const
 bool InputLayoutInfo::Deserialize(const std::string& data)
 {
     // データを取得する
-    std::unordered_map<std::string, std::string> stringData = LoadUtils::ParseStringData(data);
+    std::unordered_map<std::string, std::string> stringData = LoadUtils::AllExtractTypeInfo(data);
 
     // データをキャストして内容を取得する
     // セマンティック名

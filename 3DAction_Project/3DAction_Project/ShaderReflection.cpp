@@ -275,10 +275,10 @@ bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shad
 	std::string data;
 	for (int i = 0; i < (int)shaderInfo.size(); i++)
 	{
-		data += SaveUtils::MakeNotNameBlock(shaderInfo[i].Serialize(2), 1);
+		data += SaveUtils::FormatAnonymousBlock(shaderInfo[i].Serialize(2), 1);
 		data += "\n";
 	}
-	data = SaveUtils::MakeBlock(kShaderStart, (int)shaderInfo.size(), data, 0);
+	data = SaveUtils::FormatBlock(kShaderStart, (int)shaderInfo.size(), data, 0);
 
 	// ファイルを開ける
 	std::ofstream ofs(kShaderInfoPath, std::ios::binary | std::ios::out);
