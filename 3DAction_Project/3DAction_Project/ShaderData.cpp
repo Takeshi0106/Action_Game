@@ -82,7 +82,7 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
         return false;
     }
 
-    m_ILayout = layout; // VertexShaderData 内に保
+    m_ILayout = layout; // VertexShaderData 内に保存
 
 
     // デバッグ用に名前を出力
