@@ -9,6 +9,11 @@
 // 計算ヘッダー
 #include <DirectXMath.h>
 
+#if defined(DEBUG) || defined(_DEBUG)
+// デバッグ用にログ出力
+#include "ReportMessage.h"
+#endif
+
 
 // ======================================
 // DirectXTKと同じ、毎計算floatをXMVECTORに変換して、
@@ -68,7 +73,10 @@ Vector3 Vector3::operator/(float scalar) const
 {
 #if defined(DEBUG) || defined(_DEBUG)
     // 防止
-    if (scalar == 0.0f) { return Vector3(0.0f, 0.0f, 0.0f); }
+    if (scalar == 0.0f) {
+        ErrorLog::OutputToConsole("Vector3 : 0で除算しようとしました"); 
+        return Vector3(0.0f, 0.0f, 0.0f); 
+    }
 #endif
 
     // 計算
