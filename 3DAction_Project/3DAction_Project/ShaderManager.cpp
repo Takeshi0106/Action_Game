@@ -10,10 +10,10 @@
 #include <vector> // 読み出したファイルを保存する配列
 // DirectX用スマートポインター
 #include <wrl/client.h>  // DirectX用のスマートポインター
-// シェイダーコンパイル用ヘッダー
-#include "ShaderCompil.h"
-// シェーダーリファレクション用ヘッダー
-#include "ShaderReflection.h"
+// シェイダーコンパイル関数ヘッダー
+#include "ShaderCompilUtils.h"
+// シェーダーリファレクション関数ヘッダー
+#include "ShaderReflectionUtils.h"
 // デバッグ情報ややエラー出力用
 #include "ReportMessage.h"
 
@@ -202,7 +202,7 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 	if (filename.stem().string().rfind("VS_", 0) == 0) 
 	{
 		// コンパイルして書き出す
-		if (!OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) {
+		if (!ShaderCompilerUtils::OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) {
 			ErrorLog::OutputToConsole(std::string("頂点シェーダー " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
@@ -210,7 +210,7 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 	else if (filename.stem().string().rfind("PS_", 0) == 0) 
 	{
 		// コンパイルして書き出す
-		if (!OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) {
+		if (!ShaderCompilerUtils::OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) {
 			ErrorLog::OutputToConsole(std::string("ピクセルシェーダー " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
@@ -218,7 +218,7 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 	else if (filename.stem().string().rfind("CS_", 0) == 0)
 	{
 		// コンパイルして書き出す
-		if (!OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) {
+		if (!ShaderCompilerUtils::OutputCompileShader(kFilePath, filename, "main", "cs_5_0", blob.GetAddressOf())) {
 			ErrorLog::OutputToConsole(std::string("コンピュートシェーダ " + filename.string() + " のコンパイル失敗").c_str());
 			return false;
 		}
@@ -303,7 +303,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		else
 		{
 			// コンパイルファイルを読み込む
-			if (!LoadCompiledShader(csoPath, blob.GetAddressOf()))
+			if (!ShaderCompilerUtils::LoadCompiledShader(csoPath, blob.GetAddressOf()))
 			{
 				// 失敗したらコンパイル処理
 				if (!JudgeCompileShader(kCSOFilePath, filename, blob)) {
@@ -318,7 +318,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		std::vector<InputLayoutInfo> ilInfo;
 
 		// リフレクション情報を代入
-		if (!Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), conInfo, ilInfo)) {
+		if (!ShaderReflectionUtils::Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), conInfo, ilInfo)) {
 			ErrorLog::OutputToMessageBox("リフレクションした情報が得られませんでした");
 			return false;
 		}
@@ -357,7 +357,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 	}
 
 	// 出力関数
-	ShaderInfoOutput(kShaderInfoPath, allShaderInfo);
+	ShaderReflectionUtils::ShaderInfoOutput(kShaderInfoPath, allShaderInfo);
 
 	return true;
 }

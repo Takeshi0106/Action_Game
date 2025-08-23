@@ -88,14 +88,14 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils">
       <UniqueIdentifier>{3307b22f-9a32-477f-89ed-a9bb36abf1bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompil">
-      <UniqueIdentifier>{6ad274d1-c662-4366-ae63-d0a62acecc89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflection">
-      <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\2_ConstantBufferManager">
       <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompilUtils">
+      <UniqueIdentifier>{6ad274d1-c662-4366-ae63-d0a62acecc89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflectionUtils">
+      <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,11 +120,11 @@
     <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\2_ConstantBufferManager</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderCompil.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompil</Filter>
+    <ClCompile Include="ShaderCompilUtils.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompilUtils</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderReflection.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflection</Filter>
+    <ClCompile Include="ShaderReflectionUtils.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflectionUtils</Filter>
     </ClCompile>
     <ClCompile Include="PlatformSystem.cpp">
       <Filter>1_Platform\Base\0_PlatformSystem</Filter>
@@ -176,11 +176,11 @@
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\2_ConstantBufferManager</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderCompil.h">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompil</Filter>
+    <ClInclude Include="ShaderCompilUtils.h">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompilUtils</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderReflection.h">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflection</Filter>
+    <ClInclude Include="ShaderReflectionUtils.h">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflectionUtils</Filter>
     </ClInclude>
     <ClInclude Include="PlatformSystem.h">
       <Filter>1_Platform\Base\0_PlatformSystem</Filter>

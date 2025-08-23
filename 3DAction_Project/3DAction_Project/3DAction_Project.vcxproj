@@ -153,10 +153,10 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="ShaderInfo.cpp" />
     <ClCompile Include="Windows_ReportMessage.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="ShaderCompil.cpp" />
+    <ClCompile Include="ShaderCompilUtils.cpp" />
     <ClCompile Include="ShaderData.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
-    <ClCompile Include="ShaderReflection.cpp" />
+    <ClCompile Include="ShaderReflectionUtils.cpp" />
     <ClCompile Include="Windows_Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,11 +174,11 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="PlatformWindowsSystem.h" />
     <ClInclude Include="ReportMessage.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="ShaderCompil.h" />
+    <ClInclude Include="ShaderCompilUtils.h" />
     <ClInclude Include="ShaderData.h" />
     <ClInclude Include="ShaderInfo.h" />
     <ClInclude Include="ShaderManager.h" />
-    <ClInclude Include="ShaderReflection.h" />
+    <ClInclude Include="ShaderReflectionUtils.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
