@@ -10,25 +10,35 @@
 // ===========================================
 // 色情報
 // ===========================================
-class Color
+struct Color
 {
-private:
+    // メンバー変数
     float r, g, b, a;
 
-public:
     // コンストラクタ / デストラクタ
-    Color();
-    Color(float _r, float _g, float _b, float _a);
-    Color(const Color& color);
+    Color() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {}
+    Color(float _r, float _g, float _b, float _a) : r(_r), g(_g), b(_b), a(_a) {}
+    Color(const Color& color) :r(color.r), g(color.g), b(color.b), a(color.a) {}
 
     ~Color() = default;
 
+    // 代入演算子
+    Color& operator=(const Color& color) {
+        r = color.r;
+        g = color.g;
+        b = color.b;
+        a = color.a;
+
+        return *this;
+    }
+
     // 演算子
-    Color& operator=(const Color& color);
     Color operator+(const Color& color) const;
     Color operator-(const Color& color) const;
     Color operator*(float scalar) const;
+    Color operator*(const Color& color) const;
 
     // 計算関数
-
+    Color Lerp(const Color& color, float t) const; // 線形補間
+    void Clamp(); // 0~1.0に制限させる
 };

@@ -3,7 +3,7 @@
 // ヘッダー
 // ======================================
 // 必須ヘッダー
-#include "Vector.h"
+#include "Vector3.h"
 // ユーリアリティー関数
 #include "WindowsMath_Utiles.h"
 // 計算ヘッダー
@@ -24,30 +24,12 @@
 // プロトタイプ宣言
 // ========================================
 // XMVECTORをVector3に変換
-Vector3 FromXMVECTOR3(const DirectX::XMVECTOR& vec);
-
-
-// ============================
-// コンストラクタ
-// ============================
-Vector3::Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
-Vector3::Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
-Vector3::Vector3(const Vector3& vec) : x(vec.x), y(vec.y), z(vec.z) {}
+inline Vector3 FromXMVECTOR3(const DirectX::XMVECTOR& vec);
 
 
 // ============================
 // 演算子
 // ============================
-// 代入演算子
-Vector3& Vector3::operator=(const Vector3& vec)
-{
-    x = vec.x;
-    y = vec.y;
-    z = vec.z;
-
-    return *this;
-}
-
 // 加算演算子
 Vector3 Vector3::operator+(const Vector3& vec) const
 {    
@@ -59,7 +41,7 @@ Vector3 Vector3::operator+(const Vector3& vec) const
     return FromXMVECTOR3(add);
 }
 
-// 減算代入子
+// 減算演算子
 Vector3 Vector3::operator-(const Vector3& vec) const
 {
     // 計算
@@ -79,6 +61,22 @@ Vector3 Vector3::operator*(float scalar) const
         scalar);
 
     return FromXMVECTOR3(multiplication);
+}
+
+// 除算演算子
+Vector3 Vector3::operator/(float scalar) const
+{
+#if defined(DEBUG) || defined(_DEBUG)
+    // 防止
+    if (scalar == 0.0f) { return Vector3(0.0f, 0.0f, 0.0f); }
+#endif
+
+    // 計算
+    DirectX::XMVECTOR division = DirectX::XMVectorScale(
+        DirectXMathUtiles::ToXMVECTOR(x, y, z),
+        1.0f / scalar);
+
+    return FromXMVECTOR3(division);
 }
 
 
@@ -126,12 +124,48 @@ Vector3 Vector3::Normalize() const
     return FromXMVECTOR3(normalize);
 }
 
+// 距離
+float Vector3::Distance(const Vector3& vec) const
+{
+    // 計算
+    return DirectX::XMVectorGetX(
+        DirectX::XMVector3Length(
+        DirectX::XMVectorSubtract(
+            DirectXMathUtiles::ToXMVECTOR(x, y, z),
+            DirectXMathUtiles::ToXMVECTOR(vec.x, vec.y, vec.z))));
+}
+
+
+// 距離の２乗
+float Vector3::DistanceSquared(const Vector3& vec) const
+{
+    return DirectX::XMVectorGetX(
+        DirectX::XMVector3LengthSq(
+        DirectX::XMVectorSubtract(
+            DirectXMathUtiles::ToXMVECTOR(x, y, z),
+            DirectXMathUtiles::ToXMVECTOR(vec.x, vec.y, vec.z))));
+}
+
+
+// 線形補間
+Vector3 Vector3::Lerp(const Vector3& target, float t) const
+{
+    // 計算
+    DirectX::XMVECTOR lerp = DirectX::XMVectorLerp(
+        DirectXMathUtiles::ToXMVECTOR(x, y, z),
+        DirectXMathUtiles::ToXMVECTOR(target.x, target.y, target.z),
+        t);
+
+    // 戻す
+    return FromXMVECTOR3(lerp);
+}
+
 
 // =====================================
 // 関数
 // =====================================
 // XMVECTORをVector3に変換
-Vector3 FromXMVECTOR3(const DirectX::XMVECTOR& vec)
+inline Vector3 FromXMVECTOR3(const DirectX::XMVECTOR& vec)
 {
     // 変換
     DirectX::XMFLOAT3 out;

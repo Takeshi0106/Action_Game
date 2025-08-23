@@ -16,4 +16,9 @@ namespace DirectXMathUtiles {
         return ToXMVECTOR(a, b, c, 0.0f);
     }
 
+    DirectX::XMVECTOR ToXMVECTOR(const float& a, const float& b)
+    {
+        return ToXMVECTOR(a, b, 0.0f);
+    }
+
 }

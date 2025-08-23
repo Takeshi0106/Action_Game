@@ -12,7 +12,7 @@
 // ログ出力
 #include "ReportMessage.h"
 // メッシュ
-#include "Vector.h"
+#include "Vector3.h"
 // デバッグ用
 #include "Timer.h"
 

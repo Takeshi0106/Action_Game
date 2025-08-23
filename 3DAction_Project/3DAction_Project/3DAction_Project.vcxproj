@@ -148,7 +148,8 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="InputLayoutInfo.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Windows_Color.cpp" />
-    <ClCompile Include="Windows_Vector.cpp">
+    <ClCompile Include="Windows_Vector2.cpp" />
+    <ClCompile Include="Windows_Vector3.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="PlatformSystem.cpp" />
@@ -165,6 +166,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="ShaderReflectionUtils.cpp" />
     <ClCompile Include="Windows_Timer.cpp" />
+    <ClCompile Include="Windows_Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseDirectXManager.h" />
@@ -176,7 +178,8 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="DirectX_DrawManager.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="InputLayoutInfo.h" />
-    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
     <ClInclude Include="SaveLoadUtils.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="PlatformSystem.h" />
@@ -189,6 +192,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShaderReflectionUtils.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Vector4.h" />
     <ClInclude Include="WindowsMath_Utiles.h" />
   </ItemGroup>
   <ItemGroup>

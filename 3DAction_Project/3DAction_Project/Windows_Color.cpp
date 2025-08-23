@@ -17,32 +17,14 @@
 // プロトタイプ宣言
 // ==============================
 // XMVECTORをColorに変換
-Color FromXMColor(const DirectX::XMVECTOR& vec);
-
-// ============================
-// カラー
-// ============================
-
-// コンストラクタ
-Color::Color() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {}
-Color::Color(float _r, float _g, float _b, float _a) : r(_r), g(_g), b(_b), a(_a) {}
-Color::Color(const Color& color) :r(color.r), g(color.g), b(color.b), a(color.a) {}
+inline Color FromXMColor(const DirectX::XMVECTOR& vec);
+// 内容が下限と上限か判定する　下限より下の場合、下限に　上限以上の場合上限になる
+inline void LimitCheck(float& value, const float& min, const float& max);
 
 
 // =========================================
 // 演算子
 // =========================================
-// 代入演算子
-Color& Color::operator=(const Color& color)
-{
-    r = color.r;
-    g = color.g;
-    b = color.b;
-    a = color.a;
-
-    return *this;
-}
-
 // 加算演算子
 Color Color::operator+(const Color& color) const
 {
@@ -75,16 +57,64 @@ Color Color::operator*(float scalar) const
 
     return FromXMColor(multiplication);
 }
+// カラー同士の乗算
+Color Color::operator*(const Color& color) const
+{
+    // 計算
+    DirectX::XMVECTOR multiplication = DirectX::XMVectorMultiply(
+        DirectXMathUtiles::ToXMVECTOR(r, g, b, a),
+        DirectXMathUtiles::ToXMVECTOR(color.r, color.g, color.b, color.a));
 
+    return FromXMColor(multiplication);
+}
 
 
 // ==================================
-// プロトタイプ宣言
+// 計算関数
 // ==================================
-Color FromXMColor(const DirectX::XMVECTOR& vec)
+// 線形補間
+Color Color::Lerp(const Color& color, float t) const
+{
+    // 計算
+    DirectX::XMVECTOR result = DirectX::XMVectorLerp(
+        DirectXMathUtiles::ToXMVECTOR(r, g, b, a),
+        DirectXMathUtiles::ToXMVECTOR(color.r, color.g, color.b, color.a),
+        t);
+
+    return FromXMColor(result);
+}
+
+
+void Color::Clamp()
+{
+    LimitCheck(r, 0.0f, 1.0f);
+    LimitCheck(g, 0.0f, 1.0f);
+    LimitCheck(b, 0.0f, 1.0f);
+    LimitCheck(a, 0.0f, 1.0f);
+}
+
+
+// ==================================
+// 関数
+// ==================================
+inline Color FromXMColor(const DirectX::XMVECTOR& vec)
 {
     // 変換
     DirectX::XMFLOAT4 out;
     DirectX::XMStoreFloat4(&out, vec);
     return Color(out.x, out.y, out.z,out.w);
+}
+
+
+inline void LimitCheck(float& value, const float& min, const float& max)
+{
+    // 判定する
+    if (value < min)
+    {
+        value = min;
+    }
+    else if (value > max)
+    {
+        value = max;
+    }
 }
