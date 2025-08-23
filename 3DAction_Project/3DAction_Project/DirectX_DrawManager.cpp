@@ -11,6 +11,8 @@
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
 // ログ出力
 #include "ReportMessage.h"
+// メッシュ
+#include "Vector.h"
 // デバッグ用
 #include "Timer.h"
 
@@ -82,7 +84,13 @@ void DirectX_DrawManager::Uninit()
 // ===========================================
 void DirectX_DrawManager::DebugDraw()
 {
-    float a[4] = { 1.0f,0.1f,1.0f,0.1f };
+    /*
+    Vertex triangle[3] = {
+        {{ 0.0f,  0.5f, 0.0f }, {1,0,0,1}},
+        {{ 0.5f, -0.5f, 0.0f }, {0,1,0,1}},
+        {{-0.5f, -0.5f, 0.0f }, {0,0,1,1}},
+    };
+    */
 
     Timer::Debug_CheckUpdate(); // タイマーデバッグ
 

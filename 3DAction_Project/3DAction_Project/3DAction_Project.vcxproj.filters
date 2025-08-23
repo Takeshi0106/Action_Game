@@ -97,6 +97,9 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflectionUtils">
       <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\2_Math\WindowsMath_Utiles">
+      <UniqueIdentifier>{daa14929-8b49-46ad-a4fa-df33398adf26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -155,6 +158,15 @@
     </ClCompile>
     <ClCompile Include="DirectX_DrawManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows_Vector.cpp">
+      <Filter>1_Platform\Windows\2_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsMath_Utiles.cpp">
+      <Filter>1_Platform\Windows\2_Math\WindowsMath_Utiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows_Color.cpp">
+      <Filter>1_Platform\Windows\2_Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +229,15 @@
     </ClInclude>
     <ClInclude Include="DirectX_DrawManager.h">
       <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>1_Platform\Base\2_PlatformMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>1_Platform\Base\2_PlatformMath</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsMath_Utiles.h">
+      <Filter>1_Platform\Windows\2_Math\WindowsMath_Utiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

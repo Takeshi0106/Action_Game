@@ -22,7 +22,7 @@ class ConstantBufferManager;
 class DirectX_DrawManager
 {
 private:
-	static ShaderManager m_ShaderManager; // シェーダーマネージャー
+	static ShaderManager m_ShaderManager;     // シェーダーマネージャー
 	static ConstantBufferManager m_CBManager; // 定数バッファマネージャー
 
 public:
