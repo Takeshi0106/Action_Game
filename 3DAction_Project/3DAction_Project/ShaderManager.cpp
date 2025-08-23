@@ -317,7 +317,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 		std::vector<ConstantBufferInfo> conInfo;
 		std::vector<InputLayoutInfo> ilInfo;
 
-		// リフレクション情報を代入
+		// リフレクション情報を取得
 		if (!ShaderReflectionUtils::Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), conInfo, ilInfo)) {
 			ErrorLog::OutputToMessageBox("リフレクションした情報が得られませんでした");
 			return false;
@@ -418,7 +418,7 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 	std::vector<ShaderInfo> allShaderInfo;
 
 	// リフレクション外部情報を取得
-	if (!ShaderInfoInput(kShaderInfoPath, allShaderInfo)) {
+	if (!ShaderReflectionUtils::ShaderInfoInput(kShaderInfoPath, allShaderInfo)) {
 		ErrorLog::OutputToMessageBox("リフレクション情報を取得失敗");
 		return false;
 	}
@@ -437,7 +437,7 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 		Microsoft::WRL::ComPtr<ID3DBlob> blob; // バイナリーデータ入れる
 
 		// コンパイルしているファイルを読み込む処理
-		if (!LoadCompiledShader(compailPath, blob.GetAddressOf()))
+		if (!ShaderCompilerUtils::LoadCompiledShader(compailPath, blob.GetAddressOf()))
 		{
 			// 失敗したらコンパイル処理
 			if (!JudgeCompileShader(kCSOFilePath, hlslPath, blob)) {

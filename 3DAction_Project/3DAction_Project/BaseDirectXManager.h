@@ -46,7 +46,7 @@ public:
 	// コンストラクタ
 	BaseDirectXManager(const char* assetLog)
 		: kAssetLogPath(assetLog) {
-		m_UseObjectList += Type + "\n";
+		m_UseObjectList += Type + "\n\n";
 	}
 	// デストラクタ　
 	virtual ~BaseDirectXManager() { WriteLog(); }
