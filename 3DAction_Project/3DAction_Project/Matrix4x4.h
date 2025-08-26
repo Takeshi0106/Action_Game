@@ -5,6 +5,11 @@
 // 
 // 中身をプラットフォームごとに変更する
 // C++17基準で作成しています
+// 
+// * =---------------------------------------
+// * 左手座標系、行優先です
+// * 角度は全てラジアンで渡す想定です
+// * ----------------------------------------
 // ==========================================
 
 
@@ -28,8 +33,19 @@ struct Matrix4x4
         {1, 0, 0, 0},
         {0, 1, 0, 0},
         {0, 0, 1, 0},
-        {0, 0, 0, 1} } {
-    }
+        {0, 0, 0, 1} } {}
+
+    constexpr Matrix4x4(
+        float m00, float m01, float m02, float m03,
+        float m10, float m11, float m12, float m13,
+        float m20, float m21, float m22, float m23,
+        float m30, float m31, float m32, float m33) noexcept
+        : Matrix{
+            { m00, m01, m02, m03 },
+            { m10, m11, m12, m13 },
+            { m20, m21, m22, m23 },
+            { m30, m31, m32, m33 } } {}
+
     Matrix4x4(const Matrix4x4&) noexcept = default;
     // デストラクタ
     ~Matrix4x4() noexcept = default;
@@ -38,15 +54,14 @@ struct Matrix4x4
     Matrix4x4& operator=(const Matrix4x4&) noexcept = default;
 
     // 行列作成
-     // 単位行列
-    static Matrix4x4 Identity() noexcept;
-     // 平行移動行列
-    static Matrix4x4 Translation(const Vector3& pos) noexcept;
+    static Matrix4x4 CreateIdentityMatrix() noexcept { return Matrix4x4(); } // 単位行列
+    // 平行移動行列
+    static Matrix4x4 CreateTranslationMatrix(const Vector3& pos) noexcept;
     // 回転行列
-    static Matrix4x4 RotationX(float angle) noexcept;
-    static Matrix4x4 RotationY(float angle) noexcept;
-    static Matrix4x4 RotationZ(float angle) noexcept;
-    static Matrix4x4 RotationYawPitchRoll(float yaw, float pitch, float roll) noexcept;
+    static Matrix4x4 CreateRotationXMatrix(float radAngle) noexcept;
+    static Matrix4x4 CreateRotationYMatrix(float radAngle) noexcept;
+    static Matrix4x4 CreateRotationZMatrix(float radAngle) noexcept;
+    static Matrix4x4 CreateRotationYawPitchRollMatrix(float yaw, float pitch, float roll) noexcept;
     // 拡大縮小行列
     static Matrix4x4 Scaling(const Vector3& scale) noexcept;
     // 投影・ビュー行列

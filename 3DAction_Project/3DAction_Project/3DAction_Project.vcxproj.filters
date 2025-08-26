@@ -109,6 +109,9 @@
     <Filter Include="1_Platform\Base\2_PlatformMath\Matrix">
       <UniqueIdentifier>{9592bf7c-e241-4a70-92af-9cfbb0354756}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\2_Math\Matrix">
+      <UniqueIdentifier>{3895c690-a6c7-411d-a530-9512de23e4a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -182,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="Windows_Vector3.cpp">
       <Filter>1_Platform\Windows\2_Math\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows_Matrix4x4.cpp">
+      <Filter>1_Platform\Windows\2_Math\Matrix</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
