@@ -29,80 +29,14 @@
 // プロトタイプ宣言
 // ========================================
 // XMVECTORをVector3に変換
-inline Vector4 FromXMVECTOR4(const DirectX::XMVECTOR& vec);
-
-
-// ============================
-// 演算子
-// ============================
-// 加算演算子
-Vector4 Vector4::operator+(const Vector4& vec) const
-{
-    // 計算
-    DirectX::XMVECTOR add = DirectX::XMVectorAdd(
-        DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-        DirectXMathUtiles::ToXMVECTOR(vec.x, vec.y, vec.z, vec.w));
-
-    return FromXMVECTOR4(add);
-}
-
-// 減算演算子
-Vector4 Vector4::operator-(const Vector4& vec) const
-{
-    // 計算
-    DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(
-        DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-        DirectXMathUtiles::ToXMVECTOR(vec.x, vec.y, vec.z, vec.w));
-
-    return FromXMVECTOR4(subtract);
-}
-
-// 乗算演算子
-Vector4 Vector4::operator*(float scalar) const
-{
-    // 計算
-    DirectX::XMVECTOR multiplication = DirectX::XMVectorScale(
-        DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-        scalar);
-
-    return FromXMVECTOR4(multiplication);
-}
-
-// 除算演算子
-Vector4 Vector4::operator/(float scalar) const
-{
-#if defined(DEBUG) || defined(_DEBUG)
-    // 防止
-    if (scalar == 0.0f) { 
-        ErrorLog::OutputToConsole("Vector4 : 0で除算しようとしました");
-        return Vector4(0.0f, 0.0f, 0.0f, 0.0f); 
-    }
-#endif
-
-    // 計算
-    DirectX::XMVECTOR division = DirectX::XMVectorScale(
-        DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-        1.0f / scalar);
-
-    return FromXMVECTOR4(division);
-}
+inline Vector4 FromXMVECTOR4(const DirectX::XMVECTOR& vec) noexcept;
 
 
 // ============================
 // 計算関数
 // ============================
-// 内積
-float Vector4::Dot(const Vector4    & vec) const
-{
-    // 計算
-    return DirectX::XMVectorGetX(
-        DirectX::XMVector4Dot(
-            DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-            DirectXMathUtiles::ToXMVECTOR(vec.x, vec.y, vec.z, vec.w)));
-}
-
 // 長さ
-float Vector4::Length() const
+float Vector4::Length() const noexcept
 {
     // 計算
     return DirectX::XMVectorGetX(
@@ -111,7 +45,7 @@ float Vector4::Length() const
 }
 
 // 正規化
-Vector4 Vector4::Normalize() const
+Vector4 Vector4::Normalize() const noexcept
 {
     // 計算
     DirectX::XMVECTOR normalize = DirectX::XMVector4Normalize(
@@ -121,36 +55,104 @@ Vector4 Vector4::Normalize() const
     return FromXMVECTOR4(normalize);
 }
 
+
+// ============================
+// 演算子
+// ============================
+// 加算演算子
+Vector4 operator+(const Vector4& vec1, const Vector4& vec2) noexcept
+{
+    // 計算
+    DirectX::XMVECTOR add = DirectX::XMVectorAdd(
+        DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+        DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y, vec2.z, vec2.w));
+
+    return FromXMVECTOR4(add);
+}
+
+// 減算演算子
+Vector4 operator-(const Vector4& vec1, const Vector4& vec2) noexcept
+{
+    // 計算
+    DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(
+        DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+        DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y, vec2.z, vec2.w));
+
+    return FromXMVECTOR4(subtract);
+}
+
+// 乗算演算子
+Vector4 operator*(const Vector4& vec1, float scalar) noexcept
+{
+    // 計算
+    DirectX::XMVECTOR multiplication = DirectX::XMVectorScale(
+        DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+        scalar);
+
+    return FromXMVECTOR4(multiplication);
+}
+
+// 除算演算子
+Vector4 operator/(const Vector4& vec1, float scalar) noexcept
+{
+#if defined(DEBUG) || defined(_DEBUG)
+    // 防止
+    if (scalar == 0.0f) {
+        ErrorLog::OutputToConsole("Vector4 : 0で除算しようとしました");
+        return Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+    }
+#endif
+
+    // 計算
+    DirectX::XMVECTOR division = DirectX::XMVectorScale(
+        DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+        1.0f / scalar);
+
+    return FromXMVECTOR4(division);
+}
+
+
+// =====================================
+// グローバル関数
+// =====================================
+// 内積
+float Dot(const Vector4& vec1, const Vector4& vec2) noexcept
+{
+    // 計算
+    return DirectX::XMVectorGetX(
+        DirectX::XMVector4Dot(
+            DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+            DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y, vec2.z, vec2.w)));
+}
+
 // 距離
-float Vector4::Distance(const Vector4& vec) const
+float Distance(const Vector4& vec1,const Vector4& vec2) noexcept
 {
     // 計算
     return DirectX::XMVectorGetX(
         DirectX::XMVector4Length(
             DirectX::XMVectorSubtract(
-                DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-                DirectXMathUtiles::ToXMVECTOR(vec.x, vec.y, vec.z, vec.w))));
+                DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+                DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y, vec2.z, vec2.w))));
 }
 
-
 // 距離の２乗
-float Vector4::DistanceSquared(const Vector4& vec) const
+float DistanceSquared(const Vector4& vec1, const Vector4& vec2) noexcept
 {
     return DirectX::XMVectorGetX(
         DirectX::XMVector4LengthSq(
             DirectX::XMVectorSubtract(
-                DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-                DirectXMathUtiles::ToXMVECTOR(vec.x, vec.y, vec.z, vec.w))));
+                DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+                DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y, vec2.z, vec2.w))));
 }
 
-
 // 線形補間
-Vector4 Vector4::Lerp(const Vector4& target, float t) const
+Vector4 Lerp(const Vector4& vec1, const Vector4& vec2, float t) noexcept
 {
     // 計算
     DirectX::XMVECTOR lerp = DirectX::XMVectorLerp(
-        DirectXMathUtiles::ToXMVECTOR(x, y, z, w),
-        DirectXMathUtiles::ToXMVECTOR(target.x, target.y, target.z, target.w),
+        DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z, vec1.w),
+        DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y, vec2.z, vec2.w),
         t);
 
     // 戻す
@@ -162,7 +164,7 @@ Vector4 Vector4::Lerp(const Vector4& target, float t) const
 // 関数
 // =====================================
 // XMVECTORをVector3に変換
-inline Vector4 FromXMVECTOR4(const DirectX::XMVECTOR& vec)
+inline Vector4 FromXMVECTOR4(const DirectX::XMVECTOR& vec) noexcept
 {
     // 変換
     DirectX::XMFLOAT4 out;

@@ -84,14 +84,6 @@ void DirectX_DrawManager::Uninit()
 // ===========================================
 void DirectX_DrawManager::DebugDraw()
 {
-    /*
-    Vertex triangle[3] = {
-        {{ 0.0f,  0.5f, 0.0f }, {1,0,0,1}},
-        {{ 0.5f, -0.5f, 0.0f }, {0,1,0,1}},
-        {{-0.5f, -0.5f, 0.0f }, {0,0,1,1}},
-    };
-    */
-
     Timer::Debug_CheckUpdate(); // タイマーデバッグ
 
     // デバッグ時 
