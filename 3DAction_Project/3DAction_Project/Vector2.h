@@ -42,8 +42,13 @@ struct Vector2
 	}
 
 	// 計算関数
+	float Dot(const Vector2& vec1) const noexcept; // 内積
+	float Cross(const Vector2& vec1) const noexcept; // 外積
 	float Length() const noexcept; // 長さ
 	Vector2 Normalize() const noexcept; // 正規化
+	float Distance(const Vector2& vec1) const noexcept; // 距離
+	float DistanceSquared(const Vector2& vec1) const noexcept;// 距離の２乗
+	Vector2 Lerp(const Vector2& vec1, float t) const noexcept; // 線形補間
 };
 
 
@@ -52,10 +57,3 @@ Vector2 operator+(const Vector2& vec1, const Vector2& vec2) noexcept;
 Vector2 operator-(const Vector2& vec1, const Vector2& vec2) noexcept;
 Vector2 operator*(const Vector2& vec1, float scalar) noexcept;
 Vector2 operator/(const Vector2& vec1, float scalar) noexcept;
-
-// 計算関数
-float Dot(const Vector2& vec1, const Vector2& vec2) noexcept; // 内積
-float Cross(const Vector2& vec1, const Vector2& vec2) noexcept; // 外積
-float Distance(const Vector2& vec1, const Vector2& vec2) noexcept; // 距離
-float DistanceSquared(const Vector2& vec1, const Vector2& vec2) noexcept;// 距離の２乗
-Vector2 Lerp(const Vector2& vec1, const Vector2& vec2, float t) noexcept; // 線形補間

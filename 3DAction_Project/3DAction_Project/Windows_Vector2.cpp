@@ -35,6 +35,26 @@ inline Vector2 FromXMVECTOR2(const DirectX::XMVECTOR& vec) noexcept;
 // ============================
 // 計算関数
 // ============================
+// 内積
+float Vector2::Dot(const Vector2& vec1) const noexcept
+{
+	// 計算
+	return DirectX::XMVectorGetX(
+		DirectX::XMVector2Dot(
+			DirectXMathUtiles::ToXMVECTOR(x, y),
+			DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y)));
+}
+
+// 外積
+float Vector2::Cross(const Vector2& vec1) const noexcept
+{
+	// 計算
+	return DirectX::XMVectorGetZ(
+		DirectX::XMVector2Cross(
+			DirectXMathUtiles::ToXMVECTOR(x, y),
+			DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y)));
+}
+
 // 長さ
 float Vector2::Length() const noexcept
 {
@@ -53,6 +73,40 @@ Vector2 Vector2::Normalize() const noexcept
 
 	// 戻す
 	return FromXMVECTOR2(normalize);
+}
+
+// 距離
+float Vector2::Distance(const Vector2& vec1) const noexcept
+{
+	// 計算
+	return DirectX::XMVectorGetX(
+		DirectX::XMVector2Length(
+			DirectX::XMVectorSubtract(
+				DirectXMathUtiles::ToXMVECTOR(x, y),
+				DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y))));
+}
+
+// 距離の２乗
+float Vector2::DistanceSquared(const Vector2& vec1) const noexcept
+{
+	return DirectX::XMVectorGetX(
+		DirectX::XMVector2LengthSq(
+			DirectX::XMVectorSubtract(
+				DirectXMathUtiles::ToXMVECTOR(x, y),
+				DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y))));
+}
+
+// 線形補間
+Vector2 Vector2::Lerp(const Vector2& vec1, float t) const noexcept
+{
+	// 計算
+	DirectX::XMVECTOR lerp = DirectX::XMVectorLerp(
+		DirectXMathUtiles::ToXMVECTOR(x, y),
+		DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y),
+		t);
+
+	// 戻す
+	return FromXMVECTOR2(lerp);
 }
 
 
@@ -109,66 +163,6 @@ Vector2 operator/(const Vector2& vec1, float scalar) noexcept
 		1.0f / scalar);
 
 	return FromXMVECTOR2(division);
-}
-
-
-// =====================================
-// 計算関数
-// =====================================
-// 内積
-float Dot(const Vector2& vec1,const Vector2& vec2) noexcept
-{
-	// 計算
-	return DirectX::XMVectorGetX(
-		DirectX::XMVector2Dot(
-			DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y),
-			DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y)));
-}
-
-// 外積
-float Cross(const Vector2& vec1, const Vector2& vec2) noexcept
-{
-	// 計算
-	return DirectX::XMVectorGetZ(
-		DirectX::XMVector2Cross(
-		DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y),
-		DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y)));
-}
-
-// 距離
-float Distance(const Vector2& vec1, const Vector2& vec2) noexcept
-{
-	// 計算
-	return DirectX::XMVectorGetX(
-		DirectX::XMVector2Length(
-			DirectX::XMVectorSubtract(
-				DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y),
-				DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y))));
-}
-
-
-// 距離の２乗
-float DistanceSquared(const Vector2& vec1, const Vector2& vec2) noexcept
-{
-	return DirectX::XMVectorGetX(
-		DirectX::XMVector2LengthSq(
-			DirectX::XMVectorSubtract(
-				DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y),
-				DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y))));
-}
-
-
-// 線形補間
-Vector2 Lerp(const Vector2& vec1 ,const Vector2& vec2, float t) noexcept
-{
-	// 計算
-	DirectX::XMVECTOR lerp = DirectX::XMVectorLerp(
-		DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y),
-		DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y),
-		t);
-
-	// 戻す
-	return FromXMVECTOR2(lerp);
 }
 
 

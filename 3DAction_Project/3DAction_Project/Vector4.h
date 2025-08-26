@@ -40,19 +40,18 @@ struct Vector4
 	Vector4 operator- () const noexcept { return Vector4(-x, -y, -z, -w); }
 
 	// 計算関数
+	// 計算関数
+	float Dot(const Vector4& vec1) const noexcept; // 内積
 	float Length() const noexcept; // 長さ
 	Vector4 Normalize() const noexcept; // 正規化
+	float Distance(const Vector4& vec1) const noexcept; // 距離
+	float DistanceSquared(const Vector4& vec1) const noexcept; // 距離の２乗
+	Vector4 Lerp(const Vector4& vec1, float t) const noexcept; // 線形補間
 };
 
 
 // 演算子
 Vector4 operator+(const Vector4& vec1, const Vector4& vec2) noexcept;
 Vector4 operator-(const Vector4& vec1, const Vector4& vec2) noexcept;
-Vector4 operator*(const Vector4& vec1,float scalar) noexcept;
-Vector4 operator/(const Vector4& vec1,float scalar) noexcept;
-
-// 計算関数
-float Dot(const Vector4& vec1,const Vector4& vec2) noexcept; // 内積
-float Distance(const Vector4& vec1, const Vector4& vec2) noexcept; // 距離
-float DistanceSquared(const Vector4& vec1, const Vector4& vec2) noexcept; // 距離の２乗
-Vector4 Lerp(const Vector4& vec1, const Vector4& vec2, float t) noexcept; // 線形補間
+Vector4 operator*(const Vector4& vec1, float scalar) noexcept;
+Vector4 operator/(const Vector4& vec1, float scalar) noexcept;

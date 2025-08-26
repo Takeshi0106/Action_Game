@@ -39,9 +39,14 @@ struct Vector3
 	Vector3 operator+ () const noexcept { return *this; }
 	Vector3 operator- () const noexcept { return Vector3(-x, -y, -z); }
 
-	// 計算関数
+	// 計算関数// 計算関数
+	float Dot(const Vector3& vec1) const noexcept; // 内積
+	Vector3 Cross(const Vector3& vec1) const noexcept; // 外積
 	float Length() const noexcept; // 長さ
 	Vector3 Normalize() const noexcept; // 正規化
+	float Distance(const Vector3& vec1) const noexcept; // 距離
+	float DistanceSquared(const Vector3& vec1) const noexcept; // 距離の２乗
+	Vector3 Lerp(const Vector3& vec1, float t) const noexcept; // 線形補間
 };
 
 
@@ -50,10 +55,3 @@ Vector3 operator+(const Vector3& vec1, const Vector3& vec2) noexcept;
 Vector3 operator-(const Vector3& vec1, const Vector3& vec2) noexcept;
 Vector3 operator*(const Vector3& vec1, float scalar) noexcept;
 Vector3 operator/(const Vector3& vec1, float scalar) noexcept;
-
-// 計算関数
-float Dot(const Vector3& vec1, const Vector3& vec2) noexcept; // 内積
-Vector3 Cross(const Vector3& vec1, const Vector3& vec2) noexcept; // 外積
-float Distance(const Vector3& vec1, const Vector3& vec2)  noexcept; // 距離
-float DistanceSquared(const Vector3& vec1, const Vector3& vec2) noexcept; // 距離の２乗
-Vector3 Lerp(const Vector3& vec1, const Vector3& vec2, float t) noexcept; // 線形補間
