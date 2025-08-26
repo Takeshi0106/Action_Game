@@ -4,6 +4,7 @@
 // Math構造体　Vector3
 // 
 // 中身をプラットフォームごとに変更する
+// C++17で作成しています
 // ==========================================
 
 
@@ -21,14 +22,9 @@ struct Vector3
     Vector3(const Vector3& vec) : x(vec.x), y(vec.y), z(vec.z) {}
     ~Vector3() = default;
 
-    // 代入演算子
-    Vector3& operator=(const Vector3& vec3) {
-        x = vec3.x;
-        y = vec3.y;
-        z = vec3.z;
+    // コピー演算子
+    Vector3& operator=(const Vector3& vec3) = default;
 
-        return *this;
-    }
     // チェック演算子
     bool operator==(const Vector3& vec) const {
         return x == vec.x && y == vec.y && z == vec.z;

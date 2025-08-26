@@ -4,6 +4,7 @@
 // Math構造体 Vector2
 // 
 // 中身をプラットフォームごとに変更する
+// C++17基準
 // ==========================================
 
 
@@ -21,13 +22,10 @@ struct Vector2
     Vector2(const Vector2& vec) : x(vec.x), y(vec.y) {}
     ~Vector2() = default;
 
-    // 代入・チェック演算子
-    Vector2& operator=(const Vector2& vec2) {
-        x = vec2.x;
-        y = vec2.y;
+    // 代入演算子
+    Vector2& operator=(const Vector2& vec2) = default;
 
-        return *this;
-    }
+    // チェック演算子
     bool operator==(const Vector2& vec2) const
     {
         return x == vec2.x && y == vec2.y;

@@ -4,6 +4,7 @@
 // Math色情報クラス
 // 
 // プラットフォームごとに中身を変更する
+// C++17基準
 // ==========================================
 
 
@@ -23,14 +24,7 @@ struct Color
     ~Color() = default;
 
     // 代入演算子
-    Color& operator=(const Color& color) {
-        r = color.r;
-        g = color.g;
-        b = color.b;
-        a = color.a;
-
-        return *this;
-    }
+    Color& operator=(const Color& color) = default;
 
     // 演算子
     Color operator+(const Color& color) const;

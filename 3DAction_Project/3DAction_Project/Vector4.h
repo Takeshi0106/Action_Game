@@ -4,6 +4,7 @@
 // Math構造体　Vector4
 // 
 // 中身をプラットフォームごとに変更する
+// C++17基準
 // ==========================================
 
 
@@ -22,14 +23,8 @@ struct Vector4
     ~Vector4() = default;
 
     // 代入演算子
-    Vector4& operator=(const Vector4& vec4) {
-        x = vec4.x;
-        y = vec4.y;
-        z = vec4.z;
-        w = vec4.w;
+    Vector4& operator=(const Vector4& vec4) = default;
 
-        return *this;
-    }
     // チェック演算子
     bool operator==(const Vector4& vec) const {
         return x == vec.x && y == vec.y && z == vec.z && w == vec.w;

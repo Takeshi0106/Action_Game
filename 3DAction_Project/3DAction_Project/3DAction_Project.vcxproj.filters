@@ -106,6 +106,9 @@
     <Filter Include="1_Platform\Base\2_PlatformMath\Vector">
       <UniqueIdentifier>{72a4ab21-548f-4bff-8e34-5a09e6b41c9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Base\2_PlatformMath\Matrix">
+      <UniqueIdentifier>{9592bf7c-e241-4a70-92af-9cfbb0354756}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>1_Platform\Base\2_PlatformMath\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix3x3.h">
+      <Filter>1_Platform\Base\2_PlatformMath\Matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
