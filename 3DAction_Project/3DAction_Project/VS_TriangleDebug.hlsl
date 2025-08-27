@@ -10,9 +10,11 @@ struct PSInput
     float4 color : COLOR;
 };
 
-cbuffer Transform : register(b0)
+cbuffer Transform1 : register(b0)
 {
     float4x4 WorldMatrix;
+    float4x4 ViewMatrix;
+    float4x4 ProjMatrix;
 };
 
 
@@ -20,9 +22,10 @@ PSInput main(VSInput input)
 {
     PSInput output;
 
-    // ƒ[ƒ‹ƒh•ÏŠ·
-    output.pos = mul(float4(input.pos, 1.0f), WorldMatrix);
-    output.color = input.color;
+    float4 worldPos = mul(float4(input.pos, 1.0f), WorldMatrix);
+    float4 viewPos = mul(worldPos, ViewMatrix);
+    output.pos = mul(viewPos, ProjMatrix); // © ‚±‚ê‚Å z,w ‚ª³‚µ‚­‚È‚é
 
+    output.color = input.color;
     return output;
 }

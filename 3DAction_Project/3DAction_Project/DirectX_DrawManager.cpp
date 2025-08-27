@@ -25,8 +25,6 @@
 // デバッグ用
 #include "Timer.h"
 
-#include <DirectXMath.h>
-
 
 // ==========================================
 // 構造体　デバッグ用
@@ -123,9 +121,9 @@ void DirectX_DrawManager::DebugDraw()
 	// 三角形の頂点
 	Vertex vertices[3] =
 	{
-	{ { 0.0f, 0.57735f/10, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
-	{ { 0.5f/10, -0.288675f/10, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
-	{ { -0.5f/10, -0.288675f/10, 0.0f }, {0, 0, 1, 1} } // 左下頂点
+	{ { 0.0f, 0.57735f, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
+	{ { 0.5f, -0.288675f, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
+	{ { -0.5f, -0.288675f, 0.0f }, {0, 0, 1, 1} } // 左下頂点
 	};
 
 	// 頂点バッファ作成	
@@ -168,37 +166,41 @@ void DirectX_DrawManager::DebugDraw()
 	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
 	for (auto& cb : cbInfo)
 	{
-		// Y軸周りに回転させるとします
-		float speed = 3.14159265f * 4;
-		float deltaTime = Timer::GetDeltaTime();
-
-		// 経過時間に応じて角度を増加
+		// Y軸周りに回転させるとします 
+		float speed = 3.14159265f * 4; 
+		float deltaTime = Timer::GetDeltaTime(); 
+		
+		// 経過時間に応じて角度を増加 
 		angle += speed * deltaTime;
 
-		/*
-		// クォータニオンを作成
-		Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(0, 0, 1), angle);
+		// ワールド行列（回転のみ）
+		Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), angle);
+		Matrix4x4 world = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
 
-		// クォータニオンを行列に変換
-		Matrix4x4 rotMat = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
-		*/
+		// ビュー行列（カメラを少し離す）
+		Vector3 eye(0, 0, -5);   // カメラ位置
+		Vector3 at(0, 0, 0);     // 注視点
+		Vector3 up(0, 1, 0);     // 上方向
+		Matrix4x4 view = Matrix4x4::CreateViewMatrix_LH(eye, at, up);
 
-		// DirectXMathでY軸回転クォータニオンを作成
-		DirectX::XMVECTOR rotQuat = DirectX::XMQuaternionRotationAxis(
-			DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), // Y軸
-			angle
-		);
+		// プロジェクション行列（透視投影）
+		float fov = 3.14159265f / 4.0f;     // 視野角45°
+		float aspect = 1280.0f / 720.0f;
+		float nearZ = 0.1f;
+		float farZ = 100.0f;
+		Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
 
-		// クォータニオンを行列に変換
-		DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationQuaternion(rotQuat);
+		struct TransformCB
+		{
+			Matrix4x4 WorldMatrix;
+			Matrix4x4 ViewMatrix;
+			Matrix4x4 ProjMatrix;
+		};
 
-		DirectX::XMFLOAT4X4 worldMat;
-		DirectX::XMStoreFloat4x4(&worldMat, rotMat);
-
-		// world = Matrix4x4::CreateIdentityMatrix();
+		TransformCB mat = { world.Transpose(), view.Transpose(),proj.Transpose() };
 
 		// 定数バッファ更新
-		m_CBManager.UpdateConstantBuffer(cb.GetName(), &worldMat, cb.GetSize(), DirectX11::Get::GetContext());
+		m_CBManager.UpdateConstantBuffer(cb.GetName(), &mat, cb.GetSize(), DirectX11::Get::GetContext());
 
 		// 定数バッファ取得
 		ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
