@@ -289,5 +289,11 @@
     <FxCompile Include="VS_Debug.hlsl">
       <Filter>3_Hlsl</Filter>
     </FxCompile>
+    <FxCompile Include="VS_TriangleDebug.hlsl">
+      <Filter>3_Hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_TriangleDebug.hlsl">
+      <Filter>3_Hlsl</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

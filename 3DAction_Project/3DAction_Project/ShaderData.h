@@ -62,7 +62,7 @@ public:
 	// ゲッター
 	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }  // シェーダーのゲッター
 	// 入力レイアウト情報（頂点シェーダーのみ）
-	const Microsoft::WRL::ComPtr<ID3D11InputLayout>& GetILInfo() const { return m_ILayout; }
+	ID3D11InputLayout* GetILInfo() const { return m_ILayout.Get(); }
 };
 
 

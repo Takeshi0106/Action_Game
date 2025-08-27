@@ -9,12 +9,33 @@
 // マネージャーヘッダー
 #include "ShaderManager.h" // シェーダーマネージャー
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
+
+// シェーダーヘッダー
+#include "ShaderData.h"
+
 // ログ出力
 #include "ReportMessage.h"
-// メッシュ
+
+// 計算構造体
+#include "Matrix4x4.h"
+#include "Quaternionh.h"
 #include "Vector3.h"
+#include "Color.h"
+
 // デバッグ用
 #include "Timer.h"
+
+#include <DirectXMath.h>
+
+
+// ==========================================
+// 構造体　デバッグ用
+// ==========================================
+struct Vertex {
+	Vector3 pos;
+	Color color;
+};
+float angle;
 
 
 // ==========================================
@@ -23,25 +44,25 @@
 #if defined(DEBUG) || defined(_DEBUG)
 
 ShaderManager DirectX_DrawManager::m_ShaderManager = {
-    "Debug/Log/Shader.txt",           // 使用したシェイダーの名前を書き出すログのパス
-    "Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
-    "",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
-    "Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
+	"Debug/Log/Shader.txt",           // 使用したシェイダーの名前を書き出すログのパス
+	"Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
+	"",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
+	"Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
 };
 
 #else
 
 ShaderManager DirectX_DrawManager::m_ShaderManager = {
-    "Debug/Log/Shader.txt",             // 使用したシェイダーの名前を書き出すログのパス
-    "Asset/Shader/Compile",             // デバッグ時のコンパイルしたシェイダーを入れるパス
-    "Asset/Shader/Hlsl",                // Debug時には使用しないパス　(.hlslがある場所を示すパス)
-    "Asset/Info/ShaderReflection.txt"   // リフレクションした情報を出力するファイルパス
+	"Debug/Log/Shader.txt",             // 使用したシェイダーの名前を書き出すログのパス
+	"Asset/Shader/Compile",             // デバッグ時のコンパイルしたシェイダーを入れるパス
+	"Asset/Shader/Hlsl",                // Debug時には使用しないパス　(.hlslがある場所を示すパス)
+	"Asset/Info/ShaderReflection.txt"   // リフレクションした情報を出力するファイルパス
 };
 
 #endif
 
 ConstantBufferManager DirectX_DrawManager::m_CBManager = {
-    "Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
+	"Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
 };
 
 
@@ -50,22 +71,22 @@ ConstantBufferManager DirectX_DrawManager::m_CBManager = {
 // ==========================================
 bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND windowHandle)
 {
-    // DirectXの初期化
-    if (!DirectX11::Init(width, height, windowHandle)) {
-        ErrorLog::OutputToMessageBox("DirectXの初期化に失敗しました");
-        return false; // 失敗したら戻る
-    }
+	// DirectXの初期化
+	if (!DirectX11::Init(width, height, windowHandle)) {
+		ErrorLog::OutputToMessageBox("DirectXの初期化に失敗しました");
+		return false; // 失敗したら戻る
+	}
 
-    // シェーダー・定数バッファ作成
-    if (!m_ShaderManager.Init(DirectX11::Get::GetDevice(), m_CBManager)) {
-        ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
-        return false; // 失敗したら戻る
-    }
+	// シェーダー・定数バッファ作成
+	if (!m_ShaderManager.Init(DirectX11::Get::GetDevice(), m_CBManager)) {
+		ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
+		return false; // 失敗したら戻る
+	}
 
-    Timer::Init(); // タイマー初期化
-    Timer::Start(); // タイマー開始
+	Timer::Init(); // タイマー初期化
+	Timer::Start(); // タイマー開始
 
-    return true;
+	return true;
 }
 
 
@@ -74,8 +95,8 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 // ============================================
 void DirectX_DrawManager::Uninit()
 {
-    DirectX11::Uninit();      // Directの後処理
-    m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
+	DirectX11::Uninit();      // Directの後処理
+	m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
 }
 
 
@@ -84,20 +105,122 @@ void DirectX_DrawManager::Uninit()
 // ===========================================
 void DirectX_DrawManager::DebugDraw()
 {
-    Timer::Debug_CheckUpdate(); // タイマーデバッグ
+	// タイマーデバッグ
+	Timer::Debug_CheckUpdate();
 
-    // デバッグ時 
-    DirectX11::BeginDraw(); // 描画の開始処理
+	// 三角形デバッグ描画	
 
-    // m_ConstantBufferManager.BindVS("Transform", DirectX11::Get::GetContext());
-    // m_ConstantBufferManager.BindVS("DebugParams", DirectX11::Get::GetContext());
-    // m_ConstantBufferManager.UpdateConstantBuffer("PSInput", a, sizeof(a), DirectX11::Get::GetContext());
-    // m_ShaderManager.BindVertexShaderSet("VS_Debug", DirectX11::Get::GetContext());
-    // m_ShaderManager.BindPixelShaderSet("PS_Debug", DirectX11::Get::GetContext());
+	// デバッグ時 
+	DirectX11::BeginDraw(); // 描画の開始処理
 
-    DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
+	// シェーダー取得
+	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader("VS_TriangleDebug");
+	PixelShaderData* ps = m_ShaderManager.GetFindPixelShader("PS_TriangleDebug");
 
-    DirectX11::EndDraw(); // 描画の終わり処理
+	// 入力レイアウト取得
+	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetILInfo()); // 入力レイアウト情報
 
-    Timer::LastUpdate(); // タイマー更新処理
+	// 三角形の頂点
+	Vertex vertices[3] =
+	{
+	{ { 0.0f, 0.57735f/10, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
+	{ { 0.5f/10, -0.288675f/10, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
+	{ { -0.5f/10, -0.288675f/10, 0.0f }, {0, 0, 1, 1} } // 左下頂点
+	};
+
+	// 頂点バッファ作成	
+	D3D11_BUFFER_DESC vbDesc{};
+	vbDesc.Usage = D3D11_USAGE_DEFAULT;
+	vbDesc.ByteWidth = sizeof(vertices);
+	vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData{};
+	initData.pSysMem = vertices;
+
+	ID3D11Buffer* vertexBuffer = nullptr;
+	HRESULT hr = DirectX11::Get::GetDevice()->CreateBuffer(&vbDesc, &initData, &vertexBuffer);
+	if (FAILED(hr)) {
+		ErrorLog::OutputToConsole("頂点バッファ作製失敗" + hr);
+	}
+
+	// 入力アセンブラ
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+
+	// トポロギー設定
+	DirectX11::Get::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// カリング削除
+	D3D11_RASTERIZER_DESC rasterDesc{};
+	rasterDesc.FillMode = D3D11_FILL_SOLID;       // 通常塗りつぶし
+	rasterDesc.CullMode = D3D11_CULL_NONE;       // カリング無効
+	rasterDesc.FrontCounterClockwise = FALSE;    // 頂点順序: 時計回りが表
+	rasterDesc.DepthClipEnable = TRUE;
+
+	ID3D11RasterizerState* noCullRS = nullptr;
+	DirectX11::Get::GetDevice()->CreateRasterizerState(&rasterDesc, &noCullRS);
+
+	DirectX11::Get::GetContext()->RSSetState(noCullRS);
+
+	// 3. 定数バッファ更新とバインド
+	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
+	for (auto& cb : cbInfo)
+	{
+		// Y軸周りに回転させるとします
+		float speed = 3.14159265f * 4;
+		float deltaTime = Timer::GetDeltaTime();
+
+		// 経過時間に応じて角度を増加
+		angle += speed * deltaTime;
+
+		/*
+		// クォータニオンを作成
+		Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(0, 0, 1), angle);
+
+		// クォータニオンを行列に変換
+		Matrix4x4 rotMat = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
+		*/
+
+		// DirectXMathでY軸回転クォータニオンを作成
+		DirectX::XMVECTOR rotQuat = DirectX::XMQuaternionRotationAxis(
+			DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), // Y軸
+			angle
+		);
+
+		// クォータニオンを行列に変換
+		DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationQuaternion(rotQuat);
+
+		DirectX::XMFLOAT4X4 worldMat;
+		DirectX::XMStoreFloat4x4(&worldMat, rotMat);
+
+		// world = Matrix4x4::CreateIdentityMatrix();
+
+		// 定数バッファ更新
+		m_CBManager.UpdateConstantBuffer(cb.GetName(), &worldMat, cb.GetSize(), DirectX11::Get::GetContext());
+
+		// 定数バッファ取得
+		ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
+		if (buffer)
+		{
+			// VSスロット番号にバインド
+			DirectX11::Get::GetContext()->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
+		}
+	}
+
+	// 4. シェーダーセット
+	DirectX11::Get::GetContext()->VSSetShader(vs->GetShader(), nullptr, 0);
+	DirectX11::Get::GetContext()->PSSetShader(ps->GetShader(), nullptr, 0);
+
+	// 6. 描画
+	DirectX11::Get::GetContext()->Draw(3, 0);
+
+
+	// DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
+
+
+	DirectX11::EndDraw(); // 描画の終わり処理
+
+	Timer::LastUpdate(); // タイマー更新処理
 }
