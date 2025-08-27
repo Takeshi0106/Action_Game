@@ -180,7 +180,6 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="DirectX_DrawManager.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="InputLayoutInfo.h" />
-    <ClInclude Include="MathUtiles.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Quaternionh.h" />
     <ClInclude Include="Vector2.h" />

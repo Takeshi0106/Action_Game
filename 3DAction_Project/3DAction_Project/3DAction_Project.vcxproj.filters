@@ -97,20 +97,26 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderReflectionUtils">
       <UniqueIdentifier>{cc59df9d-1389-42c4-abf2-982e73903346}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\2_Math\Vector">
-      <UniqueIdentifier>{6b79a4e8-aeb3-4901-9ec6-290ca9652917}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\2_Math\0_WindowsMath_Utiles">
       <UniqueIdentifier>{daa14929-8b49-46ad-a4fa-df33398adf26}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Base\2_PlatformMath\Vector">
-      <UniqueIdentifier>{72a4ab21-548f-4bff-8e34-5a09e6b41c9b}</UniqueIdentifier>
+    <Filter Include="1_Platform\Windows\2_Math\MathStrut">
+      <UniqueIdentifier>{97983a48-9778-4927-a308-f0bfa8bc7771}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Base\2_PlatformMath\Matrix">
+    <Filter Include="1_Platform\Windows\2_Math\MathStrut\Matrix">
+      <UniqueIdentifier>{3895c690-a6c7-411d-a530-9512de23e4a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\2_Math\MathStrut\Vector">
+      <UniqueIdentifier>{6b79a4e8-aeb3-4901-9ec6-290ca9652917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\2_PlatformMath\MathStruct">
+      <UniqueIdentifier>{a128bb6e-d326-4a4f-8f13-b0bf6c49598d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\2_PlatformMath\MathStruct\Matrix">
       <UniqueIdentifier>{9592bf7c-e241-4a70-92af-9cfbb0354756}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\2_Math\Matrix">
-      <UniqueIdentifier>{3895c690-a6c7-411d-a530-9512de23e4a7}</UniqueIdentifier>
+    <Filter Include="1_Platform\Base\2_PlatformMath\MathStruct\Vector">
+      <UniqueIdentifier>{72a4ab21-548f-4bff-8e34-5a09e6b41c9b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,23 +180,23 @@
     <ClCompile Include="WindowsMath_Utiles.cpp">
       <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
     </ClCompile>
-    <ClCompile Include="Windows_Color.cpp">
-      <Filter>1_Platform\Windows\2_Math</Filter>
-    </ClCompile>
     <ClCompile Include="Windows_Vector4.cpp">
-      <Filter>1_Platform\Windows\2_Math\Vector</Filter>
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
     </ClCompile>
     <ClCompile Include="Windows_Vector2.cpp">
-      <Filter>1_Platform\Windows\2_Math\Vector</Filter>
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
     </ClCompile>
     <ClCompile Include="Windows_Vector3.cpp">
-      <Filter>1_Platform\Windows\2_Math\Vector</Filter>
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
     </ClCompile>
     <ClCompile Include="Windows_Matrix4x4.cpp">
-      <Filter>1_Platform\Windows\2_Math\Matrix</Filter>
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Matrix</Filter>
     </ClCompile>
     <ClCompile Include="Windows_Quaternion.cpp">
-      <Filter>1_Platform\Windows\2_Math</Filter>
+      <Filter>1_Platform\Windows\2_Math\MathStrut</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows_Color.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,29 +260,26 @@
     <ClInclude Include="DirectX_DrawManager.h">
       <Filter>1_Platform\Windows\5_DrawManager</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>1_Platform\Base\2_PlatformMath</Filter>
-    </ClInclude>
     <ClInclude Include="WindowsMath_Utiles.h">
       <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
     </ClInclude>
     <ClInclude Include="Vector4.h">
-      <Filter>1_Platform\Base\2_PlatformMath\Vector</Filter>
+      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Vector</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
-      <Filter>1_Platform\Base\2_PlatformMath\Vector</Filter>
+      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Vector</Filter>
     </ClInclude>
     <ClInclude Include="Vector3.h">
-      <Filter>1_Platform\Base\2_PlatformMath\Vector</Filter>
+      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Vector</Filter>
     </ClInclude>
     <ClInclude Include="Matrix4x4.h">
-      <Filter>1_Platform\Base\2_PlatformMath\Matrix</Filter>
+      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Matrix</Filter>
     </ClInclude>
-    <ClInclude Include="MathUtiles.h">
-      <Filter>1_Platform\Base\2_PlatformMath</Filter>
+    <ClInclude Include="Color.h">
+      <Filter>1_Platform\Base\2_PlatformMath\MathStruct</Filter>
     </ClInclude>
     <ClInclude Include="Quaternionh.h">
-      <Filter>1_Platform\Base\2_PlatformMath</Filter>
+      <Filter>1_Platform\Base\2_PlatformMath\MathStruct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
