@@ -189,6 +189,9 @@
     <ClCompile Include="Windows_Matrix4x4.cpp">
       <Filter>1_Platform\Windows\2_Math\Matrix</Filter>
     </ClCompile>
+    <ClCompile Include="Windows_Quaternion.cpp">
+      <Filter>1_Platform\Windows\2_Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -268,6 +271,12 @@
     </ClInclude>
     <ClInclude Include="Matrix4x4.h">
       <Filter>1_Platform\Base\2_PlatformMath\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtiles.h">
+      <Filter>1_Platform\Base\2_PlatformMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternionh.h">
+      <Filter>1_Platform\Base\2_PlatformMath</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

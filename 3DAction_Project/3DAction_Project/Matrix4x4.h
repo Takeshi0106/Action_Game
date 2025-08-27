@@ -17,6 +17,7 @@
 // 前方宣言
 // ==========================================
 struct Vector3;
+struct Quaternion;
 
 
 // ==========================================
@@ -56,28 +57,29 @@ struct Matrix4x4
     // 行列作成
     static Matrix4x4 CreateIdentityMatrix() noexcept { return Matrix4x4(); } // 単位行列
     // 平行移動行列
-    static Matrix4x4 CreateTranslationMatrix(const Vector3& pos) noexcept;
+    static Matrix4x4 CreateTranslationMatrix_LH(const Vector3& pos) noexcept;
     // 回転行列
-    static Matrix4x4 CreateRotationXMatrix(float radAngle) noexcept;
-    static Matrix4x4 CreateRotationYMatrix(float radAngle) noexcept;
-    static Matrix4x4 CreateRotationZMatrix(float radAngle) noexcept;
-    static Matrix4x4 CreateRotationYawPitchRollMatrix(float yaw, float pitch, float roll) noexcept;
+    static Matrix4x4 CreateRotationXMatrix_LH(float radAngle) noexcept;
+    static Matrix4x4 CreateRotationYMatrix_LH(float radAngle) noexcept;
+    static Matrix4x4 CreateRotationZMatrix_LH(float radAngle) noexcept;
+    static Matrix4x4 CreateRotationYawPitchRollMatrix_LH(float yaw, float pitch, float roll) noexcept;
+    static Matrix4x4 CreateRotationQuaternion_LH(const Quaternion& quaternion) noexcept;
     // 拡大縮小行列
-    static Matrix4x4 Scaling(const Vector3& scale) noexcept;
-    // 投影・ビュー行列
-    static Matrix4x4 PerspectiveFovLH(float fovY, float aspect, float zn, float zf) noexcept;
-    static Matrix4x4 LookAtLH(const Vector3& eye, const Vector3& at, const Vector3& up) noexcept;
+    static Matrix4x4 CreateScalingMatrix_LH(const Vector3& scale) noexcept;
+    // 投影行列
+    static Matrix4x4 CreateProjectionMatrix_LH(float fovY, float aspect, float zn, float zf) noexcept;
+    // ビュー変換行列
+    static Matrix4x4 CreateViewMatrix_LH(const Vector3& cameraPos, const Vector3& lookPoint, const Vector3& upDir) noexcept;
 
     // 計算関数
-    // 基本操作
     Matrix4x4 Transpose() const noexcept;   // 転置
     Matrix4x4 Inverse() const noexcept;     // 逆行列
     float Determinant() const noexcept;     // 行列式
 
-    // 行列からベクトルやスケールを抽出
-    Vector3 ExtractTranslation() const noexcept;
-    Vector3 ExtractScaling() const noexcept;
-    Vector3 ExtractRotationEuler() const noexcept; // オイラー角に変換
+    // 抽出
+    Vector3 ExtractTranslation() const noexcept;   // 平行移動を抽出
+    Vector3 ExtractScaling() const noexcept;       // スケール抽出
+    Quaternion ExtractQuaternion() const noexcept; // 行列からクォータニオンを取得する
 };
 
 
@@ -85,6 +87,7 @@ struct Matrix4x4
 Matrix4x4 operator+(const Matrix4x4& mat1, const Matrix4x4& mat2) noexcept;
 Matrix4x4 operator-(const Matrix4x4& mat1, const Matrix4x4& mat2) noexcept;
 Matrix4x4 operator*(const Matrix4x4& mat1, const Matrix4x4& mat2) noexcept;
+Matrix4x4 operator*(const Matrix4x4& mat, const Quaternion& q) noexcept;
 Vector3   operator*(const Matrix4x4& mat1, Vector3 vec1) noexcept;
 Matrix4x4 operator*(const Matrix4x4& mat1, float scalar) noexcept;
 Matrix4x4 operator/(const Matrix4x4& mat1, float scalar) noexcept;
