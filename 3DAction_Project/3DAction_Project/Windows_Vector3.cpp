@@ -110,6 +110,12 @@ Vector3 Vector3::Lerp(const Vector3& vec1, float t)  const noexcept
 	return FromXMVECTOR3(lerp);
 }
 
+// GPUに送るデータに変換
+Vector3 Vector3::toGPU() const noexcept
+{
+	return *this;
+}
+
 
 // ============================
 // 演算子

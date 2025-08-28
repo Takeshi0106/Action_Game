@@ -99,6 +99,11 @@ Vector4 Vector4::Lerp(const Vector4& vec1, float t) const noexcept
     return FromXMVECTOR4(lerp);
 }
 
+// GPUに送るデータに変換
+Vector4 Vector4::toGPU() const noexcept
+{
+    return *this;
+}
 
 // ============================
 // 演算子

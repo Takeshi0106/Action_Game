@@ -99,6 +99,24 @@ void DirectX_DrawManager::Uninit()
 
 
 // ===========================================
+// 描画
+// ===========================================
+void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int size)
+{
+
+}
+
+
+// ===========================================
+// 定数バッファ更新
+// ===========================================
+void DirectX_DrawManager::UpdateShaderConstants(const char* drawID, const void* data, const int size)
+{
+
+}
+
+
+// ===========================================
 // デバッグ用描画
 // ===========================================
 void DirectX_DrawManager::DebugDraw()
@@ -197,17 +215,25 @@ void DirectX_DrawManager::DebugDraw()
 			Matrix4x4 ProjMatrix;
 		};
 
-		TransformCB mat = { world.Transpose(), view.Transpose(),proj.Transpose() };
-
-		// 定数バッファ更新
-		m_CBManager.UpdateConstantBuffer(cb.GetName(), &mat, cb.GetSize(), DirectX11::Get::GetContext());
+		TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
 
 		// 定数バッファ取得
-		ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
+		ID3D11Buffer * buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
+
 		if (buffer)
 		{
+			ID3D11DeviceContext* context = DirectX11::Get::GetContext();
+
+			// MapしてCPU→GPUコピー
+			D3D11_MAPPED_SUBRESOURCE mapped = {};
+			if (SUCCEEDED(context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped)))
+			{
+				memcpy(mapped.pData, &mat, cb.GetSize());
+				context->Unmap(buffer, 0);
+			}
+
 			// VSスロット番号にバインド
-			DirectX11::Get::GetContext()->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
+			context->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
 		}
 	}
 

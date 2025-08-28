@@ -118,6 +118,9 @@
     <Filter Include="1_Platform\Base\2_PlatformMath\MathStruct\Vector">
       <UniqueIdentifier>{72a4ab21-548f-4bff-8e34-5a09e6b41c9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager">
+      <UniqueIdentifier>{13834c66-6084-4a99-95fe-1be67916659f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="Quaternionh.h">
       <Filter>1_Platform\Base\2_PlatformMath\MathStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDrawManager.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

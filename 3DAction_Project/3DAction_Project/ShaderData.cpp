@@ -69,6 +69,7 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
 
     // 入力レイアウト作成
     Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
+    
     HRESULT hrLayout = device->CreateInputLayout(
         descArray.data(),
         static_cast<UINT>(descArray.size()),
@@ -82,7 +83,7 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
         return false;
     }
 
-    m_ILayout = layout; // VertexShaderData 内に保存
+    m_ILayout = std::move(layout); // VertexShaderData 内に保存
 
 
     // デバッグ用に名前を出力

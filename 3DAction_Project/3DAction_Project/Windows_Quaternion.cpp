@@ -130,6 +130,11 @@ Vector3 Quaternion::RotateVector(const Vector3& v) const noexcept
 	);
 }
 
+// GPUに送るデータに変換
+Quaternion Quaternion::toGPU() const noexcept
+{
+	return *this;
+}
 
 // ===================================
 // 演算子

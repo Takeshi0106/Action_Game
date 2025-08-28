@@ -109,6 +109,12 @@ Vector2 Vector2::Lerp(const Vector2& vec1, float t) const noexcept
 	return FromXMVECTOR2(lerp);
 }
 
+// GPUに送るデータに変換
+Vector2 Vector2::toGPU() const noexcept
+{
+	return *this;
+}
+
 
 // ============================
 // 演算子

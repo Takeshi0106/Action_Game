@@ -47,6 +47,8 @@ struct Vector4
 	float Distance(const Vector4& vec1) const noexcept; // 距離
 	float DistanceSquared(const Vector4& vec1) const noexcept; // 距離の２乗
 	Vector4 Lerp(const Vector4& vec1, float t) const noexcept; // 線形補間
+
+	Vector4 toGPU() const noexcept;
 };
 
 

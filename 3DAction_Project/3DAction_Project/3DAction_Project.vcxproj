@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -172,6 +172,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseDirectXManager.h" />
+    <ClInclude Include="BaseDrawManager.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBufferInfo.h" />

@@ -45,6 +45,9 @@ struct Quaternion
     Quaternion Inverse() const noexcept;
     // ベクトルを回転
     Vector3 RotateVector(const Vector3& v) const noexcept;
+
+    // GPUに送るデータに変換
+    Quaternion toGPU() const noexcept;
 };
 
 

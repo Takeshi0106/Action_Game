@@ -46,14 +46,10 @@ public:
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device);
-	// 定数バッファを更新
-	bool UpdateConstantBuffer(const std::string& name, const void* data, size_t dataSize, ID3D11DeviceContext* context);
 	// 定数バッファを探して、戻り値で返す
 	ID3D11Buffer* GetFindConstantBuffer(const std::string& name);
 
-	// シェーダーをバインドする
-	bool BindVS(const std::string& name, ID3D11DeviceContext* context);
-	bool BindPS(const std::string& name, ID3D11DeviceContext* context);
-	bool BindCS(const std::string& name, ID3D11DeviceContext* context);
+	// 後処理
+	void ReleaseAllConstantBuffers();
 };
 

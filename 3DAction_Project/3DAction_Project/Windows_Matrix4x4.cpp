@@ -171,6 +171,13 @@ float Matrix4x4::Determinant() const noexcept
 	return det;
 }
 
+// GPUに送るための変換をする行列
+Matrix4x4 Matrix4x4::toGPU() const noexcept
+{
+	// DirectXは左手、列優先でOK
+	return this->Transpose();
+}
+
 // 平行移動ベクトルを抽出
 Vector3 Matrix4x4::ExtractTranslation() const noexcept
 {

@@ -1,8 +1,15 @@
 ﻿#pragma once
 
 // ========================================
-//
+// 【クラス概要】
+// DirectX描画マネージャー
 // ========================================
+
+
+// ========================================
+// ヘッダー
+// ========================================
+#include "BaseDrawManager.h"
 
 
 // ========================================
@@ -19,17 +26,24 @@ class ConstantBufferManager;
 // ========================================
 // DirectXの描画マネージャー
 // ========================================
-class DirectX_DrawManager
+class DirectX_DrawManager : public BaseDrawManager
 {
 private:
 	static ShaderManager m_ShaderManager;     // シェーダーマネージャー
 	static ConstantBufferManager m_CBManager; // 定数バッファマネージャー
 
 public:
-	bool Init(unsigned int Width, unsigned int Height, HWND windowHandle); // 初期化
-	void DebugDraw(); // デバッグ用描画
-
+	// 初期化
+	bool Init(unsigned int Width, unsigned int Height, HWND windowHandle);
+	// 後処理
 	void Uninit();
 
+	// 描画
+	void Draw(const char* drawID, const void* data, const int size) override;
+	// 定数バッファ更新
+	void UpdateShaderConstants(const char* drawID, const void* data, const int size) override;
+
+	// デバッグ用描画
+	void DebugDraw();
 };
 

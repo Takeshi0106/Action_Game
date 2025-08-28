@@ -75,6 +75,7 @@ struct Matrix4x4
     Matrix4x4 Transpose() const noexcept;   // 転置
     Matrix4x4 Inverse() const noexcept;     // 逆行列
     float Determinant() const noexcept;     // 行列式
+    Matrix4x4 toGPU() const noexcept;       // GPUに送るように作成
 
     // 抽出
     Vector3 ExtractTranslation() const noexcept;   // 平行移動を抽出
