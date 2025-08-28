@@ -22,9 +22,10 @@ PSInput main(VSInput input)
 {
     PSInput output;
 
+    
     float4 worldPos = mul(float4(input.pos, 1.0f), WorldMatrix);
     float4 viewPos = mul(worldPos, ViewMatrix);
-    output.pos = mul(viewPos, ProjMatrix); // Å© Ç±ÇÍÇ≈ z,w Ç™ê≥ÇµÇ≠Ç»ÇÈ
+    output.pos = mul(viewPos, ProjMatrix);
 
     output.color = input.color;
     return output;
