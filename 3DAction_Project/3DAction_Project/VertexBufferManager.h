@@ -44,9 +44,17 @@ public:
 	~VertexBufferManager() = default;
 
 	// 頂点バッファ作成
-	bool CreateVertexBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device);
+	bool CreateVertexBuffer(const std::string& name,
+		ID3D11Device* device,
+		const void* vertices,
+		int vertexCount,
+		int stride,
+		int slot = 0);
+
 	// 頂点バッファを探して、戻り値で返す
-	ID3D11Buffer* GetFindVertexBuffer(const std::string& name);
+	ID3D11Buffer* GetFindVertexBuffer(const std::string& name) const;
+	// 頂点バッファがあるかのチェック
+	bool Exists(const std::string& name) const;
 
 	// 後処理
 	void ReleaseAllVertexBuffers();

@@ -9,6 +9,7 @@
 // マネージャーヘッダー
 #include "ShaderManager.h" // シェーダーマネージャー
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
+#include "VertexBufferManager.h"   // 頂点バッファマネージャー
 
 // シェーダーヘッダー
 #include "ShaderData.h"
@@ -61,6 +62,10 @@ ShaderManager DirectX_DrawManager::m_ShaderManager = {
 
 ConstantBufferManager DirectX_DrawManager::m_CBManager = {
 	"Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
+};
+
+VertexBufferManager DirectX_DrawManager::m_VBManager = {
+	"Debug/Log/VertexBuffers.tex"
 };
 
 
@@ -158,21 +163,17 @@ void DirectX_DrawManager::DebugDraw()
 	{ { -0.5f, -0.288675f, 0.0f }, {0, 0, 1, 1} } // 左下頂点
 	};
 
-	// 頂点バッファ作成	
-	D3D11_BUFFER_DESC vbDesc{};
-	vbDesc.Usage = D3D11_USAGE_DEFAULT;
-	vbDesc.ByteWidth = sizeof(vertices);
-	vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vbDesc.CPUAccessFlags = 0;
+	// 頂点バッファ作成
+	bool result = m_VBManager.CreateVertexBuffer(
+		vs->GetName().c_str(),
+		DirectX11::Get::GetDevice(),
+		vertices,           // 頂点データ
+		3,                  // 頂点数
+		sizeof(Vertex),     // stride
+		0                   // slot（省略可）
+	);
 
-	D3D11_SUBRESOURCE_DATA initData{};
-	initData.pSysMem = vertices;
-
-	ID3D11Buffer* vertexBuffer = nullptr;
-	HRESULT hr = DirectX11::Get::GetDevice()->CreateBuffer(&vbDesc, &initData, &vertexBuffer);
-	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole("頂点バッファ作製失敗" + hr);
-	}
+	auto vertexBuffer = m_VBManager.GetFindVertexBuffer(vs->GetName());
 
 	// 入力アセンブラ
 	UINT stride = sizeof(Vertex);

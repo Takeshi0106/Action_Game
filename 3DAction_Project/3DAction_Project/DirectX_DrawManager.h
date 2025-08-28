@@ -21,6 +21,7 @@ using HWND = HWND__*;
 // マネージャーの前方宣言
 class ShaderManager;
 class ConstantBufferManager;
+class VertexBufferManager;
 
 
 // ========================================
@@ -31,6 +32,7 @@ class DirectX_DrawManager : public BaseDrawManager
 private:
 	static ShaderManager m_ShaderManager;     // シェーダーマネージャー
 	static ConstantBufferManager m_CBManager; // 定数バッファマネージャー
+	static VertexBufferManager m_VBManager; // 頂点バッファマネージャー
 
 public:
 	// 初期化
