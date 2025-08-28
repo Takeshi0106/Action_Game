@@ -41,7 +41,7 @@ public:
 	// 描画
 	void Draw(const char* drawID, const void* data, const int size) override;
 	// 定数バッファ更新
-	void UpdateShaderConstants(const char* drawID, const void* data, const int size) override;
+	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override;
 
 	// デバッグ用描画
 	void DebugDraw();

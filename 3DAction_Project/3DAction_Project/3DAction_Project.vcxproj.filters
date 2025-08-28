@@ -64,9 +64,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager">
       <UniqueIdentifier>{b485ea38-40c2-45b7-aa60-c162f0b52442}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\3_ResourceManager">
-      <UniqueIdentifier>{6a38eb7f-f505-4a60-8364-a613bc5a292f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager">
       <UniqueIdentifier>{06acb924-c94c-4191-ad05-e23f7fa0df66}</UniqueIdentifier>
     </Filter>
@@ -87,9 +84,6 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils">
       <UniqueIdentifier>{3307b22f-9a32-477f-89ed-a9bb36abf1bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\2_ConstantBufferManager">
-      <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompilUtils">
       <UniqueIdentifier>{6ad274d1-c662-4366-ae63-d0a62acecc89}</UniqueIdentifier>
@@ -121,6 +115,15 @@
     <Filter Include="1_Platform\Base\5_PlatformDrawManager">
       <UniqueIdentifier>{13834c66-6084-4a99-95fe-1be67916659f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\3_ConstantBufferManager">
+      <UniqueIdentifier>{931d6c2f-dc50-434e-93e0-3860968cfad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager">
+      <UniqueIdentifier>{6a38eb7f-f505-4a60-8364-a613bc5a292f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager">
+      <UniqueIdentifier>{645cb89e-6963-4846-a182-50067e546d82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -139,10 +142,10 @@
       <Filter>1_Platform\Windows\5_DrawManager\Manager</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\3_ResourceManager</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\2_ConstantBufferManager</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\3_ConstantBufferManager</Filter>
     </ClCompile>
     <ClCompile Include="ShaderCompilUtils.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompilUtils</Filter>
@@ -201,6 +204,9 @@
     <ClCompile Include="Windows_Color.cpp">
       <Filter>1_Platform\Windows\2_Math\MathStrut</Filter>
     </ClCompile>
+    <ClCompile Include="VertexBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -216,10 +222,10 @@
       <Filter>1_Platform\Windows\5_DrawManager\Manager</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\3_ResourceManager</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\2_ConstantBufferManager</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\3_ConstantBufferManager</Filter>
     </ClInclude>
     <ClInclude Include="ShaderCompilUtils.h">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\1_ShaderManager\ShaderUtils\ShaderCompilUtils</Filter>
@@ -286,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="BaseDrawManager.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

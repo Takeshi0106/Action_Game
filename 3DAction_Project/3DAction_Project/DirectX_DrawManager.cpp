@@ -110,9 +110,23 @@ void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int s
 // ===========================================
 // 定数バッファ更新
 // ===========================================
-void DirectX_DrawManager::UpdateShaderConstants(const char* drawID, const void* data, const int size)
+void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const void* data, const int size)
 {
+	// 定数バッファ取得
+	ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(constantName);
 
+	if (buffer)
+	{
+		ID3D11DeviceContext* context = DirectX11::Get::GetContext();
+
+		// MapしてCPU→GPUコピー
+		D3D11_MAPPED_SUBRESOURCE mapped = {};
+		if (SUCCEEDED(context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped)))
+		{
+			memcpy(mapped.pData, data, size);
+			context->Unmap(buffer, 0);
+		}
+	}
 }
 
 
@@ -168,6 +182,7 @@ void DirectX_DrawManager::DebugDraw()
 	// トポロギー設定
 	DirectX11::Get::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+
 	// カリング削除
 	D3D11_RASTERIZER_DESC rasterDesc{};
 	rasterDesc.FillMode = D3D11_FILL_SOLID;       // 通常塗りつぶし
@@ -179,6 +194,7 @@ void DirectX_DrawManager::DebugDraw()
 	DirectX11::Get::GetDevice()->CreateRasterizerState(&rasterDesc, &noCullRS);
 
 	DirectX11::Get::GetContext()->RSSetState(noCullRS);
+
 
 	// 3. 定数バッファ更新とバインド
 	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
@@ -217,20 +233,15 @@ void DirectX_DrawManager::DebugDraw()
 
 		TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
 
+		// 定数バッファ更新
+		UpdateShaderConstants(cb.GetName().c_str(), &mat, sizeof(mat));
+
 		// 定数バッファ取得
 		ID3D11Buffer * buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
 
 		if (buffer)
 		{
 			ID3D11DeviceContext* context = DirectX11::Get::GetContext();
-
-			// MapしてCPU→GPUコピー
-			D3D11_MAPPED_SUBRESOURCE mapped = {};
-			if (SUCCEEDED(context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped)))
-			{
-				memcpy(mapped.pData, &mat, cb.GetSize());
-				context->Unmap(buffer, 0);
-			}
 
 			// VSスロット番号にバインド
 			context->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);

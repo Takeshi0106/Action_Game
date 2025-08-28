@@ -103,7 +103,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		auto vertex = std::make_unique<VertexShaderData>(shaderName, "main", "vs_5_0");
 
 		// シェーダー作成
-		if (!vertex->CreateShader(device, binary, size,CBInfo,ILInfo)) {
+		if (!vertex->CreateShader(device, binary, size, CBInfo, ILInfo)) {
 			ErrorLog::OutputToConsole(std::string("頂点シェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -131,7 +131,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		auto compute = std::make_unique< ComputeShaderData>(shaderName, "main", "cs_5_0");
 
 		// シェーダー作成
-		if (!compute->CreateShader(device, binary, size,CBInfo)) {
+		if (!compute->CreateShader(device, binary, size, CBInfo)) {
 			ErrorLog::OutputToConsole(std::string("コンピュートシェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -160,7 +160,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
 {
 	auto it = m_Vertexs.find(name);
-	
+
 	if (it != m_Vertexs.end()) {
 		return it->second.get();
 	}
@@ -186,7 +186,7 @@ ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 	auto it = m_Computes.find(name);
 
 	if (it != m_Computes.end()) {
-		return it->second.get(); 
+		return it->second.get();
 	}
 
 	return nullptr;
@@ -199,7 +199,7 @@ ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
 bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path filename, Microsoft::WRL::ComPtr<ID3DBlob>& blob)
 {
 	// ファイルの最初の名前でシェーダー判定
-	if (filename.stem().string().rfind("VS_", 0) == 0) 
+	if (filename.stem().string().rfind("VS_", 0) == 0)
 	{
 		// コンパイルして書き出す
 		if (!ShaderCompilerUtils::OutputCompileShader(kFilePath, filename, "main", "vs_5_0", blob.GetAddressOf())) {
@@ -207,7 +207,7 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 			return false;
 		}
 	}
-	else if (filename.stem().string().rfind("PS_", 0) == 0) 
+	else if (filename.stem().string().rfind("PS_", 0) == 0)
 	{
 		// コンパイルして書き出す
 		if (!ShaderCompilerUtils::OutputCompileShader(kFilePath, filename, "main", "ps_5_0", blob.GetAddressOf())) {
@@ -223,7 +223,7 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 			return false;
 		}
 	}
-	else 
+	else
 	{
 		ErrorLog::OutputToConsole(std::string(filename.string() + " : 先頭にシェーダーの種類が記載されていません").c_str());
 		return  false;
@@ -351,7 +351,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 
 		// 一応、解放処理
 		blob.Reset();
-		
+
 		// インデックスを更新
 		index++;
 	}
@@ -371,7 +371,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device, ConstantBufferManager& CBMan
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath)
 {
 	// ファイルにアクセス時に例外が発生する可能性があるため、使用しています
-	try 
+	try
 	{
 		// .csoファイルが存在しなければ更新する
 		if (!std::filesystem::exists(binaryPath)) {
@@ -383,7 +383,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 		auto binTime = std::filesystem::last_write_time(binaryPath);
 
 		// .hlslのほうが新しければ更新
-		if (shaTime > binTime) 
+		if (shaTime > binTime)
 		{
 			// デバッグ用にログ出力
 			DebugLog::OutputToConsole((shaderPath.string() + " が新しく更新されています").c_str());
@@ -391,7 +391,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 		}
 
 	}
-	catch (const std::filesystem::filesystem_error& e) 
+	catch (const std::filesystem::filesystem_error& e)
 	{
 		// ファイルアクセスに失敗した場合もコンパイル必須にする
 		ErrorLog::OutputToConsole((std::string("IsShaderUpdateCheck ファイルアクセスエラー: ") + e.what()).c_str());
@@ -456,9 +456,9 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBM
 		// 定数バッファを作成
 		for (int j = 0; j < allShaderInfo[i].GetConstantBufferInfo().size(); j++)
 		{
-			CBManager.CreateConstantBuffer(allShaderInfo[i].GetConstantBufferInfo()[j].GetName(), 
+			CBManager.CreateConstantBuffer(allShaderInfo[i].GetConstantBufferInfo()[j].GetName(),
 				allShaderInfo[i].GetConstantBufferInfo()[j].GetSize(),
-				allShaderInfo[i].GetConstantBufferInfo()[j].GetRegisterNumber(), 
+				allShaderInfo[i].GetConstantBufferInfo()[j].GetRegisterNumber(),
 				device);
 		}
 	}

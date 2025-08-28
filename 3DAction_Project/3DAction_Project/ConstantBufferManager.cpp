@@ -14,7 +14,7 @@
 // ======================================
 // 静的メンバー配列
 // ======================================
-std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBufferManager::m_ConstantBuffer;
+std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBufferManager::m_ConstantBuffers;
 
 
 // ======================================
@@ -38,10 +38,10 @@ struct ConstantBufferData { // 定数バッファデータ
 bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device)
 {
 	// エラーチェック
-	if (m_ConstantBuffer.count(name)) 
+	if (m_ConstantBuffers.count(name)) 
 	{
 		// 定数バッファ取得
-		auto& existing = m_ConstantBuffer[name];
+		auto& existing = m_ConstantBuffers[name];
 
 		// サイズ比較
 		if (existing->size != size) {
@@ -76,8 +76,8 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t
 
 	// 情報を構造体にまとめてマップに保存
 	auto data = std::make_unique<ConstantBufferData>(buffer, size, slot);
-	m_ConstantBuffer[name] = std::move(data);
-
+	m_ConstantBuffers[name] = std::move(data);
+	
 	// デバッグ用に名前を保存しておく
 	Log(name.c_str());
 
@@ -91,9 +91,9 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t
 ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& name)
 {
 	// 探す
-	auto it = m_ConstantBuffer.find(name); 
+	auto it = m_ConstantBuffers.find(name); 
 
-	if (it != m_ConstantBuffer.end()) 
+	if (it != m_ConstantBuffers.end()) 
 	{
 		// 定数バッファを返す
 		return it->second->constantBuffer.Get();
@@ -111,5 +111,5 @@ ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& na
 // =========================================
 void ConstantBufferManager::ReleaseAllConstantBuffers()
 {
-	m_ConstantBuffer.clear();
+	m_ConstantBuffers.clear();
 }

@@ -2,6 +2,8 @@
 // ===========================================
 // 【クラス概要】
 // 定数バッファの作成、管理、削除を行うマネージャー
+// 
+// 定数バッファ、頂点バッファを管理
 // ===========================================
 
 
@@ -36,7 +38,8 @@ struct ConstantBufferData;  // 定数バッファ構造体 (定数バッファ�
 class ConstantBufferManager : public BaseDirectXManager
 {
 private:
-	static std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffer; // 定数バッファメンバー配列
+	// 定数バッファメンバー配列
+	static std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffers;
 
 public:
 	// コンストラクタ
