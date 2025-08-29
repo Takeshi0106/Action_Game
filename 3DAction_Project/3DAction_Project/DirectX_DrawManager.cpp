@@ -86,6 +86,24 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		return false; // 失敗したら戻る
 	}
 
+	// 三角形の頂点
+	Vertex vertices[3] =
+	{
+	{ { 0.0f, 0.57735f, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
+	{ { 0.5f, -0.288675f, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
+	{ { -0.5f, -0.288675f, 0.0f }, {0, 0, 1, 1} } // 左下頂点
+	};
+
+	// 頂点バッファ作成
+	bool result = m_VBManager.CreateVertexBuffer(
+		"VS_TriangleDebug",
+		DirectX11::Get::GetDevice(),
+		vertices,           // 頂点データ
+		sizeof(vertices) / sizeof(Vertex), // 頂点数
+		sizeof(Vertex)     // stride
+	);
+
+
 	Timer::Init(); // タイマー初期化
 	Timer::Start(); // タイマー開始
 
@@ -155,24 +173,7 @@ void DirectX_DrawManager::DebugDraw()
 	// 入力レイアウト取得
 	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetILInfo()); // 入力レイアウト情報
 
-	// 三角形の頂点
-	Vertex vertices[3] =
-	{
-	{ { 0.0f, 0.57735f, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
-	{ { 0.5f, -0.288675f, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
-	{ { -0.5f, -0.288675f, 0.0f }, {0, 0, 1, 1} } // 左下頂点
-	};
-
-	// 頂点バッファ作成
-	bool result = m_VBManager.CreateVertexBuffer(
-		vs->GetName().c_str(),
-		DirectX11::Get::GetDevice(),
-		vertices,           // 頂点データ
-		3,                  // 頂点数
-		sizeof(Vertex),     // stride
-		0                   // slot（省略可）
-	);
-
+	// 頂点バッファ取得
 	auto vertexBuffer = m_VBManager.GetFindVertexBuffer(vs->GetName());
 
 	// 入力アセンブラ

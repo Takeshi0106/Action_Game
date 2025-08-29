@@ -124,6 +124,9 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager">
       <UniqueIdentifier>{645cb89e-6963-4846-a182-50067e546d82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager\VertexBufferInfo">
+      <UniqueIdentifier>{fee649e9-5c54-4797-a075-f9668ebe2d20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -206,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="VertexBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBufferIData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager\VertexBufferInfo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="VertexBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager\VertexBufferInfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

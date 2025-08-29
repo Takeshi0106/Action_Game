@@ -25,7 +25,7 @@
 struct ID3D11Device;        // DirectXのデバイス
 struct ID3D11DeviceContext; // DirectXのデバイスコンテキスト
 struct ID3D11Buffer;        // 定数バッファ
-struct VertexBufferData;    // 頂点バッファ構造体 (入力レイアウトを持つ)
+class VertexBufferData;    // 頂点バッファデータクラス
 
 
 // ======================================
@@ -48,8 +48,7 @@ public:
 		ID3D11Device* device,
 		const void* vertices,
 		int vertexCount,
-		int stride,
-		int slot = 0);
+		int stride);
 
 	// 頂点バッファを探して、戻り値で返す
 	ID3D11Buffer* GetFindVertexBuffer(const std::string& name) const;
