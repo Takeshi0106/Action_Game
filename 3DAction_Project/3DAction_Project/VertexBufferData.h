@@ -59,7 +59,8 @@ public:
         int vertexMaxCount,
         int stride,
         D3D11_PRIMITIVE_TOPOLOGY primitiveType,
-        D3D11_USAGE usage = D3D11_USAGE_DEFAULT
+        D3D11_USAGE usage = D3D11_USAGE_DYNAMIC,
+        D3D11_CPU_ACCESS_FLAG flag = D3D11_CPU_ACCESS_WRITE
     );
 
     // ゲッター

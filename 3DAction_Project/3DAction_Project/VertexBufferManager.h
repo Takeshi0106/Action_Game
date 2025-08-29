@@ -5,6 +5,7 @@
 // 頂点バッファマネージャー
 // 
 // 作成、管理、削除を担当
+// VertexBufferDataに重たいヘッダーがあります
 // =====================================
 
 
@@ -17,6 +18,8 @@
 #include <memory>
 // 配列のヘッダー
 #include <unordered_map>
+// バッファ設定ヘッダー
+#include "BufferSetting.h"
 
 
 // ======================================
@@ -44,14 +47,20 @@ public:
 	~VertexBufferManager() = default;
 
 	// 頂点バッファ作成
-	bool CreateVertexBuffer(const std::string& name,
+	bool CreateVertexBuffer(
+		const std::string& name,
 		ID3D11Device* device,
 		const void* vertices,
 		int vertexCount,
-		int stride);
+		int vertexMaxCount,
+		int stride,
+		PrimitiveType type = PrimitiveType::TriangleStrip,
+		BufferUsage usage = BufferUsage::Dynamic,
+		CPUAccess access = CPUAccess::Write
+	);
 
 	// 頂点バッファを探して、戻り値で返す
-	ID3D11Buffer* GetFindVertexBuffer(const std::string& name) const;
+	VertexBufferData* GetFindVertexData(const std::string& name) const;
 	// 頂点バッファがあるかのチェック
 	bool Exists(const std::string& name) const;
 

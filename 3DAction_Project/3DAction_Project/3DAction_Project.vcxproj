@@ -176,6 +176,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="BaseDirectXManager.h" />
     <ClInclude Include="BaseDrawManager.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
+    <ClInclude Include="BufferSetting.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBufferInfo.h" />
     <ClInclude Include="ConstantBufferManager.h" />

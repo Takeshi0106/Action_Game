@@ -40,11 +40,24 @@ public:
 	// 後処理
 	void Uninit();
 
+	// 頂点バッファ作成
+	void CreateVertexBuffer(
+		const char* drawID,
+		const void* data,
+		int size,
+		PrimitiveType type,
+		BufferUsage usage,
+		CPUAccess access) override;
+
 	// 描画
 	void Draw(const char* drawID, const void* data, const int size) override;
 	// 定数バッファ更新
 	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override;
+	// 頂点バッファ更新
+	void UpdateVertexBuffer(const char* drawID, const void* data, int size) override;
 
+	// デバッグ用更新
+	void DebugUpdate();
 	// デバッグ用描画
 	void DebugDraw();
 };

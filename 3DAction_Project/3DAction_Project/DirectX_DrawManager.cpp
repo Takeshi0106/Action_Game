@@ -4,8 +4,10 @@
 // =========================================
 // 必須ヘッダー
 #include "DirectX_DrawManager.h" // 自分のヘッダー
+
 // DirectXヘッダー
 #include "DirectX.h" // DirectXの関数群ヘッダー
+
 // マネージャーヘッダー
 #include "ShaderManager.h" // シェーダーマネージャー
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
@@ -13,6 +15,8 @@
 
 // シェーダーヘッダー
 #include "ShaderData.h"
+// 頂点バッファヘッダー
+#include "VertexBufferData.h"
 
 // ログ出力
 #include "ReportMessage.h"
@@ -33,6 +37,19 @@
 struct Vertex {
 	Vector3 pos;
 	Color color;
+};
+struct TransformCB
+{
+	Matrix4x4 WorldMatrix;
+	Matrix4x4 ViewMatrix;
+	Matrix4x4 ProjMatrix;
+};
+// 三角形の頂点
+Vertex vertices[3] =
+{
+{ { 0.0f, 0.57735f, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
+{ { 0.5f, -0.288675f, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
+{ { -0.5f, -0.288675f, 0.0f }, {0, 0, 1, 1} } // 左下頂点
 };
 float angle;
 
@@ -86,22 +103,51 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		return false; // 失敗したら戻る
 	}
 
-	// 三角形の頂点
-	Vertex vertices[3] =
-	{
-	{ { 0.0f, 0.57735f, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
-	{ { 0.5f, -0.288675f, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
-	{ { -0.5f, -0.288675f, 0.0f }, {0, 0, 1, 1} } // 左下頂点
-	};
 
 	// 頂点バッファ作成
-	bool result = m_VBManager.CreateVertexBuffer(
+	CreateVertexBuffer(
 		"VS_TriangleDebug",
-		DirectX11::Get::GetDevice(),
-		vertices,           // 頂点データ
-		sizeof(vertices) / sizeof(Vertex), // 頂点数
-		sizeof(Vertex)     // stride
-	);
+		vertices,
+		sizeof(Vertex),
+		PrimitiveType::TriangleStrip,
+		BufferUsage::Dynamic,
+		CPUAccess::Write);
+
+	// 定数バッファ初期化
+	// ワールド行列
+	Matrix4x4 world = Matrix4x4::CreateIdentityMatrix();
+
+	// ビュー行列（カメラを少し離す）
+	Vector3 eye(0, 0, -5);   // カメラ位置
+	Vector3 at(0, 0, 0);     // 注視点
+	Vector3 up(0, 1, 0);     // 上方向
+	Matrix4x4 view = Matrix4x4::CreateViewMatrix_LH(eye, at, up);
+
+	// プロジェクション行列（透視投影）
+	float fov = 3.14159265f / 4.0f;     // 視野角45°
+	float aspect = 1280.0f / 720.0f;
+	float nearZ = 0.1f;
+	float farZ = 100.0f;
+	Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
+
+	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
+
+	// 定数バッファ更新
+	UpdateShaderConstants("Transform1", &mat, sizeof(mat));
+
+
+
+	// カリング削除
+	D3D11_RASTERIZER_DESC rasterDesc{};
+	rasterDesc.FillMode = D3D11_FILL_SOLID;       // 通常塗りつぶし
+	rasterDesc.CullMode = D3D11_CULL_NONE;       // カリング無効
+	rasterDesc.FrontCounterClockwise = FALSE;    // 頂点順序: 時計回りが表
+	rasterDesc.DepthClipEnable = TRUE;
+
+	ID3D11RasterizerState* noCullRS = nullptr;
+	DirectX11::Get::GetDevice()->CreateRasterizerState(&rasterDesc, &noCullRS);
+
+	DirectX11::Get::GetContext()->RSSetState(noCullRS);
 
 
 	Timer::Init(); // タイマー初期化
@@ -130,6 +176,38 @@ void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int s
 }
 
 
+
+// ===========================================
+// 頂点バッファ作成
+// ===========================================
+void DirectX_DrawManager::CreateVertexBuffer(
+	const char* drawID,
+	const void* data,
+	int stride,
+	PrimitiveType type,
+	BufferUsage usage,
+	CPUAccess access)
+{
+	// 描画IDを使用して頂点数を取得
+
+
+	// 頂点バッファ作成
+	if (!m_VBManager.CreateVertexBuffer(
+		drawID,
+		DirectX11::Get::GetDevice(),
+		data, // 頂点データ
+		3,   // 頂点数
+		10,   // 最大頂点数
+		stride,
+		type,
+		usage,
+		access))
+	{
+		ErrorLog::OutputToConsole("頂点バッファ作製失敗");
+	}
+}
+
+
 // ===========================================
 // 定数バッファ更新
 // ===========================================
@@ -150,6 +228,104 @@ void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const 
 			context->Unmap(buffer, 0);
 		}
 	}
+	else
+	{
+		ErrorLog::OutputToConsole((std::string("定数バッファが更新できませんでした　:") + constantName).c_str());
+	}
+}
+
+
+// =============================================
+// 頂点バッファ更新
+// =============================================
+void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* data, int size)
+{
+	// 描画IDから頂点シェーダー検索 // 
+
+	// 頂点シェーダー検索
+	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader(drawID);
+
+	// 頂点バッファデータ取得
+	VertexBufferData* vbData = m_VBManager.GetFindVertexData(vs->GetName());
+
+	// 頂点バッファ検索
+	ID3D11Buffer* buffer = vbData->GetVertexBuffer();
+
+	// 頂点バッファ更新
+	ID3D11DeviceContext* context = DirectX11::Get::GetContext();
+
+	D3D11_MAPPED_SUBRESOURCE mapped{};
+	HRESULT hr = context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (SUCCEEDED(hr))
+	{
+		memcpy(mapped.pData, data, size);
+		DirectX11::Get::GetContext()->Unmap(buffer, 0);
+
+		vbData->SetIsUpdate(true);
+	}
+	else
+	{
+		ErrorLog::OutputToConsole((std::string("頂点バッファが更新できませんでした　:") + vs->GetName()).c_str());
+	}
+}
+
+
+// ==============================================
+// デバッグ用更新
+// ==============================================
+void DirectX_DrawManager::DebugUpdate()
+{
+	// タイマーデバッグ
+	Timer::Debug_CheckUpdate();
+
+	// デルタタイム取得
+	float deltaTime = Timer::GetDeltaTime();
+
+	// 頂点バッファ更新 ------------------------------
+	static float offset = 0.0f;
+	offset += 0.01f * deltaTime; // 時間経過で移動
+
+	for (int i = 0; i < sizeof(vertices) / sizeof(Vertex); i++)
+	{
+		vertices[i].pos.x += offset;
+	}
+
+	// 頂点バッファ更新
+	UpdateVertexBuffer("VS_TriangleDebug", vertices, sizeof(vertices));
+
+	
+	// 定数バッファ更新 ------------------------------
+	// Y軸周りに回転させるとします 
+	float speed = 3.14159265f * 4;
+
+	// 経過時間に応じて角度を増加 
+	angle += speed * deltaTime;
+
+	// ワールド行列（回転のみ）
+	Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), angle);
+	Matrix4x4 world = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
+
+	// ビュー行列（カメラを少し離す）
+	Vector3 eye(0, 0, -5);   // カメラ位置
+	Vector3 at(0, 0, 0);     // 注視点
+	Vector3 up(0, 1, 0);     // 上方向
+	Matrix4x4 view = Matrix4x4::CreateViewMatrix_LH(eye, at, up);
+
+	// プロジェクション行列（透視投影）
+	float fov = 3.14159265f / 4.0f;     // 視野角45°
+	float aspect = 1280.0f / 720.0f;
+	float nearZ = 0.1f;
+	float farZ = 100.0f;
+	Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
+
+	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
+
+	// 定数バッファ更新
+	UpdateShaderConstants("Transform1", &mat, sizeof(mat));
+
+
+	// タイマー更新処理
+	Timer::LastUpdate();
 }
 
 
@@ -158,95 +334,60 @@ void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const 
 // ===========================================
 void DirectX_DrawManager::DebugDraw()
 {
-	// タイマーデバッグ
-	Timer::Debug_CheckUpdate();
-
 	// 三角形デバッグ描画	
 
 	// デバッグ時 
 	DirectX11::BeginDraw(); // 描画の開始処理
 
+	// DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
+
+
 	// シェーダー取得
 	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader("VS_TriangleDebug");
 	PixelShaderData* ps = m_ShaderManager.GetFindPixelShader("PS_TriangleDebug");
 
-	// 入力レイアウト取得
+	// 入力レイアウト設定
 	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetILInfo()); // 入力レイアウト情報
 
 	// 頂点バッファ取得
-	auto vertexBuffer = m_VBManager.GetFindVertexBuffer(vs->GetName());
+	VertexBufferData* vertexBufferData= m_VBManager.GetFindVertexData(vs->GetName());
 
-	// 入力アセンブラ
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	// 更新されている場合だけセット
+	if (vertexBufferData->GetIsUpdate()) 
+	{
+		// 入力アセンブラ
+		ID3D11Buffer* buffers = vertexBufferData->GetVertexBuffer();
+		UINT stride = vertexBufferData->GetStride();
+		UINT offset = 0;
+
+		DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &buffers, &stride, &offset);
+		vertexBufferData->SetIsUpdate(false);
+	}
 
 	// トポロギー設定
-	DirectX11::Get::GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-
-	// カリング削除
-	D3D11_RASTERIZER_DESC rasterDesc{};
-	rasterDesc.FillMode = D3D11_FILL_SOLID;       // 通常塗りつぶし
-	rasterDesc.CullMode = D3D11_CULL_NONE;       // カリング無効
-	rasterDesc.FrontCounterClockwise = FALSE;    // 頂点順序: 時計回りが表
-	rasterDesc.DepthClipEnable = TRUE;
-
-	ID3D11RasterizerState* noCullRS = nullptr;
-	DirectX11::Get::GetDevice()->CreateRasterizerState(&rasterDesc, &noCullRS);
-
-	DirectX11::Get::GetContext()->RSSetState(noCullRS);
-
+	DirectX11::Get::GetContext()->IASetPrimitiveTopology(vertexBufferData->GetPrimitiveType());
 
 	// 3. 定数バッファ更新とバインド
+	// 頂点
 	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
 	for (auto& cb : cbInfo)
 	{
-		// Y軸周りに回転させるとします 
-		float speed = 3.14159265f * 4; 
-		float deltaTime = Timer::GetDeltaTime(); 
-		
-		// 経過時間に応じて角度を増加 
-		angle += speed * deltaTime;
-
-		// ワールド行列（回転のみ）
-		Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), angle);
-		Matrix4x4 world = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
-
-		// ビュー行列（カメラを少し離す）
-		Vector3 eye(0, 0, -5);   // カメラ位置
-		Vector3 at(0, 0, 0);     // 注視点
-		Vector3 up(0, 1, 0);     // 上方向
-		Matrix4x4 view = Matrix4x4::CreateViewMatrix_LH(eye, at, up);
-
-		// プロジェクション行列（透視投影）
-		float fov = 3.14159265f / 4.0f;     // 視野角45°
-		float aspect = 1280.0f / 720.0f;
-		float nearZ = 0.1f;
-		float farZ = 100.0f;
-		Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
-
-		struct TransformCB
-		{
-			Matrix4x4 WorldMatrix;
-			Matrix4x4 ViewMatrix;
-			Matrix4x4 ProjMatrix;
-		};
-
-		TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
-
-		// 定数バッファ更新
-		UpdateShaderConstants(cb.GetName().c_str(), &mat, sizeof(mat));
-
 		// 定数バッファ取得
-		ID3D11Buffer * buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
-
-		if (buffer)
-		{
-			ID3D11DeviceContext* context = DirectX11::Get::GetContext();
-
+		ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
+		if (buffer) {
 			// VSスロット番号にバインド
-			context->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
+			DirectX11::Get::GetContext()->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
+		}
+	}
+	// ピクセル
+	cbInfo = ps->GetCBInfo();
+	for (auto& cb : cbInfo)
+	{
+		// 定数バッファ取得
+		ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
+		if (buffer) {
+			// VSスロット番号にバインド
+			DirectX11::Get::GetContext()->PSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
 		}
 	}
 
@@ -255,13 +396,9 @@ void DirectX_DrawManager::DebugDraw()
 	DirectX11::Get::GetContext()->PSSetShader(ps->GetShader(), nullptr, 0);
 
 	// 6. 描画
-	DirectX11::Get::GetContext()->Draw(3, 0);
+	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
 
-
-	// DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
 
 
 	DirectX11::EndDraw(); // 描画の終わり処理
-
-	Timer::LastUpdate(); // タイマー更新処理
 }

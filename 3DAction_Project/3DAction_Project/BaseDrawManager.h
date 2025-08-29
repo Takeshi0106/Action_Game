@@ -11,6 +11,12 @@
 // ===========================================================
 
 
+
+// ==============================
+// ヘッダー
+// ==============================
+#include "BufferSetting.h" // 設定用ヘッダー
+
 // ==============================
 // クラス
 // ==============================
@@ -22,6 +28,16 @@ public:
 
 	// 描画
 	virtual void Draw(const char* id, const void* data, const int size) = 0;
+
+	// 頂点バッファ作成
+	virtual void CreateVertexBuffer(
+		const char* drawID, 
+		const void* data, 
+		int size,
+		PrimitiveType type = PrimitiveType::TriangleStrip,
+		BufferUsage usage = BufferUsage::Dynamic,
+		CPUAccess access = CPUAccess::Write) = 0;
+
 	// 定数バッファ更新
 	virtual void UpdateShaderConstants(const char* id, const void* data, const int size) = 0;
 	// 頂点バッファ更新

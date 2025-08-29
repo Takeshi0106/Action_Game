@@ -216,6 +216,9 @@ bool PlatformWindowsSystem::GameInit()
 // =====================================================
 void PlatformWindowsSystem::GameMain()
 {
+    // 描画マネージャーのデバッグ更新
+    m_DrawManager.DebugUpdate();
+
     // 描画マネージャーのデバッグ描画
     m_DrawManager.DebugDraw();
 }

@@ -18,10 +18,11 @@ bool VertexBufferData::CreateVertexBuffer(
 	int vertexMaxCount,
 	int stride,
 	D3D11_PRIMITIVE_TOPOLOGY primitiveType,
-	D3D11_USAGE usage)
+	D3D11_USAGE usage,
+	D3D11_CPU_ACCESS_FLAG flag)
 {
 	if (!device || !vertices || vertexCount <= 0 || stride <= 0) {
-		ErrorLog::OutputToConsole("無効なバッファが作成されそうになりました");
+		ErrorLog::OutputToConsole("無効な頂点バッファが作成されそうになりました");
 		return false;
 	}
 
@@ -38,7 +39,7 @@ bool VertexBufferData::CreateVertexBuffer(
 	desc.Usage = usage;
 	desc.ByteWidth = static_cast<UINT>(m_Size);
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	desc.CPUAccessFlags = 0;
+	desc.CPUAccessFlags = flag;
 
 	// 初期情報を代入
 	D3D11_SUBRESOURCE_DATA initData{};
@@ -47,7 +48,7 @@ bool VertexBufferData::CreateVertexBuffer(
 	// 作成できたかチェック
 	HRESULT hr = device->CreateBuffer(&desc, &initData, m_Buffer.GetAddressOf());
 	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole("頂点バッファが作成できませんでした" + hr);
+		ErrorLog::OutputToConsole(("頂点バッファが作成できませんでした" + std::to_string(hr)).c_str());
 		return false;
 	}
 

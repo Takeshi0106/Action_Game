@@ -127,6 +127,9 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager\VertexBufferInfo">
       <UniqueIdentifier>{fee649e9-5c54-4797-a075-f9668ebe2d20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Base\6_BufferSetting">
+      <UniqueIdentifier>{b0d7046b-9219-4751-80f7-ca3155126a0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -304,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="VertexBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager\VertexBufferInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferSetting.h">
+      <Filter>1_Platform\Base\6_BufferSetting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
