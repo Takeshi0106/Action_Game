@@ -34,12 +34,16 @@ bool VertexBufferManager::CreateVertexBuffer(const std::string& name,
 
     auto vbd = std::make_unique<VertexBufferData>(name);
 
-    vbd->CreateVertexBuffer(device,
+    if (!vbd->CreateVertexBuffer(device,
         vertices,
         vertexCount,
         vertexCount,
         stride,
-        D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+        D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP))
+    {
+        ErrorLog::OutputToConsole("頂点バッファの作成に失敗");
+        return false;
+    }
 
     m_VertexBuffers[name] = std::move(vbd);
 

@@ -24,5 +24,7 @@ public:
 	virtual void Draw(const char* id, const void* data, const int size) = 0;
 	// 定数バッファ更新
 	virtual void UpdateShaderConstants(const char* id, const void* data, const int size) = 0;
+	// 頂点バッファ更新
+	virtual void UpdateVertexBuffer(const char* drawID, const void* data, int size) = 0;
 };
 
