@@ -20,6 +20,7 @@ std::unordered_map<std::string, std::unique_ptr<DSVData>> ResourceViewManager::m
 // =============================
 // メンバー関数
 // =============================
+// ゲッター
 SRVData* ResourceViewManager::GetFindSRV(const std::string& name)
 {
 	auto it = m_SRVs.find(name);
