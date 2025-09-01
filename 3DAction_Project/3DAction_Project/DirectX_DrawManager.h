@@ -40,6 +40,10 @@ public:
 	// 後処理
 	void Uninit();
 
+	// 描画
+	void Draw(const char* drawID, const void* data, const int size) override;
+
+
 	// 頂点バッファ作成
 	void CreateVertexBuffer(
 		const char* drawID,
@@ -49,8 +53,7 @@ public:
 		BufferUsage usage,
 		CPUAccess access) override;
 
-	// 描画
-	void Draw(const char* drawID, const void* data, const int size) override;
+	// バッファ更新
 	// 定数バッファ更新
 	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override;
 	// 頂点バッファ更新
