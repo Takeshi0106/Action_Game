@@ -130,6 +130,9 @@
     <Filter Include="1_Platform\Base\6_BufferSetting">
       <UniqueIdentifier>{b0d7046b-9219-4751-80f7-ca3155126a0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager\ResourceData">
+      <UniqueIdentifier>{f8242d84-382d-4a3a-9860-fdf5d12d4d66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -146,9 +149,6 @@
     </ClCompile>
     <ClCompile Include="BaseDirectXManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\3_ConstantBufferManager</Filter>
@@ -216,6 +216,12 @@
     <ClCompile Include="VertexBufferIData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\2_VertexBufferManager\VertexBufferInfo</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceViewManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceViewData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager\ResourceData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -229,9 +235,6 @@
     </ClInclude>
     <ClInclude Include="BaseDirectXManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\Manager\3_ConstantBufferManager</Filter>
@@ -310,6 +313,12 @@
     </ClInclude>
     <ClInclude Include="BufferSetting.h">
       <Filter>1_Platform\Base\6_BufferSetting</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceViewManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceViewData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\Manager\4_ResourceManager\ResourceData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
