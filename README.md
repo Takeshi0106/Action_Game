@@ -1,9 +1,25 @@
 # Action_Game
-就職作品_DirectXで制作
+就職作品 
+複数のプラットフォームでもGameMainを修正せずに動かせるように作成中。
+今対応中のプラットフォームは DirectXだけです。
+DirectXで描画などを対応できた後、GameMainを作成予定です。
+現在は C++17 で作成しています。
 
 動作環境
-Windows8  移行
-DirectX11 以上対応
+・ Windows8  移行
+・ DirectX11 以上対応
 
-.hlsl のエントリーポイントは必ず main で
-名前の最初にVS_ PS_ CS_ とつけること
+ルール
+・ .hlsl のエントリーポイントは必ず main で
+    名前の最初にVS_ PS_ CS_ とつける。
+・ 描画IDに頂点シェーダーは１つだけ、
+    頂点シェーダーに頂点バッファ、入力レイアウトは１つだけ
+
+最適化可能情報
+・ デシリアライズで String_View から String にしてから cast しています。
+・ DirectX_Math Struct 内で 自作Struct メンバー関数を使用しているため
+    DirectXStruct と自作構造体の 不必要な変換が行われています。
+
+発見されているバグ
+
+

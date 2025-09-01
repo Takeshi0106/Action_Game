@@ -166,6 +166,9 @@ namespace DirectX11 {
 		// レンダーターゲットと深度バッファをクリア
 		d3dDeviceContext->ClearRenderTargetView(FinalRender::d3dRTV.Get(), clearColor);
 		d3dDeviceContext->ClearDepthStencilView(DepthStencil::d3dDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+		
+		// ビューポートクリア
+		ViewPort::SetViewPort();
 	}
 
 
@@ -175,7 +178,6 @@ namespace DirectX11 {
 	void EndDraw()
 	{
 		d3dSwapChain->Present(1, 0); // バッファを交換して画面に表示
-		ViewPort::SetViewPort();
 	}
 
 

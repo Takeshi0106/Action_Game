@@ -51,13 +51,45 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
     }
 
     // シェーダーが使用する情報を代入する
-    CBInfo = _CBInfo;
-    ILInfo = _ILInfo;
+    CBInfo = _CBInfo; // 定数バッファの情報
+
+    // 入力レイアウトを作成
+    std::vector<D3D11_INPUT_ELEMENT_DESC> descArray(_ILInfo.size());
+
+    for (int i = 0; i < _ILInfo.size(); i++)
+    {
+        descArray[i].SemanticName = _ILInfo[i].GetSemanticName().c_str();
+        descArray[i].SemanticIndex = _ILInfo[i].GetSemanticIndex();
+        descArray[i].InputSlot = _ILInfo[i].GetInputSlot();
+        descArray[i].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT; // 自動オフセット
+        descArray[i].Format = static_cast<DXGI_FORMAT>(_ILInfo[i].GetFormat());
+        descArray[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;  // 頂点単位
+        descArray[i].InstanceDataStepRate = 0;
+    }
+
+    // 入力レイアウト作成
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> layout;
+    
+    HRESULT hrLayout = device->CreateInputLayout(
+        descArray.data(),
+        static_cast<UINT>(descArray.size()),
+        binary,
+        size,
+        layout.GetAddressOf()
+    );
+
+    if (FAILED(hrLayout)) {
+        ErrorLog::OutputToConsole((m_Name + " : 入力レイアウトの作成に失敗しました").c_str());
+        return false;
+    }
+
+    m_ILayout = std::move(layout); // VertexShaderData 内に保存
+
 
     // デバッグ用に名前を出力
     DebugLog::OutputToConsole("");
     DebugLog::OutputToConsole(m_Name.c_str());
-    OutputILname(ILInfo);
+    OutputILname(_ILInfo);
     OutputCBname(CBInfo);
     DebugLog::OutputToConsole("");
     
@@ -155,7 +187,7 @@ void OutputILname(const std::vector<InputLayoutInfo>& ILInfo)
 
     for (int i = 0; i < ILInfo.size(); i++)
     {
-        DebugLog::OutputToConsole((" " + ILInfo[i].semanticName).c_str());
+        DebugLog::OutputToConsole((" " + ILInfo[i].GetSemanticName()).c_str());
     }
 }
 
@@ -172,7 +204,7 @@ void OutputCBname(const std::vector<ConstantBufferInfo> &_CBInfo)
 
     for (int i = 0; i < _CBInfo.size(); i++)
     {
-        DebugLog::OutputToConsole(("  " + _CBInfo[i].name).c_str());
+        DebugLog::OutputToConsole(("  " + _CBInfo[i].GetName()).c_str());
     }
 }
 

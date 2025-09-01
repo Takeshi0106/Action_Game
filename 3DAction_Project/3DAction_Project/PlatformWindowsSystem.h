@@ -23,11 +23,8 @@ struct APPLICATIONHANDLE;              // HINSTANCEのラップ構造体
 // ウィンドウハンドルの前方宣言
 struct HWND__;
 using HWND = HWND__*;
-
-// DrawManagerに置き換える　---------------------------------
-class ShaderManager;          // シェーダーマネージャー
-class ConstantBufferManager;  // 定数バッファマネージャー
-// ----------------------------------------------------------
+// DirectX用描画マネージャー
+class DirectX_DrawManager;
 
 
 // =====================================================
@@ -43,10 +40,7 @@ private:
 	const wchar_t*          m_WindowName;        // ウィンドウの名前
 	const wchar_t*          m_WindowClassName;   // ウィンドウのクラス名
 
-	// DrawManagerに置き換える
-	static ShaderManager m_ShaderManager;                 // シェーダーを管理する
-	static ConstantBufferManager m_ConstantBufferManager; // 定数バッファマネージャー
-
+	static DirectX_DrawManager m_DrawManager; // 描画マネージャー
 
 	// オーバーライド関数
 	bool Init()       override; // 初期化処理
