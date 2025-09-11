@@ -48,10 +48,18 @@ public:
 	void CreateVertexBuffer(
 		const char* drawID,
 		const void* data,
-		int size,
+		size_t size,
 		PrimitiveType type,
 		BufferUsage usage,
 		CPUAccess access) override;
+
+	// 定数バッファ作成
+	virtual void CreateConstantBuffer(
+		const char* constantName,
+		const void* data,
+		size_t size,
+		BufferUsage usage = BufferUsage::Dynamic,
+		CPUAccess access = CPUAccess::Write) override;
 
 	// バッファ更新
 	// 定数バッファ更新

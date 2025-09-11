@@ -140,10 +140,11 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseDirectXManager.cpp" />
+    <ClCompile Include="ConstantBufferData.cpp" />
     <ClCompile Include="ConstantBufferInfo.cpp" />
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DirectX.cpp" />
-    <ClCompile Include="DirectX_DrawManager.cpp" />
+    <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="InputLayoutInfo.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -179,10 +180,12 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="BaseSaveLoadObject.h" />
     <ClInclude Include="BufferSetting.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ConstantBufferData.h" />
     <ClInclude Include="ConstantBufferInfo.h" />
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="DirectX.h" />
-    <ClInclude Include="DirectX_DrawManager.h" />
+    <ClInclude Include="DirectX_BufferUtils.h" />
+    <ClInclude Include="DirectX11_DrawManager.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="InputLayoutInfo.h" />
     <ClInclude Include="Matrix4x4.h" />

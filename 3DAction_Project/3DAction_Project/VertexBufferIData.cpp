@@ -16,7 +16,7 @@ bool VertexBufferData::CreateVertexBuffer(
 	const void* vertices,
 	int vertexCount,
 	int vertexMaxCount,
-	int stride,
+	size_t stride,
 	D3D11_PRIMITIVE_TOPOLOGY primitiveType,
 	D3D11_USAGE usage,
 	D3D11_CPU_ACCESS_FLAG flag)

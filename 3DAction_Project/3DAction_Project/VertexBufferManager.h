@@ -53,7 +53,7 @@ public:
 		const void* vertices,
 		int vertexCount,
 		int vertexMaxCount,
-		int stride,
+		size_t stride,
 		PrimitiveType type = PrimitiveType::TriangleStrip,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write

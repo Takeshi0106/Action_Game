@@ -18,6 +18,8 @@
 #include <memory> // スマートポインター
 // 配列のヘッダー
 #include <unordered_map> // ハッシュ値検索
+// バッファ設定ヘッダー
+#include "BufferSetting.h"
 
 
 // ======================================
@@ -26,7 +28,7 @@
 struct ID3D11Device;        // DirectXのデバイス
 struct ID3D11DeviceContext; // DirectXのデバイスコンテキスト
 struct ID3D11Buffer;        // 定数バッファ
-struct ConstantBufferData;  // 定数バッファ構造体 (定数バッファとサイズを持つ)
+class ConstantBufferData;  // 定数バッファ構造体 (定数バッファとサイズを持つ)
 
 
 // ======================================
@@ -48,7 +50,13 @@ public:
 	~ConstantBufferManager() = default;
 
 	// 定数バッファ作成
-	bool CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device);
+	bool CreateConstantBuffer(const std::string& constantName,
+		ID3D11Device* device,
+		const void* data,
+		size_t size,
+		BufferUsage usage = BufferUsage::Dynamic,
+		CPUAccess access = CPUAccess::Write);
+
 	// 定数バッファを探して、戻り値で返す
 	ID3D11Buffer* GetFindConstantBuffer(const std::string& name);
 

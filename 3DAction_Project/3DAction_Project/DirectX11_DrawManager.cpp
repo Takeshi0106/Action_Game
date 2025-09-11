@@ -3,7 +3,7 @@
 // ヘッダー
 // =========================================
 // 必須ヘッダー
-#include "DirectX_DrawManager.h" // 自分のヘッダー
+#include "DirectX11_DrawManager.h" // 自分のヘッダー
 
 // DirectXヘッダー
 #include "DirectX.h" // DirectXの関数群ヘッダー
@@ -97,21 +97,12 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		return false; // 失敗したら戻る
 	}
 
-	// シェーダー・定数バッファ作成
-	if (!m_ShaderManager.Init(DirectX11::Get::GetDevice(), m_CBManager)) {
+	// シェーダー作成
+	if (!m_ShaderManager.Init(DirectX11::Get::GetDevice())) {
 		ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
 		return false; // 失敗したら戻る
 	}
 
-
-	// 頂点バッファ作成
-	CreateVertexBuffer(
-		"VS_TriangleDebug",
-		vertices,
-		sizeof(Vertex),
-		PrimitiveType::TriangleStrip,
-		BufferUsage::Dynamic,
-		CPUAccess::Write);
 
 	// 定数バッファ初期化
 	// ワールド行列
@@ -132,9 +123,23 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 
 	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
 
-	// 定数バッファ更新
-	UpdateShaderConstants("Transform1", &mat, sizeof(mat));
 
+	// 頂点バッファ作成
+	CreateVertexBuffer(
+		"VS_TriangleDebug",
+		vertices,
+		sizeof(Vertex),
+		PrimitiveType::TriangleStrip,
+		BufferUsage::Dynamic,
+		CPUAccess::Write);
+
+	// 定数バッファ作成
+	CreateConstantBuffer(
+		"Transform1",
+		&mat,
+		sizeof(mat),
+		BufferUsage::Dynamic,
+		CPUAccess::Write);
 
 
 	// カリング削除
@@ -162,8 +167,14 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 // ============================================
 void DirectX_DrawManager::Uninit()
 {
-	DirectX11::Uninit();      // Directの後処理
-	m_ShaderManager.Uninit(); // シェーダ―マネージャーの後処理
+	// Directの後処理
+	DirectX11::Uninit();
+	// シェーダ―マネージャーの後処理
+	m_ShaderManager.Uninit();
+	// 定数バッファ解放
+	m_CBManager.ReleaseAllConstantBuffers();
+	// 頂点バッファ解放
+	m_VBManager.ReleaseAllVertexBuffers();
 }
 
 
@@ -183,7 +194,7 @@ void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int s
 void DirectX_DrawManager::CreateVertexBuffer(
 	const char* drawID,
 	const void* data,
-	int stride,
+	size_t stride,
 	PrimitiveType type,
 	BufferUsage usage,
 	CPUAccess access)
@@ -204,6 +215,30 @@ void DirectX_DrawManager::CreateVertexBuffer(
 		access))
 	{
 		ErrorLog::OutputToConsole("頂点バッファ作製失敗");
+	}
+}
+
+
+// ===========================================
+// 定数バッファ作成
+// ===========================================
+void DirectX_DrawManager::CreateConstantBuffer(
+	const char* constantName,
+	const void* data,
+	size_t size,
+	BufferUsage usage,
+	CPUAccess access)
+{
+	// 定数バッファ作成
+	if (!m_CBManager.CreateConstantBuffer(
+		constantName,
+		DirectX11::Get::GetDevice(),
+		data, // データ
+		size,
+		usage,
+		access))
+	{
+		ErrorLog::OutputToConsole("定数バッファ作製失敗");
 	}
 }
 
@@ -246,7 +281,7 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* dat
 	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader(drawID);
 
 	// 頂点バッファデータ取得
-	VertexBufferData* vbData = m_VBManager.GetFindVertexData(vs->GetName());
+	VertexBufferData* vbData = m_VBManager.GetFindVertexData(drawID);
 
 	// 頂点バッファ検索
 	ID3D11Buffer* buffer = vbData->GetVertexBuffer();
@@ -265,7 +300,7 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* dat
 	}
 	else
 	{
-		ErrorLog::OutputToConsole((std::string("頂点バッファが更新できませんでした　:") + vs->GetName()).c_str());
+		ErrorLog::OutputToConsole((std::string("頂点バッファが更新できませんでした　:") + drawID).c_str());
 	}
 }
 
@@ -321,7 +356,7 @@ void DirectX_DrawManager::DebugUpdate()
 	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
 
 	// 定数バッファ更新
-	UpdateShaderConstants("Transform1", &mat, sizeof(mat));
+	// UpdateShaderConstants("Transform1", &mat, sizeof(mat));
 
 
 	// タイマー更新処理
@@ -341,23 +376,25 @@ void DirectX_DrawManager::DebugDraw()
 
 	// DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
 
+	std::string vsName = "VS_TriangleDebug";
+	std::string psName = "PS_TriangleDebug";
 
 	// シェーダー取得
-	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader("VS_TriangleDebug");
-	PixelShaderData* ps = m_ShaderManager.GetFindPixelShader("PS_TriangleDebug");
+	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader(vsName);
+	PixelShaderData* ps = m_ShaderManager.GetFindPixelShader(psName);
 
 	// 入力レイアウト設定
 	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetILInfo()); // 入力レイアウト情報
 
 	// 頂点バッファ取得
-	VertexBufferData* vertexBufferData= m_VBManager.GetFindVertexData(vs->GetName());
+	VertexBufferData* vertexBufferData= m_VBManager.GetFindVertexData(vsName);
 
 	// 更新されている場合だけセット
 	if (vertexBufferData->GetIsUpdate()) 
 	{
 		// 入力アセンブラ
 		ID3D11Buffer* buffers = vertexBufferData->GetVertexBuffer();
-		UINT stride = vertexBufferData->GetStride();
+		UINT stride = UINT(vertexBufferData->GetStride());
 		UINT offset = 0;
 
 		DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &buffers, &stride, &offset);

@@ -77,12 +77,12 @@ private:
 #if defined(DEBUG) || defined(_DEBUG)
     // デバッグ時にこのファイルと同じ階層にある.hlslを探して、コンパイルする必要があるかを確認し、
     // 必要があればコンパイル、無ければバイナリーデータを取得して、メンバー配列に代入する関数
-    bool DebugInit(ID3D11Device* device, ConstantBufferManager& CBManager);
+    bool DebugInit(ID3D11Device* device);
 
 #else
     // 全てのシェーダー情報が書かれている外部ファイルから、読込み
     // コンパイルされていなかったら、コンパイルしてメンバー配列に代入する関数
-    bool ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBManager);
+    bool ReleaseInit(ID3D11Device* device);
 
 #endif
 
@@ -99,7 +99,7 @@ public:
     ~ShaderManager() = default;
 
     // 初期化・後処理
-    bool Init(ID3D11Device* device, ConstantBufferManager& CBManager);
+    bool Init(ID3D11Device* device);
     void Uninit();
 
     // シェーダーのゲッター  名前を入れて、返す

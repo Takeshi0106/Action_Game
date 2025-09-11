@@ -7,6 +7,10 @@
 // DirectXヘッダー
 #include <d3d11.h>        // DirectXのAPIヘッダー
 #include <wrl/client.h>   // スマートポインター
+// 定数バッファデータ
+#include "ConstantBufferData.h"
+// 自作列挙型をDirectX用に変換
+#include "DirectX_BufferUtils.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
 
@@ -17,69 +21,56 @@
 std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBufferManager::m_ConstantBuffers;
 
 
-// ======================================
-// 前方宣言
-// ======================================
-struct ConstantBufferData { // 定数バッファデータ
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer = nullptr; // 定数バッファ
-	size_t size = 0;                                               // サイズ
-	int registerNumber = -1;                                       // スロット
-
-	// コンストラクタ
-	ConstantBufferData(Microsoft::WRL::ComPtr<ID3D11Buffer> buf, size_t _size, int slot)
-		: constantBuffer(buf), size(_size), registerNumber(slot) {
-	}
-};
-
-
-// =======================================
+// ========================================
 // 定数バッファ作成
-// =======================================
-bool ConstantBufferManager::CreateConstantBuffer(const std::string& name, size_t size, int slot, ID3D11Device* device)
+// ========================================
+bool ConstantBufferManager::CreateConstantBuffer(const std::string& constantName,
+	ID3D11Device* device,
+	const void* data,
+	size_t size,
+	BufferUsage usage,
+	CPUAccess access)
 {
 	// エラーチェック
-	if (m_ConstantBuffers.count(name)) 
+	if (m_ConstantBuffers.count(constantName))
 	{
 		// 定数バッファ取得
-		auto& existing = m_ConstantBuffers[name];
+		auto& existing = m_ConstantBuffers[constantName];
 
 		// サイズ比較
-		if (existing->size != size) {
+		if (existing->GetSize() != size) {
 			ErrorLog::OutputToConsole(
-				(name + " 同じ名前の定数バッファが作成されましたが、サイズが異なります").c_str());
+				(constantName + " 同じ名前の定数バッファが作成されましたが、サイズが異なります").c_str());
 
 			return false;
 		}
 		else {
-			WarningLog::OutputToConsole((name + " 同じ名前の定数バッファが再作成されました").c_str());
+			WarningLog::OutputToConsole((constantName + " 同じ名前の定数バッファが再作成されました").c_str());
 
 			return true;
 		}
 	}
 
-	D3D11_BUFFER_DESC desc{}; // 初期化
-	desc.ByteWidth = static_cast<UINT>((size + 15) / 16 * 16); // 16バイト単位にする アライメント
-	desc.Usage = D3D11_USAGE_DYNAMIC;                          // CPUから書き込み可能
-	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;               // 定数バッファで作成
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;              // CPUから書き込み可能
-	desc.MiscFlags = 0;                                        // フラグなし
-	desc.StructureByteStride = 0;                              // 構造体バッファではない
-
+	// 情報を構造体にまとめてマップに保存
+	auto bafferData = std::make_unique<ConstantBufferData>();
+	
 	// バッファ作成
-	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-	HRESULT hr = device->CreateBuffer(&desc, nullptr, buffer.GetAddressOf());
-
-	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole(std::string(("定数バッファの作成失敗: " + name)).c_str());
+	if (!bafferData->CreateConstantBuffer(
+		device,
+		data,
+		size,
+		BufferUtils::ToDXUsage(usage),
+		D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(access))))
+	{
+		ErrorLog::OutputToConsole(std::string(("定数バッファの作成失敗: " + constantName)).c_str());
 		return false;
 	}
-
-	// 情報を構造体にまとめてマップに保存
-	auto data = std::make_unique<ConstantBufferData>(buffer, size, slot);
-	m_ConstantBuffers[name] = std::move(data);
 	
+	// 配列に代入
+	m_ConstantBuffers[constantName] = std::move(bafferData);
+
 	// デバッグ用に名前を保存しておく
-	Log(name.c_str());
+	Log(constantName.c_str());
 
 	return true;
 }
@@ -96,7 +87,7 @@ ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& na
 	if (it != m_ConstantBuffers.end()) 
 	{
 		// 定数バッファを返す
-		return it->second->constantBuffer.Get();
+		return it->second->GetBuffer();
 	}
 	else {
 		ErrorLog::OutputToConsole(std::string(" 定数バッファ : " + name + " が見つかりませんでした").c_str());
