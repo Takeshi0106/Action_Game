@@ -127,9 +127,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager">
       <UniqueIdentifier>{6a38eb7f-f505-4a60-8364-a613bc5a292f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\ResourceData">
-      <UniqueIdentifier>{f8242d84-382d-4a3a-9860-fdf5d12d4d66}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager">
       <UniqueIdentifier>{645cb89e-6963-4846-a182-50067e546d82}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,15 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXUtils">
       <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager">
+      <UniqueIdentifier>{7270727c-8028-4f13-aec1-e919d9bb013c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager">
+      <UniqueIdentifier>{572aba3a-4ad9-465e-9e2b-d844f474070d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ResourceViewData">
+      <UniqueIdentifier>{f8242d84-382d-4a3a-9860-fdf5d12d4d66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -219,17 +225,20 @@
     <ClCompile Include="VertexBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceViewManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceViewData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\ResourceData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ResourceViewData</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager\ConstantBufferInfo</Filter>
     </ClCompile>
     <ClCompile Include="VertexBufferIData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager\VertexBufferInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceViewManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,17 +332,20 @@
     <ClInclude Include="BufferSetting.h">
       <Filter>1_Platform\Base\6_BufferSetting</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceViewManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceViewData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\ResourceData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ResourceViewData</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager\ConstantBufferInfo</Filter>
     </ClInclude>
     <ClInclude Include="DirectX_BufferUtils.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceViewManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
