@@ -54,7 +54,7 @@ public:
 		CPUAccess access) override;
 
 	// 定数バッファ作成
-	virtual void CreateConstantBuffer(
+	void CreateConstantBuffer(
 		const char* constantName,
 		const void* data,
 		size_t size,

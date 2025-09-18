@@ -319,7 +319,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 
 		// リフレクション情報を取得
 		if (!ShaderReflectionUtils::Reflect(blob.Get()->GetBufferPointer(), blob.Get()->GetBufferSize(), conInfo, ilInfo)) {
-			ErrorLog::OutputToMessageBox("リフレクションした情報が得られませんでした");
+			ErrorLog::OutputToMessageBox("リフレクション情報が得られませんでした");
 			return false;
 		}
 
