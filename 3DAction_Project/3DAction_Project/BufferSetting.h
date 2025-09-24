@@ -30,3 +30,32 @@ enum class CPUAccess
 	None,
 	Write
 };
+
+// 自作のフォーマット
+enum class Format
+{
+	Unknown,
+	R8G8B8A8_UNorm,
+	R32_Float,
+	R32G32B32_Float,
+	R32G32B32A32_Float,
+};
+
+enum class BindFlag : unsigned int
+{
+	None = 0,
+	VertexBuffer = 1 << 0,
+	IndexBuffer = 1 << 1,
+	ConstantBuffer = 1 << 2,
+	ShaderResource = 1 << 3,
+	RenderTarget = 1 << 4,
+	DepthStencil = 1 << 5,
+	UnorderedAccess = 1 << 6,
+};
+
+// OR演算子
+inline BindFlag operator|(BindFlag a, BindFlag b)
+{
+	return static_cast<BindFlag>(
+		static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+}

@@ -24,27 +24,8 @@
 // ================================
 // クラス
 // ================================
-// Viewの基底クラス
-class BaseViewData {
-protected:
-
-#if defined(DEBUG) || defined(_DEBUG)
-	std::string m_Name; // ViewNameを取得しておく
-
-	// 使用できないようにしています
-	BaseViewData(std::string name) : m_Name(name) {
-	}
-#else
-	BaseViewData(std::string name) {}
-
-#endif
-
-	virtual ~BaseViewData() = default;
-};
-
-
 // SRVDataクラス
-class SRVData : public BaseViewData
+class SRVData
 {
 private:
 	// SRV
@@ -52,7 +33,7 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	SRVData(std::string name) : BaseViewData(name) {}
+	SRVData() {}
 	~SRVData() = default;
 
 	// ビュー作成
@@ -69,7 +50,7 @@ public:
 
 
 // UAVデータクラス
-class UAVData : public BaseViewData
+class UAVData
 {
 private:
 	// UAV
@@ -77,7 +58,7 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	UAVData(std::string name) : BaseViewData(name) {}
+	UAVData() {}
 	~UAVData() = default;
 
 	// ビュー作成
@@ -93,7 +74,7 @@ public:
 
 
 // RTVクラス
-class RTVData : public BaseViewData
+class RTVData
 {
 private:
 	// RTV
@@ -101,7 +82,7 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	RTVData(std::string name) : BaseViewData(name) {}
+	RTVData() {}
 	~RTVData() = default;
 
 	// ビュー作成
@@ -117,7 +98,7 @@ public:
 
 
 // DSVクラス
-class DSVData : public BaseViewData
+class DSVData
 {
 private:
 	// DSV
@@ -125,7 +106,7 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	DSVData(std::string name) : BaseViewData(name) {}
+	DSVData() {}
 	~DSVData() = default;
 
 	// ビュー作成

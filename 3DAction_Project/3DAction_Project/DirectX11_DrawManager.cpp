@@ -12,6 +12,7 @@
 #include "ShaderManager.h" // シェーダーマネージャー
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
 #include "VertexBufferManager.h"   // 頂点バッファマネージャー
+#include "TextureManager.h"
 
 // シェーダーヘッダー
 #include "ShaderData.h"
@@ -85,6 +86,10 @@ VertexBufferManager DirectX_DrawManager::m_VBManager = {
 	"Debug/Log/VertexBuffers.tex"
 };
 
+TextureManager DirectX_DrawManager::m_TextureManager = {
+	"Debug/Log/TextureManager.tex"
+};
+
 
 // ==========================================
 // 初期化
@@ -140,6 +145,21 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		sizeof(mat),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
+
+	// テクスチャ作成
+	if (!m_TextureManager.CreateTexture(
+		"DebugTexture",
+		DirectX11::Get::GetDevice(),
+		1920,
+		1080,
+		Format::R8G8B8A8_UNorm,
+		BindFlag::ShaderResource | BindFlag::RenderTarget,
+		BufferUsage::Default,
+		CPUAccess::None))
+	{
+		ErrorLog::OutputToConsole("テクスチャ作成に失敗");
+		return false;
+	}
 
 
 	// カリング削除

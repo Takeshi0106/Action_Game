@@ -41,7 +41,6 @@ private:
 
 public:
 	// 作成
-	
 
 
 	// ゲッター  名前を入れて、返す
@@ -49,6 +48,5 @@ public:
 	static UAVData* GetFindUAV(const std::string& name);
 	static RTVData* GetFindRTV(const std::string& name);
 	static DSVData* GetFindDSV(const std::string& name);
-
 };
 

@@ -58,4 +58,37 @@ namespace BufferUtils {
         }
         }
     }
+
+    // フォーマットを変換 
+    inline  DXGI_FORMAT toDXFormat(Format format)
+    {
+        switch (format)
+        {
+        case Format::Unknown: {
+            return DXGI_FORMAT_UNKNOWN;
+            break;
+        }
+        case Format::R8G8B8A8_UNorm: {
+            return DXGI_FORMAT_R8G8B8A8_UNORM;
+            break;
+        }
+        case Format::R32_Float: {
+            return DXGI_FORMAT_R32_FLOAT;
+            break;
+        }
+        case Format::R32G32B32_Float: {
+            return DXGI_FORMAT_R32G32B32_FLOAT;
+            break;
+        }
+        case Format::R32G32B32A32_Float: {
+            return DXGI_FORMAT_R32G32B32A32_FLOAT;
+            break;
+        }
+        default:
+            ErrorLog::OutputToConsole("Formatに変換できませんでした");
+            return DXGI_FORMAT_UNKNOWN;
+        }
+    }
+
+
 }

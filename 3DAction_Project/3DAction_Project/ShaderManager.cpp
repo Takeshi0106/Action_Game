@@ -36,7 +36,6 @@ bool JudgeCompileShader(const std::filesystem::path kFilePath, const std::filesy
 
 // .hlslの最終更新日を確認して、更新されているかをチェックする
 bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::filesystem::path& binaryPath);
-
 #endif
 
 

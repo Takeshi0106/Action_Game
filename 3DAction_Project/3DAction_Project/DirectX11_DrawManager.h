@@ -22,6 +22,7 @@ using HWND = HWND__*;
 class ShaderManager;
 class ConstantBufferManager;
 class VertexBufferManager;
+class TextureManager;
 
 
 // ========================================
@@ -33,6 +34,7 @@ private:
 	static ShaderManager m_ShaderManager;     // シェーダーマネージャー
 	static ConstantBufferManager m_CBManager; // 定数バッファマネージャー
 	static VertexBufferManager m_VBManager; // 頂点バッファマネージャー
+	static TextureManager m_TextureManager;
 
 public:
 	// 初期化
@@ -42,7 +44,6 @@ public:
 
 	// 描画
 	void Draw(const char* drawID, const void* data, const int size) override;
-
 
 	// 頂点バッファ作成
 	void CreateVertexBuffer(
