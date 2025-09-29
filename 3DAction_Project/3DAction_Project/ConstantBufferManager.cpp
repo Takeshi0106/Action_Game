@@ -4,11 +4,6 @@
 // ======================================
 // 必須ヘッダー
 #include "ConstantBufferManager.h" // 自分のヘッダー
-// DirectXヘッダー
-#include <d3d11.h>        // DirectXのAPIヘッダー
-#include <wrl/client.h>   // スマートポインター
-// 定数バッファデータ
-#include "ConstantBufferData.h"
 // 自作列挙型をDirectX用に変換
 #include "DirectX_BufferUtils.h"
 // ログ出力用ヘッダー
@@ -18,7 +13,7 @@
 // ======================================
 // 静的メンバー配列
 // ======================================
-std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBufferManager::m_ConstantBuffers;
+// std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBufferManager::m_ConstantBuffers;
 
 
 // ========================================

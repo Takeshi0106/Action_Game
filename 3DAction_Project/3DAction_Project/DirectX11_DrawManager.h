@@ -45,6 +45,8 @@ private:
 	std::unique_ptr<VertexBufferManager> m_VBManager; // 頂点バッファマネージャー
 	std::unique_ptr<TextureManager> m_TextureManager; // テクスチャマネージャー
 
+
+
 public:
 	// コンストラクタ
 	DirectX_DrawManager();

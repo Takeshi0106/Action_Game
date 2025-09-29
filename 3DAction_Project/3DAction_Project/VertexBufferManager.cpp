@@ -4,11 +4,6 @@
 // ======================================
 // 必須ヘッダー
 #include "VertexBufferManager.h"
-// DirectXヘッダー
-#include <d3d11.h>        // DirectXのAPIヘッダー
-#include <wrl/client.h>   // スマートポインター
-// 頂点バッファデータ
-#include "VertexBufferData.h"
 // 自作列挙型をDirectX用に変換
 #include "DirectX_BufferUtils.h"
 // ログ出力用ヘッダー
@@ -18,7 +13,7 @@
 // ======================================
 // 静的メンバー配列
 // ======================================
-std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> VertexBufferManager::m_VertexBuffers;
+// std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> VertexBufferManager::m_VertexBuffers;
 
 
 // ======================================

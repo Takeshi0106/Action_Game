@@ -4,23 +4,13 @@
 // =========================================
 // 必須ヘッダー
 #include "DirectX11_DrawManager.h" // 自分のヘッダー
-
 // DirectXヘッダー
 #include "DirectX.h" // DirectXの関数群ヘッダー
-
 // マネージャーヘッダー
 #include "ShaderManager.h" // シェーダーマネージャー
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
 #include "VertexBufferManager.h"   // 頂点バッファマネージャー
-#include "TextureManager.h"
-
-// シェーダーヘッダー
-#include "ShaderData.h"
-// 頂点バッファヘッダー
-#include "VertexBufferData.h"
-// 定数バッファヘッダー
-#include "ConstantBufferData.h"
-
+#include "TextureManager.h" // テクスチャマネージャー
 // ログ出力
 #include "ReportMessage.h"
 
@@ -29,7 +19,6 @@
 #include "Quaternionh.h"
 #include "Vector3.h"
 #include "Color.h"
-
 // デバッグ用
 #include "Timer.h"
 

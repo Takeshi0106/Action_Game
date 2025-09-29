@@ -12,6 +12,10 @@
 // ======================================
 // ヘッダー
 // ======================================
+// DirectXヘッダー
+#include <d3d11.h>        // DirectXのAPIヘッダー
+// 頂点バッファデータ
+#include "VertexBufferData.h"
 // スマートポインターヘッダー
 #include <memory>
 // 配列のヘッダー
@@ -25,22 +29,13 @@
 
 
 // ======================================
-// 前方宣言
-// ======================================
-struct ID3D11Device;        // DirectXのデバイス
-struct ID3D11DeviceContext; // DirectXのデバイスコンテキスト
-struct ID3D11Buffer;        // 定数バッファ
-class VertexBufferData;    // 頂点バッファデータクラス
-
-
-// ======================================
 // クラス
 // ======================================
 class VertexBufferManager
 {
 private:
 	// 頂点バッファメンバー配列
-	static std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> m_VertexBuffers;
+	std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> m_VertexBuffers;
 	AssetLogger m_Logger = { "VertexBuffers.txt" };
 
 public:

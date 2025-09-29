@@ -22,6 +22,8 @@
 // ==============================================================
 // ヘッダー
 // ==============================================================
+// シェーダーのデータクラス
+#include "ShaderData.h"
 // スマートポインターのヘッダー
 #include <memory>               // スマートポインター
 // 配列のヘッダー
@@ -40,11 +42,6 @@ class ConstantBufferManager; // 定数バッファマネージャー
 
 struct ID3D11Device;         // DirectXのデバイス
 struct ID3D11DeviceContext;  // DirectXのコンテキスト
-
-// メンバー配列に入れるクラス
-class VertexShaderData;  // 頂点シェーダー
-class PixelShaderData;   // ピクセルシェーダ
-class ComputeShaderData; // コンピュートシェーダ
 
 // シェーダに渡す定数バッファや入力レイアウトの情報構造体
 class ConstantBufferInfo; // 定数バッファの情報構造体
@@ -68,9 +65,9 @@ private:
     const char* kShaderInfoPath; // シェーダーや定数バッファの情報が入っている
 
     // シェーダー保存配列
-    static std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
-    static std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
-    static std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
+    std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
+    std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
+    std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
 
     // ログ出力
     AssetLogger m_Logger = { "Shader.txt" };
@@ -105,8 +102,8 @@ public:
     void Uninit();
 
     // シェーダーのゲッター  名前を入れて、返す
-    static VertexShaderData*  GetFindVertexShader (const std::string& name);
-    static PixelShaderData*   GetFindPixelShader  (const std::string& name);
-    static ComputeShaderData* GetFindComputeShader(const std::string& name);
+    VertexShaderData*  GetFindVertexShader (const std::string& name);
+    PixelShaderData*   GetFindPixelShader  (const std::string& name);
+    ComputeShaderData* GetFindComputeShader(const std::string& name);
 };
 

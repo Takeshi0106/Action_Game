@@ -10,6 +10,11 @@
 // =======================================
 // ヘッダー
 // =======================================
+// DirectXヘッダー
+#include <d3d11.h>        // DirectXのAPIヘッダー
+#include <wrl/client.h>   // スマートポインター
+// 定数バッファデータ
+#include "ConstantBufferData.h"
 // 標準ヘッダー
 #include <string>
 // スマートポインターヘッダー
@@ -23,15 +28,6 @@
 
 
 // ======================================
-// 前方宣言
-// ======================================
-struct ID3D11Device;        // DirectXのデバイス
-struct ID3D11DeviceContext; // DirectXのデバイスコンテキスト
-struct ID3D11Buffer;        // 定数バッファ
-class ConstantBufferData;  // 定数バッファ構造体 (定数バッファとサイズを持つ)
-
-
-// ======================================
 // 定数バッファマネージャ 
 // ファイルパスに定数バッファの情報が入っているファイルのパスを入れる
 // シェーダ―マネージャーにポインターを渡し
@@ -41,7 +37,7 @@ class ConstantBufferManager
 {
 private:
 	// 定数バッファメンバー配列
-	static std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffers;
+	std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffers;
 	AssetLogger m_Logger = { "ConstantBuffers.txt" };
 
 public:

@@ -4,7 +4,6 @@
 // ===========================================
 // 必須ヘッダー
 #include "ShaderManager.h"         // 自分のヘッダー
-#include "ShaderData.h"            // シェイダーデータクラス
 // 情報を保存する配列
 #include <vector> // 読み出したファイルを保存する配列
 // DirectX用スマートポインター
@@ -20,9 +19,9 @@
 // ================================================
 // 静的変数
 // ================================================
-std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  ShaderManager::m_Vertexs;
-std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   ShaderManager::m_Pixels;
-std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManager::m_Computes;
+// std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  ShaderManager::m_Vertexs;
+// std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   ShaderManager::m_Pixels;
+// std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManager::m_Computes;
 
 
 // =================================================
