@@ -20,6 +20,12 @@
 
 
 // ======================================
+// 前方宣言
+// ======================================
+struct ID3D11DeviceContext;
+
+
+// ======================================
 // 頂点バッファクラス
 // 頂点バッファの保持と、利用の責任を持つ
 // ======================================
@@ -58,6 +64,9 @@ public:
         D3D11_USAGE usage = D3D11_USAGE_DYNAMIC,
         D3D11_CPU_ACCESS_FLAG flag = D3D11_CPU_ACCESS_WRITE
     );
+
+    // 頂点バッファ更新
+    bool UpdateBuffer(ID3D11DeviceContext* context, const void* data, int size);
 
     // ゲッター
     ID3D11Buffer* GetVertexBuffer() const { return m_Buffer.Get(); }
