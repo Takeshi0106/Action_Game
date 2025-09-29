@@ -393,8 +393,9 @@ void DirectX_DrawManager::DebugDraw()
 	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
 	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
 
-	// 入力レイアウト設定
-	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetILInfo()); // 入力レイアウト情報
+	// シェーダー・入力レイアウトのバインド
+	vs->VertexShaderBind(DirectX11::Get::GetContext());
+	ps->PixelShaderBind(DirectX11::Get::GetContext());
 
 	// 頂点バッファ取得
 	VertexBufferData* vertexBufferData= m_VBManager->GetFindVertexData(vsName);
@@ -437,10 +438,6 @@ void DirectX_DrawManager::DebugDraw()
 			DirectX11::Get::GetContext()->PSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
 		}
 	}
-
-	// 4. シェーダーセット
-	DirectX11::Get::GetContext()->VSSetShader(vs->GetShader(), nullptr, 0);
-	DirectX11::Get::GetContext()->PSSetShader(ps->GetShader(), nullptr, 0);
 
 	// 6. 描画
 	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);

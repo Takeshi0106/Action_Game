@@ -5,7 +5,6 @@
 // 必須ヘッダー
 #include "ShaderManager.h"         // 自分のヘッダー
 #include "ShaderData.h"            // シェイダーデータクラス
-#include "ConstantBufferManager.h" // CBのマネージャー
 // 情報を保存する配列
 #include <vector> // 読み出したファイルを保存する配列
 // DirectX用スマートポインター

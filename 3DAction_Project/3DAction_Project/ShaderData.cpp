@@ -6,6 +6,27 @@
 #include "ShaderData.h"    // 自分のヘッダー
 // デバッグ用・メッセージボックス出力用
 #include "ReportMessage.h" // ログ出力用
+// DirectXヘッダー
+#include <d3d11.h>
+// マイクロソフトが提供するスマートポインタ
+#include <wrl/client.h> 
+
+
+// ================================================
+// PImplイディオム構造体定義
+// ================================================
+struct VertexDataImpl{
+    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader; // 頂点シェーダー
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> iLayout; // シェーダーの入力レイアウト情報を入れる
+};
+
+struct PixelDataImpl {
+    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader; // ピクセルシェーダー
+};
+
+struct ComputeDataImpl {
+    Microsoft::WRL::ComPtr<ID3D11ComputeShader> computeShader; // コンピュートシェーダー
+};
 
 
 // ================================================
@@ -28,6 +49,13 @@ inline void OutputCBname(const std::vector<ConstantBufferInfo> &CBInfo) {}
 // =======================================================================
 // 頂点シェイダー
 // =======================================================================
+// コンストラクタ・デストラクタ
+VertexShaderData::VertexShaderData() : 
+    m_VertexData(std::make_unique<VertexDataImpl>()) {}
+
+VertexShaderData::~VertexShaderData() = default;
+
+// シェーダー作成
 bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo)
 {
@@ -42,7 +70,7 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
         binary,     // バイナリデータ
         size,        // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
-        m_VertexShader.GetAddressOf() // 出力先
+        m_VertexData->vertexShader.GetAddressOf() // 出力先
     );
 
     if (FAILED(hr)) {
@@ -83,15 +111,32 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
         return false;
     }
 
-    m_ILayout = std::move(layout); // VertexShaderData 内に保存
+    m_VertexData->iLayout = std::move(layout); // VertexShaderData 内に保存
     
     return true;
+}
+
+// 頂点シェーダーをバインド
+void VertexShaderData::VertexShaderBind(ID3D11DeviceContext* context)
+{
+    // 頂点シェーダーをセット
+    context->VSSetShader(m_VertexData->vertexShader.Get(), nullptr, 0);
+
+    // シェーダーに紐づく入力レイアウトをセット
+    context->IASetInputLayout(m_VertexData->iLayout.Get());
 }
 
 
 // =======================================================================
 // ピクセルシェイダー
 // =======================================================================
+// コンストラクタ・デストラクタ
+PixelShaderData::PixelShaderData() :
+    m_PixelData(std::make_unique<PixelDataImpl>()) {}
+
+PixelShaderData::~PixelShaderData() = default;
+
+// シェーダー作成
 bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo>& _CBInfo)
 {
@@ -106,7 +151,7 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
         binary,  // バイナリデータ
         size,     // サイズ
         nullptr,                      // クラスリンク未使用ならnullptr
-        m_PixelShader.GetAddressOf()  // 出力先
+        m_PixelData->pixelShader.GetAddressOf()  // 出力先
     );
 
     if (FAILED(hr)) {
@@ -121,9 +166,23 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
 }
 
 
+// ピクセルシェーダーをバインド
+void PixelShaderData::PixelShaderBind(ID3D11DeviceContext* context)
+{
+    context->PSSetShader(m_PixelData->pixelShader.Get(), nullptr, 0);
+}
+
+
 // =======================================================================
 // コンピュートシェイダー
 // =======================================================================
+// コンストラクタ・デストラクタ
+ComputeShaderData::ComputeShaderData() :
+    m_ComputeData(std::make_unique<ComputeDataImpl>()) {}
+
+ComputeShaderData::~ComputeShaderData() = default;
+
+// シェーダー作成
 bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo> &_CBInfo)
 {
@@ -138,7 +197,7 @@ bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t 
         binary,       // バイナリデータ
         size,          // サイズ
         nullptr,                        // クラスリンク未使用ならnullptr
-        m_ComputeShader.GetAddressOf()  // 出力先
+        m_ComputeData->computeShader.GetAddressOf()  // 出力先
     );
 
     if (FAILED(hr)) {
@@ -150,6 +209,13 @@ bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t 
     CBInfo = _CBInfo;
 
     return  true;
+}
+
+
+// コンピュートシェーダーをバインド
+void ComputeShaderData::ComputeShaderBind(ID3D11DeviceContext* context)
+{
+    context->CSSetShader(m_ComputeData->computeShader.Get(), nullptr, 0);
 }
 
 
