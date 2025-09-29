@@ -81,6 +81,7 @@ public:
 	// 頂点バッファ更新
 	void UpdateVertexBuffer(const char* drawID, const void* data, int size) override;
 
+
 	// デバッグ処理（描画できるかのチェックのため後に削除）
 	// デバッグ用更新
 	void DebugUpdate();

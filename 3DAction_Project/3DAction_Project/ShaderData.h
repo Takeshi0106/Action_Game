@@ -1,42 +1,33 @@
 ﻿#pragma once
+
 // ==============================================================
-// ＊このヘッダーを絶対にヘッダーにインクルードしないでください
-// D3D11ヘッダーが含まれています
+// シェーダークラス
+// 
+// 【責任】
+// シェーダーの作成、シェーダーとセットで使用する定数バッファの名前、バインド番号などを保持
+// ＊バインドなどはDrawManageで行う
 // ==============================================================
-#include <d3d11.h>
-#include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
+
+
+// ========================================
+// ヘッダー
+// ========================================
 // 名前などのデバッグ情報取得用
 #include <string>        // 名前など
 // シェーダーに持たせる情報
 #include "ConstantBufferInfo.h" // 定数バッファの情報
 #include "InputLayoutInfo.h"    // 入力レイアウトの情報
 #include <vector>          // 配列
-// std::unique_ptrを使用するため
-#include <memory>
-
-
-// ===============================================================
-// 前方宣言
-// ===============================================================
-// D3D11 の前方宣言
-struct ID3D11Device;
-struct ID3D11DeviceContext;
-struct ID3D11VertexShader;
-struct ID3D11PixelShader;
-struct ID3D11ComputeShader;
-struct ID3D11InputLayout;
-
-// PImplイディオム
-struct VertexDataImpl;
-struct PixelDataImpl;
-struct ComputeDataImpl;
+// DirectXヘッダー
+#include <d3d11.h>
+// マイクロソフトが提供するスマートポインタ
+#include <wrl/client.h> 
 
 
 // ====================================================================
 // シェーダークラス
 // シェイダーの保持と、利用の責任を持つ
 // ====================================================================
-
 // 共通する変数や関数などをまとめるためのクラス 
 // 使用できないようにコンストラクタをプロテクトに入れてインスタンス化できないようにしています。
 class BaseShaderData {
@@ -56,53 +47,55 @@ public:
 // 頂点シェーダクラス
 class  VertexShaderData : public BaseShaderData {
 private:
-	std::unique_ptr<VertexDataImpl> m_VertexData;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_VertexShader; // 頂点シェーダー
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_ILayout; // シェーダーの入力レイアウト情報を入れる
 
 public:
 	// コンストラクタ・デストラクタ
-	VertexShaderData();
-	~VertexShaderData();
+	VertexShaderData() = default;
+	~VertexShaderData() = default;
 
 	// シェーダー作成
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
 	const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo);
 
-	// シェーダーバインド
-	void VertexShaderBind(ID3D11DeviceContext* contex);
+	// ゲッター
+	ID3D11VertexShader* GetVertexShader() { return m_VertexShader.Get(); }
+	ID3D11InputLayout* GetInputLayout() { return m_ILayout.Get(); }
 };
 
 
 // ピクセルシェーダクラス
 class  PixelShaderData : public BaseShaderData {
 private:
-	std::unique_ptr<PixelDataImpl> m_PixelData;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_PixelShader; // ピクセルシェーダー
 
 public:
-	PixelShaderData();  // コンストラクタ
-	~PixelShaderData(); // デストラクタ
+	PixelShaderData() = default;  // コンストラクタ
+	~PixelShaderData() = default; // デストラクタ
 
 	// シェーダー作成
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
 		const std::vector<ConstantBufferInfo>& _CBInfo);
 
-	// バインド
-	void PixelShaderBind(ID3D11DeviceContext* context);
+	// ゲッター
+	ID3D11PixelShader* GetPixelShader() { return m_PixelShader.Get(); }
 };
 
 
 // コンピュートシェーダークラス
 class ComputeShaderData : public BaseShaderData {
 private:
-	std::unique_ptr<ComputeDataImpl> m_ComputeData;
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader> m_ComputeShader; // コンピュートシェーダー
 
 public:
-	ComputeShaderData(); // コンストラクタ
-	~ComputeShaderData(); // デストラクタ
+	ComputeShaderData() = default; // コンストラクタ
+	~ComputeShaderData() = default; // デストラクタ
 
 	// シェーダー作成
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
 		const std::vector<ConstantBufferInfo>& _CBInfo);
 
-	// コンピュートシェーダーをセット
-	void ComputeShaderBind(ID3D11DeviceContext* context);
+	// ゲッター
+	ID3D11ComputeShader* GetComputeShader() { return m_ComputeShader.Get(); }
 };

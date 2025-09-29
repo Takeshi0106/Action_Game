@@ -44,3 +44,25 @@ bool ConstantBufferData::CreateConstantBuffer(
 
 	return true;
 }
+
+
+// 定数バッファ更新
+bool ConstantBufferData::UpdateConstantBuffer(ID3D11DeviceContext* context, const void* data, size_t size)
+{
+	D3D11_MAPPED_SUBRESOURCE mapped{};
+	HRESULT hr = context->Map(m_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (SUCCEEDED(hr))
+	{
+		memcpy(mapped.pData, data, size);
+		context->Unmap(m_Buffer.Get(), 0);
+
+		m_IsUpdate = true;
+	}
+	else
+	{
+		ErrorLog::OutputToConsole("定数バッファが更新できませんでした");
+		return false;
+	}
+
+	return true;
+}

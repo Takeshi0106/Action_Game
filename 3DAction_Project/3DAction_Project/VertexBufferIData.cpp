@@ -54,3 +54,25 @@ bool VertexBufferData::CreateVertexBuffer(
 
 	return true;
 }
+
+
+// 頂点バッファ更新
+bool VertexBufferData::UpdateBuffer(ID3D11DeviceContext* context, const void* data, int size)
+{
+	D3D11_MAPPED_SUBRESOURCE mapped{};
+	HRESULT hr = context->Map(m_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (SUCCEEDED(hr))
+	{
+		memcpy(mapped.pData, data, size);
+		context->Unmap(m_Buffer.Get(), 0);
+
+		m_IsUpdate = true;
+	}
+	else
+	{
+		ErrorLog::OutputToConsole("頂点バッファが更新できませんでした");
+		return false;
+	}
+
+	return true;
+}

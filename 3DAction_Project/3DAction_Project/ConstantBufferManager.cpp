@@ -79,7 +79,7 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& constantName
 // =======================================
 // 定数バッファを探して返す
 // =======================================
-ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& name)
+ConstantBufferData* ConstantBufferManager::GetFindConstantBuffer(const std::string& name)
 {
 	// 探す
 	auto it = m_ConstantBuffers.find(name); 
@@ -87,7 +87,7 @@ ID3D11Buffer* ConstantBufferManager::GetFindConstantBuffer(const std::string& na
 	if (it != m_ConstantBuffers.end()) 
 	{
 		// 定数バッファを返す
-		return it->second->GetBuffer();
+		return it->second.get();
 	}
 	else {
 		ErrorLog::OutputToConsole(std::string(" 定数バッファ : " + name + " が見つかりませんでした").c_str());

@@ -38,8 +38,6 @@ public:
     ConstantBufferData() {}
     ~ConstantBufferData() = default;
 
-    // 
-
     // 定数バッファ作衛
     bool CreateConstantBuffer(
         ID3D11Device* device,
@@ -47,6 +45,10 @@ public:
         size_t size,
         D3D11_USAGE usage = D3D11_USAGE_DYNAMIC,
         D3D11_CPU_ACCESS_FLAG cpuAccess = D3D11_CPU_ACCESS_WRITE);
+
+
+    // 定数バッファ更新
+    bool UpdateConstantBuffer(ID3D11DeviceContext* context, const void* data, size_t size);
 
     // ゲッター
     ID3D11Buffer* GetBuffer() const { return m_Buffer.Get(); }

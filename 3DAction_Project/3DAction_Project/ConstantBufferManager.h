@@ -59,7 +59,7 @@ public:
 		CPUAccess access = CPUAccess::Write);
 
 	// 定数バッファを探して、戻り値で返す
-	ID3D11Buffer* GetFindConstantBuffer(const std::string& name);
+	ConstantBufferData* GetFindConstantBuffer(const std::string& name);
 
 	// 後処理
 	void ReleaseAllConstantBuffers();

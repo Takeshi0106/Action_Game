@@ -18,6 +18,8 @@
 #include "ShaderData.h"
 // 頂点バッファヘッダー
 #include "VertexBufferData.h"
+// 定数バッファヘッダー
+#include "ConstantBufferData.h"
 
 // ログ出力
 #include "ReportMessage.h"
@@ -259,24 +261,10 @@ void DirectX_DrawManager::CreateConstantBuffer(
 void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const void* data, const int size)
 {
 	// 定数バッファ取得
-	ID3D11Buffer* buffer = m_CBManager->GetFindConstantBuffer(constantName);
+	ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(constantName);
 
-	if (buffer)
-	{
-		ID3D11DeviceContext* context = DirectX11::Get::GetContext();
-
-		// MapしてCPU→GPUコピー
-		D3D11_MAPPED_SUBRESOURCE mapped = {};
-		if (SUCCEEDED(context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped)))
-		{
-			memcpy(mapped.pData, data, size);
-			context->Unmap(buffer, 0);
-		}
-	}
-	else
-	{
-		ErrorLog::OutputToConsole((std::string("定数バッファが更新できませんでした　:") + constantName).c_str());
-	}
+	// 定数バッファ更新
+	buffer->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
 }
 
 
@@ -287,31 +275,12 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* dat
 {
 	// 描画IDから頂点シェーダー検索 // 
 
-	// 頂点シェーダー検索
-	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(drawID);
 
 	// 頂点バッファデータ取得
 	VertexBufferData* vbData = m_VBManager->GetFindVertexData(drawID);
 
-	// 頂点バッファ検索
-	ID3D11Buffer* buffer = vbData->GetVertexBuffer();
-
 	// 頂点バッファ更新
-	ID3D11DeviceContext* context = DirectX11::Get::GetContext();
-
-	D3D11_MAPPED_SUBRESOURCE mapped{};
-	HRESULT hr = context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-	if (SUCCEEDED(hr))
-	{
-		memcpy(mapped.pData, data, size);
-		DirectX11::Get::GetContext()->Unmap(buffer, 0);
-
-		vbData->SetIsUpdate(true);
-	}
-	else
-	{
-		ErrorLog::OutputToConsole((std::string("頂点バッファが更新できませんでした　:") + drawID).c_str());
-	}
+	vbData->UpdateBuffer(DirectX11::Get::GetContext(), data, size);
 }
 
 
@@ -393,24 +362,20 @@ void DirectX_DrawManager::DebugDraw()
 	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
 	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
 
-	// シェーダー・入力レイアウトのバインド
-	vs->VertexShaderBind(DirectX11::Get::GetContext());
-	ps->PixelShaderBind(DirectX11::Get::GetContext());
+	// 入力レイアウト設定
+	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout()); // 入力レイアウト情報
 
 	// 頂点バッファ取得
-	VertexBufferData* vertexBufferData= m_VBManager->GetFindVertexData(vsName);
+	VertexBufferData* vertexBufferData = m_VBManager->GetFindVertexData(vsName);
 
 	// 更新されている場合だけセット
-	if (vertexBufferData->GetIsUpdate()) 
-	{
-		// 入力アセンブラ
-		ID3D11Buffer* buffers = vertexBufferData->GetVertexBuffer();
-		UINT stride = UINT(vertexBufferData->GetStride());
-		UINT offset = 0;
+	// 入力アセンブラ
+	ID3D11Buffer* vbuffers = vertexBufferData->GetVertexBuffer();
+	UINT stride = UINT(vertexBufferData->GetStride());
+	UINT offset = 0;
 
-		DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &buffers, &stride, &offset);
-		vertexBufferData->SetIsUpdate(false);
-	}
+	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vbuffers, &stride, &offset);
+	vertexBufferData->SetIsUpdate(false);
 
 	// トポロギー設定
 	DirectX11::Get::GetContext()->IASetPrimitiveTopology(vertexBufferData->GetPrimitiveType());
@@ -418,30 +383,54 @@ void DirectX_DrawManager::DebugDraw()
 	// 3. 定数バッファ更新とバインド
 	// 頂点
 	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
-	for (auto& cb : cbInfo)
+	std::vector<ID3D11Buffer*> buffers(cbInfo.size(), nullptr);
+
+	for (size_t i = 0; i < cbInfo.size(); i++)
 	{
 		// 定数バッファ取得
-		ID3D11Buffer* buffer = m_CBManager->GetFindConstantBuffer(cb.GetName());
+		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
 		if (buffer) {
 			// VSスロット番号にバインド
-			DirectX11::Get::GetContext()->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
+			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
 		}
 	}
+
+	// まとめてバインド
+	DirectX11::Get::GetContext()->VSSetConstantBuffers(
+		0,                         // 先頭スロット
+		static_cast<UINT>(buffers.size()),
+		buffers.data()             // 配列を渡す
+	);
+
 	// ピクセル
 	cbInfo = ps->GetCBInfo();
-	for (auto& cb : cbInfo)
+	buffers.resize(cbInfo.size(), nullptr);
+
+	for (size_t i = 0; i < cbInfo.size(); i++)
 	{
 		// 定数バッファ取得
-		ID3D11Buffer* buffer = m_CBManager->GetFindConstantBuffer(cb.GetName());
+		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
 		if (buffer) {
 			// VSスロット番号にバインド
-			DirectX11::Get::GetContext()->PSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
+			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
 		}
 	}
+
+	// まとめてバインド
+	DirectX11::Get::GetContext()->PSSetConstantBuffers(
+		0,                         // 先頭スロット
+		static_cast<UINT>(buffers.size()),
+		buffers.data()             // 配列を渡す
+	);
+
+
+	// 4. シェーダーセット
+	DirectX11::Get::GetContext()->VSSetShader(vs->GetVertexShader(), nullptr, 0);
+	DirectX11::Get::GetContext()->PSSetShader(ps->GetPixelShader(), nullptr, 0);
+
 
 	// 6. 描画
 	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
-
 
 
 	DirectX11::EndDraw(); // 描画の終わり処理
