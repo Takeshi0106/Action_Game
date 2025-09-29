@@ -23,7 +23,7 @@ namespace BufferUtils {
     inline D3D11_USAGE ToDXUsage(BufferUsage usage)
     {
         switch (usage)
-        {
+        {   
         case BufferUsage::Default: {
             return D3D11_USAGE_DEFAULT;
             break;

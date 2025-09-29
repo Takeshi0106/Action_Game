@@ -139,7 +139,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseDirectXManager.cpp" />
+    <ClCompile Include="AssetLogger.cpp" />
     <ClCompile Include="ConstantBufferData.cpp" />
     <ClCompile Include="ConstantBufferInfo.cpp" />
     <ClCompile Include="ConstantBufferManager.cpp" />
@@ -182,7 +182,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="Windows_Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseDirectXManager.h" />
+    <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseDrawManager.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
     <ClInclude Include="BufferSetting.h" />

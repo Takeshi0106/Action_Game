@@ -15,7 +15,7 @@
 // ================================
 // 静的メンバー配列
 // ================================
-std::unordered_map<std::string, std::unique_ptr<Texture2DData>> TextureManager::m_Textures;
+std::unordered_map<std::string, std::unique_ptr<Texture2DData>>TextureManager::m_Textures;
 
 
 // ================================
@@ -57,8 +57,8 @@ bool TextureManager::CreateTexture(
 	// 配列に代入
 	m_Textures[name] = std::move(textureData);
 
-	// デバッグ用に名前を保存しておく
-	Log(name.c_str());
+	// 名前を保存しておく
+	m_Logger.Log(name.c_str());
 
 	return true;
 }

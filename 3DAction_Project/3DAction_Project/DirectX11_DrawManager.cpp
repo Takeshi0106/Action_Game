@@ -55,41 +55,31 @@ Vertex vertices[3] =
 float angle;
 
 
-// ==========================================
-// 静的メンバー変数
-// ==========================================
+// コンストラクタ・デストラクタ
+DirectX_DrawManager::DirectX_DrawManager()
+{
+	// 実態作成
 #if defined(DEBUG) || defined(_DEBUG)
-
-ShaderManager DirectX_DrawManager::m_ShaderManager = {
-	"Debug/Log/Shader.txt",           // 使用したシェイダーの名前を書き出すログのパス
-	"Asset/Debug/Shader",             // デバッグ時のコンパイルしたシェイダーを入れるパス
-	"",                               // Debug時には使用しないパス　(.hlslがある場所を示すパス)
-	"Asset/Info/ShaderReflection.txt" // リフレクションした情報を出力するファイルパス
-};
-
+	m_ShaderManager = std::make_unique<ShaderManager>(
+		"Asset/Debug/Shader",
+		"",
+		"Asset/Info/ShaderReflection.txt"
+	);
 #else
-
-ShaderManager DirectX_DrawManager::m_ShaderManager = {
-	"Debug/Log/Shader.txt",             // 使用したシェイダーの名前を書き出すログのパス
-	"Asset/Shader/Compile",             // デバッグ時のコンパイルしたシェイダーを入れるパス
-	"Asset/Shader/Hlsl",                // Debug時には使用しないパス　(.hlslがある場所を示すパス)
-	"Asset/Info/ShaderReflection.txt"   // リフレクションした情報を出力するファイルパス
-};
-
+	m_ShaderManager = std::make_unique<ShaderManager>(
+		"Asset/Shader/Compile",
+		"Asset/Shader/Hlsl",
+		"Asset/Info/ShaderReflection.txt"
+	);
 #endif
 
-ConstantBufferManager DirectX_DrawManager::m_CBManager = {
-	"Debug/Log/ConstantBuffers.txt"    // 使用したコンスタンスバッファの名前を書き出すパス
-};
+	m_CBManager = std::make_unique<ConstantBufferManager>();
+	m_VBManager = std::make_unique<VertexBufferManager>();
+	m_TextureManager = std::make_unique<TextureManager>();
+}
 
-VertexBufferManager DirectX_DrawManager::m_VBManager = {
-	"Debug/Log/VertexBuffers.tex"
-};
 
-TextureManager DirectX_DrawManager::m_TextureManager = {
-	"Debug/Log/TextureManager.tex"
-};
-
+DirectX_DrawManager::~DirectX_DrawManager() = default;
 
 // ==========================================
 // 初期化
@@ -103,7 +93,7 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 	}
 
 	// シェーダー作成
-	if (!m_ShaderManager.Init(DirectX11::Get::GetDevice())) {
+	if (!m_ShaderManager->Init(DirectX11::Get::GetDevice())) {
 		ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
 		return false; // 失敗したら戻る
 	}
@@ -147,7 +137,7 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		CPUAccess::Write);
 
 	// テクスチャ作成
-	if (!m_TextureManager.CreateTexture(
+	if (!m_TextureManager->CreateTexture(
 		"DebugTexture",
 		DirectX11::Get::GetDevice(),
 		1920,
@@ -190,11 +180,11 @@ void DirectX_DrawManager::Uninit()
 	// Directの後処理
 	DirectX11::Uninit();
 	// シェーダ―マネージャーの後処理
-	m_ShaderManager.Uninit();
+	m_ShaderManager->Uninit();
 	// 定数バッファ解放
-	m_CBManager.ReleaseAllConstantBuffers();
+	m_CBManager->ReleaseAllConstantBuffers();
 	// 頂点バッファ解放
-	m_VBManager.ReleaseAllVertexBuffers();
+	m_VBManager->ReleaseAllVertexBuffers();
 }
 
 
@@ -223,7 +213,7 @@ void DirectX_DrawManager::CreateVertexBuffer(
 
 
 	// 頂点バッファ作成
-	if (!m_VBManager.CreateVertexBuffer(
+	if (!m_VBManager->CreateVertexBuffer(
 		drawID,
 		DirectX11::Get::GetDevice(),
 		data, // 頂点データ
@@ -250,7 +240,7 @@ void DirectX_DrawManager::CreateConstantBuffer(
 	CPUAccess access)
 {
 	// 定数バッファ作成
-	if (!m_CBManager.CreateConstantBuffer(
+	if (!m_CBManager->CreateConstantBuffer(
 		constantName,
 		DirectX11::Get::GetDevice(),
 		data, // データ
@@ -269,7 +259,7 @@ void DirectX_DrawManager::CreateConstantBuffer(
 void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const void* data, const int size)
 {
 	// 定数バッファ取得
-	ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(constantName);
+	ID3D11Buffer* buffer = m_CBManager->GetFindConstantBuffer(constantName);
 
 	if (buffer)
 	{
@@ -298,10 +288,10 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* dat
 	// 描画IDから頂点シェーダー検索 // 
 
 	// 頂点シェーダー検索
-	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader(drawID);
+	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(drawID);
 
 	// 頂点バッファデータ取得
-	VertexBufferData* vbData = m_VBManager.GetFindVertexData(drawID);
+	VertexBufferData* vbData = m_VBManager->GetFindVertexData(drawID);
 
 	// 頂点バッファ検索
 	ID3D11Buffer* buffer = vbData->GetVertexBuffer();
@@ -400,14 +390,14 @@ void DirectX_DrawManager::DebugDraw()
 	std::string psName = "PS_TriangleDebug";
 
 	// シェーダー取得
-	VertexShaderData* vs = m_ShaderManager.GetFindVertexShader(vsName);
-	PixelShaderData* ps = m_ShaderManager.GetFindPixelShader(psName);
+	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
+	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
 
 	// 入力レイアウト設定
 	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetILInfo()); // 入力レイアウト情報
 
 	// 頂点バッファ取得
-	VertexBufferData* vertexBufferData= m_VBManager.GetFindVertexData(vsName);
+	VertexBufferData* vertexBufferData= m_VBManager->GetFindVertexData(vsName);
 
 	// 更新されている場合だけセット
 	if (vertexBufferData->GetIsUpdate()) 
@@ -430,7 +420,7 @@ void DirectX_DrawManager::DebugDraw()
 	for (auto& cb : cbInfo)
 	{
 		// 定数バッファ取得
-		ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
+		ID3D11Buffer* buffer = m_CBManager->GetFindConstantBuffer(cb.GetName());
 		if (buffer) {
 			// VSスロット番号にバインド
 			DirectX11::Get::GetContext()->VSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);
@@ -441,7 +431,7 @@ void DirectX_DrawManager::DebugDraw()
 	for (auto& cb : cbInfo)
 	{
 		// 定数バッファ取得
-		ID3D11Buffer* buffer = m_CBManager.GetFindConstantBuffer(cb.GetName());
+		ID3D11Buffer* buffer = m_CBManager->GetFindConstantBuffer(cb.GetName());
 		if (buffer) {
 			// VSスロット番号にバインド
 			DirectX11::Get::GetContext()->PSSetConstantBuffers(cb.GetRegisterNumber(), 1, &buffer);

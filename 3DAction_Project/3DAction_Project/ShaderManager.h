@@ -22,8 +22,6 @@
 // ==============================================================
 // ヘッダー
 // ==============================================================
-// 基底クラスヘッダー
-#include "BaseDirectXManager.h" // マネージャークラス（基底クラス）
 // スマートポインターのヘッダー
 #include <memory>               // スマートポインター
 // 配列のヘッダー
@@ -31,6 +29,8 @@
 #include <vector>               // 情報を渡す配列
 // 基底ヘッダー
 #include <string>
+// アッセット名ログ出力
+#include "AssetLogger.h"
 
 
 // ==============================================
@@ -55,7 +55,7 @@ class InputLayoutInfo;    // 入力レイアウト構造体
 // シェーダーを管理するクラス  （シェイダーのコンパイル、バイナリーファイルのロード、キャッシュ、破棄）
 // Debug時にシェーダーをリフレクションして書き出す
 // ===================================================================================================
-class ShaderManager : public BaseDirectXManager
+class ShaderManager
 {
 private:
     // ---------------------------------
@@ -72,6 +72,8 @@ private:
     static std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
     static std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
 
+    // ログ出力
+    AssetLogger m_Logger = { "Shader.txt" };
 
     // 関数
 #if defined(DEBUG) || defined(_DEBUG)
@@ -92,11 +94,11 @@ private:
 
 public:
     // コンストラクタ
-    ShaderManager(const char* assetLog, const char* CSOPath, const char* hlslPath, const char* infoFaile)
-        :BaseDirectXManager(assetLog), kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
+    ShaderManager(const char* CSOPath, const char* hlslPath, const char* infoFaile)
+        :kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
     }
     // デストラクタ
-    ~ShaderManager() = default;
+    ~ShaderManager() { m_Logger.WriteLog(); }
 
     // 初期化・後処理
     bool Init(ID3D11Device* device);

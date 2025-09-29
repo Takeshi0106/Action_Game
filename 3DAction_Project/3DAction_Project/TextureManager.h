@@ -9,8 +9,6 @@
 // ================================
 // ヘッダー
 // ================================
-// 基底クラスヘッダー
-#include "BaseDirectXManager.h"
 // 文字列ヘッダー
 #include <string>
 // スマートポインターヘッダー
@@ -19,6 +17,9 @@
 #include <unordered_map> // ハッシュ値検索
 // バッファ設定
 #include "BufferSetting.h"
+// アセットログ出力クラス
+#include "AssetLogger.h"
+
 
 // ================================
 // 前方宣言
@@ -29,17 +30,19 @@ struct ID3D11Device; // DirectXのデバイス
 // =================================
 // クラス
 // =================================
-class TextureManager : public BaseDirectXManager
+class TextureManager
 {
 private:
 	// テクスチャ配列
 	static std::unordered_map<std::string, std::unique_ptr<Texture2DData>> m_Textures;
+    AssetLogger m_Logger{"Texture.txt"};
 
 public:
-    TextureManager(const char* assetLog) : BaseDirectXManager(assetLog) {
-    }
-    ~TextureManager() = default;
+    // コンストラクタ・デストラクタ
+    TextureManager() = default;
+    ~TextureManager() { m_Logger.WriteLog(); }
 
+    // テクスチャを作成
     bool CreateTexture(
         const std::string& name,
         ID3D11Device* device,

@@ -70,7 +70,7 @@ bool VertexBufferManager::CreateVertexBuffer(
     m_VertexBuffers[name] = std::move(vbd);
 
     // 作製した頂点バッファの名前を保存
-    Log(name.c_str());
+    m_Logger.Log(name.c_str());
 
     return true;
 }

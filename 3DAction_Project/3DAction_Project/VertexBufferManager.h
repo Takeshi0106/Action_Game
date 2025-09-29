@@ -12,14 +12,16 @@
 // ======================================
 // ヘッダー
 // ======================================
-// 必須ヘッダー
-#include "BaseDirectXManager.h"
 // スマートポインターヘッダー
 #include <memory>
 // 配列のヘッダー
 #include <unordered_map>
 // バッファ設定ヘッダー
 #include "BufferSetting.h"
+// 文字列
+#include <string>
+// 外部ファイルにアセット名ログ出力
+#include "AssetLogger.h"
 
 
 // ======================================
@@ -34,17 +36,18 @@ class VertexBufferData;    // 頂点バッファデータクラス
 // ======================================
 // クラス
 // ======================================
-class VertexBufferManager : public BaseDirectXManager
+class VertexBufferManager
 {
 private:
 	// 頂点バッファメンバー配列
 	static std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> m_VertexBuffers;
+	AssetLogger m_Logger = { "VertexBuffers.txt" };
 
 public:
 	// コンストラクタ
-	VertexBufferManager(const char* assetLog) : BaseDirectXManager(assetLog) {}
+	VertexBufferManager() = default;
 	// デストラクタ
-	~VertexBufferManager() = default;
+	~VertexBufferManager() { m_Logger.WriteLog(); }
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(

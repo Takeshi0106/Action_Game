@@ -70,7 +70,7 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& constantName
 	m_ConstantBuffers[constantName] = std::move(bafferData);
 
 	// デバッグ用に名前を保存しておく
-	Log(constantName.c_str());
+	m_Logger.Log(constantName.c_str());
 
 	return true;
 }

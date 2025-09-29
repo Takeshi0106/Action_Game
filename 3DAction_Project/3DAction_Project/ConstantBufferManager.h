@@ -10,8 +10,6 @@
 // =======================================
 // ヘッダー
 // =======================================
-// 基底クラスヘッダー
-#include "BaseDirectXManager.h"
 // 標準ヘッダー
 #include <string>
 // スマートポインターヘッダー
@@ -20,6 +18,8 @@
 #include <unordered_map> // ハッシュ値検索
 // バッファ設定ヘッダー
 #include "BufferSetting.h"
+// 外部ファイルにアセット名ログ出量用
+#include "AssetLogger.h"
 
 
 // ======================================
@@ -37,17 +37,18 @@ class ConstantBufferData;  // 定数バッファ構造体 (定数バッファと
 // シェーダ―マネージャーにポインターを渡し
 // 定数バッファを作成する（単一結合）
 // ======================================
-class ConstantBufferManager : public BaseDirectXManager
+class ConstantBufferManager
 {
 private:
 	// 定数バッファメンバー配列
 	static std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffers;
+	AssetLogger m_Logger = { "ConstantBuffers.txt" };
 
 public:
 	// コンストラクタ
-	ConstantBufferManager(const char* assetLog) : BaseDirectXManager(assetLog) {}
+	ConstantBufferManager() = default;
 	// デストラクタ
-	~ConstantBufferManager() = default;
+	~ConstantBufferManager() { m_Logger.WriteLog(); }
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(const std::string& constantName,

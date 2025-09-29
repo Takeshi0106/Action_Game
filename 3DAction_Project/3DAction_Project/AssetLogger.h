@@ -4,6 +4,9 @@
 // 【クラス概要】
 // DirectXマネージャーの基底クラス
 // デバッグ時に使用した名前を出力するように設定
+// 
+// 【責任】
+// ログ出力
 // ==================================================================
 
 
@@ -29,26 +32,27 @@ namespace {
 // DirectXで使用するマネージャーの基底クラス
 // シェーダー・テクスチャ・オブジェクトなどに派生させる
 // ==================================================================
-class BaseDirectXManager
+class AssetLogger
 {
 protected:
 	// アセットのログ デバッグビルド時に書出し
-	const  char* kAssetLogPath;
+	std::string kAssetLogPath = { "Debug/Log/" };
 	// 使用したオブジェクトを入れる
 	std::string m_UseObjectList;
+
+public:
+	// コンストラクタ
+	AssetLogger(const char* assetLog)
+	{
+		kAssetLogPath = std::string(kAssetLogPath + assetLog);
+		m_UseObjectList += Type + "\n\n";
+	}
+	// デストラクタ　
+	~AssetLogger() = default;
 
 	// 外部ファイルに使用したオブジェクトのリストを書き出す
 	bool WriteLog();
 	// オブジェクトの名前をセットする
 	void Log(const char* name);
-
-public:
-	// コンストラクタ
-	BaseDirectXManager(const char* assetLog)
-		: kAssetLogPath(assetLog) {
-		m_UseObjectList += Type + "\n\n";
-	}
-	// デストラクタ　
-	virtual ~BaseDirectXManager() { WriteLog(); }
 };
 
