@@ -9,21 +9,18 @@
 // =====================================================
 // ヘッダー
 // =====================================================
+#include "ResourceViewData.h"
 // 標準ヘッダー
 #include <string>
 // スマートポインターヘッダー
 #include <memory> // スマートポインター
 // 配列のヘッダー
 #include <unordered_map> // ハッシュ値検索
+// バッファセッティング
+#include "BufferSetting.h"
+// アセットログ出力
+#include "AssetLogger.h"
 
-
-// =====================================================
-// 前方宣言
-// =====================================================
-class SRVData;
-class UAVData;
-class RTVData;
-class DSVData;
 
 // =====================================================
 // クラス
@@ -32,19 +29,47 @@ class ResourceViewManager
 {
 private:
 	// 配列
-	static std::unordered_map<std::string, std::unique_ptr<SRVData>> m_SRVs;
-	static std::unordered_map<std::string, std::unique_ptr<UAVData>> m_UAVs;
-	static std::unordered_map<std::string, std::unique_ptr<RTVData>> m_RTVs;
-	static std::unordered_map<std::string, std::unique_ptr<DSVData>> m_DSVs;
+	std::unordered_map<std::string, std::unique_ptr<SRVData>> m_SRVs;
+	std::unordered_map<std::string, std::unique_ptr<UAVData>> m_UAVs;
+	std::unordered_map<std::string, std::unique_ptr<RTVData>> m_RTVs;
+	std::unordered_map<std::string, std::unique_ptr<DSVData>> m_DSVs;
+
+	AssetLogger m_Logger{ "View.txt" };
 
 public:
-	// 作成
+	ResourceViewManager() = default;
+	~ResourceViewManager() { m_Logger.WriteLog(); }
 
+	// 作成
+	bool CreateSRV(const std::string& name,
+		ID3D11Device* device,
+		ID3D11Resource* resource,
+		Format format,
+		UINT mostDetailedMip = 0,
+		UINT mipLevels = -1);
+
+	bool CreateUAV(const std::string& name,
+		ID3D11Device* device,
+		ID3D11Resource* resource,
+		Format format,
+		UINT mmipSlice = 0);
+
+	bool CreateRTV(const std::string& name,
+		ID3D11Device* device,
+		ID3D11Resource* resource,
+		Format format,
+		UINT mmipSlice = 0);
+
+	bool CreateDSV(const std::string& name,
+		ID3D11Device* device,
+		ID3D11Resource* resource,
+		Format format,
+		UINT mmipSlice = 0);
 
 	// ゲッター  名前を入れて、返す
-	static SRVData* GetFindSRV(const std::string& name);
-	static UAVData* GetFindUAV(const std::string& name);
-	static RTVData* GetFindRTV(const std::string& name);
-	static DSVData* GetFindDSV(const std::string& name);
+	SRVData* GetFindSRV(const std::string& name);
+	UAVData* GetFindUAV(const std::string& name);
+	RTVData* GetFindRTV(const std::string& name);
+	DSVData* GetFindDSV(const std::string& name);
 };
 

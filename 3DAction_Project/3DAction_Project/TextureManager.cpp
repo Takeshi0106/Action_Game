@@ -8,14 +8,8 @@
 // DirectXヘッダー
 #include <d3d11.h>        // DirectXのAPIヘッダー
 #include <wrl/client.h>   // スマートポインター
-// 
+// バッファユーリアリティヘッダー
 #include "DirectX_BufferUtils.h"
-
-
-// ================================
-// 静的メンバー配列
-// ================================
-std::unordered_map<std::string, std::unique_ptr<Texture2DData>>TextureManager::m_Textures;
 
 
 // ================================
@@ -61,6 +55,24 @@ bool TextureManager::CreateTexture(
 	m_Logger.Log(name.c_str());
 
 	return true;
+}
+
+
+Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
+{
+    // 探す
+    auto it = m_Textures.find(name);
+
+    if (it != m_Textures.end())
+    {
+        // 定数バッファを返す
+        return it->second.get();
+    }
+    else {
+        ErrorLog::OutputToConsole(std::string(" テクスチャ : " + name + " が見つかりませんでした").c_str());
+    }
+
+    return nullptr;
 }
 
 

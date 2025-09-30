@@ -363,7 +363,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

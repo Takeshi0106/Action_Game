@@ -31,6 +31,7 @@ class ShaderManager;
 class ConstantBufferManager;
 class VertexBufferManager;
 class TextureManager;
+class ResourceViewManager;
 
 
 // ========================================
@@ -44,7 +45,7 @@ private:
 	std::unique_ptr<ConstantBufferManager> m_CBManager; // 定数バッファマネージャー
 	std::unique_ptr<VertexBufferManager> m_VBManager; // 頂点バッファマネージャー
 	std::unique_ptr<TextureManager> m_TextureManager; // テクスチャマネージャー
-
+	std::unique_ptr<ResourceViewManager> m_ViewManager; // ビューマネージャー
 
 
 public:
@@ -76,6 +77,22 @@ public:
 		size_t size,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write) override;
+
+	// テクスチャ作成
+	bool CreateTexture(
+		const char* name,
+		unsigned int width,
+		unsigned int height,
+		Format format,
+		BindFlag bindFlag,
+		BufferUsage usage = BufferUsage::Default,
+		CPUAccess cpu = CPUAccess::None) override;
+
+	// View作成
+	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;
+	bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) override;
 
 	// バッファ更新
 	// 定数バッファ更新

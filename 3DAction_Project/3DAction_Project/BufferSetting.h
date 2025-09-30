@@ -35,10 +35,19 @@ enum class CPUAccess
 enum class Format
 {
 	Unknown,
+
+	// 8bit
 	R8G8B8A8_UNorm,
+	
+	// 単
 	R32_Float,
+
+	// 高精度
 	R32G32B32_Float,
 	R32G32B32A32_Float,
+
+	// 深度
+	D24_UNorm_S8_UInt
 };
 
 enum class BindFlag : unsigned int

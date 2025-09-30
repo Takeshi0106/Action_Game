@@ -16,7 +16,6 @@
 // DirectX用
 #include <d3d11.h>       // DirectXのAPI
 #include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
-
 // 名前などのデバッグ情報取得用
 #include <string>        // 名前など
 
@@ -33,14 +32,13 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	SRVData() {}
+	SRVData() = default;
 	~SRVData() = default;
 
 	// ビュー作成
 	bool CreateSRV(ID3D11Device* device, 
 		ID3D11Resource* resource,
 		DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
-		D3D11_SRV_DIMENSION viewDim = D3D11_SRV_DIMENSION_TEXTURE2D,
 		UINT mostDetailedMip = 0,
 		UINT mipLevels = -1);
 
@@ -58,14 +56,13 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	UAVData() {}
+	UAVData() = default;
 	~UAVData() = default;
 
 	// ビュー作成
 	bool CreateUAV(ID3D11Device* device,
 		ID3D11Resource* resource,
 		DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
-		D3D11_UAV_DIMENSION viewDim = D3D11_UAV_DIMENSION_TEXTURE2D,
 		UINT mipSlice = 0);
 
 	// ゲッター
@@ -82,14 +79,13 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	RTVData() {}
+	RTVData() = default;
 	~RTVData() = default;
 
 	// ビュー作成
 	bool CreateRTV(ID3D11Device* device, 
 		ID3D11Resource* resource,
 		DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
-		D3D11_RTV_DIMENSION viewDim = D3D11_RTV_DIMENSION_TEXTURE2D,
 		UINT mipSlice = 0);
 
 	// ゲッター
@@ -106,14 +102,13 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	DSVData() {}
+	DSVData() = default;
 	~DSVData() = default;
 
 	// ビュー作成
 	bool CreateDSV(ID3D11Device* device, 
 		ID3D11Resource* resource,
 		DXGI_FORMAT format = DXGI_FORMAT_D24_UNORM_S8_UINT,
-		D3D11_DSV_DIMENSION viewDim = D3D11_DSV_DIMENSION_TEXTURE2D,
 		UINT mipSlice = 0);
 
 	// ゲッター

@@ -11,6 +11,7 @@
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
 #include "VertexBufferManager.h"   // 頂点バッファマネージャー
 #include "TextureManager.h" // テクスチャマネージャー
+#include "ResourceViewManager.h" // ビューマネージャー
 // ログ出力
 #include "ReportMessage.h"
 
@@ -67,6 +68,7 @@ DirectX_DrawManager::DirectX_DrawManager()
 	m_CBManager = std::make_unique<ConstantBufferManager>();
 	m_VBManager = std::make_unique<VertexBufferManager>();
 	m_TextureManager = std::make_unique<TextureManager>();
+	m_ViewManager = std::make_unique<ResourceViewManager>();
 }
 
 
@@ -128,9 +130,8 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		CPUAccess::Write);
 
 	// テクスチャ作成
-	if (!m_TextureManager->CreateTexture(
+	if (!CreateTexture(
 		"DebugTexture",
-		DirectX11::Get::GetDevice(),
 		1920,
 		1080,
 		Format::R8G8B8A8_UNorm,
@@ -139,6 +140,17 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		CPUAccess::None))
 	{
 		ErrorLog::OutputToConsole("テクスチャ作成に失敗");
+		return false;
+	}
+
+	// SRV作成
+	if (!CreateSRV(
+		"DebugTexture",
+		Format::R8G8B8A8_UNorm,
+		0,
+		1))
+	{
+		ErrorLog::OutputToConsole("SRV作成に失敗");
 		return false;
 	}
 
@@ -241,6 +253,126 @@ void DirectX_DrawManager::CreateConstantBuffer(
 	{
 		ErrorLog::OutputToConsole("定数バッファ作製失敗");
 	}
+}
+
+
+// =========================================
+// テクスチャ作成
+// =========================================
+bool DirectX_DrawManager::CreateTexture(
+	const char* name,
+	unsigned int width,
+	unsigned int height,
+	Format format,
+	BindFlag bindFlag,
+	BufferUsage usage,
+	CPUAccess cpu)
+{
+	// テクスチャマネージャー作成
+	if (!m_TextureManager->CreateTexture(name, 
+		DirectX11::Get::GetDevice(), 
+		width, 
+		height, 
+		format, 
+		bindFlag, 
+		usage, 
+		cpu)) 
+	{
+		ErrorLog::OutputToConsole("テクスチャの作成に失敗しました");
+		return false;
+	}
+
+	return true;
+}
+
+
+// ===========================================
+// View作成
+// ===========================================
+bool DirectX_DrawManager::CreateSRV(const char* name, Format format, 
+	unsigned int mostDetailedMip, unsigned int mipLevels)
+{
+	// リソースビュ―取得
+	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+
+	if (tex == nullptr) { return false; }
+
+	// SRV作成
+	if (!m_ViewManager->CreateSRV(name,
+		DirectX11::Get::GetDevice(),
+		tex->GetTexture(),
+		format,
+		mostDetailedMip,
+		mipLevels))
+	{
+		ErrorLog::OutputToConsole("SRVの作成に失敗しました");
+		return false;
+	}
+
+	return true;
+}
+
+bool DirectX_DrawManager::CreateUAV(const char* name, Format format, unsigned int mipSlice)
+{
+	// リソースビュ―取得
+	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+
+	if (tex == nullptr) { return false; }
+
+	// UAV作成
+	if (!m_ViewManager->CreateUAV(name,
+		DirectX11::Get::GetDevice(),
+		tex->GetTexture(),
+		format,
+		mipSlice))
+	{
+		ErrorLog::OutputToConsole("UAVの作成に失敗しました");
+		return false;
+	}
+
+	return true;
+}
+
+bool DirectX_DrawManager::CreateRTV(const char* name, Format format, unsigned int mipSlice)
+{
+	// リソースビュ―取得
+	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+
+	if (tex == nullptr) { return false; }
+
+	// UAV作成
+	if (!m_ViewManager->CreateRTV(name,
+		DirectX11::Get::GetDevice(),
+		tex->GetTexture(),
+		format,
+		mipSlice))
+	{
+		ErrorLog::OutputToConsole("RTVの作成に失敗しました");
+		return false;
+	}
+
+	return true;
+}
+
+bool DirectX_DrawManager::CreateDSV(const char* name, Format format, unsigned int mipSlice)
+{
+	// リソースビュ―取得
+	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+
+	if (tex == nullptr) { return false; }
+
+	// DSV作成
+	if (!m_ViewManager->CreateDSV(name,
+		DirectX11::Get::GetDevice(),
+		tex->GetTexture(),
+		format,
+		mipSlice))
+	{
+		ErrorLog::OutputToConsole("DSVの作成に失敗しました");
+		return false;
+	}
+
+	return true;
 }
 
 
@@ -411,7 +543,6 @@ void DirectX_DrawManager::DebugDraw()
 		static_cast<UINT>(buffers.size()),
 		buffers.data()             // 配列を渡す
 	);
-
 
 	// 4. シェーダーセット
 	DirectX11::Get::GetContext()->VSSetShader(vs->GetVertexShader(), nullptr, 0);

@@ -9,6 +9,8 @@
 // ================================
 // ヘッダー
 // ================================
+// テクスチャデータヘッダー
+#include "TextureData.h"
 // 文字列ヘッダー
 #include <string>
 // スマートポインターヘッダー
@@ -21,12 +23,6 @@
 #include "AssetLogger.h"
 
 
-// ================================
-// 前方宣言
-// ================================
-class Texture2DData;
-struct ID3D11Device; // DirectXのデバイス
-
 // =================================
 // クラス
 // =================================
@@ -34,7 +30,7 @@ class TextureManager
 {
 private:
 	// テクスチャ配列
-	static std::unordered_map<std::string, std::unique_ptr<Texture2DData>> m_Textures;
+	std::unordered_map<std::string, std::unique_ptr<Texture2DData>> m_Textures;
     AssetLogger m_Logger{"Texture.txt"};
 
 public:
@@ -52,5 +48,8 @@ public:
         BindFlag bindFlag,
         BufferUsage usage = BufferUsage::Default,
         CPUAccess flag = CPUAccess::None);
+
+    // テクスチャを探して、戻り値で返す
+    Texture2DData* GetFindTexture2DData(const std::string& name);
 };
 

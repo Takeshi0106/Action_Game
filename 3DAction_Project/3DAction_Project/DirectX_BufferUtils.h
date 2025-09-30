@@ -84,6 +84,11 @@ namespace BufferUtils {
             return DXGI_FORMAT_R32G32B32A32_FLOAT;
             break;
         }
+        case Format::D24_UNorm_S8_UInt: {
+            return DXGI_FORMAT_D24_UNORM_S8_UINT;
+            break;
+        }
+
         default:
             ErrorLog::OutputToConsole("Formatに変換できませんでした");
             return DXGI_FORMAT_UNKNOWN;
