@@ -31,7 +31,9 @@ class ShaderManager;
 class ConstantBufferManager;
 class VertexBufferManager;
 class TextureManager;
-class ResourceViewManager;
+class ResourceViewManager;	
+
+class TextureLoader;
 
 
 // ========================================
@@ -46,6 +48,9 @@ private:
 	std::unique_ptr<VertexBufferManager> m_VBManager; // 頂点バッファマネージャー
 	std::unique_ptr<TextureManager> m_TextureManager; // テクスチャマネージャー
 	std::unique_ptr<ResourceViewManager> m_ViewManager; // ビューマネージャー
+
+	// モジュール
+	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
 
 
 public:

@@ -12,6 +12,8 @@
 #include "VertexBufferManager.h"   // 頂点バッファマネージャー
 #include "TextureManager.h" // テクスチャマネージャー
 #include "ResourceViewManager.h" // ビューマネージャー
+// モジュール
+#include "TextureLoader.h"
 // ログ出力
 #include "ReportMessage.h"
 
@@ -69,10 +71,23 @@ DirectX_DrawManager::DirectX_DrawManager()
 	m_VBManager = std::make_unique<VertexBufferManager>();
 	m_TextureManager = std::make_unique<TextureManager>();
 	m_ViewManager = std::make_unique<ResourceViewManager>();
+
+	// モジュール作成
+	m_TextureLoader = std::make_unique<TextureLoader>(m_TextureManager.get(), m_ViewManager.get());
 }
 
 
-DirectX_DrawManager::~DirectX_DrawManager() = default;
+DirectX_DrawManager::~DirectX_DrawManager()
+{
+	// メンバー変数初期化
+	m_ShaderManager.reset();
+	m_CBManager.reset();
+	m_VBManager.reset();
+	m_TextureManager.reset();
+	m_ViewManager.reset();
+	m_TextureLoader.reset();
+}
+
 
 // ==========================================
 // 初期化
@@ -129,6 +144,9 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
+	// テクスチャロード
+	m_TextureLoader->ImageFileLoader("Asset/Texture/pipo-halloweenchara2016_08.png", "pipoya", DirectX11::Get::GetDevice());
+
 	// テクスチャ作成
 	if (!CreateTexture(
 		"DebugTexture",
@@ -153,7 +171,6 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		ErrorLog::OutputToConsole("SRV作成に失敗");
 		return false;
 	}
-
 
 	// カリング削除
 	D3D11_RASTERIZER_DESC rasterDesc{};
@@ -180,14 +197,14 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 // ============================================
 void DirectX_DrawManager::Uninit()
 {
-	// Directの後処理
-	DirectX11::Uninit();
-	// シェーダ―マネージャーの後処理
-	m_ShaderManager->Uninit();
-	// 定数バッファ解放
-	m_CBManager->ReleaseAllConstantBuffers();
 	// 頂点バッファ解放
 	m_VBManager->ReleaseAllVertexBuffers();
+	// 定数バッファ解放
+	m_CBManager->ReleaseAllConstantBuffers();
+	// シェーダ―マネージャーの後処理
+	m_ShaderManager->Uninit();
+	// Directの後処理
+	DirectX11::Uninit();
 }
 
 
@@ -417,18 +434,18 @@ void DirectX_DrawManager::DebugUpdate()
 	float deltaTime = Timer::GetDeltaTime();
 
 	// 頂点バッファ更新 ------------------------------
-	static float offset = 0.0f;
-	offset += 0.01f * deltaTime; // 時間経過で移動
+	// static float offset = 0.0f;
+	// offset += 0.01f * deltaTime; // 時間経過で移動 
 
-	for (int i = 0; i < sizeof(vertices) / sizeof(Vertex); i++)
-	{
-		vertices[i].pos.x += offset;
-	}
+	// for (int i = 0; i < sizeof(vertices) / sizeof(Vertex); i++)
+	// {
+	// 	vertices[i].pos.x += offset;
+	// }
+	// 
+	// // 頂点バッファ更新
+	// UpdateVertexBuffer("VS_TriangleDebug", vertices, sizeof(vertices));
 
-	// 頂点バッファ更新
-	UpdateVertexBuffer("VS_TriangleDebug", vertices, sizeof(vertices));
 
-	
 	// 定数バッファ更新 ------------------------------
 	// Y軸周りに回転させるとします 
 	float speed = 3.14159265f * 4;
@@ -438,7 +455,16 @@ void DirectX_DrawManager::DebugUpdate()
 
 	// ワールド行列（回転のみ）
 	Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), angle);
-	Matrix4x4 world = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
+	Matrix4x4 rotationMatrix = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
+
+	// 移動
+	static float offset = 0.0f;
+	offset += 1.0f * deltaTime; // 時間経過で移動
+
+	Matrix4x4 translationMatrix = Matrix4x4::CreateTranslationMatrix_LH(Vector3(offset, 0.0f, 0.0f));
+
+	// ワールド行列
+	Matrix4x4 world = translationMatrix * rotationMatrix;
 
 	// ビュー行列（カメラを少し離す）
 	Vector3 eye(0, 0, -5);   // カメラ位置
@@ -456,8 +482,7 @@ void DirectX_DrawManager::DebugUpdate()
 	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
 
 	// 定数バッファ更新
-	// UpdateShaderConstants("Transform1", &mat, sizeof(mat));
-
+	UpdateShaderConstants("Transform1", &mat, sizeof(mat));
 
 	// タイマー更新処理
 	Timer::LastUpdate();

@@ -26,6 +26,8 @@ class BaseDrawManager
 private:
 
 public:
+	BaseDrawManager() = default;
+	virtual ~BaseDrawManager() = default;
 
 	// 描画
 	virtual void Draw(const char* id, const void* data, const int size) = 0;

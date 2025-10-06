@@ -40,7 +40,8 @@ public:
 		DXGI_FORMAT format,
 		D3D11_BIND_FLAG bindFlags,
 		D3D11_USAGE usage = D3D11_USAGE_DEFAULT,
-		D3D11_CPU_ACCESS_FLAG flag = static_cast<D3D11_CPU_ACCESS_FLAG>(0));
+		D3D11_CPU_ACCESS_FLAG flag = static_cast<D3D11_CPU_ACCESS_FLAG>(0),
+		D3D11_SUBRESOURCE_DATA* initData = nullptr);
 
 	// ゲッター
 	ID3D11Texture2D* GetTexture() { return m_Texture.Get(); }

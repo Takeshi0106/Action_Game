@@ -72,6 +72,10 @@ namespace BufferUtils {
             return DXGI_FORMAT_R8G8B8A8_UNORM;
             break;
         }
+        case Format::B8G8R8A8_UNorm_SRGB: {
+            return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+            break;
+        }
         case Format::R32_Float: {
             return DXGI_FORMAT_R32_FLOAT;
             break;
@@ -96,4 +100,42 @@ namespace BufferUtils {
     }
 
 
+    inline Format toSelfFormat(DXGI_FORMAT format)
+    {
+        switch (format)
+        {
+        case DXGI_FORMAT::DXGI_FORMAT_UNKNOWN: {
+            return Format::Unknown;
+            break;
+        }
+        case DXGI_FORMAT_R8G8B8A8_UNORM: {
+            return Format::R8G8B8A8_UNorm;
+            break;
+        }
+        case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB: {
+            return Format::B8G8R8A8_UNorm_SRGB;
+            break;
+        }
+        case DXGI_FORMAT_R32_FLOAT: {
+            return Format::R32_Float;
+            break;
+        }
+        case DXGI_FORMAT_R32G32B32_FLOAT: {
+            return Format::R32G32B32_Float;
+            break;
+        }
+        case DXGI_FORMAT_R32G32B32A32_FLOAT: {
+            return Format::R32G32B32A32_Float;
+            break;
+        }
+        case DXGI_FORMAT_D24_UNORM_S8_UINT: {
+            return Format::D24_UNorm_S8_UInt;
+            break;
+        }
+
+        default:
+            ErrorLog::OutputToConsole("Formatに変換できませんでした");
+            return Format::Unknown;
+        }
+    }
 }

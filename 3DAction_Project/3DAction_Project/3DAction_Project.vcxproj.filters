@@ -142,14 +142,14 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager">
       <UniqueIdentifier>{572aba3a-4ad9-465e-9e2b-d844f474070d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ResourceViewData">
-      <UniqueIdentifier>{f8242d84-382d-4a3a-9860-fdf5d12d4d66}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_ModelManager">
       <UniqueIdentifier>{85da51fa-3834-46d5-b604-d84304b5459a}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData">
       <UniqueIdentifier>{165837de-03f5-41e0-9c47-abf603dced7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData">
+      <UniqueIdentifier>{994f5eb9-baf3-4bba-bef1-78e708e23482}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -231,9 +231,6 @@
     <ClCompile Include="VertexBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceViewData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ResourceViewData</Filter>
-    </ClCompile>
     <ClCompile Include="ConstantBufferData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager\ConstantBufferInfo</Filter>
     </ClCompile>
@@ -251,6 +248,12 @@
     </ClCompile>
     <ClCompile Include="TextureData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceViewData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +347,6 @@
     <ClInclude Include="BufferSetting.h">
       <Filter>1_Platform\Base\6_BufferSetting</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceViewData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ResourceViewData</Filter>
-    </ClInclude>
     <ClInclude Include="ConstantBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager\ConstantBufferInfo</Filter>
     </ClInclude>
@@ -364,6 +364,12 @@
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceViewData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

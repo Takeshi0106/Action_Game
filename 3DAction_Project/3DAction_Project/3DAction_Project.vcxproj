@@ -70,6 +70,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\0 thirdParty\thirdParty\directxtex\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0 thirdParty\thirdParty\directxtex\lib\x64\debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\0 thirdParty\thirdParty\directxtex\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0 thirdParty\thirdParty\directxtex\lib\x64\release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -149,6 +157,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="InputLayoutInfo.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="ResourceViewData.cpp" />
     <ClCompile Include="TextureData.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -198,6 +207,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Quaternionh.h" />
+    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="ResourceViewData.h" />
     <ClInclude Include="TextureData.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

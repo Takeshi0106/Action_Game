@@ -16,7 +16,8 @@ bool Texture2DData::CreateTexture2D(ID3D11Device* device,
 	DXGI_FORMAT format,
     D3D11_BIND_FLAG bindFlags,
     D3D11_USAGE usage,
-    D3D11_CPU_ACCESS_FLAG flag)
+    D3D11_CPU_ACCESS_FLAG flag,
+    D3D11_SUBRESOURCE_DATA* initData)
 {
     // テクスチャ記述
     D3D11_TEXTURE2D_DESC desc{};

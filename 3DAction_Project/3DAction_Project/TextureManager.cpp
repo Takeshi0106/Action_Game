@@ -29,24 +29,52 @@ bool TextureManager::CreateTexture(
     Format format,
 	BindFlag bindFlag,
     BufferUsage usage,
-    CPUAccess flag)
+    CPUAccess flag,
+    TextureInitData* initData)
 {
 	// 情報を構造体にまとめてマップに保存
 	auto textureData = std::make_unique<Texture2DData>();
 
-	// テクスチャ作成
-	if (!textureData->CreateTexture2D(
-		device,
-		width,
-		height,
-		BufferUtils::toDXFormat(format),
-		D3D11_BIND_FLAG(ToDXBindFlag(bindFlag)),
-		BufferUtils::ToDXUsage(usage),
-		D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(flag))))
-	{
-		DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
-		return false;
-	}
+    if (initData != nullptr)
+    {
+        // 初期化データあり
+        D3D11_SUBRESOURCE_DATA dxInitData = {};
+        dxInitData.pSysMem = initData->data;
+        dxInitData.SysMemPitch = static_cast<UINT>(initData->rowPitch);
+        dxInitData.SysMemSlicePitch = static_cast<UINT>(initData->slicePitch);
+
+        // テクスチャ作成
+        if (!textureData->CreateTexture2D(
+            device,
+            width,
+            height,
+            BufferUtils::toDXFormat(format),
+            D3D11_BIND_FLAG(ToDXBindFlag(bindFlag)),
+            BufferUtils::ToDXUsage(usage),
+            D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(flag)),
+            &dxInitData))
+        {
+            DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
+            return false;
+        }
+    }
+    else
+    {
+        // 初期化データなし
+        // テクスチャ作成
+        if (!textureData->CreateTexture2D(
+            device,
+            width,
+            height,
+            BufferUtils::toDXFormat(format),
+            D3D11_BIND_FLAG(ToDXBindFlag(bindFlag)),
+            BufferUtils::ToDXUsage(usage),
+            D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(flag))))
+        {
+            DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
+            return false;
+        }
+    }
 
 	// 配列に代入
 	m_Textures[name] = std::move(textureData);

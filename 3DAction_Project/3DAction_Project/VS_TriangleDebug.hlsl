@@ -1,15 +1,24 @@
+// ==================================================
+// 頂点入力
+// ==================================================
 struct VSInput
 {
-    float3 pos : POSITION;
-    float4 color : COLOR;
+    float3 pos : POSITION; // 頂点位置
+    float4 color : COLOR; // 頂点カラー
 };
 
+// ==================================================
+// 頂点シェーダーからピクセルシェーダーへの出力
+// ==================================================
 struct PSInput
 {
-    float4 pos : SV_POSITION;
-    float4 color : COLOR;
+    float4 pos : SV_POSITION; // クリッピング後の座標
+    float4 color : COLOR; // 頂点カラー
 };
 
+// ==================================================
+// 定数バッファ
+// ==================================================
 cbuffer Transform1 : register(b0)
 {
     float4x4 WorldMatrix;
@@ -17,16 +26,24 @@ cbuffer Transform1 : register(b0)
     float4x4 ProjMatrix;
 };
 
-
+// ==================================================
+// 頂点シェーダー
+// ==================================================
 PSInput main(VSInput input)
 {
-    PSInput output;
+    PSInput vsOut;
 
-    
-    float4 worldPos = mul(float4(input.pos, 1.0f), WorldMatrix);
-    float4 viewPos = mul(worldPos, ViewMatrix);
-    output.pos = mul(viewPos, ProjMatrix);
+    // ワールド変換
+    vsOut.pos = mul(WorldMatrix, float4(input.pos, 1.0f));
 
-    output.color = input.color;
-    return output;
+    // ビュー変換
+    vsOut.pos = mul(ViewMatrix, vsOut.pos);
+
+    // 投影変換
+    vsOut.pos = mul(ProjMatrix, vsOut.pos);
+
+    // 頂点カラーはそのまま渡す
+    vsOut.color = input.color;
+
+    return vsOut;
 }

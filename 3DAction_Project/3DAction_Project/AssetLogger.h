@@ -41,18 +41,35 @@ protected:
 	std::string m_UseObjectList;
 
 public:
+
+#if defined(DEBUG) || defined(_DEBUG)
 	// コンストラクタ
 	AssetLogger(const char* assetLog)
 	{
 		kAssetLogPath = std::string(kAssetLogPath + assetLog);
 		m_UseObjectList += Type + "\n\n";
 	}
-	// デストラクタ　
-	~AssetLogger() = default;
 
 	// 外部ファイルに使用したオブジェクトのリストを書き出す
 	bool WriteLog();
 	// オブジェクトの名前をセットする
 	void Log(const char* name);
+
+#else
+
+	// コンストラクタ
+	AssetLogger(const char* assetLog) {
+		kAssetLogPath = std::string(kAssetLogPath + assetLog);
+		m_UseObjectList += Type + "\n\n";
+	}
+
+	// 外部ファイルに使用したオブジェクトのリストを書き出す
+	bool WriteLog();
+	// オブジェクトの名前をセットする
+	void Log(const char* name);
+#endif
+
+	// デストラクタ　
+	~AssetLogger() = default;
 };
 

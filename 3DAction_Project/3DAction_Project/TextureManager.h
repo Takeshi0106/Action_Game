@@ -24,6 +24,17 @@
 
 
 // =================================
+// 構造体
+// =================================
+// テクスチャの初期化データ構造体
+struct TextureInitData {
+    const void* data = nullptr;   // バッファ先頭
+    size_t rowPitch = 0;          // 1行あたりのバイト数
+    size_t slicePitch = 0;        // テクスチャ配列/3D用
+};
+
+
+// =================================
 // クラス
 // =================================
 class TextureManager
@@ -47,7 +58,8 @@ public:
         Format format,
         BindFlag bindFlag,
         BufferUsage usage = BufferUsage::Default,
-        CPUAccess flag = CPUAccess::None);
+        CPUAccess flag = CPUAccess::None,
+        TextureInitData* initData = nullptr);
 
     // テクスチャを探して、戻り値で返す
     Texture2DData* GetFindTexture2DData(const std::string& name);
