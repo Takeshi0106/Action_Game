@@ -28,11 +28,12 @@ inline void OutputCBname(const std::vector<ConstantBufferInfo> &CBInfo) {}
 // =======================================================================
 // 頂点シェイダー
 // =======================================================================
+// シェーダー作成
 bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        ErrorLog::OutputToConsole("引き数がおかしいです");
         return false;
     }
 
@@ -46,7 +47,7 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole((m_Name + "の頂点シェーダーの初期化に失敗").c_str());
+        ErrorLog::OutputToConsole("頂点シェーダーの初期化に失敗");
         return false;
     }
 
@@ -79,19 +80,11 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
     );
 
     if (FAILED(hrLayout)) {
-        ErrorLog::OutputToConsole((m_Name + " : 入力レイアウトの作成に失敗しました").c_str());
+        ErrorLog::OutputToConsole("入力レイアウトの作成に失敗しました");
         return false;
     }
 
     m_ILayout = std::move(layout); // VertexShaderData 内に保存
-
-
-    // デバッグ用に名前を出力
-    DebugLog::OutputToConsole("");
-    DebugLog::OutputToConsole(m_Name.c_str());
-    OutputILname(_ILInfo);
-    OutputCBname(CBInfo);
-    DebugLog::OutputToConsole("");
     
     return true;
 }
@@ -100,11 +93,12 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
 // =======================================================================
 // ピクセルシェイダー
 // =======================================================================
+// シェーダー作成
 bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo>& _CBInfo)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        ErrorLog::OutputToConsole("引き数がおかしいです");
         return false;
     }
 
@@ -118,18 +112,12 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(std::string(m_Name + "のピクセルシェーダーの初期化に失敗").c_str());
+        ErrorLog::OutputToConsole("ピクセルシェーダーの初期化に失敗");
         return false;
     }
 
     // 定数バッファの情報を代入する
     CBInfo = _CBInfo;
-
-    // デバッグ用に名前を出力
-    DebugLog::OutputToConsole("");
-    DebugLog::OutputToConsole(m_Name.c_str());
-    OutputCBname(CBInfo);
-    DebugLog::OutputToConsole("");
 
     return true;
 }
@@ -138,11 +126,12 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
 // =======================================================================
 // コンピュートシェイダー
 // =======================================================================
+// シェーダー作成
 bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo> &_CBInfo)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::OutputToConsole(std::string(m_Name + " : への引き数がおかしいです").c_str());
+        ErrorLog::OutputToConsole("引き数がおかしいです");
         return false;
     }
 
@@ -156,18 +145,12 @@ bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t 
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(std::string(m_Name + "のコンピュートシェーダの初期化に失敗").c_str());
+        ErrorLog::OutputToConsole("コンピュートシェーダーの初期化に失敗");
         return false;
     }
 
     // 定数バッファを代入
     CBInfo = _CBInfo;
-
-    // デバッグ用に名前を出力
-    DebugLog::OutputToConsole("");
-    DebugLog::OutputToConsole(m_Name.c_str());
-    OutputCBname(CBInfo);
-    DebugLog::OutputToConsole("");
 
     return  true;
 }

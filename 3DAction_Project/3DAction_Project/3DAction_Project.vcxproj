@@ -70,6 +70,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\0 thirdParty\thirdParty\directxtex\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0 thirdParty\thirdParty\directxtex\lib\x64\debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\0 thirdParty\thirdParty\directxtex\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0 thirdParty\thirdParty\directxtex\lib\x64\release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -139,14 +147,24 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseDirectXManager.cpp" />
+    <ClCompile Include="AssetLogger.cpp" />
+    <ClCompile Include="ConstantBufferData.cpp" />
     <ClCompile Include="ConstantBufferInfo.cpp" />
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DirectX.cpp" />
-    <ClCompile Include="DirectX_DrawManager.cpp" />
+    <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="InputLayoutInfo.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
+    <ClCompile Include="ResourceViewData.cpp" />
+    <ClCompile Include="TextureData.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="VertexBufferIData.cpp" />
     <ClCompile Include="VertexBufferManager.cpp" />
     <ClCompile Include="Windows_Quaternion.cpp" />
@@ -164,7 +182,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="Windows_ReportMessage.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ResourceViewManager.cpp" />
     <ClCompile Include="ShaderCompilUtils.cpp" />
     <ClCompile Include="ShaderData.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
@@ -173,19 +191,30 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="Windows_Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseDirectXManager.h" />
+    <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseDrawManager.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
     <ClInclude Include="BufferSetting.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ConstantBufferData.h" />
     <ClInclude Include="ConstantBufferInfo.h" />
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="DirectX.h" />
-    <ClInclude Include="DirectX_DrawManager.h" />
+    <ClInclude Include="DirectX_BufferUtils.h" />
+    <ClInclude Include="DirectX11_DrawManager.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="InputLayoutInfo.h" />
     <ClInclude Include="Matrix4x4.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Quaternionh.h" />
+    <ClInclude Include="TextureLoader.h" />
+    <ClInclude Include="ResourceViewData.h" />
+    <ClInclude Include="TextureData.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="SaveLoadUtils.h" />
@@ -193,7 +222,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="PlatformSystem.h" />
     <ClInclude Include="PlatformWindowsSystem.h" />
     <ClInclude Include="ReportMessage.h" />
-    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ResourceViewManager.h" />
     <ClInclude Include="ShaderCompilUtils.h" />
     <ClInclude Include="ShaderData.h" />
     <ClInclude Include="ShaderInfo.h" />
@@ -220,6 +249,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="VS_Debug.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointName>
@@ -237,6 +267,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

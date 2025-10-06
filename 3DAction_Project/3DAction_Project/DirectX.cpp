@@ -147,10 +147,15 @@ namespace DirectX11 {
     // =====================================================
 	void Uninit()
 	{
+		// バインド解除
+		d3dDeviceContext->ClearState();
+		d3dDeviceContext->Flush();     
+
+
 		DepthStencil::Uninit();
-		UAV         ::Uninit();
-		FinalRender ::Uninit();
-		DXCore      ::Uninit();
+		UAV::Uninit();
+		FinalRender::Uninit();
+		DXCore::Uninit();
 	}
 
 

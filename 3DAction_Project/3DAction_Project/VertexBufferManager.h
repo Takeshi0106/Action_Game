@@ -12,39 +12,37 @@
 // ======================================
 // ヘッダー
 // ======================================
-// 必須ヘッダー
-#include "BaseDirectXManager.h"
+// DirectXヘッダー
+#include <d3d11.h>        // DirectXのAPIヘッダー
+// 頂点バッファデータ
+#include "VertexBufferData.h"
 // スマートポインターヘッダー
 #include <memory>
 // 配列のヘッダー
 #include <unordered_map>
 // バッファ設定ヘッダー
 #include "BufferSetting.h"
-
-
-// ======================================
-// 前方宣言
-// ======================================
-struct ID3D11Device;        // DirectXのデバイス
-struct ID3D11DeviceContext; // DirectXのデバイスコンテキスト
-struct ID3D11Buffer;        // 定数バッファ
-class VertexBufferData;    // 頂点バッファデータクラス
+// 文字列
+#include <string>
+// 外部ファイルにアセット名ログ出力
+#include "AssetLogger.h"
 
 
 // ======================================
 // クラス
 // ======================================
-class VertexBufferManager : public BaseDirectXManager
+class VertexBufferManager
 {
 private:
 	// 頂点バッファメンバー配列
-	static std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> m_VertexBuffers;
+	std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> m_VertexBuffers;
+	AssetLogger m_Logger = { "VertexBuffers.txt" };
 
 public:
 	// コンストラクタ
-	VertexBufferManager(const char* assetLog) : BaseDirectXManager(assetLog) {}
+	VertexBufferManager() = default;
 	// デストラクタ
-	~VertexBufferManager() = default;
+	~VertexBufferManager() { m_Logger.WriteLog(); }
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
@@ -53,7 +51,7 @@ public:
 		const void* vertices,
 		int vertexCount,
 		int vertexMaxCount,
-		int stride,
+		size_t stride,
 		PrimitiveType type = PrimitiveType::TriangleStrip,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write

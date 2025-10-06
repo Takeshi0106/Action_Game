@@ -34,7 +34,7 @@ Matrix4x4 Matrix4x4::CreateTranslationMatrix_LH(const Vector3& pos) noexcept
 {
 	// 単位行列を作成
 	Matrix4x4 mat = Matrix4x4::CreateIdentityMatrix();
-
+	
 	// 行優先で代入
 	mat.Matrix[0][3] = pos.x;
 	mat.Matrix[1][3] = pos.y;
@@ -96,12 +96,12 @@ Matrix4x4 Matrix4x4::CreateScalingMatrix_LH(const Vector3& scale) noexcept
 {
 	// 単位行列を作成
 	Matrix4x4 mat = CreateIdentityMatrix();
-
+	
 	// 行優先で代入
 	mat.Matrix[0][0] = scale.x;
 	mat.Matrix[1][1] = scale.y;
 	mat.Matrix[2][2] = scale.z;
-
+	
 	return mat;
 }
 
@@ -111,10 +111,11 @@ Matrix4x4 Matrix4x4::CreateProjectionMatrix_LH(float fovY, float aspect, float z
 	// 透視行列を作成
 	DirectX::XMMATRIX projMat = DirectX::XMMatrixPerspectiveFovLH(fovY, aspect, zn, zf);
 
-	// Matrix4x4作成
-	return CreateMatrix4x4FromXMMATRIX(projMat);
+	// 列優先行列のため転地を行い、Matrix4x4作成
+	return CreateMatrix4x4FromXMMATRIX(DirectX::XMMatrixTranspose(projMat));
 }
 
+// View行列作成
 Matrix4x4 Matrix4x4::CreateViewMatrix_LH(const Vector3& cameraPos, const Vector3& lookPoint, const Vector3& upDir) noexcept
 {
 	// カメラに位置
@@ -126,8 +127,9 @@ Matrix4x4 Matrix4x4::CreateViewMatrix_LH(const Vector3& cameraPos, const Vector3
 
 	// カメラの行列作成
 	DirectX::XMMATRIX viewMat = DirectX::XMMatrixLookAtLH(cameraPosVec, lookPointVec, upDirVec);
-	// Matrix4x4作成
-	return CreateMatrix4x4FromXMMATRIX(viewMat);
+
+	// 列優先行列のため転地を行い,Matrix4x4作成
+	return CreateMatrix4x4FromXMMATRIX(DirectX::XMMatrixTranspose(viewMat));
 }
 
 
@@ -174,8 +176,8 @@ float Matrix4x4::Determinant() const noexcept
 // GPUに送るための変換をする行列
 Matrix4x4 Matrix4x4::toGPU() const noexcept
 {
-	// DirectXは左手、列優先でOK
-	return this->Transpose();
+	// 列優先で渡す
+	return Transpose();
 }
 
 // 平行移動ベクトルを抽出

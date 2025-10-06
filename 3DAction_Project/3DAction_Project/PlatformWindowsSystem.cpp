@@ -16,7 +16,7 @@
 // 標準ヘッダー
 #include <cstdint>   // 整数型 uintなど
 // 描画マネージャー
-#include "DirectX_DrawManager.h"
+#include "DirectX11_DrawManager.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
 

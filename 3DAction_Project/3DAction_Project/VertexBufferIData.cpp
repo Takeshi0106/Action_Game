@@ -16,7 +16,7 @@ bool VertexBufferData::CreateVertexBuffer(
 	const void* vertices,
 	int vertexCount,
 	int vertexMaxCount,
-	int stride,
+	size_t stride,
 	D3D11_PRIMITIVE_TOPOLOGY primitiveType,
 	D3D11_USAGE usage,
 	D3D11_CPU_ACCESS_FLAG flag)
@@ -49,6 +49,28 @@ bool VertexBufferData::CreateVertexBuffer(
 	HRESULT hr = device->CreateBuffer(&desc, &initData, m_Buffer.GetAddressOf());
 	if (FAILED(hr)) {
 		ErrorLog::OutputToConsole(("頂点バッファが作成できませんでした" + std::to_string(hr)).c_str());
+		return false;
+	}
+
+	return true;
+}
+
+
+// 頂点バッファ更新
+bool VertexBufferData::UpdateBuffer(ID3D11DeviceContext* context, const void* data, int size)
+{
+	D3D11_MAPPED_SUBRESOURCE mapped{};
+	HRESULT hr = context->Map(m_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (SUCCEEDED(hr))
+	{
+		memcpy(mapped.pData, data, size);
+		context->Unmap(m_Buffer.Get(), 0);
+
+		m_IsUpdate = true;
+	}
+	else
+	{
+		ErrorLog::OutputToConsole("頂点バッファが更新できませんでした");
 		return false;
 	}
 

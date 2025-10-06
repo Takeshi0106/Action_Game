@@ -4,11 +4,8 @@
 // ======================================
 // 必須ヘッダー
 #include "VertexBufferManager.h"
-// DirectXヘッダー
-#include <d3d11.h>        // DirectXのAPIヘッダー
-#include <wrl/client.h>   // スマートポインター
-// 頂点バッファデータ
-#include "VertexBufferData.h"
+// 自作列挙型をDirectX用に変換
+#include "DirectX_BufferUtils.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
 
@@ -16,15 +13,14 @@
 // ======================================
 // 静的メンバー配列
 // ======================================
-std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> VertexBufferManager::m_VertexBuffers;
+// std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> VertexBufferManager::m_VertexBuffers;
 
 
-// =======================================
+// ======================================
 // プロトタイプ宣言
-// =======================================
-inline D3D11_PRIMITIVE_TOPOLOGY ToDX(PrimitiveType type);
-inline D3D11_USAGE ToDX(BufferUsage usage);
-inline D3D11_CPU_ACCESS_FLAG ToDX(CPUAccess access);
+// ======================================
+    // 自作列挙型をDirectXに変換数関数
+inline D3D11_PRIMITIVE_TOPOLOGY ToDXPrimitive(PrimitiveType type);
 
 
 // =======================================
@@ -37,34 +33,39 @@ bool VertexBufferManager::CreateVertexBuffer(
     const void* vertices,
     int vertexCount,
     int vertexMaxCount,
-    int stride,
+    size_t stride,
     PrimitiveType type,
     BufferUsage usage,
     CPUAccess access)
 {
     // 既に作成済み
-    if (Exists(name)) { return true; }
+    if (Exists(name)) { 
+        DebugLog::OutputToConsole((name + " 頂点バッファが既に作成されていました").c_str());
+        return true; 
+    }
 
-    auto vbd = std::make_unique<VertexBufferData>(name);
+    auto vbd = std::make_unique<VertexBufferData>();
 
+    // 定数バッファ作成呼び出し
     if (!vbd->CreateVertexBuffer(
         device,
         vertices,
         vertexCount,
         vertexMaxCount,
         stride,
-        ToDX(type),
-        ToDX(usage),
-        ToDX(access)))
+        ToDXPrimitive(type),
+        BufferUtils::ToDXUsage(usage),
+        D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(access))))
     {
         ErrorLog::OutputToConsole("頂点バッファの作成に失敗");
         return false;
     }
 
+    // 定数バッファデータを配列に代入
     m_VertexBuffers[name] = std::move(vbd);
 
     // 作製した頂点バッファの名前を保存
-    Log(name.c_str());
+    m_Logger.Log(name.c_str());
 
     return true;
 }
@@ -109,10 +110,11 @@ void VertexBufferManager::ReleaseAllVertexBuffers()
 }
 
 
-// =======================================
-// 関数
-// =======================================
-inline D3D11_PRIMITIVE_TOPOLOGY ToDX(PrimitiveType type)
+
+// ========================================
+// トポロギーに変換
+// ========================================
+inline D3D11_PRIMITIVE_TOPOLOGY ToDXPrimitive(PrimitiveType type)
 {
     switch (type)
     {
@@ -135,43 +137,6 @@ inline D3D11_PRIMITIVE_TOPOLOGY ToDX(PrimitiveType type)
     default: {
         ErrorLog::OutputToConsole("トポロギーに変換できませんでした");
         return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-    }
-    }
-}
-inline D3D11_USAGE ToDX(BufferUsage usage)
-{
-    switch (usage)
-    {
-    case BufferUsage::Default: {
-        return D3D11_USAGE_DEFAULT;
-        break;
-    }
-    case BufferUsage::Dynamic: {
-        return D3D11_USAGE_DYNAMIC;
-        break;
-    }
-    default: {
-        ErrorLog::OutputToConsole("BufferUsageに変換できませんでした");
-        return D3D11_USAGE_DEFAULT;
-    }
-    }
-}
-
-inline D3D11_CPU_ACCESS_FLAG ToDX(CPUAccess access)
-{
-    switch (access)
-    {
-    case CPUAccess::None: {
-        return static_cast<D3D11_CPU_ACCESS_FLAG>(0);
-        break;
-    }
-    case CPUAccess::Write: {
-        return D3D11_CPU_ACCESS_WRITE;
-        break;
-    }
-    default: {
-        ErrorLog::OutputToConsole("CPUAccessに変換できませんでした");
-        return static_cast<D3D11_CPU_ACCESS_FLAG>(0);
     }
     }
 }

@@ -1,45 +1,44 @@
 ﻿#pragma once
+
 // ==============================================================
-// ＊このヘッダーを絶対にヘッダーにインクルードしないでください
-// D3D11ヘッダーが含まれています
+// シェーダークラス
+// 
+// 【責任】
+// シェーダーの作成、シェーダーとセットで使用する定数バッファの名前、バインド番号などを保持
+// ＊バインドなどはDrawManageで行う
 // ==============================================================
-// DirectX用
-#include <d3d11.h>       // DirectXのAPI
-#include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
+
+
+// ========================================
+// ヘッダー
+// ========================================
 // 名前などのデバッグ情報取得用
 #include <string>        // 名前など
 // シェーダーに持たせる情報
 #include "ConstantBufferInfo.h" // 定数バッファの情報
 #include "InputLayoutInfo.h"    // 入力レイアウトの情報
 #include <vector>          // 配列
+// DirectXヘッダー
+#include <d3d11.h>
+// マイクロソフトが提供するスマートポインタ
+#include <wrl/client.h> 
 
 
 // ====================================================================
 // シェーダークラス
 // シェイダーの保持と、利用の責任を持つ
 // ====================================================================
-
 // 共通する変数や関数などをまとめるためのクラス 
 // 使用できないようにコンストラクタをプロテクトに入れてインスタンス化できないようにしています。
 class BaseShaderData {
 protected:
-	std::string           m_Name;            // シェーダーの名前　＊ログ出力用
-	std::string           m_EntryPoint;      // シェーダーのエントリーポイント
-	std::string           m_ShaderTypeModel; // シェーダータイプとモデルを入れる
-
-	std::vector<ConstantBufferInfo> CBInfo;  // シェーダーと紐づく定数バッファを代入する
+	std::vector<ConstantBufferInfo> CBInfo;  // シェーダーと紐づく定数バッファ情報を代入する
 
 	// コンストラクタ
-	BaseShaderData(std::string name, std::string entry, std::string type)
-		:m_Name(name), m_EntryPoint(entry), m_ShaderTypeModel(type) {
-	}
+	BaseShaderData() = default;
 	virtual ~BaseShaderData() = default;
 
 public:
-	// ゲッター
-	std::string GetName()       const { return m_Name; }
-	std::string GetEntryPoint() const { return m_EntryPoint; }
-	std::string GetTypeModel()  const { return m_ShaderTypeModel; }
 	// 定数バッファ情報
 	const std::vector<ConstantBufferInfo>& GetCBInfo() const { return CBInfo; }
 };
@@ -49,20 +48,20 @@ public:
 class  VertexShaderData : public BaseShaderData {
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_VertexShader; // 頂点シェーダー
-
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_ILayout; // シェーダーの入力レイアウト情報を入れる配列
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_ILayout; // シェーダーの入力レイアウト情報を入れる
 
 public:
-	VertexShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {}   // コンストラクタ
-	~VertexShaderData() = default;                                                                                   // デストラクタ
+	// コンストラクタ・デストラクタ
+	VertexShaderData() = default;
+	~VertexShaderData() = default;
 
+	// シェーダー作成
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
-	const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo); // シェーダー作成
+	const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo);
 
 	// ゲッター
-	ID3D11VertexShader* GetShader() { return m_VertexShader.Get(); }  // シェーダーのゲッター
-	// 入力レイアウト情報（頂点シェーダーのみ）
-	ID3D11InputLayout* GetILInfo() const { return m_ILayout.Get(); }
+	ID3D11VertexShader* GetVertexShader() { return m_VertexShader.Get(); }
+	ID3D11InputLayout* GetInputLayout() { return m_ILayout.Get(); }
 };
 
 
@@ -72,13 +71,15 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_PixelShader; // ピクセルシェーダー
 
 public:
-	PixelShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {}  // コンストラクタ
-	~PixelShaderData() = default;                                                                               // デストラクタ
+	PixelShaderData() = default;  // コンストラクタ
+	~PixelShaderData() = default; // デストラクタ
 
+	// シェーダー作成
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
-		const std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
+		const std::vector<ConstantBufferInfo>& _CBInfo);
 
-	ID3D11PixelShader* GetShader() { return m_PixelShader.Get(); }  // シェーダーのゲッター
+	// ゲッター
+	ID3D11PixelShader* GetPixelShader() { return m_PixelShader.Get(); }
 };
 
 
@@ -88,11 +89,13 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> m_ComputeShader; // コンピュートシェーダー
 
 public:
-	ComputeShaderData(std::string name, std::string entry, std::string type) :BaseShaderData(name, entry, type) {} // コンストラクタ
-	~ComputeShaderData() = default;                                                                             // デストラクタ
+	ComputeShaderData() = default; // コンストラクタ
+	~ComputeShaderData() = default; // デストラクタ
 
+	// シェーダー作成
 	bool CreateShader(ID3D11Device* device, void* binary, size_t size,
-		const std::vector<ConstantBufferInfo>& _CBInfo); // シェーダー作成
+		const std::vector<ConstantBufferInfo>& _CBInfo);
 
-	ID3D11ComputeShader* GetShader() { return m_ComputeShader.Get(); } // シェーダーのゲッター
+	// ゲッター
+	ID3D11ComputeShader* GetComputeShader() { return m_ComputeShader.Get(); }
 };

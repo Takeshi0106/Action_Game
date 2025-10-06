@@ -27,7 +27,6 @@ namespace {
 	// リファレンス情報書き込み、読込み用
 	// シェーダー関連
 	const std::string kShaderStart = "Shader"; // シェーダーの数
-
 }
 
 

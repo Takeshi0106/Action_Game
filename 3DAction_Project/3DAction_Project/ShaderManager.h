@@ -22,8 +22,8 @@
 // ==============================================================
 // ヘッダー
 // ==============================================================
-// 基底クラスヘッダー
-#include "BaseDirectXManager.h" // マネージャークラス（基底クラス）
+// シェーダーのデータクラス
+#include "ShaderData.h"
 // スマートポインターのヘッダー
 #include <memory>               // スマートポインター
 // 配列のヘッダー
@@ -31,6 +31,8 @@
 #include <vector>               // 情報を渡す配列
 // 基底ヘッダー
 #include <string>
+// アッセット名ログ出力
+#include "AssetLogger.h"
 
 
 // ==============================================
@@ -41,11 +43,6 @@ class ConstantBufferManager; // 定数バッファマネージャー
 struct ID3D11Device;         // DirectXのデバイス
 struct ID3D11DeviceContext;  // DirectXのコンテキスト
 
-// メンバー配列に入れるクラス
-class VertexShaderData;  // 頂点シェーダー
-class PixelShaderData;   // ピクセルシェーダ
-class ComputeShaderData; // コンピュートシェーダ
-
 // シェーダに渡す定数バッファや入力レイアウトの情報構造体
 class ConstantBufferInfo; // 定数バッファの情報構造体
 class InputLayoutInfo;    // 入力レイアウト構造体
@@ -55,7 +52,7 @@ class InputLayoutInfo;    // 入力レイアウト構造体
 // シェーダーを管理するクラス  （シェイダーのコンパイル、バイナリーファイルのロード、キャッシュ、破棄）
 // Debug時にシェーダーをリフレクションして書き出す
 // ===================================================================================================
-class ShaderManager : public BaseDirectXManager
+class ShaderManager
 {
 private:
     // ---------------------------------
@@ -68,21 +65,23 @@ private:
     const char* kShaderInfoPath; // シェーダーや定数バッファの情報が入っている
 
     // シェーダー保存配列
-    static std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
-    static std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
-    static std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
+    std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
+    std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
+    std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
 
+    // ログ出力
+    AssetLogger m_Logger = { "Shader.txt" };
 
     // 関数
 #if defined(DEBUG) || defined(_DEBUG)
     // デバッグ時にこのファイルと同じ階層にある.hlslを探して、コンパイルする必要があるかを確認し、
     // 必要があればコンパイル、無ければバイナリーデータを取得して、メンバー配列に代入する関数
-    bool DebugInit(ID3D11Device* device, ConstantBufferManager& CBManager);
+    bool DebugInit(ID3D11Device* device);
 
 #else
     // 全てのシェーダー情報が書かれている外部ファイルから、読込み
     // コンパイルされていなかったら、コンパイルしてメンバー配列に代入する関数
-    bool ReleaseInit(ID3D11Device* device, ConstantBufferManager& CBManager);
+    bool ReleaseInit(ID3D11Device* device);
 
 #endif
 
@@ -92,19 +91,19 @@ private:
 
 public:
     // コンストラクタ
-    ShaderManager(const char* assetLog, const char* CSOPath, const char* hlslPath, const char* infoFaile)
-        :BaseDirectXManager(assetLog), kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
+    ShaderManager(const char* CSOPath, const char* hlslPath, const char* infoFaile)
+        :kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
     }
     // デストラクタ
-    ~ShaderManager() = default;
+    ~ShaderManager() { m_Logger.WriteLog(); }
 
     // 初期化・後処理
-    bool Init(ID3D11Device* device, ConstantBufferManager& CBManager);
+    bool Init(ID3D11Device* device);
     void Uninit();
 
     // シェーダーのゲッター  名前を入れて、返す
-    static VertexShaderData*  GetFindVertexShader (const std::string& name);
-    static PixelShaderData*   GetFindPixelShader  (const std::string& name);
-    static ComputeShaderData* GetFindComputeShader(const std::string& name);
+    VertexShaderData*  GetFindVertexShader (const std::string& name);
+    PixelShaderData*   GetFindPixelShader  (const std::string& name);
+    ComputeShaderData* GetFindComputeShader(const std::string& name);
 };
 
