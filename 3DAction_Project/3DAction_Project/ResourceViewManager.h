@@ -71,5 +71,8 @@ public:
 	UAVData* GetFindUAV(const std::string& name);
 	RTVData* GetFindRTV(const std::string& name);
 	DSVData* GetFindDSV(const std::string& name);
+
+	// View削除
+	void ReleaseAllView();
 };
 
