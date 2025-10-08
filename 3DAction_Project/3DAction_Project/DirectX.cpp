@@ -15,6 +15,10 @@
 // デバッグ用出力
 #include "ReportMessage.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+// デバッグ表示用
+#include <dxgidebug.h>     // ReportLiveObjects 用（DXGIデバッグ）
+#endif
 
 // =======================================
 // DirectX の処理
@@ -149,7 +153,7 @@ namespace DirectX11 {
 	{
 		// バインド解除
 		d3dDeviceContext->ClearState();
-		d3dDeviceContext->Flush();     
+		d3dDeviceContext->Flush();
 
 
 		DepthStencil::Uninit();
@@ -307,8 +311,17 @@ namespace DirectX11 {
             // -----------------------------------------------------
 			void Uninit()
 			{
-				d3dSwapChain.Reset();     // スワップチェインの解放
+#if defined(DEBUG) || defined(_DEBUG)
+				// デバッグ表示用
+				Microsoft::WRL::ComPtr<ID3D11Debug> debug;
+				if (SUCCEEDED(d3dDevice.As(&debug)))
+				{
+					debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL | D3D11_RLDO_IGNORE_INTERNAL);
+				}
+#endif
+
 				d3dDeviceContext.Reset(); // デバイスコンテキストの解放
+				d3dSwapChain.Reset();     // スワップチェインの解放
 				d3dDevice.Reset();        // デバイスの解放
 			}
 

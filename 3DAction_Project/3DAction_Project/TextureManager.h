@@ -63,5 +63,8 @@ public:
 
     // テクスチャを探して、戻り値で返す
     Texture2DData* GetFindTexture2DData(const std::string& name);
+
+    // 後処理
+    void ReleaseAllTexture();
 };
 

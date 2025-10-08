@@ -194,3 +194,13 @@ DSVData* ResourceViewManager::GetFindDSV(const std::string& name)
 
 	return nullptr;
 }
+
+
+// View削除
+void ResourceViewManager::ReleaseAllView()
+{
+	m_SRVs.clear();
+	m_UAVs.clear();
+	m_RTVs.clear();
+	m_DSVs.clear();
+}

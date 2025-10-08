@@ -79,13 +79,7 @@ DirectX_DrawManager::DirectX_DrawManager()
 
 DirectX_DrawManager::~DirectX_DrawManager()
 {
-	// メンバー変数初期化
-	m_ShaderManager.reset();
-	m_CBManager.reset();
-	m_VBManager.reset();
-	m_TextureManager.reset();
-	m_ViewManager.reset();
-	m_TextureLoader.reset();
+
 }
 
 
@@ -147,6 +141,7 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 	// テクスチャロード
 	m_TextureLoader->ImageFileLoader("Asset/Texture/pipo-halloweenchara2016_08.png", "pipoya", DirectX11::Get::GetDevice());
 
+	/*
 	// テクスチャ作成
 	if (!CreateTexture(
 		"DebugTexture",
@@ -160,7 +155,6 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		ErrorLog::OutputToConsole("テクスチャ作成に失敗");
 		return false;
 	}
-
 	// SRV作成
 	if (!CreateSRV(
 		"DebugTexture",
@@ -171,6 +165,7 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		ErrorLog::OutputToConsole("SRV作成に失敗");
 		return false;
 	}
+		*/
 
 	// カリング削除
 	D3D11_RASTERIZER_DESC rasterDesc{};
@@ -197,13 +192,15 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 // ============================================
 void DirectX_DrawManager::Uninit()
 {
-	// 頂点バッファ解放
-	m_VBManager->ReleaseAllVertexBuffers();
-	// 定数バッファ解放
-	m_CBManager->ReleaseAllConstantBuffers();
-	// シェーダ―マネージャーの後処理
-	m_ShaderManager->Uninit();
-	// Directの後処理
+	// メンバー変数初期化
+	m_ShaderManager.reset();
+	m_CBManager.reset();
+	m_VBManager.reset();
+	m_TextureManager.reset();
+	m_ViewManager.reset();
+	m_TextureLoader.reset();
+
+	// DirectX11 の初期化
 	DirectX11::Uninit();
 }
 
