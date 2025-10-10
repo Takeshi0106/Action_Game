@@ -435,7 +435,6 @@ void DirectX_DrawManager::DebugUpdate()
 	// デルタタイム取得
 	float deltaTime = Timer::GetDeltaTime();
 
-	// 定数バッファ更新 ------------------------------
 	// Y軸周りに回転させるとします 
 	float speed = 3.14159265f * 4;
 
