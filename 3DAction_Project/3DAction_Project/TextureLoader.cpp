@@ -11,7 +11,7 @@
 // ログ表示ヘッダー
 #include "ReportMessage.h"
 // 自作列挙型をDirectXように変換する関数
-#include "DirectX_BufferUtils.h"
+#include "DirectX_FormatConverter.h"
 
 
 // ============================
@@ -59,7 +59,7 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::str
         device,
         (unsigned int)(meta.width),
         (unsigned int)(meta.height),
-        BufferUtils::toSelfFormat(meta.format), // enumが一致していれば直接渡せる
+        DirectX_FormatConverter::ToSelfFormat(meta.format),
         BindFlag::ShaderResource,
         BufferUsage::Default,
         CPUAccess::None,
@@ -74,6 +74,6 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::str
         key,
         device,
         data->GetTexture(),
-        BufferUtils::toSelfFormat(meta.format)
+        DirectX_FormatConverter::ToSelfFormat(meta.format)
     );
 }

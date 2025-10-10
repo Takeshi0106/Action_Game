@@ -133,9 +133,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager\VertexBufferInfo">
       <UniqueIdentifier>{fee649e9-5c54-4797-a075-f9668ebe2d20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXUtils">
-      <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager">
       <UniqueIdentifier>{7270727c-8028-4f13-aec1-e919d9bb013c}</UniqueIdentifier>
     </Filter>
@@ -150,6 +147,15 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData">
       <UniqueIdentifier>{994f5eb9-baf3-4bba-bef1-78e708e23482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager">
+      <UniqueIdentifier>{a71000c5-692b-4630-b14a-7c0413dfcc70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager\SamplerData">
+      <UniqueIdentifier>{3ea33533-1e78-47bc-a801-ccb51bf76d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter">
+      <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +261,15 @@
     <ClCompile Include="ResourceViewData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClCompile>
+    <ClCompile Include="SamplerData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager\SamplerData</Filter>
+    </ClCompile>
+    <ClCompile Include="SamplerManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX_FormatConverter.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -344,14 +359,11 @@
     <ClInclude Include="VertexBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager\VertexBufferInfo</Filter>
     </ClInclude>
-    <ClInclude Include="BufferSetting.h">
+    <ClInclude Include="GraphicsEnums.h">
       <Filter>1_Platform\Base\6_BufferSetting</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager\ConstantBufferInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectX_BufferUtils.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXUtils</Filter>
     </ClInclude>
     <ClInclude Include="ResourceViewManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
@@ -370,6 +382,15 @@
     </ClInclude>
     <ClInclude Include="ResourceViewData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager\SamplerData</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX_FormatConverter.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

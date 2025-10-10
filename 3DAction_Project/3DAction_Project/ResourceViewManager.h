@@ -17,7 +17,7 @@
 // 配列のヘッダー
 #include <unordered_map> // ハッシュ値検索
 // バッファセッティング
-#include "BufferSetting.h"
+#include "GraphicsEnums.h"
 // アセットログ出力
 #include "AssetLogger.h"
 

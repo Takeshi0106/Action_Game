@@ -65,6 +65,8 @@ public:
 
 	// 描画
 	void Draw(const char* drawID, const void* data, const int size) override;
+	void Draw(const char* _vsShaderName, const char* _psShaderName,
+		const char* _textureName, const char* _modelName) override;
 
 	// 頂点バッファ作成
 	void CreateVertexBuffer(

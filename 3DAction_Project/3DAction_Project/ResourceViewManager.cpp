@@ -7,7 +7,9 @@
 // Dataヘッダー
 #include "ResourceViewData.h"
 // 変換ヘッダー
-#include "DirectX_BufferUtils.h"
+#include "DirectX_FormatConverter.h"
+// ログ出力
+#include "ReportMessage.h"
 
 
 // =============================
@@ -28,7 +30,7 @@ bool ResourceViewManager::CreateSRV(const std::string& name,
 	if (!srv->CreateSRV(
 		device,
 		resource,
-		BufferUtils::toDXFormat(format),
+		DirectX_FormatConverter::ToDXFormat(format),
 		mostDetailedMip,
 		mipLevels))
 	{
@@ -75,7 +77,7 @@ bool ResourceViewManager::CreateUAV(const std::string& name,
 	if (!uav->CreateUAV(
 		device,
 		resource,
-		BufferUtils::toDXFormat(format),
+		DirectX_FormatConverter::ToDXFormat(format),
 		mipSlice))
 	{
 		ErrorLog::OutputToConsole(std::string(("UAV の作成失敗: " + name)).c_str());
@@ -121,7 +123,7 @@ bool ResourceViewManager::CreateRTV(const std::string& name,
 	if (!rtv->CreateRTV(
 		device,
 		resource,
-		BufferUtils::toDXFormat(format),
+		DirectX_FormatConverter::ToDXFormat(format),
 		mipSlice))
 	{
 		ErrorLog::OutputToConsole(std::string(("RTV の作成失敗: " + name)).c_str());
@@ -167,7 +169,7 @@ bool ResourceViewManager::CreateDSV(const std::string& name,
 	if (!dsv->CreateDSV(
 		device,
 		resource,
-		BufferUtils::toDXFormat(format),
+		DirectX_FormatConverter::ToDXFormat(format),
 		mipSlice))
 	{
 		ErrorLog::OutputToConsole(std::string(("DSV の作成失敗: " + name)).c_str());

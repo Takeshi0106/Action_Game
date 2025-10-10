@@ -213,6 +213,11 @@ void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int s
 
 }
 
+void DirectX_DrawManager::Draw(const char* _vsShaderName, const char* _psShaderName,
+	const char* _textureName, const char* _modelName)
+{
+
+}
 
 
 // ===========================================
@@ -354,7 +359,7 @@ bool DirectX_DrawManager::CreateRTV(const char* name, Format format, unsigned in
 
 	if (tex == nullptr) { return false; }
 
-	// UAV作成
+	// RTV作成
 	if (!m_ViewManager->CreateRTV(name,
 		DirectX11::Get::GetDevice(),
 		tex->GetTexture(),

@@ -21,7 +21,7 @@
 // 配列のヘッダー
 #include <unordered_map>
 // バッファ設定ヘッダー
-#include "BufferSetting.h"
+#include "GraphicsEnums.h"
 // 文字列
 #include <string>
 // 外部ファイルにアセット名ログ出力

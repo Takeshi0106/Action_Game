@@ -16,7 +16,8 @@
 // ==============================
 // ヘッダー
 // ==============================
-#include "BufferSetting.h" // 設定用ヘッダー
+#include "GraphicsEnums.h" // 設定用ヘッダー
+
 
 // ==============================
 // クラス
@@ -26,11 +27,15 @@ class BaseDrawManager
 private:
 
 public:
+	// コンストラクタ・デストラクタ
 	BaseDrawManager() = default;
 	virtual ~BaseDrawManager() = default;
 
 	// 描画
 	virtual void Draw(const char* id, const void* data, const int size) = 0;
+	// 描画
+	virtual void Draw(const char* _vsShaderName, const char* _psShaderName,
+		const char* _textureName, const char* _modelName) = 0;
 
 	// 頂点バッファ作成
 	virtual void CreateVertexBuffer(
