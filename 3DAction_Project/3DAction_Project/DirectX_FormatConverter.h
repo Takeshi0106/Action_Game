@@ -34,5 +34,10 @@ public:
 
     // DXGI_FORMAT ‚©‚ç ©ìFormat ‚É•ÏŠ·
     static Format ToSelfFormat(DXGI_FORMAT format);
+
+    // ƒTƒ“ƒvƒ‰[•ÏŠ·
+    static D3D11_FILTER ConvertFilter(SamplerFilter filter);
+    static D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SamplerAddressMode mode);
+    static D3D11_COMPARISON_FUNC ConvertComparisonFunc(SamplerComparisonFunc func);
 };
 

@@ -120,3 +120,82 @@ Format DirectX_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
         break;
     }
 }
+
+
+D3D11_FILTER DirectX_FormatConverter::ConvertFilter(SamplerFilter filter)
+{
+    switch (filter)
+    {
+    case SamplerFilter::Point: 
+        return D3D11_FILTER_MIN_MAG_MIP_POINT;
+        break;
+    case SamplerFilter::Linear: 
+        return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        break;
+    case SamplerFilter::Anisotropic: 
+        return D3D11_FILTER_ANISOTROPIC;
+        break;
+    default: 
+        ErrorLog::OutputToConsole("D3D11_FILTER ‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        break;
+    }
+}
+
+D3D11_TEXTURE_ADDRESS_MODE DirectX_FormatConverter::ConvertAddressMode(SamplerAddressMode mode)
+{
+    switch (mode)
+    {
+    case SamplerAddressMode::Wrap: 
+        return D3D11_TEXTURE_ADDRESS_WRAP;
+        break;
+    case SamplerAddressMode::Mirror: 
+        return D3D11_TEXTURE_ADDRESS_MIRROR;
+        break;
+    case SamplerAddressMode::Clamp: 
+        return D3D11_TEXTURE_ADDRESS_CLAMP;
+        break;
+    case SamplerAddressMode::Border: 
+        return D3D11_TEXTURE_ADDRESS_BORDER;
+        break;
+    default: 
+        ErrorLog::OutputToConsole("D3D11_TEXTURE_ADDRESS_MODE ‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        return D3D11_TEXTURE_ADDRESS_WRAP;
+        break;
+    }
+}
+
+D3D11_COMPARISON_FUNC DirectX_FormatConverter::ConvertComparisonFunc(SamplerComparisonFunc func)
+{
+    switch (func)
+    {
+    case SamplerComparisonFunc::Never: 
+        return D3D11_COMPARISON_NEVER;
+        break;
+    case SamplerComparisonFunc::Less: 
+        return D3D11_COMPARISON_LESS;
+        break;
+    case SamplerComparisonFunc::Equal: 
+        return D3D11_COMPARISON_EQUAL;
+        break;
+    case SamplerComparisonFunc::LessEqual: 
+        return D3D11_COMPARISON_LESS_EQUAL;
+        break;
+    case SamplerComparisonFunc::Greater: 
+        return D3D11_COMPARISON_GREATER;
+        break;
+    case SamplerComparisonFunc::NotEqual: 
+        return D3D11_COMPARISON_NOT_EQUAL;
+        break;
+    case SamplerComparisonFunc::GreaterEqual:
+        return D3D11_COMPARISON_GREATER_EQUAL;
+        break;
+    case SamplerComparisonFunc::Always:
+        return D3D11_COMPARISON_ALWAYS;
+        break;
+    default: 
+        ErrorLog::OutputToConsole("D3D11_COMPARISON_FUNC ‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        return D3D11_COMPARISON_ALWAYS;
+        break;
+    }
+}

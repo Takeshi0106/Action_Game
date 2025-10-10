@@ -51,6 +51,41 @@ enum class Format
 	D24_UNorm_S8_UInt
 };
 
+// ==============================
+// サンプラー設定用
+// ==============================
+
+// フィルタータイプ
+enum class SamplerFilter
+{
+	Point,
+	Linear,
+	Anisotropic
+};
+
+// アドレスモード
+enum class SamplerAddressMode
+{
+	Wrap,
+	Mirror,
+	Clamp,
+	Border
+};
+
+// 比較関数（シャドウマップなどに使用）
+enum class SamplerComparisonFunc
+{
+	Never,
+	Less,
+	Equal,
+	LessEqual,
+	Greater,
+	NotEqual,
+	GreaterEqual,
+	Always
+};
+
+
 enum class BindFlag : unsigned int
 {
 	None = 0,
