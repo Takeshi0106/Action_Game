@@ -435,19 +435,6 @@ void DirectX_DrawManager::DebugUpdate()
 	// デルタタイム取得
 	float deltaTime = Timer::GetDeltaTime();
 
-	// 頂点バッファ更新 ------------------------------
-	// static float offset = 0.0f;
-	// offset += 0.01f * deltaTime; // 時間経過で移動 
-
-	// for (int i = 0; i < sizeof(vertices) / sizeof(Vertex); i++)
-	// {
-	// 	vertices[i].pos.x += offset;
-	// }
-	// 
-	// // 頂点バッファ更新
-	// UpdateVertexBuffer("VS_TriangleDebug", vertices, sizeof(vertices));
-
-
 	// 定数バッファ更新 ------------------------------
 	// Y軸周りに回転させるとします 
 	float speed = 3.14159265f * 4;
