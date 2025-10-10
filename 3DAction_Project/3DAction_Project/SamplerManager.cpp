@@ -62,11 +62,12 @@ bool SamplerManager::CreateSampler(
 // サンプラー取得
 SamplerData* SamplerManager::GetSampler(const std::string& samplerName)
 {
+    auto it = m_Samplers.find(samplerName);
+    if (it != m_Samplers.end())
+    {
+        return it->second.get();
+    }
 
-}
-
-// 全削除
-void SamplerManager::ReleaseAllSamplers()
-{
-
+    ErrorLog::OutputToConsole(("サンプラーが見つかりません: " + samplerName).c_str());
+    return nullptr;
 }
