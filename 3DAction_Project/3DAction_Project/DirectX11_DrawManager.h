@@ -64,6 +64,9 @@ public:
 	void Uninit();
 
 	// 描画
+	void BegingDraw();
+	void EndDraw();
+
 	void Draw(const char* drawID, const void* data, const int size) override;
 	void Draw(const char* _vsShaderName, const char* _psShaderName,
 		const char* _textureName, const char* _modelName) override;
@@ -73,6 +76,7 @@ public:
 		const char* drawID,
 		const void* data,
 		size_t size,
+		int vertexNumber,
 		PrimitiveType type,
 		BufferUsage usage,
 		CPUAccess access) override;

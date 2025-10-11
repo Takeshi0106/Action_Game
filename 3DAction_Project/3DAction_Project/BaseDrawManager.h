@@ -32,8 +32,9 @@ public:
 	virtual ~BaseDrawManager() = default;
 
 	// 描画
+	virtual void BegingDraw() = 0;
+	virtual void EndDraw() = 0;
 	virtual void Draw(const char* id, const void* data, const int size) = 0;
-	// 描画
 	virtual void Draw(const char* _vsShaderName, const char* _psShaderName,
 		const char* _textureName, const char* _modelName) = 0;
 
@@ -42,6 +43,7 @@ public:
 		const char* drawID, 
 		const void* data, 
 		size_t size,
+		int vertexNumber,
 		PrimitiveType type = PrimitiveType::TriangleStrip,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write) = 0;

@@ -206,6 +206,8 @@ bool PlatformWindowsSystem::GameInit()
 {
     // 描画マネージャーの初期化
     m_DrawManager.Init(m_Width,m_Height,m_WinInstance);
+    // ゲームの初期化
+    m_Game->Init(&m_DrawManager);
 
     return true;
 }
@@ -216,11 +218,11 @@ bool PlatformWindowsSystem::GameInit()
 // =====================================================
 void PlatformWindowsSystem::GameMain()
 {
-    // 描画マネージャーのデバッグ更新
-    m_DrawManager.DebugUpdate();
+    // ゲーム更新処理
+    m_Game->Update();
 
-    // 描画マネージャーのデバッグ描画
-    m_DrawManager.DebugDraw();
+    // ゲームの描画処理
+    m_Game->Draw();
 }
 
 
@@ -229,6 +231,8 @@ void PlatformWindowsSystem::GameMain()
 // =====================================================
 void PlatformWindowsSystem::GameUninit()
 {
+    // ゲームの後処理
+    m_Game->Uninit();
     // 描画マネージャーの後処理
     m_DrawManager.Uninit();
 }
