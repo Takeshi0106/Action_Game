@@ -69,7 +69,7 @@ public:
 
 	void Draw(const char* drawID, const void* data, const int size) override;
 	void Draw(const char* _vsShaderName, const char* _psShaderName,
-		const char* _textureName, const char* _modelName) override;
+		const char* _textureName = nullptr, const char* _modelName = nullptr) override;
 
 	// 頂点バッファ作成
 	void CreateVertexBuffer(
@@ -98,6 +98,9 @@ public:
 		BindFlag bindFlag,
 		BufferUsage usage = BufferUsage::Default,
 		CPUAccess cpu = CPUAccess::None) override;
+
+	// テクスチャのロード
+	void LoadTexture(const char* textureName) override;
 
 	// View作成
 	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;

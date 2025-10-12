@@ -135,7 +135,6 @@ void DirectX_DrawManager::Draw(const char* _vsShaderName, const char* _psShaderN
 	// 頂点バッファ取得
 	VertexBufferData* vertexBufferData = m_VBManager->GetFindVertexData(vsName);
 
-	// 更新されている場合だけセット
 	// 入力アセンブラ
 	ID3D11Buffer* vbuffers = vertexBufferData->GetVertexBuffer();
 	UINT stride = UINT(vertexBufferData->GetStride());
@@ -196,7 +195,6 @@ void DirectX_DrawManager::Draw(const char* _vsShaderName, const char* _psShaderN
 
 	// 6. 描画
 	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
-	
 }
 
 
@@ -283,6 +281,16 @@ bool DirectX_DrawManager::CreateTexture(
 	}
 
 	return true;
+}
+
+
+// ===========================================
+// テクスチャロード
+// ===========================================
+void DirectX_DrawManager::LoadTexture(const char* textureName)
+{
+	// テクスチャのロード関数
+	m_TextureLoader->ImageFileLoader(textureName, DirectX11::Get::GetDevice());
 }
 
 

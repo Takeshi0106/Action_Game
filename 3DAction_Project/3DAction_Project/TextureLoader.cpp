@@ -17,7 +17,7 @@
 // ============================
 // 画像ファイルをロードする
 // ============================
-void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::string& key, ID3D11Device* device)
+void TextureLoader::ImageFileLoader(const std::string& sFilePath, ID3D11Device* device)
 {
     // UTF-16 に変換
     std::filesystem::path filePath = sFilePath;
@@ -55,7 +55,7 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::str
 
     // TextureManagerに登録
     m_TextureManager->CreateTexture(
-        key,
+        filePath.stem().string(),
         device,
         (unsigned int)(meta.width),
         (unsigned int)(meta.height),
@@ -67,13 +67,16 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::str
     );
 
     // テクスチャを取得
-    Texture2DData* data = m_TextureManager->GetFindTexture2DData(key);
+    Texture2DData* data = m_TextureManager->GetFindTexture2DData(filePath.stem().string());
 
     // SRVを作成して ResourceViewManager に登録
     m_ViewManager->CreateSRV(
-        key,
+        filePath.stem().string(),
         device,
         data->GetTexture(),
         DirectX_FormatConverter::ToSelfFormat(meta.format)
     );
+
+    // テクスチャ作成ログ出力
+    DebugLog::OutputToConsole((filePath.stem().string() + " のロードに成功しました。").c_str());
 }

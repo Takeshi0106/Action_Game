@@ -66,6 +66,9 @@ public:
 		BufferUsage usage = BufferUsage::Default,
 		CPUAccess cpu = CPUAccess::None) = 0;
 
+	// テクスチャのロード
+	virtual void LoadTexture(const char* textureName) = 0;
+
 	// View作成
 	virtual bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
 	virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;

@@ -78,6 +78,9 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
+	// 外部画像をロード
+	m_DrawManager->LoadTexture("Asset/Texture/pipo-halloweenchara2016_08.png");
+
 
 	Timer::Init(); // タイマー初期化
 	Timer::Start(); // タイマー開始
