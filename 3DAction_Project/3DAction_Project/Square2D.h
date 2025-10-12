@@ -1,5 +1,13 @@
 ﻿#pragma once
-class Square2D
+#include "BaseObject.h"
+
+
+class Square2D : public BaseObject
 {
+private:
+
+public:
+
+
 };
 

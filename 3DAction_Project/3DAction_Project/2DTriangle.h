@@ -6,12 +6,8 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include "Color.h"
+#include "Vertex.h"
 
-// 構造体
-struct Vertex {
-	Vector3 pos;
-	Color color;
-};
 
 class Triangle2D : public BaseObject
 {

@@ -36,7 +36,7 @@ public:
 	virtual void EndDraw() = 0;
 	virtual void Draw(const char* id, const void* data, const int size) = 0;
 	virtual void Draw(const char* _vsShaderName, const char* _psShaderName,
-		const char* _textureName, const char* _modelName) = 0;
+		const char* _textureNam = nullptr, const char* _modelName = nullptr) = 0;
 
 	// 頂点バッファ作成
 	virtual void CreateVertexBuffer(

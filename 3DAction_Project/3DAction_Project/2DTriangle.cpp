@@ -79,7 +79,7 @@ void Triangle2D::Update()
 void Triangle2D::Draw()
 {
 	// 描画
-	m_Draw->Draw(VsName.c_str(), PsName.c_str(), "", "");
+	m_Draw->Draw(VsName.c_str(), PsName.c_str());
 }
 
 
