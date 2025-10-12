@@ -392,8 +392,17 @@ void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const 
 	// 定数バッファ取得
 	ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(constantName);
 
-	// 定数バッファ更新
-	buffer->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
+	if (buffer->GetSize() == size)
+	{
+		// 定数バッファ更新
+		buffer->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
+	}
+	else
+	{
+		ErrorLog::OutputToConsole("定数バッファが更新できませんでした。");
+		ErrorLog::OutputToConsole(("バッファサイズ :" + std::to_string(buffer->GetSize())).c_str());
+		ErrorLog::OutputToConsole(("更新サイズ :" + std::to_string(size)).c_str());
+	}
 }
 
 

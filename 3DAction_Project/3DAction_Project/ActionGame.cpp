@@ -14,9 +14,8 @@ struct Vertex {
 	Vector3 pos;
 	Color color;
 };
-struct TransformCB
+struct CameraInfo
 {
-	Matrix4x4 WorldMatrix;
 	Matrix4x4 ViewMatrix;
 	Matrix4x4 ProjMatrix;
 };
@@ -57,8 +56,7 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 	float farZ = 100.0f;
 	Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
 
-	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
-
+	CameraInfo mat = { view.toGPU(),proj.toGPU() };
 
 	// 頂点バッファ作成
 	m_DrawManager->CreateVertexBuffer(
@@ -72,14 +70,22 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 
 	// 定数バッファ作成
 	m_DrawManager->CreateConstantBuffer(
-		"Transform1",
+		"CameraInfo",
 		&mat,
 		sizeof(mat),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
+	// ワールド作成
+	m_DrawManager->CreateConstantBuffer(
+		"Transform1",
+		&world,
+		sizeof(world),
+		BufferUsage::Dynamic,
+		CPUAccess::Write);
+
 	// 外部画像をロード
-	m_DrawManager->LoadTexture("Asset/Texture/pipo-halloweenchara2016_08.png");
+	m_DrawManager->LoadTexture("Asset/Texture/23249532.jpg");
 
 
 	Timer::Init(); // タイマー初期化
@@ -130,10 +136,14 @@ void ActionGame::Update()
 	float farZ = 100.0f;
 	Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
 
-	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
+	CameraInfo mat = { view.toGPU(),proj.toGPU() };
+
+	world = world.toGPU();
 
 	// 定数バッファ更新
-	m_DrawManager->UpdateShaderConstants("Transform1", &mat, sizeof(mat));
+	m_DrawManager->UpdateShaderConstants("CameraInfo", &mat, sizeof(mat));
+
+	m_DrawManager->UpdateShaderConstants("Transform1", &world, sizeof(world));
 
 	// タイマー更新処理
 	Timer::LastUpdate();

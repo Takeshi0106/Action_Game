@@ -177,7 +177,7 @@ float Matrix4x4::Determinant() const noexcept
 Matrix4x4 Matrix4x4::toGPU() const noexcept
 {
 	// 列優先で渡す
-	return Transpose();
+	return *this;
 }
 
 // 平行移動ベクトルを抽出

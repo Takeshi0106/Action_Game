@@ -121,7 +121,9 @@
       <Message>
       </Message>
       <Command>if not exist "$(ProjectDir)Asset\Shader\Hlsl" mkdir "$(ProjectDir)Asset\Shader\Hlsl"
-xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
+xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"
+xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
+</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Message>
@@ -169,6 +171,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="TextureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="VertexBufferIData.cpp" />
     <ClCompile Include="VertexBufferManager.cpp" />
     <ClCompile Include="Windows_Quaternion.cpp" />
@@ -223,6 +226,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="TextureManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="SaveLoadUtils.h" />

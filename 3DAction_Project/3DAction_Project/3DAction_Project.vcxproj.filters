@@ -270,6 +270,7 @@
     <ClCompile Include="DirectX_FormatConverter.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClCompile>
+    <ClCompile Include="ActionGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -392,6 +393,8 @@
     <ClInclude Include="DirectX_FormatConverter.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClInclude>
+    <ClInclude Include="BaseGame.h" />
+    <ClInclude Include="ActionGame.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PS_Debug.hlsl">
