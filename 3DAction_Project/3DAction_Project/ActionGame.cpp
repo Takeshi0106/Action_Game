@@ -7,7 +7,8 @@
 #include "GraphicsEnums.h"
 #include <string>
 
-#include "2DTriangle.h"
+#include "Square2D.h"
+
 
 // ==========================================
 // 構造体　デバッグ用
@@ -18,7 +19,7 @@ struct CameraInfo
 	Matrix4x4 ProjMatrix;
 };
 
-Triangle2D g_Triangle;
+Square2D g_Square;
 
 
 // =================================
@@ -52,8 +53,8 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
-	// Triangle初期化
-	g_Triangle.Init(m_DrawManager);
+
+	g_Square.Init(m_DrawManager);
 
 	// 外部画像をロード
 	m_DrawManager->LoadTexture("Asset/Texture/23249532.jpg");
@@ -72,8 +73,7 @@ void ActionGame::Update()
 	// タイマーデバッグ
 	Timer::Debug_CheckUpdate();
 
-	// Triangle更新
-	g_Triangle.Update();
+	g_Square.Update();
 
 	// タイマー更新処理
 	Timer::LastUpdate();
@@ -88,8 +88,7 @@ void ActionGame::Draw()
 	// 描画前
 	m_DrawManager->BegingDraw();
 
-	// Triangle 描画
-	g_Triangle.Draw();
+	g_Square.Draw();
 
 	// 描画後
 	m_DrawManager->EndDraw();
@@ -101,6 +100,5 @@ void ActionGame::Draw()
 // ================================
 void ActionGame::Uninit()
 {
-	// Triangle 後処理
-	g_Triangle.Uninit();
+	g_Square.Uninit();
 }

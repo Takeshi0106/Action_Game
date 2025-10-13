@@ -65,11 +65,8 @@ void Triangle2D::Update()
 	// ワールド行列
 	Matrix4x4 world = translationMatrix * rotationMatrix;
 
-	// GPUに送るように変換
-	world = world.toGPU();
-
-	// 定数バッファ更新
-	m_Draw->UpdateShaderConstants("Transform1", &world, sizeof(world));
+	// 代入
+	m_SRT = world;
 }
 
 
@@ -78,8 +75,14 @@ void Triangle2D::Update()
 // =====================================
 void Triangle2D::Draw()
 {
+	// GPUように変換
+	Matrix4x4 world = m_SRT.toGPU();
+
+	// 定数バッファ更新
+	m_Draw->UpdateShaderConstants("Transform1", &world, sizeof(world));
+
 	// 描画
-	m_Draw->Draw(VsName.c_str(), PsName.c_str());
+	m_Draw->Draw(VsName.c_str(), PsName.c_str());	
 }
 
 
