@@ -32,6 +32,9 @@ void Square2D::Init(BaseDrawManager* _drawManager)
 		sizeof(m_SRT),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
+
+	// 外部画像をロード
+	m_Draw->LoadTexture("Asset/Texture/23249532.jpg");
 }
 
 
@@ -56,7 +59,7 @@ void Square2D::Draw()
 	m_Draw->UpdateShaderConstants("Transform1", &world, sizeof(world));
 
 	// 描画
-	m_Draw->Draw(VsName.c_str(), PsName.c_str());
+	m_Draw->Draw(VsName.c_str(), PsName.c_str(), "23249532");
 }
 
 

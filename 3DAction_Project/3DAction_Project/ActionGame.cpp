@@ -53,12 +53,8 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
-
+	// 四角
 	g_Square.Init(m_DrawManager);
-
-	// 外部画像をロード
-	m_DrawManager->LoadTexture("Asset/Texture/23249532.jpg");
-
 
 	Timer::Init(); // タイマー初期化
 	Timer::Start(); // タイマー開始
