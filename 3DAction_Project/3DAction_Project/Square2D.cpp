@@ -35,6 +35,9 @@ void Square2D::Init(BaseDrawManager* _drawManager)
 
 	// 外部画像をロード
 	m_Draw->LoadTexture("Asset/Texture/23249532.jpg");
+
+	// サンプラー
+
 }
 
 

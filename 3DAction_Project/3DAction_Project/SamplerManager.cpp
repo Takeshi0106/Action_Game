@@ -71,3 +71,11 @@ SamplerData* SamplerManager::GetSampler(const std::string& samplerName)
     ErrorLog::OutputToConsole(("サンプラーが見つかりません: " + samplerName).c_str());
     return nullptr;
 }
+
+
+// サンプラー削除
+void SamplerManager::ReleaseAllSamplers()
+{
+    // 削除
+    m_Samplers.clear();
+}

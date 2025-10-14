@@ -157,6 +157,30 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter">
       <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Object">
+      <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Object\BaseObject">
+      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3_Hlsl\Debug">
+      <UniqueIdentifier>{dac1bb92-e977-4e4d-9330-1d1fa5db6909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3_Hlsl\Triangle">
+      <UniqueIdentifier>{9d33cc3f-536f-4624-b1f3-cca34a018e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0_Main\BaseGame">
+      <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Object\TAriangle">
+      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Object\Square">
+      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Object\Vertex">
+      <UniqueIdentifier>{5fbbee1c-36f8-43f4-ae53-7c5109d66842}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -270,7 +294,18 @@
     <ClCompile Include="DirectX_FormatConverter.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClCompile>
-    <ClCompile Include="ActionGame.cpp" />
+    <ClCompile Include="ActionGame.cpp">
+      <Filter>0_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="2DTriangle.cpp">
+      <Filter>4_Object\TAriangle</Filter>
+    </ClCompile>
+    <ClCompile Include="Square2D.cpp">
+      <Filter>4_Object\Square</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>4_Object\Vertex</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -393,21 +428,43 @@
     <ClInclude Include="DirectX_FormatConverter.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGame.h" />
-    <ClInclude Include="ActionGame.h" />
+    <ClInclude Include="ActionGame.h">
+      <Filter>0_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGame.h">
+      <Filter>0_Main\BaseGame</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>4_Object\BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="2DTriangle.h">
+      <Filter>4_Object\TAriangle</Filter>
+    </ClInclude>
+    <ClInclude Include="Square2D.h">
+      <Filter>4_Object\Square</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>4_Object\Vertex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PS_Debug.hlsl">
-      <Filter>3_Hlsl</Filter>
-    </FxCompile>
-    <FxCompile Include="VS_Debug.hlsl">
-      <Filter>3_Hlsl</Filter>
-    </FxCompile>
-    <FxCompile Include="VS_TriangleDebug.hlsl">
-      <Filter>3_Hlsl</Filter>
-    </FxCompile>
     <FxCompile Include="PS_TriangleDebug.hlsl">
       <Filter>3_Hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Object.hlsl">
+      <Filter>3_Hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Debug.hlsl">
+      <Filter>3_Hlsl\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Debug.hlsl">
+      <Filter>3_Hlsl\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_TriangleDebug.hlsl">
+      <Filter>3_Hlsl\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Texture.hlsl">
+      <Filter>3_Hlsl\Triangle</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

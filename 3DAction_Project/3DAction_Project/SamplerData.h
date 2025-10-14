@@ -33,7 +33,9 @@ private:
 
 public:
     // コンストラクタ・デストラクタ
-    SamplerData() = default;
+    SamplerData() {
+        m_Desc = {};
+    };
     ~SamplerData() = default;
 
     // サンプラー作成
