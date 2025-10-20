@@ -67,6 +67,8 @@ bool VertexBufferManager::CreateVertexBuffer(
     // 作製した頂点バッファの名前を保存
     m_Logger.Log(name.c_str());
 
+    DebugLog::OutputToConsole((name + " を作成しました").c_str());
+
     return true;
 }
 

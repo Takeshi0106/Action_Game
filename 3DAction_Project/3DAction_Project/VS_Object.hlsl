@@ -3,8 +3,8 @@
 // ==================================================
 struct VS_IN
 {
-    float3 pos : POSITION; // 頂点位置
     float4 color : COLOR; // 頂点カラー
+    float3 pos : POSITION; // 頂点位置
     float2 uv : TEXCOORD; // UV
 };
 

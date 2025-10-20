@@ -29,8 +29,8 @@
 class SamplerManager
 {
 private:
-	// サンプラー配列
-	std::unordered_map<std::string, std::shared_ptr<SamplerData>> m_Samplers;
+	// サンプラー配列　(サンプラーデスクのハッシュ値計算関数を渡す)
+    std::unordered_map<SamplerDesc, std::shared_ptr<SamplerData>, SamplerDescHash> m_Samplers;
 	// ログ出力
 	AssetLogger m_Logger = { "Samplers.txt" };
 
@@ -41,20 +41,11 @@ public:
 
     // サンプラー作成
     bool CreateSampler(
-        std::string name,
-        ID3D11Device* device,
-        const D3D11_SAMPLER_DESC& desc);
-
-    bool CreateSampler(
-        std::string name,
-        ID3D11Device* device,
-        SamplerFilter filter,
-        SamplerAddressMode addressMode,
-        SamplerComparisonFunc comparisonFunc);
-
+        SamplerDesc desc,
+        ID3D11Device* device);
 
     // サンプラー取得
-    SamplerData* GetSampler(const std::string& samplerName);
+    SamplerData* GetSampler(const SamplerDesc& sampler);
 
     // 全削除
     void ReleaseAllSamplers();

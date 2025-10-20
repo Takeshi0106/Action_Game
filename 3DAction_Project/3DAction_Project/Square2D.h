@@ -13,15 +13,15 @@ private:
 	// std::string PsName = "PS_Texture";
 
 	// 使用するシェーダーの名前
-	std::string VsName = "VS_TriangleDebug";
-	std::string PsName = "PS_TriangleDebug";
+	std::string VsName = "VS_Object";
+	std::string PsName = "PS_Texture";
 
 	// 頂点データ
 	const Vertex m_Vertices[4] = {
-		{ { -0.5f,  0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f } },
-		{ {  0.5f,  0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 0.0f } },
-		{ { -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f }, { 0.0f, 1.0f } },
-		{ {  0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f } } };
+		{ { 1.0f, 0.0f, 0.0f, 1.0f },{ -0.5f,  0.5f, 0.0f }, { 0.0f, 0.0f } },
+		{ { 0.0f, 1.0f, 0.0f, 1.0f },{  0.5f,  0.5f, 0.0f }, { 1.0f, 0.0f } },
+		{ { 0.0f, 0.0f, 1.0f, 1.0f },{ -0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f } },
+		{ { 1.0f, 1.0f, 0.0f, 1.0f },{  0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f } } };
 
 	// SRT
 	Matrix4x4 m_SRT;

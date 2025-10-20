@@ -6,8 +6,8 @@
 class Vertex
 {
 public:
-	Vector3 pos;
 	Color color;
+	Vector3 pos;
 	Vector2 uv;
 };
 

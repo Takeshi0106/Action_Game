@@ -32,6 +32,7 @@ class ConstantBufferManager;
 class VertexBufferManager;
 class TextureManager;
 class ResourceViewManager;	
+class SamplerManager;
 
 class TextureLoader;
 
@@ -48,10 +49,17 @@ private:
 	std::unique_ptr<VertexBufferManager> m_VBManager; // 頂点バッファマネージャー
 	std::unique_ptr<TextureManager> m_TextureManager; // テクスチャマネージャー
 	std::unique_ptr<ResourceViewManager> m_ViewManager; // ビューマネージャー
+	std::unique_ptr<SamplerManager> m_SamplerManager; // サンプラーマネージャー
 
 	// モジュール
 	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
 
+	// 描画
+	void DrawObject(const char* _vsShaderName, 
+		const char* _psShaderName,
+		const char* _textureName, 
+		const SamplerDesc _desc,
+		const char* _modelName);
 
 public:
 	// コンストラクタ
@@ -68,8 +76,12 @@ public:
 	void EndDraw();
 
 	void Draw(const char* drawID, const void* data, const int size) override;
-	void Draw(const char* _vsShaderName, const char* _psShaderName,
-		const char* _textureName = nullptr, const char* _modelName = nullptr) override;
+
+	void Draw(const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _textureName = nullptr,
+		const char* _modelName = nullptr,
+		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override;
 
 	// 頂点バッファ作成
 	void CreateVertexBuffer(
@@ -99,6 +111,10 @@ public:
 		BufferUsage usage = BufferUsage::Default,
 		CPUAccess cpu = CPUAccess::None) override;
 
+	// サンプラー作成
+	void CreateSampler(
+	const SamplerDesc& _desc) override;
+
 	// テクスチャのロード
 	void LoadTexture(const char* textureName) override;
 
@@ -113,12 +129,5 @@ public:
 	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override;
 	// 頂点バッファ更新
 	void UpdateVertexBuffer(const char* drawID, const void* data, int size) override;
-
-
-	// デバッグ処理（描画できるかのチェックのため後に削除）
-	// デバッグ用更新
-	void DebugUpdate();
-	// デバッグ用描画
-	void DebugDraw();
 };
 

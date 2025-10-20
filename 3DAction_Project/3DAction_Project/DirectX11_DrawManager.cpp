@@ -12,20 +12,16 @@
 #include "VertexBufferManager.h"   // 頂点バッファマネージャー
 #include "TextureManager.h" // テクスチャマネージャー
 #include "ResourceViewManager.h" // ビューマネージャー
+#include "SamplerManager.h" // サンプラーマネージャー
 // モジュール
 #include "TextureLoader.h"
 // ログ出力
 #include "ReportMessage.h"
 
-// 計算構造体
-#include "Matrix4x4.h"
-#include "Quaternionh.h"
-#include "Vector3.h"
-#include "Color.h"
-// デバッグ用
-#include "Timer.h"
 
-
+// ============================================
+// クラスのメンバー関数
+// ============================================
 // コンストラクタ・デストラクタ
 DirectX_DrawManager::DirectX_DrawManager()
 {
@@ -48,6 +44,7 @@ DirectX_DrawManager::DirectX_DrawManager()
 	m_VBManager = std::make_unique<VertexBufferManager>();
 	m_TextureManager = std::make_unique<TextureManager>();
 	m_ViewManager = std::make_unique<ResourceViewManager>();
+	m_SamplerManager = std::make_unique<SamplerManager>();
 
 	// モジュール作成
 	m_TextureLoader = std::make_unique<TextureLoader>(m_TextureManager.get(), m_ViewManager.get());
@@ -77,6 +74,10 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		return false; // 失敗したら戻る
 	}
 
+	// 基本サンプラーを作成
+	SamplerDesc desc = SamplerDesc::NormalSampler();
+	CreateSampler(desc);
+
 	return true;
 }
 
@@ -92,6 +93,8 @@ void DirectX_DrawManager::Uninit()
 	m_VBManager.reset();
 	m_TextureManager.reset();
 	m_ViewManager.reset();
+	m_SamplerManager.reset();
+
 	m_TextureLoader.reset();
 
 	// DirectX11 の初期化
@@ -119,82 +122,15 @@ void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int s
 
 }
 
-void DirectX_DrawManager::Draw(const char* _vsShaderName, const char* _psShaderName,
-	const char* _textureName, const char* _modelName)
+// 描画情報を記載して描画
+void DirectX_DrawManager::Draw(const char* _vsShaderName,
+	const char* _psShaderName,
+	const char* _textureName,
+	const char* _modelName,
+	const SamplerDesc& _sampler)
 {
-	std::string vsName = _vsShaderName;
-	std::string psName = _psShaderName;
-
-	// シェーダー取得
-	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
-	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
-
-	// 入力レイアウト設定
-	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout()); // 入力レイアウト情報
-
-	// 頂点バッファ取得
-	VertexBufferData* vertexBufferData = m_VBManager->GetFindVertexData(vsName);
-
-	// 入力アセンブラ
-	ID3D11Buffer* vbuffers = vertexBufferData->GetVertexBuffer();
-	UINT stride = UINT(vertexBufferData->GetStride());
-	UINT offset = 0;
-
-	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vbuffers, &stride, &offset);
-	vertexBufferData->SetIsUpdate(false);
-
-	// トポロギー設定
-	DirectX11::Get::GetContext()->IASetPrimitiveTopology(vertexBufferData->GetPrimitiveType());
-
-	// 3. 定数バッファ更新とバインド
-	// 頂点
-	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
-	std::vector<ID3D11Buffer*> buffers(cbInfo.size(), nullptr);
-
-	for (size_t i = 0; i < cbInfo.size(); i++)
-	{
-		// 定数バッファ取得
-		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
-		if (buffer) {
-			// VSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
-		}
-	}
-
-	// まとめてバインド
-	DirectX11::Get::GetContext()->VSSetConstantBuffers(
-		0,                         // 先頭スロット
-		static_cast<UINT>(buffers.size()),
-		buffers.data()             // 配列を渡す
-	);
-
-	// ピクセル
-	cbInfo = ps->GetCBInfo();
-	buffers.resize(cbInfo.size(), nullptr);
-
-	for (size_t i = 0; i < cbInfo.size(); i++)
-	{
-		// 定数バッファ取得
-		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
-		if (buffer) {
-			// VSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
-		}
-	}
-
-	// まとめてバインド
-	DirectX11::Get::GetContext()->PSSetConstantBuffers(
-		0,                         // 先頭スロット
-		static_cast<UINT>(buffers.size()),
-		buffers.data()             // 配列を渡す
-	);
-
-	// 4. シェーダーセット
-	DirectX11::Get::GetContext()->VSSetShader(vs->GetVertexShader(), nullptr, 0);
-	DirectX11::Get::GetContext()->PSSetShader(ps->GetPixelShader(), nullptr, 0);
-
-	// 6. 描画
-	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
+	// 描画
+	DrawObject(_vsShaderName, _psShaderName, _textureName, _sampler, _modelName);
 }
 
 
@@ -281,6 +217,19 @@ bool DirectX_DrawManager::CreateTexture(
 	}
 
 	return true;
+}
+
+
+// ===========================================
+// サンプラー作成
+// ===========================================
+void DirectX_DrawManager::CreateSampler(
+	const SamplerDesc& _desc)
+{
+	// サンプラー作成
+	m_SamplerManager->CreateSampler(
+		_desc,
+		DirectX11::Get::GetDevice());
 }
 
 
@@ -422,26 +371,102 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* dat
 }
 
 
-// ==============================================
-// デバッグ用更新
-// ==============================================
-void DirectX_DrawManager::DebugUpdate()
+// ===================================================
+// 非公開のメンバー関数
+// ===================================================
+void DirectX_DrawManager::DrawObject(const char* _vsShaderName, 
+	const char* _psShaderName,
+	const char* _textureName, 
+	const SamplerDesc _desc,
+	const char* _modelName)
 {
+	// Stringに変換
+	std::string vsName = _vsShaderName;
+	std::string psName = _psShaderName;
 
-}
+	// シェーダー取得
+	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
+	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
 
+	// 入力レイアウト設定
+	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout()); // 入力レイアウト情報
 
-// ===========================================
-// デバッグ用描画
-// ===========================================
-void DirectX_DrawManager::DebugDraw()
-{
-	// 三角形デバッグ描画	
+	// 頂点バッファ取得
+	VertexBufferData* vertexBufferData = m_VBManager->GetFindVertexData(vsName);
 
-	// デバッグ時 
-	DirectX11::BeginDraw(); // 描画の開始処理
+	// 入力アセンブラ
+	ID3D11Buffer* vbuffers = vertexBufferData->GetVertexBuffer();
+	UINT stride = UINT(vertexBufferData->GetStride());
+	UINT offset = 0;
 
-	// DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
+	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vbuffers, &stride, &offset);
+	vertexBufferData->SetIsUpdate(false);
 
-	DirectX11::EndDraw(); // 描画の終わり処理
+	// トポロギー設定
+	DirectX11::Get::GetContext()->IASetPrimitiveTopology(vertexBufferData->GetPrimitiveType());
+
+	// 3. 定数バッファ更新とバインド
+	// 頂点
+	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
+	std::vector<ID3D11Buffer*> buffers(cbInfo.size(), nullptr);
+
+	for (size_t i = 0; i < cbInfo.size(); i++)
+	{
+		// 定数バッファ取得
+		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
+		if (buffer) {
+			// VSスロット番号にバインド
+			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
+		}
+	}
+
+	// まとめてバインド
+	DirectX11::Get::GetContext()->VSSetConstantBuffers(
+		0,                         // 先頭スロット
+		static_cast<UINT>(buffers.size()),
+		buffers.data()             // 配列を渡す
+	);
+
+	// ピクセル
+	cbInfo = ps->GetCBInfo();
+	buffers.resize(cbInfo.size(), nullptr);
+
+	for (size_t i = 0; i < cbInfo.size(); i++)
+	{
+		// 定数バッファ取得
+		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
+		if (buffer) {
+			// VSスロット番号にバインド
+			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
+		}
+	}
+
+	// まとめてバインド
+	DirectX11::Get::GetContext()->PSSetConstantBuffers(
+		0,                         // 先頭スロット
+		static_cast<UINT>(buffers.size()),
+		buffers.data()             // 配列を渡す
+	);
+
+	// テクスチャバインド
+	if (_textureName != nullptr)
+	{
+		// Stringに変換
+		std::string viewName = _textureName;
+
+		// 取得
+		ID3D11ShaderResourceView* srv = m_ViewManager->GetFindSRV(viewName)->GetSRV();
+		ID3D11SamplerState* sampler = m_SamplerManager->GetSampler(_desc)->GetSampler();
+
+		// テクスチャ・サンプラー バインド
+		DirectX11::Get::GetContext()->PSSetShaderResources(0, 1, &srv);
+		DirectX11::Get::GetContext()->PSSetSamplers(0, 1, &sampler);
+	}
+
+	// 4. シェーダーセット
+	DirectX11::Get::GetContext()->VSSetShader(vs->GetVertexShader(), nullptr, 0);
+	DirectX11::Get::GetContext()->PSSetShader(ps->GetPixelShader(), nullptr, 0);
+
+	// 6. 描画
+	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
 }

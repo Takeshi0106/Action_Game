@@ -17,7 +17,7 @@ void Square2D::Init(BaseDrawManager* _drawManager)
 
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(
-		"VS_TriangleDebug",
+		VsName.c_str(),
 		m_Vertices,
 		sizeof(Vertex),
 		sizeof(m_Vertices) / sizeof(Vertex),
@@ -35,9 +35,6 @@ void Square2D::Init(BaseDrawManager* _drawManager)
 
 	// 外部画像をロード
 	m_Draw->LoadTexture("Asset/Texture/23249532.jpg");
-
-	// サンプラー
-
 }
 
 
