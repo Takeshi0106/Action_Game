@@ -34,7 +34,7 @@ void Square2D::Init(BaseDrawManager* _drawManager)
 		CPUAccess::Write);
 
 	// 外部画像をロード
-	m_Draw->LoadTexture("Asset/Texture/23249532.jpg");
+	m_Draw->LoadTexture("Asset/Texture/pipo-halloweenchara2016_02.png");
 }
 
 
@@ -59,7 +59,7 @@ void Square2D::Draw()
 	m_Draw->UpdateShaderConstants("Transform1", &world, sizeof(world));
 
 	// 描画
-	m_Draw->Draw(VsName.c_str(), PsName.c_str(), "23249532");
+	m_Draw->Draw(VsName.c_str(), PsName.c_str(), "pipo-halloweenchara2016_02");
 }
 
 

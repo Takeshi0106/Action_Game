@@ -34,7 +34,7 @@ bool Texture2DData::CreateTexture2D(ID3D11Device* device,
     desc.MiscFlags = 0;
 
     // テクスチャ作成
-    HRESULT hr = device->CreateTexture2D(&desc, nullptr, m_Texture.GetAddressOf());
+    HRESULT hr = device->CreateTexture2D(&desc, initData, m_Texture.GetAddressOf());
     if (FAILED(hr)) {
         ErrorLog::OutputToConsole(("テクスチャの作成に失敗しました " + std::to_string(hr)).c_str());
         return false;

@@ -451,6 +451,10 @@ void DirectX_DrawManager::DrawObject(const char* _vsShaderName,
 	// テクスチャバインド
 	if (_textureName != nullptr)
 	{
+		// 描画コンテキスト取得
+		DirectX11::Get::GetContext()->OMSetDepthStencilState(nullptr, 0);
+		DirectX11::Get::GetContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
+
 		// Stringに変換
 		std::string viewName = _textureName;
 

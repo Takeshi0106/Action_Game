@@ -27,13 +27,13 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, ID3D11Device* 
 
     HRESULT hr = DirectX::LoadFromWICFile(
         filePath.wstring().c_str(),
-        DirectX::WIC_FLAGS_NONE,
+        DirectX::WIC_FLAGS::WIC_FLAGS_NONE,
         nullptr,
         image
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole("画像のロードに失敗しました");
+        ErrorLog::OutputToConsole(("画像のロードに失敗しました" + std::to_string(hr)).c_str());
         return;
     }
 
