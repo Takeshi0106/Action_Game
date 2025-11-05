@@ -16,6 +16,7 @@
 // =====================================================
 // 基底ヘッダー
 #include "NonCopyable.h" // コピーを禁止するヘッダー
+#include "BaseGame.h"
 
 
 // =====================================================
@@ -27,6 +28,7 @@ public:
 #if defined(DEBUG) || defined(_DEBUG)
 	static bool m_IsCreated; // １つしかないことを保証する
 #endif
+	BaseGame* m_Game = nullptr;
 
 protected:
 	// -----------------------------------------------------------------
@@ -43,5 +45,5 @@ public:
 	explicit PlatformSystem(); // コンストラクタ
 	~PlatformSystem();         // デストラクタ
 
-	void Execute(); // 起動する
+	void Execute(BaseGame* game); // 起動する
 };

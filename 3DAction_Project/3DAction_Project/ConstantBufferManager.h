@@ -22,7 +22,7 @@
 // 配列のヘッダー
 #include <unordered_map> // ハッシュ値検索
 // バッファ設定ヘッダー
-#include "BufferSetting.h"
+#include "GraphicsEnums.h"
 // 外部ファイルにアセット名ログ出量用
 #include "AssetLogger.h"
 

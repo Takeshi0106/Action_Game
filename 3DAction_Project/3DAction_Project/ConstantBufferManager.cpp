@@ -5,15 +5,9 @@
 // 必須ヘッダー
 #include "ConstantBufferManager.h" // 自分のヘッダー
 // 自作列挙型をDirectX用に変換
-#include "DirectX_BufferUtils.h"
+#include "DirectX_FormatConverter.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
-
-
-// ======================================
-// 静的メンバー配列
-// ======================================
-// std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> ConstantBufferManager::m_ConstantBuffers;
 
 
 // ========================================
@@ -54,8 +48,8 @@ bool ConstantBufferManager::CreateConstantBuffer(const std::string& constantName
 		device,
 		data,
 		size,
-		BufferUtils::ToDXUsage(usage),
-		D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(access))))
+		DirectX_FormatConverter::ToDXUsage(usage),
+		D3D11_CPU_ACCESS_FLAG(DirectX_FormatConverter::ToDXCPUAccess(access))))
 	{
 		ErrorLog::OutputToConsole(std::string(("定数バッファの作成失敗: " + constantName)).c_str());
 		return false;

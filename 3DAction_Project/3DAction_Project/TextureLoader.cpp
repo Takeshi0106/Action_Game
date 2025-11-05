@@ -11,13 +11,13 @@
 // ログ表示ヘッダー
 #include "ReportMessage.h"
 // 自作列挙型をDirectXように変換する関数
-#include "DirectX_BufferUtils.h"
+#include "DirectX_FormatConverter.h"
 
 
 // ============================
 // 画像ファイルをロードする
 // ============================
-void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::string& key, ID3D11Device* device)
+bool TextureLoader::ImageFileLoader(const std::string& sFilePath, ID3D11Device* device)
 {
     // UTF-16 に変換
     std::filesystem::path filePath = sFilePath;
@@ -27,14 +27,14 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::str
 
     HRESULT hr = DirectX::LoadFromWICFile(
         filePath.wstring().c_str(),
-        DirectX::WIC_FLAGS_NONE,
+        DirectX::WIC_FLAGS_FORCE_RGB | DirectX::WIC_FLAGS_IGNORE_SRGB,
         nullptr,
         image
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole("画像のロードに失敗しました");
-        return;
+        ErrorLog::OutputToConsole(("画像のロードに失敗しました" + std::to_string(hr)).c_str());
+        return false;
     }
 
     // 画像メタデータを取得する
@@ -44,7 +44,7 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::str
     const DirectX::Image* img = image.GetImage(0, 0, 0);
     if (!img) {
         ErrorLog::OutputToConsole("画像データの取得に失敗しました");
-        return;
+        return false;
     }
 
     // 初期化データを作成
@@ -54,26 +54,36 @@ void TextureLoader::ImageFileLoader(const std::string& sFilePath, const std::str
     initData.slicePitch = img->slicePitch;
 
     // TextureManagerに登録
-    m_TextureManager->CreateTexture(
-        key,
+    if (m_TextureManager->CreateTexture(
+        filePath.stem().string(),
         device,
         (unsigned int)(meta.width),
         (unsigned int)(meta.height),
-        BufferUtils::toSelfFormat(meta.format), // enumが一致していれば直接渡せる
+        DirectX_FormatConverter::ToSelfFormat(meta.format),
         BindFlag::ShaderResource,
         BufferUsage::Default,
         CPUAccess::None,
-        &initData
-    );
+        &initData))
+    {
+        ErrorLog::OutputToConsole((filePath.stem().string() + " のテクスチャの作成に失敗しました。").c_str());
+        return false;
+    }
 
     // テクスチャを取得
-    Texture2DData* data = m_TextureManager->GetFindTexture2DData(key);
+    Texture2DData* data = m_TextureManager->GetFindTexture2DData(filePath.stem().string());
 
     // SRVを作成して ResourceViewManager に登録
-    m_ViewManager->CreateSRV(
-        key,
+    if (m_ViewManager->CreateSRV(
+        filePath.stem().string(),
         device,
         data->GetTexture(),
-        BufferUtils::toSelfFormat(meta.format)
-    );
+        DirectX_FormatConverter::ToSelfFormat(meta.format)))
+    {
+        ErrorLog::OutputToConsole((filePath.stem().string() + " のSRVの作成に失敗しました。").c_str());
+        return false;
+    }
+
+    // テクスチャ作成ログ出力
+    DebugLog::OutputToConsole((filePath.stem().string() + " のロードに成功しました。").c_str());
+    return true;
 }

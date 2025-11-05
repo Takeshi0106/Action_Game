@@ -5,6 +5,7 @@ struct VS_IN
 {
     float4 color : COLOR; // 頂点カラー
     float3 pos : POSITION; // 頂点位置
+    float2 uv : TEXCOORD; // UV
 };
 
 // ==================================================
@@ -14,6 +15,7 @@ struct VS_OUT
 {
     float4 pos : SV_POSITION; // クリッピング後の座標
     float4 color : COLOR; // 頂点カラー
+    float2 uv : TEXCOORD;
 };
 
 // ==================================================
@@ -47,6 +49,7 @@ VS_OUT main(VS_IN vin)
     
     // そのまま返す
     vout.color = vin.color;
+    vout.uv = vin.uv;
 
     return vout;
 }

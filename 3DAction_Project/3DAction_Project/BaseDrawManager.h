@@ -16,7 +16,8 @@
 // ==============================
 // ヘッダー
 // ==============================
-#include "BufferSetting.h" // 設定用ヘッダー
+#include "GraphicsEnums.h" // 設定用ヘッダー
+
 
 // ==============================
 // クラス
@@ -26,23 +27,33 @@ class BaseDrawManager
 private:
 
 public:
+	// コンストラクタ・デストラクタ
 	BaseDrawManager() = default;
 	virtual ~BaseDrawManager() = default;
 
 	// 描画
+	virtual void BegingDraw() = 0;
+	virtual void EndDraw() = 0;
 	virtual void Draw(const char* id, const void* data, const int size) = 0;
 
+	virtual void Draw(const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _textureNam = nullptr,
+		const char* _modelName = nullptr,
+		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
+
 	// 頂点バッファ作成
-	virtual void CreateVertexBuffer(
+	virtual bool CreateVertexBuffer(
 		const char* drawID, 
 		const void* data, 
 		size_t size,
+		int vertexNumber,
 		PrimitiveType type = PrimitiveType::TriangleStrip,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write) = 0;
 
 	// 定数バッファ作成
-	virtual void CreateConstantBuffer(
+	virtual bool CreateConstantBuffer(
 		const char* constantName,
 		const void* data,
 		size_t size,
@@ -58,6 +69,12 @@ public:
 		BindFlag bindFlag,
 		BufferUsage usage = BufferUsage::Default,
 		CPUAccess cpu = CPUAccess::None) = 0;
+
+	// テクスチャのロード
+	virtual bool LoadTexture(const char* textureName) = 0;
+
+	// サンプラー作成
+	virtual bool CreateSampler(const SamplerDesc& _desc) = 0;
 
 	// View作成
 	virtual bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;

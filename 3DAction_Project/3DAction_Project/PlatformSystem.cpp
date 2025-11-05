@@ -26,6 +26,8 @@ bool PlatformSystem::m_IsCreated = false; // 初期化
 // ========================================================
 PlatformSystem::PlatformSystem()
 {
+	m_Game = nullptr;
+
 #if defined(DEBUG) || defined(_DEBUG)
 	// デバッグ時のみ確認する
 	if (m_IsCreated)
@@ -51,9 +53,11 @@ PlatformSystem::~PlatformSystem()
 // ========================================================
 // 起動
 // ========================================================
-void PlatformSystem::Execute()
+void PlatformSystem::Execute(BaseGame* game)
 {
-	if (Init()) // 初期化
+	m_Game = game;
+
+	if (Init() && m_Game != nullptr) // 初期化
 	{
 		GameLoop(); // ゲームループ
 	}

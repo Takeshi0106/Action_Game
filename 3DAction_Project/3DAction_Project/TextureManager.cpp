@@ -9,7 +9,9 @@
 #include <d3d11.h>        // DirectXのAPIヘッダー
 #include <wrl/client.h>   // スマートポインター
 // バッファユーリアリティヘッダー
-#include "DirectX_BufferUtils.h"
+#include "DirectX_FormatConverter.h"
+// ログ出力
+#include "ReportMessage.h"
 
 
 // ================================
@@ -48,10 +50,10 @@ bool TextureManager::CreateTexture(
             device,
             width,
             height,
-            BufferUtils::toDXFormat(format),
+            DirectX_FormatConverter::ToDXFormat(format),
             D3D11_BIND_FLAG(ToDXBindFlag(bindFlag)),
-            BufferUtils::ToDXUsage(usage),
-            D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(flag)),
+            DirectX_FormatConverter::ToDXUsage(usage),
+            D3D11_CPU_ACCESS_FLAG(DirectX_FormatConverter::ToDXCPUAccess(flag)),
             &dxInitData))
         {
             DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
@@ -66,10 +68,10 @@ bool TextureManager::CreateTexture(
             device,
             width,
             height,
-            BufferUtils::toDXFormat(format),
+            DirectX_FormatConverter::ToDXFormat(format),
             D3D11_BIND_FLAG(ToDXBindFlag(bindFlag)),
-            BufferUtils::ToDXUsage(usage),
-            D3D11_CPU_ACCESS_FLAG(BufferUtils::ToDXCPUAccess(flag))))
+            DirectX_FormatConverter::ToDXUsage(usage),
+            D3D11_CPU_ACCESS_FLAG(DirectX_FormatConverter::ToDXCPUAccess(flag))))
         {
             DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
             return false;
@@ -85,7 +87,9 @@ bool TextureManager::CreateTexture(
 	return true;
 }
 
-
+// ======================================
+// テクスチャ２Dデータを探してポインターを返す
+// ======================================
 Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
 {
     // 探す
@@ -104,14 +108,18 @@ Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
 }
 
 
+// ========================================
 // テクスチャをすべて削除
+// ========================================
 void TextureManager::ReleaseAllTexture()
 {
     m_Textures.clear();
 }
 
 
+// =========================================
 // バインドフラグ変換
+// =========================================
 UINT ToDXBindFlag(BindFlag flags)
 {
     UINT result = 0;

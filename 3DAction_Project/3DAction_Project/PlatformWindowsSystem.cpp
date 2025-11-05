@@ -159,12 +159,15 @@ bool PlatformWindowsSystem::Init()
 // =====================================================
 void PlatformWindowsSystem::GameLoop()
 {
-    MSG msg = {}; // メッセージ
+    // メッセージ
+    MSG msg = {};
 
-    if (GameInit()) // ゲームの初期化処理
+    // ゲームの初期化処理
+    if (GameInit())
     {
         while (true)
         {
+            // プロシージャー受け取り
             if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
             {
                 if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
@@ -174,12 +177,14 @@ void PlatformWindowsSystem::GameLoop()
             }
             else
             {
+                // ゲームメイン
                 GameMain();
             }
         }
     }
 
-    GameUninit();        // ゲームの後処理 多重に呼び出しても問題ないように作成
+    // ゲームの後処理
+    GameUninit();
 }
 
 
@@ -206,6 +211,8 @@ bool PlatformWindowsSystem::GameInit()
 {
     // 描画マネージャーの初期化
     m_DrawManager.Init(m_Width,m_Height,m_WinInstance);
+    // ゲームの初期化
+    m_Game->Init(&m_DrawManager);
 
     return true;
 }
@@ -216,11 +223,11 @@ bool PlatformWindowsSystem::GameInit()
 // =====================================================
 void PlatformWindowsSystem::GameMain()
 {
-    // 描画マネージャーのデバッグ更新
-    m_DrawManager.DebugUpdate();
+    // ゲーム更新処理
+    m_Game->Update();
 
-    // 描画マネージャーのデバッグ描画
-    m_DrawManager.DebugDraw();
+    // ゲームの描画処理
+    m_Game->Draw();
 }
 
 
@@ -229,6 +236,8 @@ void PlatformWindowsSystem::GameMain()
 // =====================================================
 void PlatformWindowsSystem::GameUninit()
 {
+    // ゲームの後処理
+    m_Game->Uninit();
     // 描画マネージャーの後処理
     m_DrawManager.Uninit();
 }

@@ -12,43 +12,16 @@
 #include "VertexBufferManager.h"   // 頂点バッファマネージャー
 #include "TextureManager.h" // テクスチャマネージャー
 #include "ResourceViewManager.h" // ビューマネージャー
+#include "SamplerManager.h" // サンプラーマネージャー
 // モジュール
 #include "TextureLoader.h"
 // ログ出力
 #include "ReportMessage.h"
 
-// 計算構造体
-#include "Matrix4x4.h"
-#include "Quaternionh.h"
-#include "Vector3.h"
-#include "Color.h"
-// デバッグ用
-#include "Timer.h"
 
-
-// ==========================================
-// 構造体　デバッグ用
-// ==========================================
-struct Vertex {
-	Vector3 pos;
-	Color color;
-};
-struct TransformCB
-{
-	Matrix4x4 WorldMatrix;
-	Matrix4x4 ViewMatrix;
-	Matrix4x4 ProjMatrix;
-};
-// 三角形の頂点
-Vertex vertices[3] =
-{
-{ { 0.0f, 0.57735f, 0.0f }, {1, 0, 0, 1} },   // 上頂点 (y = √3/2 * 0.5)
-{ { 0.5f, -0.288675f, 0.0f }, {0, 1, 0, 1} }, // 右下頂点
-{ { -0.5f, -0.288675f, 0.0f }, {0, 0, 1, 1} } // 左下頂点
-};
-float angle;
-
-
+// ============================================
+// クラスのメンバー関数
+// ============================================
 // コンストラクタ・デストラクタ
 DirectX_DrawManager::DirectX_DrawManager()
 {
@@ -71,6 +44,7 @@ DirectX_DrawManager::DirectX_DrawManager()
 	m_VBManager = std::make_unique<VertexBufferManager>();
 	m_TextureManager = std::make_unique<TextureManager>();
 	m_ViewManager = std::make_unique<ResourceViewManager>();
+	m_SamplerManager = std::make_unique<SamplerManager>();
 
 	// モジュール作成
 	m_TextureLoader = std::make_unique<TextureLoader>(m_TextureManager.get(), m_ViewManager.get());
@@ -91,97 +65,18 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 	// DirectXの初期化
 	if (!DirectX11::Init(width, height, windowHandle)) {
 		ErrorLog::OutputToMessageBox("DirectXの初期化に失敗しました");
-		return false; // 失敗したら戻る
+		return false;
 	}
 
 	// シェーダー作成
 	if (!m_ShaderManager->Init(DirectX11::Get::GetDevice())) {
 		ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
-		return false; // 失敗したら戻る
-	}
-
-
-	// 定数バッファ初期化
-	// ワールド行列
-	Matrix4x4 world = Matrix4x4::CreateIdentityMatrix();
-
-	// ビュー行列（カメラを少し離す）
-	Vector3 eye(0, 0, -5);   // カメラ位置
-	Vector3 at(0, 0, 0);     // 注視点
-	Vector3 up(0, 1, 0);     // 上方向
-	Matrix4x4 view = Matrix4x4::CreateViewMatrix_LH(eye, at, up);
-
-	// プロジェクション行列（透視投影）
-	float fov = 3.14159265f / 4.0f;     // 視野角45°
-	float aspect = 1280.0f / 720.0f;
-	float nearZ = 0.1f;
-	float farZ = 100.0f;
-	Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
-
-	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
-
-
-	// 頂点バッファ作成
-	CreateVertexBuffer(
-		"VS_TriangleDebug",
-		vertices,
-		sizeof(Vertex),
-		PrimitiveType::TriangleStrip,
-		BufferUsage::Dynamic,
-		CPUAccess::Write);
-
-	// 定数バッファ作成
-	CreateConstantBuffer(
-		"Transform1",
-		&mat,
-		sizeof(mat),
-		BufferUsage::Dynamic,
-		CPUAccess::Write);
-
-	// テクスチャロード
-	m_TextureLoader->ImageFileLoader("Asset/Texture/pipo-halloweenchara2016_08.png", "pipoya", DirectX11::Get::GetDevice());
-
-	/*
-	// テクスチャ作成
-	if (!CreateTexture(
-		"DebugTexture",
-		1920,
-		1080,
-		Format::R8G8B8A8_UNorm,
-		BindFlag::ShaderResource | BindFlag::RenderTarget,
-		BufferUsage::Default,
-		CPUAccess::None))
-	{
-		ErrorLog::OutputToConsole("テクスチャ作成に失敗");
 		return false;
 	}
-	// SRV作成
-	if (!CreateSRV(
-		"DebugTexture",
-		Format::R8G8B8A8_UNorm,
-		0,
-		1))
-	{
-		ErrorLog::OutputToConsole("SRV作成に失敗");
-		return false;
-	}
-		*/
 
-	// カリング削除
-	D3D11_RASTERIZER_DESC rasterDesc{};
-	rasterDesc.FillMode = D3D11_FILL_SOLID;       // 通常塗りつぶし
-	rasterDesc.CullMode = D3D11_CULL_NONE;       // カリング無効
-	rasterDesc.FrontCounterClockwise = FALSE;    // 頂点順序: 時計回りが表
-	rasterDesc.DepthClipEnable = TRUE;
-
-	ID3D11RasterizerState* noCullRS = nullptr;
-	DirectX11::Get::GetDevice()->CreateRasterizerState(&rasterDesc, &noCullRS);
-
-	DirectX11::Get::GetContext()->RSSetState(noCullRS);
-
-
-	Timer::Init(); // タイマー初期化
-	Timer::Start(); // タイマー開始
+	// 基本サンプラーを作成
+	SamplerDesc desc = SamplerDesc::NormalSampler();
+	CreateSampler(desc);
 
 	return true;
 }
@@ -198,6 +93,8 @@ void DirectX_DrawManager::Uninit()
 	m_VBManager.reset();
 	m_TextureManager.reset();
 	m_ViewManager.reset();
+	m_SamplerManager.reset();
+
 	m_TextureLoader.reset();
 
 	// DirectX11 の初期化
@@ -206,22 +103,45 @@ void DirectX_DrawManager::Uninit()
 
 
 // ===========================================
-// 描画
+// 描画　のちにリストでスタック
 // ===========================================
+void DirectX_DrawManager::BegingDraw()
+{
+	// 描画最初の処理
+	DirectX11::BeginDraw();
+}
+
+void DirectX_DrawManager::EndDraw()
+{
+	// 描画終了の処理
+	DirectX11::EndDraw();
+}
+
 void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int size)
 {
 
 }
 
+// 描画情報を記載して描画
+void DirectX_DrawManager::Draw(const char* _vsShaderName,
+	const char* _psShaderName,
+	const char* _textureName,
+	const char* _modelName,
+	const SamplerDesc& _sampler)
+{
+	// 描画
+	DrawObject(_vsShaderName, _psShaderName, _textureName, _sampler, _modelName);
+}
 
 
 // ===========================================
 // 頂点バッファ作成
 // ===========================================
-void DirectX_DrawManager::CreateVertexBuffer(
+bool DirectX_DrawManager::CreateVertexBuffer(
 	const char* drawID,
 	const void* data,
 	size_t stride,
+	int vertexNumber,
 	PrimitiveType type,
 	BufferUsage usage,
 	CPUAccess access)
@@ -234,7 +154,7 @@ void DirectX_DrawManager::CreateVertexBuffer(
 		drawID,
 		DirectX11::Get::GetDevice(),
 		data, // 頂点データ
-		3,   // 頂点数
+		vertexNumber,   // 頂点数
 		10,   // 最大頂点数
 		stride,
 		type,
@@ -242,14 +162,17 @@ void DirectX_DrawManager::CreateVertexBuffer(
 		access))
 	{
 		ErrorLog::OutputToConsole("頂点バッファ作製失敗");
+		return false;
 	}
+
+	return true;
 }
 
 
 // ===========================================
 // 定数バッファ作成
 // ===========================================
-void DirectX_DrawManager::CreateConstantBuffer(
+bool DirectX_DrawManager::CreateConstantBuffer(
 	const char* constantName,
 	const void* data,
 	size_t size,
@@ -266,7 +189,10 @@ void DirectX_DrawManager::CreateConstantBuffer(
 		access))
 	{
 		ErrorLog::OutputToConsole("定数バッファ作製失敗");
+		return false;
 	}
+	
+	return true;
 }
 
 
@@ -296,6 +222,33 @@ bool DirectX_DrawManager::CreateTexture(
 		return false;
 	}
 
+	return true;
+}
+
+
+// ===========================================
+// サンプラー作成
+// ===========================================
+bool DirectX_DrawManager::CreateSampler(
+	const SamplerDesc& _desc)
+{
+	// サンプラー作成
+	m_SamplerManager->CreateSampler(
+		_desc,
+		DirectX11::Get::GetDevice());
+
+	return true;
+}
+
+
+// ===========================================
+// テクスチャロード
+// ===========================================
+bool DirectX_DrawManager::LoadTexture(const char* textureName)
+{
+	// テクスチャのロード関数
+	m_TextureLoader->ImageFileLoader(textureName, DirectX11::Get::GetDevice());
+	
 	return true;
 }
 
@@ -354,7 +307,7 @@ bool DirectX_DrawManager::CreateRTV(const char* name, Format format, unsigned in
 
 	if (tex == nullptr) { return false; }
 
-	// UAV作成
+	// RTV作成
 	if (!m_ViewManager->CreateRTV(name,
 		DirectX11::Get::GetDevice(),
 		tex->GetTexture(),
@@ -398,8 +351,17 @@ void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const 
 	// 定数バッファ取得
 	ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(constantName);
 
-	// 定数バッファ更新
-	buffer->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
+	if (buffer->GetSize() == size)
+	{
+		// 定数バッファ更新
+		buffer->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
+	}
+	else
+	{
+		ErrorLog::OutputToConsole("定数バッファが更新できませんでした。");
+		ErrorLog::OutputToConsole(("バッファサイズ :" + std::to_string(buffer->GetSize())).c_str());
+		ErrorLog::OutputToConsole(("更新サイズ :" + std::to_string(size)).c_str());
+	}
 }
 
 
@@ -419,133 +381,64 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* dat
 }
 
 
-// ==============================================
-// デバッグ用更新
-// ==============================================
-void DirectX_DrawManager::DebugUpdate()
+// ===================================================
+// 非公開のメンバー関数
+// ===================================================
+void DirectX_DrawManager::DrawObject(const char* _vsShaderName, 
+	const char* _psShaderName,
+	const char* _textureName, 
+	const SamplerDesc _desc,
+	const char* _modelName)
 {
-	// タイマーデバッグ
-	Timer::Debug_CheckUpdate();
-
-	// デルタタイム取得
-	float deltaTime = Timer::GetDeltaTime();
-
-	// 頂点バッファ更新 ------------------------------
-	// static float offset = 0.0f;
-	// offset += 0.01f * deltaTime; // 時間経過で移動 
-
-	// for (int i = 0; i < sizeof(vertices) / sizeof(Vertex); i++)
-	// {
-	// 	vertices[i].pos.x += offset;
-	// }
-	// 
-	// // 頂点バッファ更新
-	// UpdateVertexBuffer("VS_TriangleDebug", vertices, sizeof(vertices));
-
-
-	// 定数バッファ更新 ------------------------------
-	// Y軸周りに回転させるとします 
-	float speed = 3.14159265f * 4;
-
-	// 経過時間に応じて角度を増加 
-	angle += speed * deltaTime;
-
-	// ワールド行列（回転のみ）
-	Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), angle);
-	Matrix4x4 rotationMatrix = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
-
-	// 移動
-	static float offset = 0.0f;
-	offset += 1.0f * deltaTime; // 時間経過で移動
-
-	Matrix4x4 translationMatrix = Matrix4x4::CreateTranslationMatrix_LH(Vector3(offset, 0.0f, 0.0f));
-
-	// ワールド行列
-	Matrix4x4 world = translationMatrix * rotationMatrix;
-
-	// ビュー行列（カメラを少し離す）
-	Vector3 eye(0, 0, -5);   // カメラ位置
-	Vector3 at(0, 0, 0);     // 注視点
-	Vector3 up(0, 1, 0);     // 上方向
-	Matrix4x4 view = Matrix4x4::CreateViewMatrix_LH(eye, at, up);
-
-	// プロジェクション行列（透視投影）
-	float fov = 3.14159265f / 4.0f;     // 視野角45°
-	float aspect = 1280.0f / 720.0f;
-	float nearZ = 0.1f;
-	float farZ = 100.0f;
-	Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
-
-	TransformCB mat = { world.toGPU(), view.toGPU(),proj.toGPU() };
-
-	// 定数バッファ更新
-	UpdateShaderConstants("Transform1", &mat, sizeof(mat));
-
-	// タイマー更新処理
-	Timer::LastUpdate();
-}
-
-
-// ===========================================
-// デバッグ用描画
-// ===========================================
-void DirectX_DrawManager::DebugDraw()
-{
-	// 三角形デバッグ描画	
-
-	// デバッグ時 
-	DirectX11::BeginDraw(); // 描画の開始処理
-
-	// DirectX11::DebugDraw(Timer::GetElapsedTime()); // デバッグ表示
-
-	std::string vsName = "VS_TriangleDebug";
-	std::string psName = "PS_TriangleDebug";
+	// Stringに変換
+	std::string vsName = _vsShaderName;
+	std::string psName = _psShaderName;
 
 	// シェーダー取得
 	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
 	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
 
-	// 入力レイアウト設定
-	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout()); // 入力レイアウト情報
+	// 入力レイアウトを設定
+	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout());
 
-	// 頂点バッファ取得
+	// 頂点バッファを取得
 	VertexBufferData* vertexBufferData = m_VBManager->GetFindVertexData(vsName);
 
-	// 更新されている場合だけセット
 	// 入力アセンブラ
 	ID3D11Buffer* vbuffers = vertexBufferData->GetVertexBuffer();
 	UINT stride = UINT(vertexBufferData->GetStride());
 	UINT offset = 0;
 
+	// 頂点バッファをセット
 	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vbuffers, &stride, &offset);
 	vertexBufferData->SetIsUpdate(false);
 
 	// トポロギー設定
 	DirectX11::Get::GetContext()->IASetPrimitiveTopology(vertexBufferData->GetPrimitiveType());
 
-	// 3. 定数バッファ更新とバインド
-	// 頂点
+	// 定数バッファ情報を取得
 	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
 	std::vector<ID3D11Buffer*> buffers(cbInfo.size(), nullptr);
 
+	// 頂点シェーダーの定数バッファバインド設定
 	for (size_t i = 0; i < cbInfo.size(); i++)
 	{
 		// 定数バッファ取得
 		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
 		if (buffer) {
 			// VSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
+			buffers[i] = buffer->GetBuffer();
 		}
 	}
 
-	// まとめてバインド
+	// 定数バッファをまとめてバインド
 	DirectX11::Get::GetContext()->VSSetConstantBuffers(
 		0,                         // 先頭スロット
 		static_cast<UINT>(buffers.size()),
 		buffers.data()             // 配列を渡す
 	);
 
-	// ピクセル
+	// ピクセルシェーダーの定数バッファバインド設定
 	cbInfo = ps->GetCBInfo();
 	buffers.resize(cbInfo.size(), nullptr);
 
@@ -554,26 +447,41 @@ void DirectX_DrawManager::DebugDraw()
 		// 定数バッファ取得
 		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
 		if (buffer) {
-			// VSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
+			// PSスロット番号にバインド
+			buffers[i] = buffer->GetBuffer();
 		}
 	}
 
-	// まとめてバインド
+	// まとめて定数バッファをバインド
 	DirectX11::Get::GetContext()->PSSetConstantBuffers(
 		0,                         // 先頭スロット
 		static_cast<UINT>(buffers.size()),
 		buffers.data()             // 配列を渡す
 	);
 
-	// 4. シェーダーセット
+	// テクスチャバインド
+	if (_textureName != nullptr)
+	{
+		// 描画コンテキスト取得
+		DirectX11::Get::GetContext()->OMSetDepthStencilState(nullptr, 0);
+		DirectX11::Get::GetContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
+
+		// Stringに変換
+		std::string viewName = _textureName;
+
+		// 取得
+		ID3D11ShaderResourceView* srv = m_ViewManager->GetFindSRV(viewName)->GetSRV();
+		ID3D11SamplerState* sampler = m_SamplerManager->GetSampler(_desc)->GetSampler();
+
+		// テクスチャ・サンプラー バインド
+		DirectX11::Get::GetContext()->PSSetShaderResources(0, 1, &srv);
+		DirectX11::Get::GetContext()->PSSetSamplers(0, 1, &sampler);
+	}
+
+	// シェーダーセット
 	DirectX11::Get::GetContext()->VSSetShader(vs->GetVertexShader(), nullptr, 0);
 	DirectX11::Get::GetContext()->PSSetShader(ps->GetPixelShader(), nullptr, 0);
 
-
-	// 6. 描画
+	// 描画
 	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
-
-
-	DirectX11::EndDraw(); // 描画の終わり処理
 }

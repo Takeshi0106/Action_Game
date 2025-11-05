@@ -1,8 +1,10 @@
 ﻿#pragma once
 
+
 // ==============================
-// バッファ設定用
+// ヘッダー
 // ==============================
+#include "SamplerSetting.h"
 
 
 // ==============================
@@ -39,18 +41,23 @@ enum class Format
 	// 8bit
 	R8G8B8A8_UNorm,
 	B8G8R8A8_UNorm_SRGB,
-	
+
 	// 単
 	R32_Float,
 
 	// 高精度
 	R32G32B32_Float,
-	R32G32B32A32_Float, 
+	R32G32B32A32_Float,
 
 	// 深度
 	D24_UNorm_S8_UInt
 };
 
+
+// ==========================================
+// View 関連
+// ==========================================
+// バインドフラグ(Viewやテクスチャ用)
 enum class BindFlag : unsigned int
 {
 	None = 0,
@@ -69,3 +76,5 @@ inline BindFlag operator|(BindFlag a, BindFlag b)
 	return static_cast<BindFlag>(
 		static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
 }
+
+

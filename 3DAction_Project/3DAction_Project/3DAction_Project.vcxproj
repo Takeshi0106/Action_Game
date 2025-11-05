@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\0 thirdParty\thirdParty\directxtex\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\0 thirdParty\thirdParty\directxtex\lib\x64\debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\lib\MT\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\0 thirdParty\thirdParty\directxtex\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\0 thirdParty\thirdParty\directxtex\lib\x64\release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\lib\MT\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,7 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,9 @@
       <Message>
       </Message>
       <Command>if not exist "$(ProjectDir)Asset\Shader\Hlsl" mkdir "$(ProjectDir)Asset\Shader\Hlsl"
-xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
+xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"
+xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
+</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Message>
@@ -139,7 +141,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,10 +155,15 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX11_DrawManager.cpp" />
+    <ClCompile Include="DirectX_FormatConverter.cpp" />
     <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="ActionGame.cpp" />
     <ClCompile Include="InputLayoutInfo.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="SamplerData.cpp" />
+    <ClCompile Include="SamplerManager.cpp" />
+    <ClCompile Include="Square2D.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="ResourceViewData.cpp" />
     <ClCompile Include="TextureData.cpp">
@@ -165,6 +172,8 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClCompile Include="TextureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="2DTriangle.cpp" />
+    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBufferIData.cpp" />
     <ClCompile Include="VertexBufferManager.cpp" />
     <ClCompile Include="Windows_Quaternion.cpp" />
@@ -193,20 +202,27 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
   <ItemGroup>
     <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseDrawManager.h" />
+    <ClInclude Include="BaseGame.h" />
+    <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
-    <ClInclude Include="BufferSetting.h" />
+    <ClInclude Include="DirectX_FormatConverter.h" />
+    <ClInclude Include="ActionGame.h" />
+    <ClInclude Include="GraphicsEnums.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBufferData.h" />
     <ClInclude Include="ConstantBufferInfo.h" />
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="DirectX.h" />
-    <ClInclude Include="DirectX_BufferUtils.h" />
     <ClInclude Include="DirectX11_DrawManager.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="InputLayoutInfo.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Quaternionh.h" />
+    <ClInclude Include="SamplerSetting.h" />
+    <ClInclude Include="SamplerData.h" />
+    <ClInclude Include="SamplerManager.h" />
+    <ClInclude Include="Square2D.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="ResourceViewData.h" />
     <ClInclude Include="TextureData.h">
@@ -215,6 +231,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="TextureManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="2DTriangle.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="SaveLoadUtils.h" />
@@ -230,6 +247,7 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
     <ClInclude Include="ShaderReflectionUtils.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBufferData.h" />
     <ClInclude Include="VertexBufferManager.h" />
     <ClInclude Include="WindowsMath_Utiles.h" />
@@ -243,6 +261,12 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <FileType>Document</FileType>
+    </FxCompile>
+    <FxCompile Include="PS_Texture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="PS_TriangleDebug.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -268,6 +292,12 @@ xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="VS_Object.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
