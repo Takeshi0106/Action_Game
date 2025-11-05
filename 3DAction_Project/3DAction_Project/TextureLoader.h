@@ -31,6 +31,6 @@ public:
     ~TextureLoader() = default;
 
     // 外部ファイルの画像ファイルをロード
-    void ImageFileLoader(const std::string& filePath, ID3D11Device* device);
+    bool ImageFileLoader(const std::string& filePath, ID3D11Device* device);
 };
 

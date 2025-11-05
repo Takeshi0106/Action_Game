@@ -84,7 +84,7 @@ public:
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override;
 
 	// 頂点バッファ作成
-	void CreateVertexBuffer(
+	bool CreateVertexBuffer(
 		const char* drawID,
 		const void* data,
 		size_t size,
@@ -94,7 +94,7 @@ public:
 		CPUAccess access) override;
 
 	// 定数バッファ作成
-	void CreateConstantBuffer(
+	bool CreateConstantBuffer(
 		const char* constantName,
 		const void* data,
 		size_t size,
@@ -112,11 +112,10 @@ public:
 		CPUAccess cpu = CPUAccess::None) override;
 
 	// サンプラー作成
-	void CreateSampler(
-	const SamplerDesc& _desc) override;
+	bool CreateSampler(const SamplerDesc& _desc) override;
 
 	// テクスチャのロード
-	void LoadTexture(const char* textureName) override;
+	bool LoadTexture(const char* textureName) override;
 
 	// View作成
 	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;

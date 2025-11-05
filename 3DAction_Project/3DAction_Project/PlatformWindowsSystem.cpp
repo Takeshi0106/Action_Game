@@ -159,12 +159,15 @@ bool PlatformWindowsSystem::Init()
 // =====================================================
 void PlatformWindowsSystem::GameLoop()
 {
-    MSG msg = {}; // メッセージ
+    // メッセージ
+    MSG msg = {};
 
-    if (GameInit()) // ゲームの初期化処理
+    // ゲームの初期化処理
+    if (GameInit())
     {
         while (true)
         {
+            // プロシージャー受け取り
             if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) // メッセージを受け取る
             {
                 if (msg.message == WM_QUIT) { break; } // ウィンドウ削除を受け取ったらループを抜ける
@@ -174,12 +177,14 @@ void PlatformWindowsSystem::GameLoop()
             }
             else
             {
+                // ゲームメイン
                 GameMain();
             }
         }
     }
 
-    GameUninit();        // ゲームの後処理 多重に呼び出しても問題ないように作成
+    // ゲームの後処理
+    GameUninit();
 }
 
 

@@ -43,7 +43,7 @@ public:
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
 	// 頂点バッファ作成
-	virtual void CreateVertexBuffer(
+	virtual bool CreateVertexBuffer(
 		const char* drawID, 
 		const void* data, 
 		size_t size,
@@ -53,7 +53,7 @@ public:
 		CPUAccess access = CPUAccess::Write) = 0;
 
 	// 定数バッファ作成
-	virtual void CreateConstantBuffer(
+	virtual bool CreateConstantBuffer(
 		const char* constantName,
 		const void* data,
 		size_t size,
@@ -71,11 +71,10 @@ public:
 		CPUAccess cpu = CPUAccess::None) = 0;
 
 	// テクスチャのロード
-	virtual void LoadTexture(const char* textureName) = 0;
+	virtual bool LoadTexture(const char* textureName) = 0;
 
 	// サンプラー作成
-	virtual void CreateSampler(
-	const SamplerDesc& _desc) = 0;
+	virtual bool CreateSampler(const SamplerDesc& _desc) = 0;
 
 	// View作成
 	virtual bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;

@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\DirectXTex;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\DirectXTex\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\lib\MT\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\DirectXTex;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\DirectXTex\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\lib\MT\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

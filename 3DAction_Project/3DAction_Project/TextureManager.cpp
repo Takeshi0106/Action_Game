@@ -87,7 +87,9 @@ bool TextureManager::CreateTexture(
 	return true;
 }
 
-
+// ======================================
+// テクスチャ２Dデータを探してポインターを返す
+// ======================================
 Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
 {
     // 探す
@@ -106,14 +108,18 @@ Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
 }
 
 
+// ========================================
 // テクスチャをすべて削除
+// ========================================
 void TextureManager::ReleaseAllTexture()
 {
     m_Textures.clear();
 }
 
 
+// =========================================
 // バインドフラグ変換
+// =========================================
 UINT ToDXBindFlag(BindFlag flags)
 {
     UINT result = 0;

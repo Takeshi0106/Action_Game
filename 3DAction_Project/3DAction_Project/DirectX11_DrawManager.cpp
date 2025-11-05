@@ -65,13 +65,13 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 	// DirectXの初期化
 	if (!DirectX11::Init(width, height, windowHandle)) {
 		ErrorLog::OutputToMessageBox("DirectXの初期化に失敗しました");
-		return false; // 失敗したら戻る
+		return false;
 	}
 
 	// シェーダー作成
 	if (!m_ShaderManager->Init(DirectX11::Get::GetDevice())) {
 		ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
-		return false; // 失敗したら戻る
+		return false;
 	}
 
 	// 基本サンプラーを作成
@@ -103,7 +103,7 @@ void DirectX_DrawManager::Uninit()
 
 
 // ===========================================
-// 描画
+// 描画　のちにリストでスタック
 // ===========================================
 void DirectX_DrawManager::BegingDraw()
 {
@@ -137,7 +137,7 @@ void DirectX_DrawManager::Draw(const char* _vsShaderName,
 // ===========================================
 // 頂点バッファ作成
 // ===========================================
-void DirectX_DrawManager::CreateVertexBuffer(
+bool DirectX_DrawManager::CreateVertexBuffer(
 	const char* drawID,
 	const void* data,
 	size_t stride,
@@ -162,14 +162,17 @@ void DirectX_DrawManager::CreateVertexBuffer(
 		access))
 	{
 		ErrorLog::OutputToConsole("頂点バッファ作製失敗");
+		return false;
 	}
+
+	return true;
 }
 
 
 // ===========================================
 // 定数バッファ作成
 // ===========================================
-void DirectX_DrawManager::CreateConstantBuffer(
+bool DirectX_DrawManager::CreateConstantBuffer(
 	const char* constantName,
 	const void* data,
 	size_t size,
@@ -186,7 +189,10 @@ void DirectX_DrawManager::CreateConstantBuffer(
 		access))
 	{
 		ErrorLog::OutputToConsole("定数バッファ作製失敗");
+		return false;
 	}
+	
+	return true;
 }
 
 
@@ -223,23 +229,27 @@ bool DirectX_DrawManager::CreateTexture(
 // ===========================================
 // サンプラー作成
 // ===========================================
-void DirectX_DrawManager::CreateSampler(
+bool DirectX_DrawManager::CreateSampler(
 	const SamplerDesc& _desc)
 {
 	// サンプラー作成
 	m_SamplerManager->CreateSampler(
 		_desc,
 		DirectX11::Get::GetDevice());
+
+	return true;
 }
 
 
 // ===========================================
 // テクスチャロード
 // ===========================================
-void DirectX_DrawManager::LoadTexture(const char* textureName)
+bool DirectX_DrawManager::LoadTexture(const char* textureName)
 {
 	// テクスチャのロード関数
 	m_TextureLoader->ImageFileLoader(textureName, DirectX11::Get::GetDevice());
+	
+	return true;
 }
 
 
@@ -388,10 +398,10 @@ void DirectX_DrawManager::DrawObject(const char* _vsShaderName,
 	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
 	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
 
-	// 入力レイアウト設定
-	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout()); // 入力レイアウト情報
+	// 入力レイアウトを設定
+	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout());
 
-	// 頂点バッファ取得
+	// 頂点バッファを取得
 	VertexBufferData* vertexBufferData = m_VBManager->GetFindVertexData(vsName);
 
 	// 入力アセンブラ
@@ -399,35 +409,36 @@ void DirectX_DrawManager::DrawObject(const char* _vsShaderName,
 	UINT stride = UINT(vertexBufferData->GetStride());
 	UINT offset = 0;
 
+	// 頂点バッファをセット
 	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vbuffers, &stride, &offset);
 	vertexBufferData->SetIsUpdate(false);
 
 	// トポロギー設定
 	DirectX11::Get::GetContext()->IASetPrimitiveTopology(vertexBufferData->GetPrimitiveType());
 
-	// 3. 定数バッファ更新とバインド
-	// 頂点
+	// 定数バッファ情報を取得
 	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
 	std::vector<ID3D11Buffer*> buffers(cbInfo.size(), nullptr);
 
+	// 頂点シェーダーの定数バッファバインド設定
 	for (size_t i = 0; i < cbInfo.size(); i++)
 	{
 		// 定数バッファ取得
 		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
 		if (buffer) {
 			// VSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
+			buffers[i] = buffer->GetBuffer();
 		}
 	}
 
-	// まとめてバインド
+	// 定数バッファをまとめてバインド
 	DirectX11::Get::GetContext()->VSSetConstantBuffers(
 		0,                         // 先頭スロット
 		static_cast<UINT>(buffers.size()),
 		buffers.data()             // 配列を渡す
 	);
 
-	// ピクセル
+	// ピクセルシェーダーの定数バッファバインド設定
 	cbInfo = ps->GetCBInfo();
 	buffers.resize(cbInfo.size(), nullptr);
 
@@ -436,12 +447,12 @@ void DirectX_DrawManager::DrawObject(const char* _vsShaderName,
 		// 定数バッファ取得
 		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
 		if (buffer) {
-			// VSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer(); // バッファポインタをセット
+			// PSスロット番号にバインド
+			buffers[i] = buffer->GetBuffer();
 		}
 	}
 
-	// まとめてバインド
+	// まとめて定数バッファをバインド
 	DirectX11::Get::GetContext()->PSSetConstantBuffers(
 		0,                         // 先頭スロット
 		static_cast<UINT>(buffers.size()),
@@ -467,10 +478,10 @@ void DirectX_DrawManager::DrawObject(const char* _vsShaderName,
 		DirectX11::Get::GetContext()->PSSetSamplers(0, 1, &sampler);
 	}
 
-	// 4. シェーダーセット
+	// シェーダーセット
 	DirectX11::Get::GetContext()->VSSetShader(vs->GetVertexShader(), nullptr, 0);
 	DirectX11::Get::GetContext()->PSSetShader(ps->GetPixelShader(), nullptr, 0);
 
-	// 6. 描画
+	// 描画
 	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
 }
