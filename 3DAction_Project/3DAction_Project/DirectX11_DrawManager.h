@@ -127,6 +127,6 @@ public:
 	// 定数バッファ更新
 	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override;
 	// 頂点バッファ更新
-	void UpdateVertexBuffer(const char* drawID, const void* data, int size) override;
+	void UpdateVertexBuffer(const char* vertexName, const void* data, int size) override;
 };
 

@@ -62,11 +62,6 @@ bool SamplerManager::CreateSampler(
     // 配列に保存
     m_Samplers[_desc] = samplerData;
 
-    // 作成ログ出力
-    DebugLog::OutputToConsole((
-        SamplerDescToString(&_desc) +
-        "サンプラーを作成しました").c_str());
-
     return true;
 }
 

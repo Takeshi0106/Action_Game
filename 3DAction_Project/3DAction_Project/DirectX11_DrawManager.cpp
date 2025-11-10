@@ -47,7 +47,10 @@ DirectX_DrawManager::DirectX_DrawManager()
 	m_SamplerManager = std::make_unique<SamplerManager>();
 
 	// モジュール作成
-	m_TextureLoader = std::make_unique<TextureLoader>(m_TextureManager.get(), m_ViewManager.get());
+	m_TextureLoader = std::make_unique<TextureLoader>(
+		m_TextureManager.get(),
+		m_ViewManager.get(),
+		"Asset/Texture");
 }
 
 
@@ -183,7 +186,7 @@ bool DirectX_DrawManager::CreateConstantBuffer(
 	if (!m_CBManager->CreateConstantBuffer(
 		constantName,
 		DirectX11::Get::GetDevice(),
-		data, // データ
+		data,
 		size,
 		usage,
 		access))
@@ -233,9 +236,11 @@ bool DirectX_DrawManager::CreateSampler(
 	const SamplerDesc& _desc)
 {
 	// サンプラー作成
-	m_SamplerManager->CreateSampler(
-		_desc,
-		DirectX11::Get::GetDevice());
+	if (!m_SamplerManager->CreateSampler(_desc,
+		DirectX11::Get::GetDevice())) {
+		ErrorLog::OutputToConsole("サンプラー作成に失敗しました");
+		return false;
+	}
 
 	return true;
 }
@@ -247,7 +252,10 @@ bool DirectX_DrawManager::CreateSampler(
 bool DirectX_DrawManager::LoadTexture(const char* textureName)
 {
 	// テクスチャのロード関数
-	m_TextureLoader->ImageFileLoader(textureName, DirectX11::Get::GetDevice());
+	if (!m_TextureLoader->ImageFileLoader(textureName, DirectX11::Get::GetDevice())){
+		ErrorLog::OutputToConsole("テクスチャのロードに失敗しました");
+		return false;
+	}
 	
 	return true;
 }
@@ -348,33 +356,21 @@ bool DirectX_DrawManager::CreateDSV(const char* name, Format format, unsigned in
 // ===========================================
 void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const void* data, const int size)
 {
-	// 定数バッファ取得
-	ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(constantName);
+	// 定数バッファデータを取得
+	ConstantBufferData* cbData = m_CBManager->GetFindConstantBuffer(constantName);
 
-	if (buffer->GetSize() == size)
-	{
-		// 定数バッファ更新
-		buffer->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
-	}
-	else
-	{
-		ErrorLog::OutputToConsole("定数バッファが更新できませんでした。");
-		ErrorLog::OutputToConsole(("バッファサイズ :" + std::to_string(buffer->GetSize())).c_str());
-		ErrorLog::OutputToConsole(("更新サイズ :" + std::to_string(size)).c_str());
-	}
+	// 定数バッファ更新
+	cbData->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
 }
 
 
 // =============================================
 // 頂点バッファ更新
 // =============================================
-void DirectX_DrawManager::UpdateVertexBuffer(const char* drawID, const void* data, int size)
+void DirectX_DrawManager::UpdateVertexBuffer(const char* vertexName, const void* data, int size)
 {
-	// 描画IDから頂点シェーダー検索 // 
-
-
 	// 頂点バッファデータ取得
-	VertexBufferData* vbData = m_VBManager->GetFindVertexData(drawID);
+	VertexBufferData* vbData = m_VBManager->GetFindVertexData(vertexName);
 
 	// 頂点バッファ更新
 	vbData->UpdateBuffer(DirectX11::Get::GetContext(), data, size);
@@ -466,11 +462,8 @@ void DirectX_DrawManager::DrawObject(const char* _vsShaderName,
 		DirectX11::Get::GetContext()->OMSetDepthStencilState(nullptr, 0);
 		DirectX11::Get::GetContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
 
-		// Stringに変換
-		std::string viewName = _textureName;
-
 		// 取得
-		ID3D11ShaderResourceView* srv = m_ViewManager->GetFindSRV(viewName)->GetSRV();
+		ID3D11ShaderResourceView* srv = m_ViewManager->GetFindSRV(_textureName)->GetSRV();
 		ID3D11SamplerState* sampler = m_SamplerManager->GetSampler(_desc)->GetSampler();
 
 		// テクスチャ・サンプラー バインド

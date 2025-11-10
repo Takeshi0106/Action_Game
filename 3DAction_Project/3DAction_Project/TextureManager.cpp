@@ -24,7 +24,7 @@ UINT ToDXBindFlag(BindFlag flags); // バインドフラグをDirectXように�
 // メンバー関数
 // =================================
 bool TextureManager::CreateTexture(
-    const std::string& name,
+    const std::string name,
     ID3D11Device* device,
     unsigned int width,
     unsigned int height,

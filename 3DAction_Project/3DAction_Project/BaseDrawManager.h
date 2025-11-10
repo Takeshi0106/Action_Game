@@ -42,6 +42,7 @@ public:
 		const char* _modelName = nullptr,
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
+	/* ------------ リソース作成 ------------ */
 	// 頂点バッファ作成
 	virtual bool CreateVertexBuffer(
 		const char* drawID, 
@@ -82,9 +83,10 @@ public:
 	virtual bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
 	virtual bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
 
-	// バッファ更新
+
+	/* ------------ バッファ更新 ------------ */
 	// 頂点バッファ更新
-	virtual void UpdateVertexBuffer(const char* drawID, const void* data, int size) = 0;
+	virtual void UpdateVertexBuffer(const char* vertexName, const void* data, int size) = 0;
 	// 定数バッファ更新
 	virtual void UpdateShaderConstants(const char* constantName, const void* data, const int size) = 0;
 };

@@ -28,7 +28,7 @@ inline D3D11_PRIMITIVE_TOPOLOGY ToDXPrimitive(PrimitiveType type);
 // =======================================
 // 頂点バッファ作成
 bool VertexBufferManager::CreateVertexBuffer(
-    const std::string& name,
+    const std::string name,
     ID3D11Device* device,
     const void* vertices,
     int vertexCount,

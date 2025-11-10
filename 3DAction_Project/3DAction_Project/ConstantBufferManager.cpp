@@ -13,7 +13,8 @@
 // ========================================
 // 定数バッファ作成
 // ========================================
-bool ConstantBufferManager::CreateConstantBuffer(const std::string& constantName,
+bool ConstantBufferManager::CreateConstantBuffer(
+	const std::string constantName,
 	ID3D11Device* device,
 	const void* data,
 	size_t size,

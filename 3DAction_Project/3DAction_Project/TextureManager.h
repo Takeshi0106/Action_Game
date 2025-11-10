@@ -51,7 +51,7 @@ public:
 
     // テクスチャを作成
     bool CreateTexture(
-        const std::string& name,
+        const std::string name,
         ID3D11Device* device,
         unsigned int width,
         unsigned int height,

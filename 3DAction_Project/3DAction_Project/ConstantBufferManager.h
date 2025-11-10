@@ -47,7 +47,7 @@ public:
 	~ConstantBufferManager() { m_Logger.WriteLog(); }
 
 	// 定数バッファ作成
-	bool CreateConstantBuffer(const std::string& constantName,
+	bool CreateConstantBuffer(const std::string constantName,
 		ID3D11Device* device,
 		const void* data,
 		size_t size,

@@ -46,7 +46,7 @@ public:
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
-		const std::string& name,
+		const std::string name,
 		ID3D11Device* device,
 		const void* vertices,
 		int vertexCount,

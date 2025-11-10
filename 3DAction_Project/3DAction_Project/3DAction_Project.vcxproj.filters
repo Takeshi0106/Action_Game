@@ -136,9 +136,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager">
       <UniqueIdentifier>{572aba3a-4ad9-465e-9e2b-d844f474070d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_ModelManager">
-      <UniqueIdentifier>{85da51fa-3834-46d5-b604-d84304b5459a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData">
       <UniqueIdentifier>{165837de-03f5-41e0-9c47-abf603dced7e}</UniqueIdentifier>
     </Filter>
@@ -181,6 +178,18 @@
     <Filter Include="1_Platform\Base\6_Setting">
       <UniqueIdentifier>{b0d7046b-9219-4751-80f7-ca3155126a0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2_Core\ModelLoder">
+      <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager">
+      <UniqueIdentifier>{85da51fa-3834-46d5-b604-d84304b5459a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load">
+      <UniqueIdentifier>{12cb8ffc-913b-4520-b53e-d486ea8c52f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\AssetUsageLogger">
+      <UniqueIdentifier>{8e5fd0c9-2970-4691-bccf-fd90bc90d16f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -194,9 +203,6 @@
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetLogger.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager</Filter>
@@ -274,7 +280,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
     </ClCompile>
     <ClCompile Include="ModelManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_ModelManager</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClCompile>
     <ClCompile Include="TextureData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData</Filter>
@@ -306,6 +312,15 @@
     <ClCompile Include="Vertex.cpp">
       <Filter>4_Object\Vertex</Filter>
     </ClCompile>
+    <ClCompile Include="ModelConversion.cpp">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetLogger.cpp">
+      <Filter>2_Core\AssetUsageLogger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -316,9 +331,6 @@
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetLogger.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager</Filter>
@@ -405,7 +417,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
     </ClInclude>
     <ClInclude Include="ModelManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_ModelManager</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClInclude>
     <ClInclude Include="TextureData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData</Filter>
@@ -448,6 +460,15 @@
     </ClInclude>
     <ClInclude Include="SamplerSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelConversion.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetLogger.h">
+      <Filter>2_Core\AssetUsageLogger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
