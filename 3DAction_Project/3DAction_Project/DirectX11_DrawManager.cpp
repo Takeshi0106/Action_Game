@@ -406,7 +406,8 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* vertexName, const void*
 // ===================================================
 // 非公開のメンバー関数
 // ===================================================
-void DirectX_DrawManager::DrawObject(const char* _vsShaderName, 
+void DirectX_DrawManager::DrawObject(
+	const char* _vsShaderName, 
 	const char* _psShaderName,
 	const char* _textureName, 
 	const SamplerDesc _desc,
