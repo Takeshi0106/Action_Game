@@ -45,13 +45,19 @@ public:
 	/* ------------ リソース作成 ------------ */
 	// 頂点バッファ作成
 	virtual bool CreateVertexBuffer(
-		const char* drawID, 
+		const char* modelName, 
 		const void* data, 
 		size_t size,
 		int vertexNumber,
 		PrimitiveType type = PrimitiveType::TriangleStrip,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write) = 0;
+
+	// インデックスバッファ作成
+	virtual bool CreateIndexBuffer(
+		const char* modelName,
+		const int* indexData,
+		int indexNumber) = 0;
 
 	// 定数バッファ作成
 	virtual bool CreateConstantBuffer(

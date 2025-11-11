@@ -13,6 +13,7 @@
 #include "TextureManager.h" // テクスチャマネージャー
 #include "ResourceViewManager.h" // ビューマネージャー
 #include "SamplerManager.h" // サンプラーマネージャー
+#include "IndexBufferManager.h"
 // モジュール
 #include "TextureLoader.h"
 // ログ出力
@@ -45,6 +46,7 @@ DirectX_DrawManager::DirectX_DrawManager()
 	m_TextureManager = std::make_unique<TextureManager>();
 	m_ViewManager = std::make_unique<ResourceViewManager>();
 	m_SamplerManager = std::make_unique<SamplerManager>();
+	m_IndexBufferManager = std::make_unique<IndexBufferManager>();
 
 	// モジュール作成
 	m_TextureLoader = std::make_unique<TextureLoader>(
@@ -97,6 +99,7 @@ void DirectX_DrawManager::Uninit()
 	m_TextureManager.reset();
 	m_ViewManager.reset();
 	m_SamplerManager.reset();
+	m_IndexBufferManager.reset();
 
 	m_TextureLoader.reset();
 
@@ -141,7 +144,7 @@ void DirectX_DrawManager::Draw(const char* _vsShaderName,
 // 頂点バッファ作成
 // ===========================================
 bool DirectX_DrawManager::CreateVertexBuffer(
-	const char* drawID,
+	const char* modelName,
 	const void* data,
 	size_t stride,
 	int vertexNumber,
@@ -154,7 +157,7 @@ bool DirectX_DrawManager::CreateVertexBuffer(
 
 	// 頂点バッファ作成
 	if (!m_VBManager->CreateVertexBuffer(
-		drawID,
+		modelName,
 		DirectX11::Get::GetDevice(),
 		data, // 頂点データ
 		vertexNumber,   // 頂点数
@@ -165,6 +168,29 @@ bool DirectX_DrawManager::CreateVertexBuffer(
 		access))
 	{
 		ErrorLog::OutputToConsole("頂点バッファ作製失敗");
+		return false;
+	}
+
+	return true;
+}
+
+
+// ===========================================
+// インデックスバッファ作成
+// ===========================================
+bool DirectX_DrawManager::CreateIndexBuffer(
+	const char* modelName,
+	const int* indexData,
+	int indexNumber)
+{
+	// 作成
+	if (m_IndexBufferManager->CreateIndexBuffer(
+		modelName,
+		DirectX11::Get::GetDevice(),
+		indexData,
+		indexNumber))
+	{
+		ErrorLog::OutputToConsole("インデックスバッファ作成失敗");
 		return false;
 	}
 

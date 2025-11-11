@@ -39,6 +39,6 @@ public:
     // バッファ作成
     bool CreateIndexBuffer(
         ID3D11Device* device,
-        int* indexData,
+        const int* indexData,
         int indexCount);
 };

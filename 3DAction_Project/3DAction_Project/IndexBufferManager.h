@@ -44,7 +44,7 @@ public:
 	bool CreateIndexBuffer(
 		std::string name,
 		ID3D11Device* device,
-		int* indexData,
+		const int* indexData,
 		int indexNumber);
 
 	// インデックスバッファを探して、戻り値で返す
@@ -55,4 +55,3 @@ public:
 	// 後処理
 	void ReleaseAllIndexBuffers();
 };
-

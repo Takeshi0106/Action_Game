@@ -13,7 +13,7 @@
 // ==================================
 bool IndexBufferData::CreateIndexBuffer(
 	ID3D11Device* device,
-	int* indexData,
+	const int* indexData,
 	int indexNumber)
 {
 	// インデックスバッファ作成

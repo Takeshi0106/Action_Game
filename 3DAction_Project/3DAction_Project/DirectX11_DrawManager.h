@@ -33,6 +33,7 @@ class VertexBufferManager;
 class TextureManager;
 class ResourceViewManager;	
 class SamplerManager;
+class IndexBufferManager;
 
 class TextureLoader;
 
@@ -50,6 +51,7 @@ private:
 	std::unique_ptr<TextureManager> m_TextureManager; // テクスチャマネージャー
 	std::unique_ptr<ResourceViewManager> m_ViewManager; // ビューマネージャー
 	std::unique_ptr<SamplerManager> m_SamplerManager; // サンプラーマネージャー
+	std::unique_ptr<IndexBufferManager> m_IndexBufferManager; // インデックスバッファ
 
 	// モジュール
 	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
@@ -85,13 +87,19 @@ public:
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
-		const char* drawID,
+		const char* modelName,
 		const void* data,
 		size_t size,
 		int vertexNumber,
 		PrimitiveType type,
 		BufferUsage usage,
 		CPUAccess access) override;
+
+	// インデックスバッファ作成
+	bool CreateIndexBuffer(
+		const char* modelName,
+		const int* indexData,
+		const int indexNumber) override;
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(

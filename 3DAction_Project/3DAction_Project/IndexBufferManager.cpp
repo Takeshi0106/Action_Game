@@ -14,7 +14,7 @@
 bool IndexBufferManager::CreateIndexBuffer(
 	std::string name,
     ID3D11Device* device,
-	int* indexData,
+	const int* indexData,
 	int indexNumber)
 {
     // 既に作成済み
