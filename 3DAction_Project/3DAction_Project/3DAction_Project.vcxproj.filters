@@ -190,6 +190,12 @@
     <Filter Include="2_Core\AssetUsageLogger">
       <UniqueIdentifier>{8e5fd0c9-2970-4691-bccf-fd90bc90d16f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager">
+      <UniqueIdentifier>{bf385ec2-bb69-4e1c-948e-bdac45da98bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData">
+      <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -320,6 +326,12 @@
     </ClCompile>
     <ClCompile Include="AssetLogger.cpp">
       <Filter>2_Core\AssetUsageLogger</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBufferData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,6 +482,12 @@
     <ClInclude Include="AssetLogger.h">
       <Filter>2_Core\AssetUsageLogger</Filter>
     </ClInclude>
+    <ClInclude Include="IndexBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBufferData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VS_Object.hlsl">
@@ -490,5 +508,8 @@
     <FxCompile Include="PS_Texture.hlsl">
       <Filter>3_Hlsl</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
   </ItemGroup>
 </Project>

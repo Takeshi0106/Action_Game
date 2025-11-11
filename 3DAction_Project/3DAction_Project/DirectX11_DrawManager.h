@@ -129,4 +129,3 @@ public:
 	// 頂点バッファ更新
 	void UpdateVertexBuffer(const char* vertexName, const void* data, int size) override;
 };
-
