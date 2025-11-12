@@ -162,8 +162,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="IndexBufferManager.cpp" />
     <ClCompile Include="InputLayoutInfo.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ModelConversion.cpp" />
-    <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="ModelConversionModule.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="SamplerData.cpp" />
     <ClCompile Include="SamplerManager.cpp" />
@@ -223,8 +222,8 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="IndexBufferManager.h" />
     <ClInclude Include="InputLayoutInfo.h" />
     <ClInclude Include="Matrix4x4.h" />
-    <ClInclude Include="ModelConversion.h" />
-    <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="MeshData.h" />
+    <ClInclude Include="ModelConversionModule.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Quaternionh.h" />
     <ClInclude Include="SamplerSetting.h" />
@@ -240,6 +239,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="2DTriangle.h" />
+    <ClInclude Include="UseShaderType.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="SaveLoadUtils.h" />

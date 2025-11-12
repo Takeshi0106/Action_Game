@@ -184,9 +184,6 @@
     <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager">
       <UniqueIdentifier>{85da51fa-3834-46d5-b604-d84304b5459a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load">
-      <UniqueIdentifier>{12cb8ffc-913b-4520-b53e-d486ea8c52f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\AssetUsageLogger">
       <UniqueIdentifier>{8e5fd0c9-2970-4691-bccf-fd90bc90d16f}</UniqueIdentifier>
     </Filter>
@@ -195,6 +192,12 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData">
       <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Conversion">
+      <UniqueIdentifier>{af127b4e-026a-4536-8846-7a023727826e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager\MeshData">
+      <UniqueIdentifier>{747eefbd-0f77-4977-8bc3-6479e4ba3dc7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -318,12 +321,6 @@
     <ClCompile Include="Vertex.cpp">
       <Filter>4_Object\Vertex</Filter>
     </ClCompile>
-    <ClCompile Include="ModelConversion.cpp">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelLoader.cpp">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
-    </ClCompile>
     <ClCompile Include="AssetLogger.cpp">
       <Filter>2_Core\AssetUsageLogger</Filter>
     </ClCompile>
@@ -332,6 +329,9 @@
     </ClCompile>
     <ClCompile Include="IndexBufferData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelConversionModule.cpp">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Conversion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -473,12 +473,6 @@
     <ClInclude Include="SamplerSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
     </ClInclude>
-    <ClInclude Include="ModelConversion.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelLoader.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Load</Filter>
-    </ClInclude>
     <ClInclude Include="AssetLogger.h">
       <Filter>2_Core\AssetUsageLogger</Filter>
     </ClInclude>
@@ -487,6 +481,15 @@
     </ClInclude>
     <ClInclude Include="IndexBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelConversionModule.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\Conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshData.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="UseShaderType.h">
+      <Filter>1_Platform\Base\6_Setting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
