@@ -45,7 +45,7 @@ public:
         ID3D11Device* device);
 
     // サンプラー取得
-    SamplerData* GetSampler(const SamplerDesc& sampler);
+    bool BindSampler(const SamplerDesc& sampler, ID3D11DeviceContext* context);
 
     // 全削除
     void ReleaseAllSamplers();

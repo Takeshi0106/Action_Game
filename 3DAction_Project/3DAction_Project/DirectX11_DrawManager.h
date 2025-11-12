@@ -57,7 +57,7 @@ private:
 	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
 
 	// 描画
-	void DrawObject(const char* _vsShaderName, 
+	bool DrawObject(const char* _vsShaderName, 
 		const char* _psShaderName,
 		const char* _textureName, 
 		const SamplerDesc _desc,
@@ -99,7 +99,7 @@ public:
 	bool CreateIndexBuffer(
 		const char* modelName,
 		const int* indexData,
-		const int indexNumber) override;
+		int indexNumber) override;
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(
@@ -127,9 +127,9 @@ public:
 
 	// View作成
 	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;
-	bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
-	bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) override;
-	bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	//bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	//bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	//bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) override;
 
 	// バッファ更新
 	// 定数バッファ更新

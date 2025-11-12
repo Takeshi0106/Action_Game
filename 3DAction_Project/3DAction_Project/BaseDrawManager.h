@@ -85,9 +85,9 @@ public:
 
 	// View作成
 	virtual bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
-	virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
-	virtual bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
-	virtual bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
+	//virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
+	//virtual bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
+	//virtual bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
 
 
 	/* ------------ バッファ更新 ------------ */

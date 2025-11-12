@@ -16,6 +16,8 @@
 #include "IndexBufferManager.h"
 // モジュール
 #include "TextureLoader.h"
+// シェーダータイプ
+#include "UseShaderType.h"
 // ログ出力
 #include "ReportMessage.h"
 
@@ -313,68 +315,68 @@ bool DirectX_DrawManager::CreateSRV(const char* name, Format format,
 	return true;
 }
 
-bool DirectX_DrawManager::CreateUAV(const char* name, Format format, unsigned int mipSlice)
-{
-	// リソースビュ―取得
-	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
-
-	if (tex == nullptr) { return false; }
-
-	// UAV作成
-	if (!m_ViewManager->CreateUAV(name,
-		DirectX11::Get::GetDevice(),
-		tex->GetTexture(),
-		format,
-		mipSlice))
-	{
-		ErrorLog::OutputToConsole("UAVの作成に失敗しました");
-		return false;
-	}
-
-	return true;
-}
-
-bool DirectX_DrawManager::CreateRTV(const char* name, Format format, unsigned int mipSlice)
-{
-	// リソースビュ―取得
-	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
-
-	if (tex == nullptr) { return false; }
-
-	// RTV作成
-	if (!m_ViewManager->CreateRTV(name,
-		DirectX11::Get::GetDevice(),
-		tex->GetTexture(),
-		format,
-		mipSlice))
-	{
-		ErrorLog::OutputToConsole("RTVの作成に失敗しました");
-		return false;
-	}
-
-	return true;
-}
-
-bool DirectX_DrawManager::CreateDSV(const char* name, Format format, unsigned int mipSlice)
-{
-	// リソースビュ―取得
-	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
-
-	if (tex == nullptr) { return false; }
-
-	// DSV作成
-	if (!m_ViewManager->CreateDSV(name,
-		DirectX11::Get::GetDevice(),
-		tex->GetTexture(),
-		format,
-		mipSlice))
-	{
-		ErrorLog::OutputToConsole("DSVの作成に失敗しました");
-		return false;
-	}
-
-	return true;
-}
+//bool DirectX_DrawManager::CreateUAV(const char* name, Format format, unsigned int mipSlice)
+//{
+//	// リソースビュ―取得
+//	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+//
+//	if (tex == nullptr) { return false; }
+//
+//	// UAV作成
+//	if (!m_ViewManager->CreateUAV(name,
+//		DirectX11::Get::GetDevice(),
+//		tex->GetTexture(),
+//		format,
+//		mipSlice))
+//	{
+//		ErrorLog::OutputToConsole("UAVの作成に失敗しました");
+//		return false;
+//	}
+//
+//	return true;
+//}
+//
+//bool DirectX_DrawManager::CreateRTV(const char* name, Format format, unsigned int mipSlice)
+//{
+//	// リソースビュ―取得
+//	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+//
+//	if (tex == nullptr) { return false; }
+//
+//	// RTV作成
+//	if (!m_ViewManager->CreateRTV(name,
+//		DirectX11::Get::GetDevice(),
+//		tex->GetTexture(),
+//		format,
+//		mipSlice))
+//	{
+//		ErrorLog::OutputToConsole("RTVの作成に失敗しました");
+//		return false;
+//	}
+//
+//	return true;
+//}
+//
+//bool DirectX_DrawManager::CreateDSV(const char* name, Format format, unsigned int mipSlice)
+//{
+//	// リソースビュ―取得
+//	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+//
+//	if (tex == nullptr) { return false; }
+//
+//	// DSV作成
+//	if (!m_ViewManager->CreateDSV(name,
+//		DirectX11::Get::GetDevice(),
+//		tex->GetTexture(),
+//		format,
+//		mipSlice))
+//	{
+//		ErrorLog::OutputToConsole("DSVの作成に失敗しました");
+//		return false;
+//	}
+//
+//	return true;
+//}
 
 
 // ===========================================
@@ -382,11 +384,7 @@ bool DirectX_DrawManager::CreateDSV(const char* name, Format format, unsigned in
 // ===========================================
 void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const void* data, const int size)
 {
-	// 定数バッファデータを取得
-	ConstantBufferData* cbData = m_CBManager->GetFindConstantBuffer(constantName);
-
-	// 定数バッファ更新
-	cbData->UpdateConstantBuffer(DirectX11::Get::GetContext(), data, size);
+	m_CBManager->UpdateConstantBuffer(constantName, DirectX11::Get::GetContext(), data, size);
 }
 
 
@@ -395,92 +393,35 @@ void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const 
 // =============================================
 void DirectX_DrawManager::UpdateVertexBuffer(const char* vertexName, const void* data, int size)
 {
-	// 頂点バッファデータ取得
-	VertexBufferData* vbData = m_VBManager->GetFindVertexData(vertexName);
-
-	// 頂点バッファ更新
-	vbData->UpdateBuffer(DirectX11::Get::GetContext(), data, size);
+	m_VBManager->UpdateVertexBuffer(vertexName, DirectX11::Get::GetContext(), data, size);
 }
 
 
 // ===================================================
 // 非公開のメンバー関数
 // ===================================================
-void DirectX_DrawManager::DrawObject(
+bool DirectX_DrawManager::DrawObject(
 	const char* _vsShaderName, 
 	const char* _psShaderName,
 	const char* _textureName, 
-	const SamplerDesc _desc,
+	const SamplerDesc _sampler,
 	const char* _modelName)
 {
-	// Stringに変換
-	std::string vsName = _vsShaderName;
-	std::string psName = _psShaderName;
+	// シェーダーバインド
+	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager->BindVertexShader(_vsShaderName,DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager->BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
 
-	// シェーダー取得
-	VertexShaderData* vs = m_ShaderManager->GetFindVertexShader(vsName);
-	PixelShaderData* ps = m_ShaderManager->GetFindPixelShader(psName);
-
-	// 入力レイアウトを設定
-	DirectX11::Get::GetContext()->IASetInputLayout(vs->GetInputLayout());
-
-	// 頂点バッファを取得
-	VertexBufferData* vertexBufferData = m_VBManager->GetFindVertexData(vsName);
-
-	// 入力アセンブラ
-	ID3D11Buffer* vbuffers = vertexBufferData->GetVertexBuffer();
-	UINT stride = UINT(vertexBufferData->GetStride());
-	UINT offset = 0;
-
-	// 頂点バッファをセット
-	DirectX11::Get::GetContext()->IASetVertexBuffers(0, 1, &vbuffers, &stride, &offset);
-	vertexBufferData->SetIsUpdate(false);
-
-	// トポロギー設定
-	DirectX11::Get::GetContext()->IASetPrimitiveTopology(vertexBufferData->GetPrimitiveType());
-
-	// 定数バッファ情報を取得
-	std::vector<ConstantBufferInfo> cbInfo = vs->GetCBInfo();
-	std::vector<ID3D11Buffer*> buffers(cbInfo.size(), nullptr);
-
-	// 頂点シェーダーの定数バッファバインド設定
-	for (size_t i = 0; i < cbInfo.size(); i++)
+	// 頂点バッファをバインド
+	int vertexCount = m_VBManager->BindVertexBuffer(_vsShaderName, DirectX11::Get::GetContext());
+	if (vertexCount == -1)
 	{
-		// 定数バッファ取得
-		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
-		if (buffer) {
-			// VSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer();
-		}
+		ErrorLog::OutputToConsole("頂点バッファが見つかりませんでした");
+		return false;
 	}
 
-	// 定数バッファをまとめてバインド
-	DirectX11::Get::GetContext()->VSSetConstantBuffers(
-		0,                         // 先頭スロット
-		static_cast<UINT>(buffers.size()),
-		buffers.data()             // 配列を渡す
-	);
-
-	// ピクセルシェーダーの定数バッファバインド設定
-	cbInfo = ps->GetCBInfo();
-	buffers.resize(cbInfo.size(), nullptr);
-
-	for (size_t i = 0; i < cbInfo.size(); i++)
-	{
-		// 定数バッファ取得
-		ConstantBufferData* buffer = m_CBManager->GetFindConstantBuffer(cbInfo[i].GetName());
-		if (buffer) {
-			// PSスロット番号にバインド
-			buffers[i] = buffer->GetBuffer();
-		}
-	}
-
-	// まとめて定数バッファをバインド
-	DirectX11::Get::GetContext()->PSSetConstantBuffers(
-		0,                         // 先頭スロット
-		static_cast<UINT>(buffers.size()),
-		buffers.data()             // 配列を渡す
-	);
+	// シェーダーの定数バッファ情報をバインド
+	m_CBManager->BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
+	m_CBManager->BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
 	// テクスチャバインド
 	if (_textureName != nullptr)
@@ -489,19 +430,13 @@ void DirectX_DrawManager::DrawObject(
 		DirectX11::Get::GetContext()->OMSetDepthStencilState(nullptr, 0);
 		DirectX11::Get::GetContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
 
-		// 取得
-		ID3D11ShaderResourceView* srv = m_ViewManager->GetFindSRV(_textureName)->GetSRV();
-		ID3D11SamplerState* sampler = m_SamplerManager->GetSampler(_desc)->GetSampler();
-
 		// テクスチャ・サンプラー バインド
-		DirectX11::Get::GetContext()->PSSetShaderResources(0, 1, &srv);
-		DirectX11::Get::GetContext()->PSSetSamplers(0, 1, &sampler);
+		m_ViewManager->BindSRV(_textureName, DirectX11::Get::GetContext(), PIXSELSHADER);
+		m_SamplerManager->BindSampler(_sampler, DirectX11::Get::GetContext());
 	}
 
-	// シェーダーセット
-	DirectX11::Get::GetContext()->VSSetShader(vs->GetVertexShader(), nullptr, 0);
-	DirectX11::Get::GetContext()->PSSetShader(ps->GetPixelShader(), nullptr, 0);
-
 	// 描画
-	DirectX11::Get::GetContext()->Draw(vertexBufferData->GetVertexCount(), 0);
+	DirectX11::Get::GetContext()->Draw(vertexCount, 0);
+	
+	return true;
 }

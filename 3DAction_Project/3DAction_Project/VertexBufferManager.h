@@ -62,8 +62,12 @@ public:
 		CPUAccess access = CPUAccess::Write
 	);
 
-	// 頂点バッファを探して、戻り値で返す
-	VertexBufferData* GetFindVertexData(const std::string& name) const;
+	// 頂点バッファ更新
+	bool UpdateVertexBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size);
+
+	// 頂点バッファをバインドして描画する頂点数を返す
+	int BindVertexBuffer(const std::string& name, ID3D11DeviceContext* context) const;
+	
 	// 頂点バッファがあるかのチェック
 	bool Exists(const std::string& name) const;
 

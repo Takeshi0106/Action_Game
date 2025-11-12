@@ -67,23 +67,79 @@ bool ConstantBufferManager::CreateConstantBuffer(
 
 
 // =======================================
-// 定数バッファを探して返す
+// 定数バッファ更新
 // =======================================
-ConstantBufferData* ConstantBufferManager::GetFindConstantBuffer(const std::string& name)
+bool ConstantBufferManager::UpdateConstantBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size)
 {
 	// 探す
-	auto it = m_ConstantBuffers.find(name); 
+	auto it = m_ConstantBuffers.find(name);
 
-	if (it != m_ConstantBuffers.end()) 
+	// あるかどうかのチェック
+	if (it != m_ConstantBuffers.end())
 	{
-		// 定数バッファを返す
-		return it->second.get();
-	}
-	else {
-		ErrorLog::OutputToConsole(std::string(" 定数バッファ : " + name + " が見つかりませんでした").c_str());
+		it->second.get()->UpdateConstantBuffer(context, data, size);
+		return true;
 	}
 
-	return nullptr;
+	ErrorLog::OutputToConsole("定数バッファが見つかりませんでした");
+	return false;
+}
+
+
+// =======================================
+// 定数バッファを探して,バインドを行う
+// =======================================
+bool ConstantBufferManager::BindConstantBuffer(const std::vector<ConstantBufferInfo>* cbInfo, ID3D11DeviceContext* context, SETSHADERTYPE type)
+{
+	// バッファ配列を作成
+	std::vector<ID3D11Buffer*> buffers(cbInfo->size(), nullptr);
+
+	// 頂点シェーダーの定数バッファバインド設定
+	for (size_t i = 0; i < cbInfo->size(); i++)
+	{
+		// 探す
+		auto it = m_ConstantBuffers.find((*cbInfo)[i].GetName());
+
+		// あるかどうかのチェック
+		if (it != m_ConstantBuffers.end())
+		{
+			// バッファに代入
+			buffers[i] = it->second.get()->GetBuffer();
+		}
+		else {
+			ErrorLog::OutputToConsole(std::string(" 定数バッファ : " + (*cbInfo)[i].GetName() + " が見つかりませんでした").c_str());
+			return false;
+		}
+	}
+
+	// 定数バッファをまとめてバインド
+	switch (type)
+	{
+	case VERTEXSHADER:
+		context->VSSetConstantBuffers(
+			0,
+			static_cast<UINT>(buffers.size()),
+			buffers.data());
+		break;
+	case PIXSELSHADER:
+		context->PSSetConstantBuffers(
+			0,
+			static_cast<UINT>(buffers.size()),
+			buffers.data());
+		break;
+	case CONPUTESHADER:
+		context->CSSetConstantBuffers(
+			0,
+			static_cast<UINT>(buffers.size()),
+			buffers.data());
+		break;
+
+	default:
+		ErrorLog::OutputToConsole(("無効なシェーダータイプが選択されています。"));
+		break;
+	}
+
+	return true;
 }
 
 

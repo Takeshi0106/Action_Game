@@ -16,14 +16,6 @@
 #include "ReportMessage.h"
 
 
-// ================================================
-// 静的変数
-// ================================================
-// std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  ShaderManager::m_Vertexs;
-// std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   ShaderManager::m_Pixels;
-// std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> ShaderManager::m_Computes;
-
-
 // =================================================
 // プロトタイプ宣言
 // =================================================
@@ -154,36 +146,51 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 // ===============================================
 
 // 頂点シェーダーを探す関数
-VertexShaderData* ShaderManager::GetFindVertexShader(const std::string& name)
+const std::vector<ConstantBufferInfo>* ShaderManager::BindVertexShader(const std::string& name, ID3D11DeviceContext* context)
 {
 	auto it = m_Vertexs.find(name);
 
-	if (it != m_Vertexs.end()) {
-		return it->second.get();
+	if (it != m_Vertexs.end()) 
+	{
+		// シェーダーセット
+		context->VSSetShader(it->second.get()->GetVertexShader(), nullptr, 0);
+		// 入力レイアウトセット
+		context->IASetInputLayout(it->second.get()->GetInputLayout());
+
+		// 定数バッファ情報を返す
+		return it->second.get()->GetCBInfo();
 	}
 
 	return nullptr;
 }
 
 // ピクセルシェーダを探す関数
-PixelShaderData* ShaderManager::GetFindPixelShader(const std::string& name)
+const std::vector<ConstantBufferInfo>* ShaderManager::BindPixelShader(const std::string& name, ID3D11DeviceContext* contex)
 {
 	auto it = m_Pixels.find(name);
 
-	if (it != m_Pixels.end()) {
-		return it->second.get();
+	if (it != m_Pixels.end()) 
+	{
+		// ピクセルシェーダーをバインド
+		contex->PSSetShader(it->second.get()->GetPixelShader(), nullptr, 0);
+		// 定数バッファ情報を返す
+		return it->second.get()->GetCBInfo();
 	}
 
 	return nullptr;
 }
 
 // コンピュートシェーダを探す関数
-ComputeShaderData* ShaderManager::GetFindComputeShader(const std::string& name)
+const std::vector<ConstantBufferInfo>* ShaderManager::BindComputeShader(const std::string& name, ID3D11DeviceContext* context)
 {
 	auto it = m_Computes.find(name);
 
-	if (it != m_Computes.end()) {
-		return it->second.get();
+	if (it != m_Computes.end()) 
+	{
+		// コンピュートシェーダーをバインド
+		context->CSSetShader(it->second.get()->GetComputeShader(), nullptr, 0);
+		// 定数バッファ情報を返す
+		return it->second.get()->GetCBInfo();
 	}
 
 	return nullptr;

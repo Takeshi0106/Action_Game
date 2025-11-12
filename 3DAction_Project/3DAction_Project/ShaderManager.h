@@ -101,9 +101,9 @@ public:
     bool Init(ID3D11Device* device);
     void Uninit();
 
-    // シェーダーのゲッター  名前を入れて、返す
-    VertexShaderData*  GetFindVertexShader (const std::string& name);
-    PixelShaderData*   GetFindPixelShader  (const std::string& name);
-    ComputeShaderData* GetFindComputeShader(const std::string& name);
+    // シェーダーのバインド　定数バッファの情報を返す
+    const std::vector<ConstantBufferInfo>* BindVertexShader (const std::string& name, ID3D11DeviceContext* context);
+    const std::vector<ConstantBufferInfo>* BindPixelShader  (const std::string& name, ID3D11DeviceContext* context);
+    const std::vector<ConstantBufferInfo>* BindComputeShader(const std::string& name, ID3D11DeviceContext* context);
 };
 
