@@ -45,8 +45,6 @@ namespace DirectX11 {
 			Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforSRV = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ
 			// 最終的に描画するためのView
 			Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    d3dRTV       = nullptr; // レンダーターゲットビュー  描画結果を描画対象として渡す
-			// ポストエフェクト用
-			Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  d3dRTSRV     = nullptr; // シェーダーに計算した描画結果を渡す (読み取り専用)
 		}
 
 		// UAV用　読み書き可能
@@ -264,7 +262,7 @@ namespace DirectX11 {
 				swapChainDesc.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;                                // RGBA 各8ビット 0.0~1.0に正規化　＊一般的でどの環境でも動きやすい
 				swapChainDesc.BufferDesc.RefreshRate.Numerator   = 0;                                                         // リフレッシュレート　分母 (0の場合,OSに任せる)
 				swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;                                                         // リフレッシュレート　分子 (*ウィンドウモードの時は適用されない)
-				swapChainDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT; // バックバッファの使用用途
+				swapChainDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;                           // バックバッファの使用用途
 				swapChainDesc.OutputWindow                       = windowHandle;                                              // 描画するウィンドウのハンドルを渡す
 				swapChainDesc.SampleDesc.Count                   = 1;                                                         // マルチサンプリング　アンチエイリアス 1は無効
 				swapChainDesc.SampleDesc.Quality                 = 0;                                                         // 品質レベル　大きい値ほど良くなる(フォーマットとサンプリング数で上限が決まる)
@@ -355,14 +353,7 @@ namespace DirectX11 {
 					return false;
 				}
 
-				// シェーダーリソースの作成
-				hr = d3dDevice->CreateShaderResourceView(d3dRTTforSRV.Get(), nullptr, d3dRTSRV.GetAddressOf());
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("SRVが設定できませんでした");
-					return false;
-				}
-
-				DebugLog::OutputToConsole("RT、RTV,SRV	の初期化に成功");
+				DebugLog::OutputToConsole("RT、RTV,	の初期化に成功");
 
 				return true;
 			}
@@ -373,7 +364,6 @@ namespace DirectX11 {
             // -----------------------------------------------------
 			void Uninit()
 			{
-				d3dRTSRV.Reset();     // SRVを解放
 				d3dRTV.Reset();       // レンダラーターゲットを解放
 				d3dRTTforSRV.Reset(); // SRVの記憶領域を解放
 			}

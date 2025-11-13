@@ -13,6 +13,7 @@ private:
 	const std::string m_PSName = "PS_Texture";
 	// このオブジェクトが更新する定数バッファ名
 	const std::string m_CBName = "Transform1";
+
 	// 使用する画像名
 	const std::string m_TextureName = "pipo-halloweenchara2016_02.png";
 

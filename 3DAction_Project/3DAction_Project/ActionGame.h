@@ -18,6 +18,9 @@ class ActionGame :public BaseGame
 private:
 	// 描画マネージャー
 	BaseDrawManager* m_DrawManager = nullptr;
+	// フレーム計測用
+	float m_FPSTime = 0.0f;
+	int m_FPSCount = 0;
 
 public:
 	ActionGame() = default;

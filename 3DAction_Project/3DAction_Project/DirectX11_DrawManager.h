@@ -77,6 +77,7 @@ public:
 	void BegingDraw();
 	void EndDraw();
 
+	// 今は使用できません注意してください
 	void Draw(const char* drawID, const void* data, const int size) override;
 
 	void Draw(const char* _vsShaderName,

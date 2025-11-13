@@ -1,13 +1,25 @@
-﻿#include "ActionGame.h"
+﻿
+// ==========================================
+// ヘッダー
+// ==========================================
+// 必須
+#include "ActionGame.h"
+// 計算
 #include  "Quaternionh.h"
 #include "Matrix4x4.h"
 #include "Vector3.h"
+// 色
 #include "Color.h"
+// 時間
 #include "Timer.h"
+// 定数バッファ
 #include "GraphicsEnums.h"
+// 文字列
 #include <string>
-
+// オブジェクト
 #include "Square2D.h"
+// ログ出力
+#include "ReportMessage.h"
 
 
 // ==========================================
@@ -18,7 +30,7 @@ struct CameraInfo
 	Matrix4x4 ViewMatrix;
 	Matrix4x4 ProjMatrix;
 };
-
+// 四角形描画
 Square2D g_Square;
 
 
@@ -70,6 +82,22 @@ void ActionGame::Update()
 	Timer::Debug_CheckUpdate();
 
 	g_Square.Update();
+
+// #if defined(DEBUG) || defined(_DEBUG)
+	// 時間を取得
+	m_FPSTime += Timer::GetDeltaTime();
+	m_FPSCount++;
+
+	if (m_FPSTime > 1.0f)
+	{
+		// ログ出力
+		WarningLog::OutputToConsole(std::string("1フレームのFPS " + std::to_string(m_FPSCount)).c_str());
+
+		// リセット
+		m_FPSTime = 0.0f;
+		m_FPSCount = 0;
+	}
+// #endif
 
 	// タイマー更新処理
 	Timer::LastUpdate();
