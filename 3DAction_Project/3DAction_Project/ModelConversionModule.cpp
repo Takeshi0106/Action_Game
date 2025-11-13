@@ -26,72 +26,12 @@ bool ModelConversionModule::Init()
 	for (const auto& entry : std::filesystem::directory_iterator(m_ModelPath))
 	{
 		// モデルかチェック
-		if (!entry.is_regular_file() || entry.path().extension() != ".obj") { continue; }
+		if (!entry.is_regular_file() || entry.path().extension() != kObjExtension) { continue; }
 
-		// モデル読込
-		Assimp::Importer importer;
-
-		// フラグ　３角形・法線生成・重複頂点削除
-		const aiScene* scene = importer.ReadFile(entry.path().string(),
-			aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
-
-		// エラーチェック
-		if (!scene) {
-			ErrorLog::OutputToConsole("モデルロード失敗");
+		// モデル読込み
+		if (!ModelLoad(entry.path().string())) {
+			ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 			return false;
-		}
-
-		// データの取得
-		for (unsigned int i = 0; i < scene->mNumMeshes; i++)
-		{
-			// メッシュ
-			MeshData mesh = {};
-
-			// 頂点の作成
-			std::vector<Vertex> vtx;
-			// 領域確保
-			vtx.resize(scene->mMeshes[i]->mNumVertices);
-
-			for (unsigned int j = 0; j < vtx.size(); j++)
-			{
-				// 値の吸出し
-				aiVector3D pos = scene->mMeshes[i]->mVertices[j];
-				aiVector3D uv = scene->mMeshes[i]->HasTextureCoords(0) ?
-					scene->mMeshes[i]->mTextureCoords[0][j] : aiVector3D(0.0f, 0.0f, 0.0f);
-				aiVector3D normal = scene->mMeshes[i]->HasNormals() ?
-					scene->mMeshes[i]->mNormals[j] : aiVector3D(0.0f, 0.0f, 0.0f);
-
-				// 値を設定
-				vtx[j] = {
-					Vector3(pos.x, pos.y, pos.z),
-					Vector3(normal.x, normal.y, normal.z),
-					Vector2(uv.x, uv.y) };
-			}
-
-			// インデックスの作成
-			std::vector<int> idx;
-			// 領域確保
-			idx.resize(scene->mMeshes[i]->mNumFaces * 3);
-
-			for (unsigned int j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
-			{
-				aiFace face = scene->mMeshes[i]->mFaces[j];
-				int faceIdx = j * 3;
-				idx[faceIdx + 0] = face.mIndices[0];
-				idx[faceIdx + 1] = face.mIndices[1];
-				idx[faceIdx + 2] = face.mIndices[2];
-			}
-
-			// マテリアル情報作成
-			aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-			aiString texPath;
-
-			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
-			{
-				std::string texturePath = texPath.C_Str();
-				// 相対パス補正
-				std::filesystem::path fullPath = std::filesystem::path(m_ModelPath) / texturePath;
-			}
 		}
 	}
 
@@ -100,5 +40,99 @@ bool ModelConversionModule::Init()
 
 
 // =====================================
-// 
+// モデルを読み込んで、各マネージャーに登録する
 // =====================================
+bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, DirectX_DrawManager& drawManager)
+{
+	// モデルを読み込む
+	if (!ModelLoad(modelName)) {
+		ErrorLog::OutputToConsole("モデルを読み込めませんでした");
+		return false;
+	}
+
+	return true;
+}
+
+
+// =====================================
+// モデルを読み込む関数
+// =====================================
+bool ModelConversionModule::ModelLoad(const std::string& _modelPath)
+{
+	// ファイルパスに変換
+	std::filesystem::path modelPath = _modelPath;
+
+	// 読み込めないモデルかチェック
+	if (modelPath.extension() != kObjExtension) {
+		ErrorLog::OutputToConsole("変換できないモデルが渡されています");
+		return false;
+	}
+
+	// モデルを読込むための変数
+	Assimp::Importer importer;
+
+	// フラグ　３角形・法線生成・重複頂点削除
+	const aiScene* scene = importer.ReadFile(modelPath.string(),
+		aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
+
+	// ロードチェック
+	if (!scene) {
+		ErrorLog::OutputToConsole("モデルロード失敗");
+		return false;
+	}
+
+	// データの取得
+	for (unsigned int i = 0; i < scene->mNumMeshes; i++)
+	{
+		// メッシュ
+		MeshData mesh = {};
+
+		// 頂点の作成
+		std::vector<Vertex> vtx;
+		// 領域確保
+		vtx.resize(scene->mMeshes[i]->mNumVertices);
+
+		for (unsigned int j = 0; j < vtx.size(); j++)
+		{
+			// 値の吸出し
+			aiVector3D pos = scene->mMeshes[i]->mVertices[j];
+			aiVector3D uv = scene->mMeshes[i]->HasTextureCoords(0) ?
+				scene->mMeshes[i]->mTextureCoords[0][j] : aiVector3D(0.0f, 0.0f, 0.0f);
+			aiVector3D normal = scene->mMeshes[i]->HasNormals() ?
+				scene->mMeshes[i]->mNormals[j] : aiVector3D(0.0f, 0.0f, 0.0f);
+
+			// 値を設定
+			vtx[j] = {
+				Vector3(pos.x, pos.y, pos.z),
+				Vector3(normal.x, normal.y, normal.z),
+				Vector2(uv.x, uv.y) };
+		}
+
+		// インデックスの作成
+		std::vector<int> idx;
+		// 領域確保
+		idx.resize(scene->mMeshes[i]->mNumFaces * 3);
+
+		for (unsigned int j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
+		{
+			aiFace face = scene->mMeshes[i]->mFaces[j];
+			int faceIdx = j * 3;
+			idx[faceIdx + 0] = face.mIndices[0];
+			idx[faceIdx + 1] = face.mIndices[1];
+			idx[faceIdx + 2] = face.mIndices[2];
+		}
+
+		// マテリアル情報作成
+		aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+		aiString texPath;
+
+		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
+		{
+			std::string texturePath = texPath.C_Str();
+			// 相対パス補正
+			std::filesystem::path fullPath = std::filesystem::path(m_ModelPath) / texturePath;
+		}
+	}
+
+	return true;
+}

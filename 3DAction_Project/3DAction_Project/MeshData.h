@@ -28,6 +28,6 @@ struct Vertex {
 struct MeshData
 {
 	std::vector<Vertex> vertices;
-	std::vector<int> indices;
+	std::vector<unsigned int> indices;
 	std::string texturePath;
 };
