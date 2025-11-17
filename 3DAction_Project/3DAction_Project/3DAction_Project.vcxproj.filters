@@ -181,20 +181,17 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData">
       <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2_Core\0_Model">
-      <UniqueIdentifier>{9fd92a9e-335e-47f9-ad8c-c47588245f5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\SaveLoad">
       <UniqueIdentifier>{3e9bee0c-817f-489a-9aae-9db8b36cb856}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2_Core\0_Model\0_ModelManager">
-      <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2_Core\0_Model\1_ModelConversion">
-      <UniqueIdentifier>{af127b4e-026a-4536-8846-7a023727826e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\1_MeshData">
       <UniqueIdentifier>{fe995487-afd6-456b-972d-48ef8019a8ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\0_ModelConversion">
+      <UniqueIdentifier>{9fd92a9e-335e-47f9-ad8c-c47588245f5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager">
+      <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -321,11 +318,11 @@
     <ClCompile Include="IndexBufferData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
     </ClCompile>
-    <ClCompile Include="ModelConversionModule.cpp">
-      <Filter>2_Core\0_Model\1_ModelConversion</Filter>
-    </ClCompile>
     <ClCompile Include="ModelManager.cpp">
-      <Filter>2_Core\0_Model\0_ModelManager</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelConversionModule.cpp">
+      <Filter>2_Core\0_ModelConversion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,20 +467,20 @@
     <ClInclude Include="IndexBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
     </ClInclude>
-    <ClInclude Include="ModelConversionModule.h">
-      <Filter>2_Core\0_Model\1_ModelConversion</Filter>
-    </ClInclude>
     <ClInclude Include="UseShaderType.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
     </ClInclude>
     <ClInclude Include="ModelManager.h">
-      <Filter>2_Core\0_Model\0_ModelManager</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClInclude>
     <ClInclude Include="MeshData.h">
       <Filter>2_Core\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>2_Core\1_MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelConversionModule.h">
+      <Filter>2_Core\0_ModelConversion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
