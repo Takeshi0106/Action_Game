@@ -18,7 +18,7 @@
 // 文字列
 #include <string>
 // 描画マネージャー
-#include "DirectX11_DrawManager.h"
+#include "BaseDrawManager.h"
 
 
 // ==============================
@@ -35,7 +35,7 @@ private:
 	const std::string kObjExtension = ".obj";
 
 	// モデルをロードする
-	bool ModelLoad(const std::string& modelPath);
+	bool ModelLoad(const std::string& modelPath , int flag);
 
 public:
 	// コンストラクタ・デストラクタ
@@ -46,9 +46,9 @@ public:
 	~ModelConversionModule() = default;
 
 	// 初期化時に変換されているかの確認、変換を行う
-	bool Init();
+	bool ModelConversion();
 
 	// 今はモデルをロードしてモデルマネージャーに入れる関数
 	bool LoadAndRegisterModelResources(const std::string& modelName,
-		DirectX_DrawManager& drawManager);
+		BaseDrawManager& drawManager);
 };

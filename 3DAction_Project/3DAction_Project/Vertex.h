@@ -1,13 +1,32 @@
-#pragma once
+﻿#pragma once
+
+// ===============================
+// 【クラス概要】
+// 頂点情報構造体
+// 頂点バッファを作成する際に使用する
+// ===============================
+
+
+// ===============================
+// ヘッダー
+// ===============================
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Color.h"
 
-class Vertex
-{
-public:
-	Color color;
-	Vector3 pos;
-	Vector2 uv;
-};
 
+// ===============================
+// 構造体
+// ===============================
+// 頂点情報
+struct Vertex
+{
+	// 位置
+	Vector3 position;
+	// 法線
+	Vector3 normal;
+	// UV
+	Vector2 uv;
+	// 頂点カラー
+	Color color;
+};

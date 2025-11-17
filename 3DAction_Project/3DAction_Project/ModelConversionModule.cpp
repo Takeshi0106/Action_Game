@@ -20,7 +20,7 @@
 // =====================================
 // 初期化
 // =====================================
-bool ModelConversionModule::Init()
+bool ModelConversionModule::ModelConversion()
 {
 	// モデルが入っているパス内を捜査
 	for (const auto& entry : std::filesystem::directory_iterator(m_ModelPath))
@@ -28,8 +28,8 @@ bool ModelConversionModule::Init()
 		// モデルかチェック
 		if (!entry.is_regular_file() || entry.path().extension() != kObjExtension) { continue; }
 
-		// モデル読込み
-		if (!ModelLoad(entry.path().string())) {
+		// モデル読込み 重たいので注意
+		if (!ModelLoad(entry.path().string(), aiProcessPreset_TargetRealtime_MaxQuality)) {
 			ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 			return false;
 		}
@@ -42,10 +42,10 @@ bool ModelConversionModule::Init()
 // =====================================
 // モデルを読み込んで、各マネージャーに登録する
 // =====================================
-bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, DirectX_DrawManager& drawManager)
+bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, BaseDrawManager& drawManager)
 {
-	// モデルを読み込む
-	if (!ModelLoad(modelName)) {
+	// モデルを読み込む　最低限のフラグ (３角形・法線生成・重複頂点削除)
+	if (!ModelLoad(modelName, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices)) {
 		ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 		return false;
 	}
@@ -57,7 +57,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 // =====================================
 // モデルを読み込む関数
 // =====================================
-bool ModelConversionModule::ModelLoad(const std::string& _modelPath)
+bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag)
 {
 	// ファイルパスに変換
 	std::filesystem::path modelPath = _modelPath;
@@ -71,9 +71,8 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath)
 	// モデルを読込むための変数
 	Assimp::Importer importer;
 
-	// フラグ　３角形・法線生成・重複頂点削除
-	const aiScene* scene = importer.ReadFile(modelPath.string(),
-		aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
+	// モデルロード
+	const aiScene* scene = importer.ReadFile(modelPath.string(), flag);
 
 	// ロードチェック
 	if (!scene) {
@@ -124,13 +123,16 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath)
 
 		// マテリアル情報作成
 		aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+		// テクスチャのパス
 		aiString texPath;
 
 		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
 		{
 			std::string texturePath = texPath.C_Str();
-			// 相対パス補正
+			// プロジェクトからの相対パスを作成
 			std::filesystem::path fullPath = std::filesystem::path(m_ModelPath) / texturePath;
+			// 区切り文字を変換
+			fullPath.make_preferred();
 		}
 	}
 
