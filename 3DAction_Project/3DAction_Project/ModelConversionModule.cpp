@@ -66,7 +66,8 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag, ModelData& modelData)
 {
 	// ファイルパスに変換
-	std::filesystem::path modelPath = _modelPath;
+	std::filesystem::path modelPath = std::filesystem::path(m_ModelPath) / _modelPath;
+	modelPath.make_preferred();
 
 	// 読み込めないモデルかチェック
 	if (modelPath.extension() != kObjExtension) {
