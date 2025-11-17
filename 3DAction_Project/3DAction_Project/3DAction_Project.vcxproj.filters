@@ -473,7 +473,7 @@
     <ClInclude Include="ModelManager.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClInclude>
-    <ClInclude Include="MeshData.h">
+    <ClInclude Include="ModelData.h">
       <Filter>2_Core\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">

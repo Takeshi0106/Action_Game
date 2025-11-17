@@ -19,6 +19,8 @@
 #include <string>
 // 描画マネージャー
 #include "BaseDrawManager.h"
+// モデル情報構造体
+#include "ModelData.h"
 
 
 // ==============================

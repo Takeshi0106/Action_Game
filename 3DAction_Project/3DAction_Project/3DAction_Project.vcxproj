@@ -221,7 +221,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="IndexBufferManager.h" />
     <ClInclude Include="InputLayoutInfo.h" />
     <ClInclude Include="Matrix4x4.h" />
-    <ClInclude Include="MeshData.h" />
+    <ClInclude Include="ModelData.h" />
     <ClInclude Include="ModelConversionModule.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Quaternionh.h" />
