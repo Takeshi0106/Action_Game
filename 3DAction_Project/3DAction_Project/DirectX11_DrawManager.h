@@ -34,8 +34,9 @@ class TextureManager;
 class ResourceViewManager;	
 class SamplerManager;
 class IndexBufferManager;
-
+// モジュールの前方宣言
 class TextureLoader;
+class ModelConversionModule;
 
 
 // ========================================
@@ -55,6 +56,7 @@ private:
 
 	// モジュール
 	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
+	std::unique_ptr<ModelConversionModule> m_ModelConversionModule; // モデル変換モジュール
 
 	// 描画
 	bool DrawObject(const char* _vsShaderName, 

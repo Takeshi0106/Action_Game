@@ -37,7 +37,7 @@ private:
 	const std::string kObjExtension = ".obj";
 
 	// モデルをロードする
-	bool ModelLoad(const std::string& modelPath , int flag);
+	bool ModelLoad(const std::string& modelPath, int flag, ModelData& modelData);
 
 public:
 	// コンストラクタ・デストラクタ

@@ -11,8 +11,8 @@
 #pragma comment(lib, "assimp-vc143-mtd.lib")
 // ファイルシステム
 #include <filesystem>
-// メッシュ情報
-#include "MeshData.h"
+// モデル情報
+#include "ModelData.h"
 // ログ出力
 #include "ReportMessage.h"
 
@@ -28,8 +28,11 @@ bool ModelConversionModule::ModelConversion()
 		// モデルかチェック
 		if (!entry.is_regular_file() || entry.path().extension() != kObjExtension) { continue; }
 
+		// モデルデータ
+		ModelData modelData;
+
 		// モデル読込み 重たいので注意
-		if (!ModelLoad(entry.path().string(), aiProcessPreset_TargetRealtime_MaxQuality)) {
+		if (!ModelLoad(entry.path().string(), aiProcessPreset_TargetRealtime_MaxQuality, modelData)) {
 			ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 			return false;
 		}
@@ -44,8 +47,11 @@ bool ModelConversionModule::ModelConversion()
 // =====================================
 bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, BaseDrawManager& drawManager)
 {
+	// モデルデータ
+	ModelData modelData;
+
 	// モデルを読み込む　最低限のフラグ (３角形・法線生成・重複頂点削除)
-	if (!ModelLoad(modelName, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices)) {
+	if (!ModelLoad(modelName, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices, modelData)) {
 		ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 		return false;
 	}
@@ -57,7 +63,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 // =====================================
 // モデルを読み込む関数
 // =====================================
-bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag)
+bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag, ModelData& modelData)
 {
 	// ファイルパスに変換
 	std::filesystem::path modelPath = _modelPath;
@@ -80,6 +86,9 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag)
 		return false;
 	}
 
+	// メッシュ配列のリサイズ
+	modelData.meshDataArray.resize(scene->mNumMeshes);
+
 	// データの取得
 	for (unsigned int i = 0; i < scene->mNumMeshes; i++)
 	{
@@ -91,28 +100,40 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag)
 		// 領域確保
 		vtx.resize(scene->mMeshes[i]->mNumVertices);
 
+		// 頂点情報の作成
 		for (unsigned int j = 0; j < vtx.size(); j++)
 		{
-			// 値の吸出し
+			// 位置
 			aiVector3D pos = scene->mMeshes[i]->mVertices[j];
-			aiVector3D uv = scene->mMeshes[i]->HasTextureCoords(0) ?
-				scene->mMeshes[i]->mTextureCoords[0][j] : aiVector3D(0.0f, 0.0f, 0.0f);
+			// 法線　情報がなければ0.0f
 			aiVector3D normal = scene->mMeshes[i]->HasNormals() ?
 				scene->mMeshes[i]->mNormals[j] : aiVector3D(0.0f, 0.0f, 0.0f);
+			// UV　情報がなければ0.0f
+			aiVector3D uv = scene->mMeshes[i]->HasTextureCoords(0) ?
+				scene->mMeshes[i]->mTextureCoords[0][j] : aiVector3D(0.0f, 0.0f, 0.0f);
+			// 頂点カラー 情報がなければ白
+			aiColor4D color = scene->mMeshes[i]->HasVertexColors(0) ?
+				scene->mMeshes[i]->mColors[0][j] : aiColor4D(1.0f, 1.0f, 1.0f, 1.0f);
 
 			// 値を設定
 			vtx[j] = {
 				Vector3(pos.x, pos.y, pos.z),
 				Vector3(normal.x, normal.y, normal.z),
-				Vector2(uv.x, uv.y) };
+				Vector2(uv.x, uv.y),
+				Color(color.r,color.g,color.b,color.a) };
 		}
 
+		// メッシュデータに設定
+		mesh.vertices = vtx;
+
+
 		// インデックスの作成
-		std::vector<int> idx;
+		std::vector<uint32_t> idx;
 		// 領域確保
 		idx.resize(scene->mMeshes[i]->mNumFaces * 3);
 
-		for (unsigned int j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
+		// インデックス情報の作成
+		for (uint32_t j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
 		{
 			aiFace face = scene->mMeshes[i]->mFaces[j];
 			int faceIdx = j * 3;
@@ -121,19 +142,61 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag)
 			idx[faceIdx + 2] = face.mIndices[2];
 		}
 
-		// マテリアル情報作成
-		aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-		// テクスチャのパス
-		aiString texPath;
+		// メッシュデータに設定
+		mesh.indices = idx;
 
-		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
+		// マテリアルIDを設定
+		mesh.materialID = scene->mMeshes[i]->mMaterialIndex;
+
+		// メッシュデータをモデルデータに設定
+		modelData.meshDataArray[i] = mesh;
+	}
+
+
+	// マテリアル配列リサイズ
+	modelData.materialDataArray.resize(scene->mNumMaterials);
+
+	// マテリアル情報取得
+	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+	{
+		// アシンプでテクスチャのパス
+		aiString texPath;
+		// マテリアル情報を入れる配列
+		MeshMaterialData materialData = {};
+		// テクスチャのパスを取得
+		std::filesystem::path fullPath = "";
+
+		// テクスチャがあればパスを取得
+		if (scene->mMaterials[i]->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
 		{
-			std::string texturePath = texPath.C_Str();
 			// プロジェクトからの相対パスを作成
-			std::filesystem::path fullPath = std::filesystem::path(m_ModelPath) / texturePath;
+			fullPath = std::filesystem::path(m_ModelPath) / texPath.C_Str();
 			// 区切り文字を変換
 			fullPath.make_preferred();
 		}
+
+		// マテリアルデータを取得
+		aiColor4D aiDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+		aiColor4D aiAmbient(0.3f, 0.3f, 0.3f, 1.0f);
+		aiColor4D aiSpecular(1.0f, 1.0f, 1.0f, 1.0f);
+		float opacity = 1.0f;
+
+		// マテリアルカラー取得（存在しなければデフォルトのまま）
+		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
+		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_AMBIENT, aiAmbient);
+		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_SPECULAR, aiSpecular);
+		scene->mMaterials[i]->Get(AI_MATKEY_OPACITY, opacity);
+
+		// MeshMaterialData にセット
+		materialData.diffuse = Color(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, opacity);
+		materialData.ambient = Color(aiAmbient.r, aiAmbient.g, aiAmbient.b, aiAmbient.a);
+		materialData.specular = Color(aiSpecular.r, aiSpecular.g, aiSpecular.b, aiSpecular.a);
+
+		// テクスチャ名をセット
+		materialData.textureName = fullPath.string();
+
+		// マテリアルデータをモデルデータに設定
+		modelData.materialDataArray[i] = materialData;
 	}
 
 	return true;

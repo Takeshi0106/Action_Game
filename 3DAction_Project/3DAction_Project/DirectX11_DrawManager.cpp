@@ -16,6 +16,7 @@
 #include "IndexBufferManager.h"
 // モジュール
 #include "TextureLoader.h"
+#include "ModelConversionModule.h"
 // シェーダータイプ
 #include "UseShaderType.h"
 // ログ出力
@@ -55,6 +56,10 @@ DirectX_DrawManager::DirectX_DrawManager()
 		m_TextureManager.get(),
 		m_ViewManager.get(),
 		"Asset/Texture");
+
+	m_ModelConversionModule = std::make_unique<ModelConversionModule>(
+		"Asset/ObjModel",
+		"Asset/SelfModel");
 }
 
 
@@ -85,6 +90,10 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 	SamplerDesc desc = SamplerDesc::NormalSampler();
 	CreateSampler(desc);
 
+	// デバッグ用
+	m_ModelConversionModule->LoadAndRegisterModelResources(
+		"Knight_Male.obj", *this);
+
 	return true;
 }
 
@@ -104,6 +113,7 @@ void DirectX_DrawManager::Uninit()
 	m_IndexBufferManager.reset();
 
 	m_TextureLoader.reset();
+	m_ModelConversionModule.reset();
 
 	// DirectX11 の初期化
 	DirectX11::Uninit();
