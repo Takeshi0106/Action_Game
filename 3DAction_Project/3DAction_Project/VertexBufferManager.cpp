@@ -11,12 +11,6 @@
 
 
 // ======================================
-// 静的メンバー配列
-// ======================================
-// std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> VertexBufferManager::m_VertexBuffers;
-
-
-// ======================================
 // プロトタイプ宣言
 // ======================================
     // 自作列挙型をDirectXに変換数関数
@@ -67,7 +61,7 @@ bool VertexBufferManager::CreateVertexBuffer(
     // 作製した頂点バッファの名前を保存
     m_Logger.Log(name.c_str());
 
-    DebugLog::OutputToConsole((name + " を作成しました").c_str());
+    DebugLog::OutputToConsole(("頂点バッファ " + name + " を作成しました").c_str());
 
     return true;
 }
@@ -139,7 +133,6 @@ void VertexBufferManager::ReleaseAllVertexBuffers()
 {
     m_VertexBuffers.clear();
 }
-
 
 
 // ========================================

@@ -20,9 +20,10 @@ void Triangle2D::Init(BaseDrawManager* _drawManager)
 
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(
-		"VS_TriangleDebug",
+		m_VsBufferName.c_str(),
 		m_Vertices,
 		sizeof(Vertex),
+		sizeof(m_Vertices) / sizeof(Vertex),
 		sizeof(m_Vertices) / sizeof(Vertex),
 		PrimitiveType::TriangleStrip,
 		BufferUsage::Dynamic,
@@ -82,7 +83,7 @@ void Triangle2D::Draw()
 	m_Draw->UpdateShaderConstants("Transform1", &world, sizeof(world));
 
 	// 描画
-	m_Draw->Draw(VsName.c_str(), PsName.c_str());	
+	m_Draw->PrimitiveDraw(m_VsName.c_str(), m_PsName.c_str(), m_VsBufferName.c_str());
 }
 
 

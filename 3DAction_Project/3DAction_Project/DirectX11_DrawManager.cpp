@@ -13,7 +13,8 @@
 #include "TextureManager.h" // テクスチャマネージャー
 #include "ResourceViewManager.h" // ビューマネージャー
 #include "SamplerManager.h" // サンプラーマネージャー
-#include "IndexBufferManager.h"
+#include "IndexBufferManager.h" // インデックスバッファマネージャー
+#include "ModelManager.h" // モデルマネージャー
 // モジュール
 #include "TextureLoader.h"
 #include "ModelConversionModule.h"
@@ -50,6 +51,7 @@ DirectX_DrawManager::DirectX_DrawManager()
 	m_ViewManager = std::make_unique<ResourceViewManager>();
 	m_SamplerManager = std::make_unique<SamplerManager>();
 	m_IndexBufferManager = std::make_unique<IndexBufferManager>();
+	m_ModelManager = std::make_unique<ModelManager>();
 
 	// モジュール作成
 	m_TextureLoader = std::make_unique<TextureLoader>(
@@ -91,8 +93,7 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 	CreateSampler(desc);
 
 	// デバッグ用
-	m_ModelConversionModule->LoadAndRegisterModelResources(
-		"Knight_Male.obj", *this);
+	LoadModel("Knight_Male");
 
 	return true;
 }
@@ -111,6 +112,7 @@ void DirectX_DrawManager::Uninit()
 	m_ViewManager.reset();
 	m_SamplerManager.reset();
 	m_IndexBufferManager.reset();
+	m_ModelManager.reset();
 
 	m_TextureLoader.reset();
 	m_ModelConversionModule.reset();
@@ -135,20 +137,23 @@ void DirectX_DrawManager::EndDraw()
 	DirectX11::EndDraw();
 }
 
-void DirectX_DrawManager::Draw(const char* drawID, const void* data, const int size)
+// モデル描画
+void DirectX_DrawManager::ModelDraw(const char* _vsShaderName, 
+	const char* _psShaderName, 
+	const char* _modelName)
 {
-
+	DrawModelObject(_vsShaderName, _psShaderName, _modelName);
 }
 
 // 描画情報を記載して描画
-void DirectX_DrawManager::Draw(const char* _vsShaderName,
+void DirectX_DrawManager::PrimitiveDraw(const char* _vsShaderName,
 	const char* _psShaderName,
+	const char* _vertexName,
 	const char* _textureName,
-	const char* _modelName,
 	const SamplerDesc& _sampler)
 {
 	// 描画
-	DrawObject(_vsShaderName, _psShaderName, _textureName, _sampler, _modelName);
+	DrawPrimitiveObject(_vsShaderName, _psShaderName, _vertexName, _textureName, _sampler);
 }
 
 
@@ -159,7 +164,8 @@ bool DirectX_DrawManager::CreateVertexBuffer(
 	const char* modelName,
 	const void* data,
 	size_t stride,
-	int vertexNumber,
+	uint32_t vertexNumber,
+	uint32_t maxNumber,
 	PrimitiveType type,
 	BufferUsage usage,
 	CPUAccess access)
@@ -173,7 +179,7 @@ bool DirectX_DrawManager::CreateVertexBuffer(
 		DirectX11::Get::GetDevice(),
 		data, // 頂点データ
 		vertexNumber,   // 頂点数
-		10,   // 最大頂点数
+		maxNumber,   // 最大頂点数
 		stride,
 		type,
 		usage,
@@ -196,7 +202,7 @@ bool DirectX_DrawManager::CreateIndexBuffer(
 	int indexNumber)
 {
 	// 作成
-	if (m_IndexBufferManager->CreateIndexBuffer(
+	if (!m_IndexBufferManager->CreateIndexBuffer(
 		modelName,
 		DirectX11::Get::GetDevice(),
 		indexData,
@@ -290,11 +296,28 @@ bool DirectX_DrawManager::CreateSampler(
 bool DirectX_DrawManager::LoadTexture(const char* textureName)
 {
 	// テクスチャのロード関数
-	if (!m_TextureLoader->ImageFileLoader(textureName, DirectX11::Get::GetDevice())){
+	if (!m_TextureLoader->ImageFileLoader(textureName, DirectX11::Get::GetDevice())) {
 		ErrorLog::OutputToConsole("テクスチャのロードに失敗しました");
 		return false;
 	}
-	
+
+	return true;
+}
+
+
+// ===========================================
+// モデルロード
+// ===========================================
+bool DirectX_DrawManager::LoadModel(const char* modelName)
+{
+	// モデル変換モジュールを使用してモデルをロード
+	if (!m_ModelConversionModule->LoadAndRegisterModelResources(
+		modelName,
+		*this))
+	{
+		ErrorLog::OutputToConsole("モデルのロードに失敗しました");
+		return false;
+	}
 	return true;
 }
 
@@ -408,21 +431,21 @@ void DirectX_DrawManager::UpdateVertexBuffer(const char* vertexName, const void*
 
 
 // ===================================================
-// 非公開のメンバー関数
+// 自作メッシュを描画
 // ===================================================
-bool DirectX_DrawManager::DrawObject(
+bool DirectX_DrawManager::DrawPrimitiveObject(
 	const char* _vsShaderName, 
 	const char* _psShaderName,
+	const char* _modelName,
 	const char* _textureName, 
-	const SamplerDesc _sampler,
-	const char* _modelName)
+	const SamplerDesc _sampler)
 {
 	// シェーダーバインド
 	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager->BindVertexShader(_vsShaderName,DirectX11::Get::GetContext());
 	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager->BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
 
 	// 頂点バッファをバインド
-	int vertexCount = m_VBManager->BindVertexBuffer(_vsShaderName, DirectX11::Get::GetContext());
+	int vertexCount = m_VBManager->BindVertexBuffer(_modelName, DirectX11::Get::GetContext());
 	if (vertexCount == -1)
 	{
 		ErrorLog::OutputToConsole("頂点バッファが見つかりませんでした");
@@ -448,5 +471,35 @@ bool DirectX_DrawManager::DrawObject(
 	// 描画
 	DirectX11::Get::GetContext()->Draw(vertexCount, 0);
 	
+	return true;
+}
+
+// ===================================================
+// モデルを描画
+// ===================================================
+bool DirectX_DrawManager::DrawModelObject(
+	const char* _vsShaderName,
+	const char* _psShaderName,
+	const char* _modelName)
+{
+	// シェーダーバインド
+	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager->BindVertexShader(_vsShaderName, DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager->BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
+
+	// シェーダーの定数バッファ情報をバインド
+	m_CBManager->BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
+	m_CBManager->BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
+
+	// 頂点バッファをバインド
+	int vertexCount = m_VBManager->BindVertexBuffer(_modelName, DirectX11::Get::GetContext());
+	if (vertexCount == -1)
+	{
+		ErrorLog::OutputToConsole("頂点バッファが見つかりませんでした");
+		return false;
+	}
+
+	// 描画
+	DirectX11::Get::GetContext()->Draw(vertexCount, 0);
+
 	return true;
 }

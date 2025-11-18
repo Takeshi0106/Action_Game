@@ -50,10 +50,61 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 	// モデルデータ
 	ModelData modelData;
 
-	// モデルを読み込む　最低限のフラグ (３角形・法線生成・重複頂点削除)
-	if (!ModelLoad(modelName, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices, modelData)) {
+	// モデルを読み込む
+	if (!ModelLoad(modelName, 
+		aiProcessPreset_TargetRealtime_MaxQuality,
+		modelData)) {
 		ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 		return false;
+	}
+
+	// 各バッファ作成
+	for (int i = 0; i < modelData.meshDataArray.size(); i++)
+	{
+		// メッシュデータ取得
+		MeshData& mesh = modelData.meshDataArray[i];
+		// 登録名
+		std::string keyName = modelName + std::to_string(i);
+
+		// 頂点バッファ作成
+		if (!drawManager.CreateVertexBuffer(
+			keyName.c_str(),
+			mesh.vertices.data(),
+			sizeof(Vertex),
+			static_cast<uint32_t>(mesh.vertices.size()),
+			static_cast<uint32_t>(mesh.vertices.size()),
+			PrimitiveType::TriangleList))
+		{
+			ErrorLog::OutputToConsole((modelName + " 頂点バッファの作成に失敗しました").c_str());
+			return false;
+		}
+
+		// インデックスバッファ作成
+		if (!drawManager.CreateIndexBuffer(
+			keyName.c_str(),
+			reinterpret_cast<const int*>(mesh.indices.data()),
+			static_cast<int>(mesh.indices.size())))
+		{
+			ErrorLog::OutputToConsole((modelName + " インデックスバッファの作成に失敗しました").c_str());
+			return false;
+		}
+	}
+
+	// テクスチャ読込み
+	for (int i = 0; i < modelData.materialDataArray.size(); i++)
+	{
+		// メッシュマテリアル情報取得
+		MeshMaterialData materialData = modelData.materialDataArray[i];
+
+		// テクスチャパスがあるか確認
+		if (!materialData.textureName.empty())
+		{
+			// テクスチャロード
+			if (!drawManager.LoadTexture(materialData.textureName.c_str())) {
+				ErrorLog::OutputToConsole((modelName + " テクスチャの作成に失敗しました").c_str());
+				return false;
+			}
+		}
 	}
 
 	return true;
@@ -66,14 +117,9 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag, ModelData& modelData)
 {
 	// ファイルパスに変換
-	std::filesystem::path modelPath = std::filesystem::path(m_ModelPath) / _modelPath;
+	std::filesystem::path modelPath = std::filesystem::path(m_ModelPath) / (_modelPath + kObjExtension);
+	// 区切り文字統一
 	modelPath.make_preferred();
-
-	// 読み込めないモデルかチェック
-	if (modelPath.extension() != kObjExtension) {
-		ErrorLog::OutputToConsole("変換できないモデルが渡されています");
-		return false;
-	}
 
 	// モデルを読込むための変数
 	Assimp::Importer importer;

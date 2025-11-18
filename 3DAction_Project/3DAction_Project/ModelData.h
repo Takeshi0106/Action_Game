@@ -3,6 +3,7 @@
 // ===============================
 // 【クラス概要】
 // メッシュ・モデル情報構造体定義
+// アシンプから読み込んだモデルのメタデータ
 // ===============================
 
 
@@ -13,30 +14,15 @@
 #include "Vertex.h"
 // 他のプラットフォームでも使用できるように
 #include <cstdint>
-// 色情報
-#include "Color.h"
-// 文字列
-#include <string>
 // 配列
 #include <vector>
+// メッシュマテリアル情報
+#include "MaterialData.h"
 
 
 // ===============================
 // クラス
 // ===============================
-// メッシュのマテリアル情報
-struct MeshMaterialData 
-{
-	// 反射光
-	Color diffuse;
-	// 環境光
-	Color ambient;
-	// 鏡面光
-	Color specular;
-	// テクスチャの名前(テクスチャマネージャーに登録する名前)
-	std::string textureName = "";
-};
-
 // メッシュ情報(リサイズして使用してください)
 struct MeshData
 {
@@ -45,7 +31,7 @@ struct MeshData
 	// インデックス
 	std::vector<uint32_t> indices;
 	// マテリアルインデックス
-	uint16_t materialID;
+	uint16_t materialID = UINT16_MAX;
 };
 
 // モデルデータ(1モデルが持つ情報)

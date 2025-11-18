@@ -482,6 +482,9 @@
     <ClInclude Include="ModelConversionModule.h">
       <Filter>2_Core\0_ModelConversion</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialData.h">
+      <Filter>2_Core\1_MeshData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VS_Object.hlsl">

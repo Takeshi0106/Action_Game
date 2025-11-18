@@ -17,9 +17,10 @@ void Square2D::Init(BaseDrawManager* _drawManager)
 
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(
-		m_VSName.c_str(),
+		m_VsBufferName.c_str(),
 		m_Vertices,
 		sizeof(Vertex),
+		sizeof(m_Vertices) / sizeof(Vertex),
 		sizeof(m_Vertices) / sizeof(Vertex),
 		PrimitiveType::TriangleStrip,
 		BufferUsage::Dynamic,
@@ -59,7 +60,7 @@ void Square2D::Draw()
 	m_Draw->UpdateShaderConstants(m_CBName.c_str(), &world, sizeof(world));
 
 	// 描画
-	m_Draw->Draw(m_VSName.c_str(), m_PSName.c_str(), m_TextureName.c_str());
+	m_Draw->PrimitiveDraw(m_VSName.c_str(), m_PSName.c_str(), m_VsBufferName.c_str(), m_TextureName.c_str());
 }
 
 

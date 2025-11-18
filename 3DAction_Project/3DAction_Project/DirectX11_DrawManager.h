@@ -34,6 +34,7 @@ class TextureManager;
 class ResourceViewManager;	
 class SamplerManager;
 class IndexBufferManager;
+class ModelManager;
 // モジュールの前方宣言
 class TextureLoader;
 class ModelConversionModule;
@@ -53,17 +54,22 @@ private:
 	std::unique_ptr<ResourceViewManager> m_ViewManager; // ビューマネージャー
 	std::unique_ptr<SamplerManager> m_SamplerManager; // サンプラーマネージャー
 	std::unique_ptr<IndexBufferManager> m_IndexBufferManager; // インデックスバッファ
+	std::unique_ptr<ModelManager> m_ModelManager; // モデルマネージャー
 
 	// モジュール
 	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
 	std::unique_ptr<ModelConversionModule> m_ModelConversionModule; // モデル変換モジュール
 
 	// 描画
-	bool DrawObject(const char* _vsShaderName, 
+	bool DrawModelObject(const char* _vsShaderName,
 		const char* _psShaderName,
-		const char* _textureName, 
-		const SamplerDesc _desc,
 		const char* _modelName);
+
+	bool DrawPrimitiveObject(const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vsBufferName,
+		const char* _textureName, 
+		const SamplerDesc _desc);
 
 public:
 	// コンストラクタ
@@ -80,12 +86,14 @@ public:
 	void EndDraw();
 
 	// 今は使用できません注意してください
-	void Draw(const char* drawID, const void* data, const int size) override;
+	void ModelDraw(const char* _vsShaderName, 
+		const char* _psShaderName, 
+		const char* _modelName) override;
 
-	void Draw(const char* _vsShaderName,
+	void PrimitiveDraw(const char* _vsShaderName,
 		const char* _psShaderName,
+		const char* _vsBufferName,
 		const char* _textureName = nullptr,
-		const char* _modelName = nullptr,
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override;
 
 	// 頂点バッファ作成
@@ -93,7 +101,8 @@ public:
 		const char* modelName,
 		const void* data,
 		size_t size,
-		int vertexNumber,
+		uint32_t vertexNumber,
+		uint32_t maxNumber,
 		PrimitiveType type,
 		BufferUsage usage,
 		CPUAccess access) override;
@@ -127,6 +136,8 @@ public:
 
 	// テクスチャのロード
 	bool LoadTexture(const char* textureName) override;
+	// モデルのロード
+	bool LoadModel(const char* modelName) override;
 
 	// View作成
 	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;

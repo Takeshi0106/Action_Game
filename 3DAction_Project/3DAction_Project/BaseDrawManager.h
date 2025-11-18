@@ -16,7 +16,8 @@
 // ==============================
 // ヘッダー
 // ==============================
-#include "GraphicsEnums.h" // 設定用ヘッダー
+// 設定用ヘッダー
+#include "GraphicsEnums.h"
 
 
 // ==============================
@@ -24,7 +25,7 @@
 // ==============================
 class BaseDrawManager
 {
-private:
+protected:
 
 public:
 	// コンストラクタ・デストラクタ
@@ -34,12 +35,14 @@ public:
 	// 描画
 	virtual void BegingDraw() = 0;
 	virtual void EndDraw() = 0;
-	virtual void Draw(const char* id, const void* data, const int size) = 0;
-
-	virtual void Draw(const char* _vsShaderName,
+	virtual void ModelDraw(const char* _vsShaderName,
 		const char* _psShaderName,
+		const char* _modelName) = 0;
+
+	virtual void PrimitiveDraw(const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vsBufferName,
 		const char* _textureNam = nullptr,
-		const char* _modelName = nullptr,
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
 	/* ------------ リソース作成 ------------ */
@@ -48,7 +51,8 @@ public:
 		const char* modelName, 
 		const void* data, 
 		size_t size,
-		int vertexNumber,
+		uint32_t vertexNumber,
+		uint32_t maxNumber,
 		PrimitiveType type = PrimitiveType::TriangleStrip,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write) = 0;
@@ -79,6 +83,8 @@ public:
 
 	// テクスチャのロード
 	virtual bool LoadTexture(const char* textureName) = 0;
+	// モデルのロード
+	virtual bool LoadModel(const char* modelName) = 0;
 
 	// サンプラー作成
 	virtual bool CreateSampler(const SamplerDesc& _desc) = 0;

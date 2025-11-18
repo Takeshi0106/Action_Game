@@ -17,12 +17,24 @@
 // ============================
 // 画像ファイルをロードする
 // ============================
-bool TextureLoader::ImageFileLoader(const std::string faileName, ID3D11Device* device)
+bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* device)
 {
-    // UTF-16 に変換
-    std::filesystem::path filePath = m_ImageFailePath;
-    filePath /= faileName;
-    
+    // ファイルパス作成
+    std::filesystem::path filePath;
+
+    // パス確認
+    if (std::filesystem::path(fileName).parent_path().empty())
+    {
+        // 相対パスを追加
+        filePath = m_ImageFailePath;
+        filePath /= fileName;
+    }
+    else
+    {
+        // そのまま使用
+        filePath = fileName;
+    }
+
     // 区切り文字を統一する
     filePath.make_preferred();
 
@@ -56,9 +68,12 @@ bool TextureLoader::ImageFileLoader(const std::string faileName, ID3D11Device* d
     initData.rowPitch = img->rowPitch;
     initData.slicePitch = img->slicePitch;
 
+    // 登録名
+    std::string keyName = filePath.filename().string();
+
     // TextureManagerに登録
     if (!m_TextureManager->CreateTexture(
-        filePath.filename().string(),
+        keyName,
         device,
         (unsigned int)(meta.width),
         (unsigned int)(meta.height),
@@ -68,25 +83,25 @@ bool TextureLoader::ImageFileLoader(const std::string faileName, ID3D11Device* d
         CPUAccess::None,
         &initData))
     {
-        ErrorLog::OutputToConsole((filePath.filename().string() + " のテクスチャの作成に失敗しました。").c_str());
+        ErrorLog::OutputToConsole((keyName + " のテクスチャの作成に失敗しました。").c_str());
         return false;
     }
 
     // テクスチャを取得
-    Texture2DData* data = m_TextureManager->GetFindTexture2DData(filePath.filename().string());
+    Texture2DData* data = m_TextureManager->GetFindTexture2DData(keyName);
 
     // SRVを作成して ResourceViewManager に登録
     if (!m_ViewManager->CreateSRV(
-        filePath.filename().string(),
+        keyName,
         device,
         data->GetTexture(),
         DirectX_FormatConverter::ToSelfFormat(meta.format)))
     {
-        ErrorLog::OutputToConsole((filePath.filename().string() + " のSRVの作成に失敗しました。").c_str());
+        ErrorLog::OutputToConsole((keyName + " のSRVの作成に失敗しました。").c_str());
         return false;
     }
 
     // テクスチャ作成ログ出力
-    DebugLog::OutputToConsole((filePath.filename().string() + " のロードに成功しました。").c_str());
+    DebugLog::OutputToConsole((keyName + " のロードに成功しました。").c_str());
     return true;
 }

@@ -13,8 +13,11 @@ class Triangle2D : public BaseObject
 {
 private:
 	// 使用するシェーダーの名前
-	std::string VsName = "VS_TriangleDebug";
-	std::string PsName = "PS_TriangleDebug";
+	std::string m_VsName = "VS_TriangleDebug";
+	std::string m_PsName = "PS_TriangleDebug";
+
+    // 頂点バッファ名
+	std::string m_VsBufferName = "Triangle2D";
 
 	// 頂点
     const Vertex m_Vertices[3] =

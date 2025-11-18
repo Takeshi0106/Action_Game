@@ -11,6 +11,8 @@ private:
 	// 使用するシェーダーの名前
 	const std::string m_VSName = "VS_Object";
 	const std::string m_PSName = "PS_Texture";
+	// 頂点バッファ名
+	const std::string m_VsBufferName = "Square2D";
 	// このオブジェクトが更新する定数バッファ名
 	const std::string m_CBName = "Transform1";
 

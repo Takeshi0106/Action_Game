@@ -43,7 +43,7 @@ bool IndexBufferManager::CreateIndexBuffer(
     m_Logger.Log(name.c_str());
 
     // コンソールに出力
-    DebugLog::OutputToConsole((name + " を作成しました").c_str());
+    DebugLog::OutputToConsole(("インデックスバッファ " + name + " を作成しました").c_str());
 
     return true;
 }
