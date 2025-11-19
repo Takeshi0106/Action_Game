@@ -88,12 +88,15 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		return false;
 	}
 
+	// モデルマネージャー初期化
+	if (!m_ModelManager->Init(*this)) {
+		ErrorLog::OutputToMessageBox("ModelManagerの初期化に失敗しました");
+		return false;
+	}
+
 	// 基本サンプラーを作成
 	SamplerDesc desc = SamplerDesc::NormalSampler();
 	CreateSampler(desc);
-
-	// デバッグ用
-	LoadModel("Knight_Male");
 
 	return true;
 }
@@ -313,7 +316,8 @@ bool DirectX_DrawManager::LoadModel(const char* modelName)
 	// モデル変換モジュールを使用してモデルをロード
 	if (!m_ModelConversionModule->LoadAndRegisterModelResources(
 		modelName,
-		*this))
+		*this,
+		*m_ModelManager))
 	{
 		ErrorLog::OutputToConsole("モデルのロードに失敗しました");
 		return false;
@@ -490,16 +494,42 @@ bool DirectX_DrawManager::DrawModelObject(
 	m_CBManager->BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
 	m_CBManager->BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
-	// 頂点バッファをバインド
-	int vertexCount = m_VBManager->BindVertexBuffer(_modelName, DirectX11::Get::GetContext());
-	if (vertexCount == -1)
-	{
-		ErrorLog::OutputToConsole("頂点バッファが見つかりませんでした");
-		return false;
-	}
+	// モデル情報を取得
+	const ModelManagerData* data = m_ModelManager->GetModelData(_modelName);
+	const std::string materialCBName = m_ModelManager->GetMaterialCBName();
 
-	// 描画
-	DirectX11::Get::GetContext()->Draw(vertexCount, 0);
+	for (int i = 0; i < data->meshMaterialIDs.size(); i++)
+	{
+		// 頂点バッファをバインド
+		int vertexCount = m_VBManager->BindVertexBuffer(_modelName + std::to_string(i), DirectX11::Get::GetContext());
+		if (vertexCount == -1)
+		{
+			ErrorLog::OutputToConsole("頂点バッファが見つかりませんでした");
+			return false;
+		}
+
+		// インデックスバッファをバインド
+		if (!m_IndexBufferManager->BindIndexData(_modelName + std::to_string(i), DirectX11::Get::GetContext()))
+		{
+			ErrorLog::OutputToConsole("インデックスバッファが見つかりませんでした");
+			return false;
+		}
+
+		// マテリアル情報取得
+		Color color[] = {
+			data->materialData[data->meshMaterialIDs[i]].diffuse,
+			data->materialData[data->meshMaterialIDs[i]].ambient,
+			data->materialData[data->meshMaterialIDs[i]].specular
+		};
+
+		// マテリアル用定数バッファを更新
+		UpdateShaderConstants(materialCBName.c_str(),
+			&color,
+			sizeof(color));
+
+		// 描画
+		DirectX11::Get::GetContext()->DrawIndexed(vertexCount, 0, 0);
+	}
 
 	return true;
 }

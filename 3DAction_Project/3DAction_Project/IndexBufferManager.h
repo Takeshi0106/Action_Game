@@ -48,7 +48,7 @@ public:
 		int indexNumber);
 
 	// インデックスバッファを探して、戻り値で返す
-	IndexBufferData* GetFindIndexData(const std::string& name) const;
+	bool BindIndexData(const std::string& name, ID3D11DeviceContext* context) const;
 	// インデックスバッファがあるかのチェック
 	bool Exists(const std::string& name) const;
 

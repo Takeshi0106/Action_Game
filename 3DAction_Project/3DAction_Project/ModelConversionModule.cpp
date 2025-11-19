@@ -45,7 +45,8 @@ bool ModelConversionModule::ModelConversion()
 // =====================================
 // モデルを読み込んで、各マネージャーに登録する
 // =====================================
-bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, BaseDrawManager& drawManager)
+bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, 
+	BaseDrawManager& drawManager,ModelManager& modelManager)
 {
 	// モデルデータ
 	ModelData modelData;
@@ -104,8 +105,15 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 				ErrorLog::OutputToConsole((modelName + " テクスチャの作成に失敗しました").c_str());
 				return false;
 			}
+
+			// パスではなくファイル名に変換
+			modelData.materialDataArray[i].textureName = 
+				std::filesystem::path(materialData.textureName).filename().string();
 		}
 	}
+
+	// モデルマネージャーに登録
+	modelManager.RegisterModel(modelName, modelData);
 
 	return true;
 }

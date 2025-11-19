@@ -18,6 +18,7 @@
 #include <string>
 // オブジェクト
 #include "Square2D.h"
+#include "Knight.h"
 // ログ出力
 #include "ReportMessage.h"
 
@@ -32,6 +33,7 @@ struct CameraInfo
 };
 // 四角形描画
 Square2D g_Square;
+Knight g_Knight;
 
 
 // =================================
@@ -67,6 +69,7 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 
 	// 四角
 	g_Square.Init(m_DrawManager);
+	g_Knight.Init(m_DrawManager);
 
 	Timer::Init(); // タイマー初期化
 	Timer::Start(); // タイマー開始
@@ -82,6 +85,7 @@ void ActionGame::Update()
 	Timer::Debug_CheckUpdate();
 
 	g_Square.Update();
+	g_Knight.Update();
 
 // #if defined(DEBUG) || defined(_DEBUG)
 	// 時間を取得
@@ -113,6 +117,7 @@ void ActionGame::Draw()
 	m_DrawManager->BegingDraw();
 
 	g_Square.Draw();
+	g_Knight.Draw();
 
 	// 描画後
 	m_DrawManager->EndDraw();
@@ -125,4 +130,5 @@ void ActionGame::Draw()
 void ActionGame::Uninit()
 {
 	g_Square.Uninit();
+	g_Knight.Uninit();
 }

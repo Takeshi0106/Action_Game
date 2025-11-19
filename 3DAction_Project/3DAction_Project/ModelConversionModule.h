@@ -19,6 +19,7 @@
 #include <string>
 // 描画マネージャー
 #include "BaseDrawManager.h"
+#include "ModelManager.h"
 // モデル情報構造体
 #include "ModelData.h"
 
@@ -52,5 +53,6 @@ public:
 
 	// 今はモデルをロードしてモデルマネージャーに入れる関数
 	bool LoadAndRegisterModelResources(const std::string& modelName,
-		BaseDrawManager& drawManager);
+		BaseDrawManager& drawManager,
+		ModelManager& modelManager);
 };

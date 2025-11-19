@@ -19,6 +19,8 @@
 #include <cstdint>
 // ハッシュ値配列
 #include <unordered_map>
+// 描画マネージャー
+#include "BaseDrawManager.h"
 
 
 // ==============================
@@ -48,16 +50,22 @@ class ModelManager
 private:
 	// モデルデータ配列
 	std::unordered_map<std::string, ModelManagerData> m_Models;
+	// マテリアル情報
+	std::string m_MaterialCBName = "Material";
 
 public:
 	// コンストラクタ・デストラクタ
 	ModelManager() = default;
 	~ModelManager() = default;
 
+	bool Init(BaseDrawManager& drawManager);
+
 	// モデルマネージャーに登録
 	void RegisterModel(const std::string modelName, const ModelData& modelData);
 	// モデルデータ取得
 	const ModelManagerData* GetModelData(const std::string modelName);
+	// マテリアル定数バッファ名ゲッター
+	const std::string& GetMaterialCBName() const { return m_MaterialCBName; }
 	// モデルデータがあるかチェック
 	bool CheckModelData(const std::string modelName);
 };

@@ -41,4 +41,6 @@ public:
         ID3D11Device* device,
         const int* indexData,
         int indexCount);
+	// バッファゲッター
+	ID3D11Buffer* GetBuffer() const { return m_Buffer.Get(); }
 };

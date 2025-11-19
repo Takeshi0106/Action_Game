@@ -50,22 +50,25 @@ bool IndexBufferManager::CreateIndexBuffer(
 
 
 // =============================================
-// インデックスバッファを探す
+// インデックスバッファをバインド
 // =============================================
-IndexBufferData* IndexBufferManager::GetFindIndexData(const std::string& name) const
+bool IndexBufferManager::BindIndexData(const std::string& name,ID3D11DeviceContext* context) const
 {
 	// 探す
 	auto it = m_IndexBuffers.find(name);
 
-	if (it != m_IndexBuffers.end()) {
-		// 頂点データを返す
-		return it->second.get();
-	}
-	else {
+	if (it == m_IndexBuffers.end()) {
 		WarningLog::OutputToConsole(std::string(" インデックスバッファ : " + name + " が見つかりませんでした").c_str());
+        return false;
 	}
 
-	return nullptr;
+	// インデックスバッファをセット
+    context->IASetIndexBuffer(
+        it->second->GetBuffer(),
+        DXGI_FORMAT_R32_UINT,
+		0);
+
+    return true;
 }
 
 

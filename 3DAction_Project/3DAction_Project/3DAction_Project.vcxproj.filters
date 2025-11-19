@@ -148,26 +148,11 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter">
       <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Object">
-      <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Object\BaseObject">
-      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="3_Hlsl\Debug">
-      <UniqueIdentifier>{dac1bb92-e977-4e4d-9330-1d1fa5db6909}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3_Hlsl\Triangle">
       <UniqueIdentifier>{9d33cc3f-536f-4624-b1f3-cca34a018e39}</UniqueIdentifier>
     </Filter>
     <Filter Include="0_Main\BaseGame">
       <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Object\TAriangle">
-      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Object\Square">
-      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Base\6_Setting">
       <UniqueIdentifier>{b0d7046b-9219-4751-80f7-ca3155126a0d}</UniqueIdentifier>
@@ -192,6 +177,21 @@
     </Filter>
     <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager">
       <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game">
+      <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\BaseObject">
+      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\TAriangle">
+      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\Square">
+      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\Knight">
+      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -304,10 +304,10 @@
       <Filter>0_Main</Filter>
     </ClCompile>
     <ClCompile Include="2DTriangle.cpp">
-      <Filter>4_Object\TAriangle</Filter>
+      <Filter>4_Game\TAriangle</Filter>
     </ClCompile>
     <ClCompile Include="Square2D.cpp">
-      <Filter>4_Object\Square</Filter>
+      <Filter>4_Game\Square</Filter>
     </ClCompile>
     <ClCompile Include="AssetLogger.cpp">
       <Filter>2_Core\AssetUsageLogger</Filter>
@@ -323,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="ModelConversionModule.cpp">
       <Filter>2_Core\0_ModelConversion</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>4_Game\Knight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -447,13 +450,13 @@
       <Filter>0_Main\BaseGame</Filter>
     </ClInclude>
     <ClInclude Include="BaseObject.h">
-      <Filter>4_Object\BaseObject</Filter>
+      <Filter>4_Game\BaseObject</Filter>
     </ClInclude>
     <ClInclude Include="2DTriangle.h">
-      <Filter>4_Object\TAriangle</Filter>
+      <Filter>4_Game\TAriangle</Filter>
     </ClInclude>
     <ClInclude Include="Square2D.h">
-      <Filter>4_Object\Square</Filter>
+      <Filter>4_Game\Square</Filter>
     </ClInclude>
     <ClInclude Include="SamplerSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
@@ -485,16 +488,13 @@
     <ClInclude Include="MaterialData.h">
       <Filter>2_Core\1_MeshData</Filter>
     </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>4_Game\Knight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VS_Object.hlsl">
       <Filter>3_Hlsl</Filter>
-    </FxCompile>
-    <FxCompile Include="PS_Debug.hlsl">
-      <Filter>3_Hlsl\Debug</Filter>
-    </FxCompile>
-    <FxCompile Include="VS_Debug.hlsl">
-      <Filter>3_Hlsl\Debug</Filter>
     </FxCompile>
     <FxCompile Include="VS_TriangleDebug.hlsl">
       <Filter>3_Hlsl\Triangle</Filter>
@@ -503,6 +503,9 @@
       <Filter>3_Hlsl\Triangle</Filter>
     </FxCompile>
     <FxCompile Include="PS_Texture.hlsl">
+      <Filter>3_Hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_NoTexture.hlsl">
       <Filter>3_Hlsl</Filter>
     </FxCompile>
   </ItemGroup>
