@@ -9,6 +9,10 @@
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment(lib, "dxguid.lib")
+#endif
+
 
 // ========================================
 // 定数バッファ作成
@@ -58,9 +62,19 @@ bool ConstantBufferManager::CreateConstantBuffer(
 	
 	// 配列に代入
 	m_ConstantBuffers[constantName] = std::move(bafferData);
-
+	
 	// デバッグ用に名前を保存しておく
 	m_Logger.Log(constantName.c_str());
+
+#if defined(DEBUG) || defined(_DEBUG)
+	DebugLog::OutputToConsole(("定数バッファ " + constantName + " を作成しました").c_str());
+
+	// 名前を設定
+	m_ConstantBuffers[constantName]->GetBuffer()->SetPrivateData(
+		WKPDID_D3DDebugObjectName,
+		UINT(constantName.size()),
+		constantName.c_str());
+#endif
 
 	return true;
 }

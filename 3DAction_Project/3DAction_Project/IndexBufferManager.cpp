@@ -42,8 +42,17 @@ bool IndexBufferManager::CreateIndexBuffer(
     // バッファの名前を保存
     m_Logger.Log(name.c_str());
 
+
+#if defined(DEBUG) || defined(_DEBUG)
     // コンソールに出力
     DebugLog::OutputToConsole(("インデックスバッファ " + name + " を作成しました").c_str());
+
+    // 名前を設定
+    m_IndexBuffers[name]->GetBuffer()->SetPrivateData(
+        WKPDID_D3DDebugObjectName,
+        UINT(name.size()),
+        name.c_str());
+#endif
 
     return true;
 }

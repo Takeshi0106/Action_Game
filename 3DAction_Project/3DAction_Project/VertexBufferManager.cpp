@@ -9,6 +9,10 @@
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment(lib, "dxguid.lib")
+#endif
+
 
 // ======================================
 // プロトタイプ宣言
@@ -61,7 +65,15 @@ bool VertexBufferManager::CreateVertexBuffer(
     // 作製した頂点バッファの名前を保存
     m_Logger.Log(name.c_str());
 
+#if defined(DEBUG) || defined(_DEBUG)
     DebugLog::OutputToConsole(("頂点バッファ " + name + " を作成しました").c_str());
+
+	// 名前を設定
+    m_VertexBuffers[name]->GetVertexBuffer()->SetPrivateData(
+        WKPDID_D3DDebugObjectName,
+        UINT(name.size()),
+        name.c_str());
+#endif
 
     return true;
 }
