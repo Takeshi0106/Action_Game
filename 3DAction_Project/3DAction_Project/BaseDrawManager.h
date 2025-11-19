@@ -18,6 +18,8 @@
 // ==============================
 // 設定用ヘッダー
 #include "GraphicsEnums.h"
+// 基本ヘッダー
+#include <cstdint>
 
 
 // ==============================
@@ -60,8 +62,8 @@ public:
 	// インデックスバッファ作成
 	virtual bool CreateIndexBuffer(
 		const char* modelName,
-		const int* indexData,
-		int indexNumber) = 0;
+		const uint32_t* indexData,
+		uint32_t indexNumber) = 0;
 
 	// 定数バッファ作成
 	virtual bool CreateConstantBuffer(

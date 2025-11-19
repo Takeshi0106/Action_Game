@@ -18,8 +18,8 @@
 // DirectX用
 #include <d3d11.h>       // DirectXのAPI
 #include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
-// 名前などのデバッグ情報取得用
-#include <string>        // 名前など
+// 標準ヘッダー
+#include <cstdint>
 
 
 // ==================================
@@ -30,6 +30,8 @@ class IndexBufferData
 private:
     // バッファ
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_Buffer = nullptr;
+	// インデックス数
+	uint32_t m_IndexCount = 0;
 
 public:
     // コンストラクタ・デストラクタ
@@ -39,8 +41,11 @@ public:
     // バッファ作成
     bool CreateIndexBuffer(
         ID3D11Device* device,
-        const int* indexData,
-        int indexCount);
+        const uint32_t* indexData,
+        uint32_t indexCount);
+
 	// バッファゲッター
 	ID3D11Buffer* GetBuffer() const { return m_Buffer.Get(); }
+	// インデックス数ゲッター
+	uint32_t GetIndexCount() const { return m_IndexCount; }
 };

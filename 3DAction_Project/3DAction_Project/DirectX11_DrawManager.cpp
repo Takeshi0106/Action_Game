@@ -201,8 +201,8 @@ bool DirectX_DrawManager::CreateVertexBuffer(
 // ===========================================
 bool DirectX_DrawManager::CreateIndexBuffer(
 	const char* modelName,
-	const int* indexData,
-	int indexNumber)
+	const uint32_t* indexData,
+	uint32_t indexNumber)
 {
 	// 作成
 	if (!m_IndexBufferManager->CreateIndexBuffer(
@@ -490,9 +490,8 @@ bool DirectX_DrawManager::DrawModelObject(
 	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager->BindVertexShader(_vsShaderName, DirectX11::Get::GetContext());
 	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager->BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
 
-	// シェーダーの定数バッファ情報をバインド
+	// 頂点シェーダーの定数バッファ情報をバインド
 	m_CBManager->BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
-	m_CBManager->BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
 	// モデル情報を取得
 	const ModelManagerData* data = m_ModelManager->GetModelData(_modelName);
@@ -501,22 +500,13 @@ bool DirectX_DrawManager::DrawModelObject(
 	for (int i = 0; i < data->meshMaterialIDs.size(); i++)
 	{
 		// 頂点バッファをバインド
-		int vertexCount = m_VBManager->BindVertexBuffer(_modelName + std::to_string(i), DirectX11::Get::GetContext());
-		if (vertexCount == -1)
-		{
-			ErrorLog::OutputToConsole("頂点バッファが見つかりませんでした");
-			return false;
-		}
+		m_VBManager->BindVertexBuffer(_modelName + std::to_string(i), DirectX11::Get::GetContext());
 
 		// インデックスバッファをバインド
-		if (!m_IndexBufferManager->BindIndexData(_modelName + std::to_string(i), DirectX11::Get::GetContext()))
-		{
-			ErrorLog::OutputToConsole("インデックスバッファが見つかりませんでした");
-			return false;
-		}
-
+		uint32_t count = m_IndexBufferManager->BindIndexData(_modelName + std::to_string(i), DirectX11::Get::GetContext());
+		
 		// マテリアル情報取得
-		Color color[] = {
+		Color color[3] = {
 			data->materialData[data->meshMaterialIDs[i]].diffuse,
 			data->materialData[data->meshMaterialIDs[i]].ambient,
 			data->materialData[data->meshMaterialIDs[i]].specular
@@ -525,10 +515,13 @@ bool DirectX_DrawManager::DrawModelObject(
 		// マテリアル用定数バッファを更新
 		UpdateShaderConstants(materialCBName.c_str(),
 			&color,
-			sizeof(color));
+			sizeof(Color) * 3);
+
+		// ピクセルシェーダー更新
+		m_CBManager->BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
 		// 描画
-		DirectX11::Get::GetContext()->DrawIndexed(vertexCount, 0, 0);
+		DirectX11::Get::GetContext()->DrawIndexed(count, 0, 0);
 	}
 
 	return true;

@@ -13,12 +13,12 @@
 // ==================================
 bool IndexBufferData::CreateIndexBuffer(
 	ID3D11Device* device,
-	const int* indexData,
-	int indexNumber)
+	const uint32_t* indexData,
+	uint32_t indexNumber)
 {
 	// インデックスバッファ作成
 	D3D11_BUFFER_DESC desc{};
-	desc.ByteWidth = sizeof(int) * indexNumber;
+	desc.ByteWidth = sizeof(uint32_t) * indexNumber;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = D3D10_BIND_INDEX_BUFFER;
 	desc.CPUAccessFlags = 0;
@@ -32,9 +32,12 @@ bool IndexBufferData::CreateIndexBuffer(
 	// バッファ作成
 	HRESULT hr = device->CreateBuffer(&desc, &initData, m_Buffer.GetAddressOf());
 	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole(("インデックスバッファが作成できませんでした" + std::to_string(hr)).c_str());
+		ErrorLog::OutputToConsole("インデックスバッファが作成できませんでした");
 		return false;
 	}
+
+	// メンバー変数にインデックス数を保存
+	m_IndexCount = indexNumber;
 
 	return true;
 }

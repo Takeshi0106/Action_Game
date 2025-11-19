@@ -163,9 +163,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager">
       <UniqueIdentifier>{bf385ec2-bb69-4e1c-948e-bdac45da98bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData">
-      <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\SaveLoad">
       <UniqueIdentifier>{3e9bee0c-817f-489a-9aae-9db8b36cb856}</UniqueIdentifier>
     </Filter>
@@ -192,6 +189,9 @@
     </Filter>
     <Filter Include="4_Game\Knight">
       <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo">
+      <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -316,7 +316,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
     </ClCompile>
     <ClCompile Include="IndexBufferData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo</Filter>
     </ClCompile>
     <ClCompile Include="ModelManager.cpp">
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
@@ -468,7 +468,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
     </ClInclude>
     <ClInclude Include="IndexBufferData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo</Filter>
     </ClInclude>
     <ClInclude Include="UseShaderType.h">
       <Filter>1_Platform\Base\6_Setting</Filter>

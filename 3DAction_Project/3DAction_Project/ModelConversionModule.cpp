@@ -83,8 +83,8 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 		// インデックスバッファ作成
 		if (!drawManager.CreateIndexBuffer(
 			keyName.c_str(),
-			reinterpret_cast<const int*>(mesh.indices.data()),
-			static_cast<int>(mesh.indices.size())))
+			static_cast<const uint32_t*>(mesh.indices.data()),
+			static_cast<uint32_t>(mesh.indices.size())))
 		{
 			ErrorLog::OutputToConsole((modelName + " インデックスバッファの作成に失敗しました").c_str());
 			return false;

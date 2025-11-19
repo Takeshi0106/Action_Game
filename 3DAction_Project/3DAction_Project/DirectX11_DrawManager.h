@@ -110,8 +110,8 @@ public:
 	// インデックスバッファ作成
 	bool CreateIndexBuffer(
 		const char* modelName,
-		const int* indexData,
-		int indexNumber) override;
+		const uint32_t* indexData,
+		uint32_t indexNumber) override;
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(

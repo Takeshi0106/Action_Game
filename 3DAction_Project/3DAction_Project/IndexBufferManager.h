@@ -21,6 +21,8 @@
 #include <unordered_map>
 // 文字列
 #include <string>
+// 必須ヘッダー
+#include <cstdint>
 // 外部ファイルにアセット名ログ出力
 #include "AssetLogger.h"
 
@@ -44,11 +46,11 @@ public:
 	bool CreateIndexBuffer(
 		std::string name,
 		ID3D11Device* device,
-		const int* indexData,
-		int indexNumber);
+		const uint32_t* indexData,
+		uint32_t indexNumber);
 
 	// インデックスバッファを探して、戻り値で返す
-	bool BindIndexData(const std::string& name, ID3D11DeviceContext* context) const;
+	uint32_t BindIndexData(const std::string& name, ID3D11DeviceContext* context) const;
 	// インデックスバッファがあるかのチェック
 	bool Exists(const std::string& name) const;
 

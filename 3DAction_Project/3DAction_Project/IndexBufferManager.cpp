@@ -14,8 +14,8 @@
 bool IndexBufferManager::CreateIndexBuffer(
 	std::string name,
     ID3D11Device* device,
-	const int* indexData,
-	int indexNumber)
+	const uint32_t* indexData,
+	uint32_t indexNumber)
 {
     // 既に作成済み
     if (Exists(name)) {
@@ -61,14 +61,14 @@ bool IndexBufferManager::CreateIndexBuffer(
 // =============================================
 // インデックスバッファをバインド
 // =============================================
-bool IndexBufferManager::BindIndexData(const std::string& name,ID3D11DeviceContext* context) const
+uint32_t IndexBufferManager::BindIndexData(const std::string& name,ID3D11DeviceContext* context) const
 {
 	// 探す
 	auto it = m_IndexBuffers.find(name);
 
 	if (it == m_IndexBuffers.end()) {
 		WarningLog::OutputToConsole(std::string(" インデックスバッファ : " + name + " が見つかりませんでした").c_str());
-        return false;
+        return UINT32_MAX;
 	}
 
 	// インデックスバッファをセット
@@ -77,7 +77,7 @@ bool IndexBufferManager::BindIndexData(const std::string& name,ID3D11DeviceConte
         DXGI_FORMAT_R32_UINT,
 		0);
 
-    return true;
+    return it->second->GetIndexCount();
 }
 
 

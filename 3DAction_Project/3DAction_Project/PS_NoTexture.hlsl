@@ -1,4 +1,7 @@
 
+// =============================
+// 入力情報
+// =============================
 struct PSInput
 {
     float4 pos : SV_POSITION;
@@ -6,14 +9,22 @@ struct PSInput
     float2 uv : TEXCOORD;
 };
 
+
+// =============================
+// 定数バッファ
+// =============================
 cbuffer Material : register(b0)
 {
-    float4 diffse : COLOR0;
-    float4 ambient : COLOR1;
-    float4 specular : COLOR2;
+    float4 diffse;
+    float4 ambient;
+    float4 specular;
 };
 
+
+// =============================
+// ピクセルシェーダー
+// =============================
 float4 main(PSInput input) : SV_TARGET
 {
-    return diffse * input.color;
+    return diffse;
 }

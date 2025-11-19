@@ -1,4 +1,6 @@
 ﻿#include "Knight.h"
+#include "Vector3.h"
+
 
 // ============================
 // 初期化
@@ -15,6 +17,9 @@ void Knight::LateInit()
 		sizeof(m_SRT),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
+
+	// 位置を更新
+	m_SRT = Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, 0.0f, 5.0f)) * m_SRT;
 }
 
 
@@ -32,13 +37,12 @@ void Knight::Update()
 // ============================
 void Knight::Draw()
 {
-	// 描画
 	Matrix4x4 world = m_SRT.toGPU();
 
 	// 定数バッファ更新
 	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));
 
-	//// 描画
+	// 描画
 	m_Draw->ModelDraw(m_VSName.c_str(), m_PSName.c_str(), m_ModelName.c_str());
 }
 
