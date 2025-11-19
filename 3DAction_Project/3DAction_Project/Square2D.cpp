@@ -3,18 +3,13 @@
 // ヘッダー
 // =====================================
 #include "Square2D.h"
-#include "Quaternionh.h"
-#include "Timer.h"
 
 
 // =====================================
 // 初期化
 // =====================================
-void Square2D::Init(BaseDrawManager* _drawManager)
+void Square2D::LateInit()
 {
-	// オブジェクトの初期化
-	BaseObject::Init(_drawManager);
-
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(
 		m_VsBufferName.c_str(),
@@ -28,7 +23,7 @@ void Square2D::Init(BaseDrawManager* _drawManager)
 
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
-		m_CBName.c_str(),
+		m_TransformCBName.c_str(),
 		&m_SRT,
 		sizeof(m_SRT),
 		BufferUsage::Dynamic,
@@ -57,7 +52,7 @@ void Square2D::Draw()
 	Matrix4x4 world = m_SRT.toGPU();
 
 	// 定数バッファ更新
-	m_Draw->UpdateShaderConstants(m_CBName.c_str(), &world, sizeof(world));
+	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));
 
 	// 描画
 	m_Draw->PrimitiveDraw(m_VSName.c_str(), m_PSName.c_str(), m_VsBufferName.c_str(), m_TextureName.c_str());

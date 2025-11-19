@@ -13,8 +13,6 @@ private:
 	const std::string m_PSName = "PS_Texture";
 	// 頂点バッファ名
 	const std::string m_VsBufferName = "Square2D";
-	// このオブジェクトが更新する定数バッファ名
-	const std::string m_CBName = "Transform1";
 
 	// 使用する画像名
 	const std::string m_TextureName = "pipo-halloweenchara2016_02.png";
@@ -55,12 +53,10 @@ private:
 		}
 	};
 
-	// SRT情報
-	Matrix4x4 m_SRT;
+	// 基本関数
+	void LateInit() override final;
 
 public:
-	// 基本関数
-	void Init(BaseDrawManager* _drawManager) override final;
 	void Update() override final;
 	void Draw() override final;
 	void Uninit() override final;

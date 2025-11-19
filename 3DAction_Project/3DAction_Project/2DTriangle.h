@@ -47,12 +47,10 @@ private:
         }
     };
 
-	// 位置
-	Matrix4x4 m_SRT;
+    void LateInit() override final;
 
 public:
-	void Init(BaseDrawManager* _drawManager) override;
-	void Update() override;
-	void Draw() override;
-	void Uninit() override;
+	void Update() override final;
+	void Draw() override final;
+	void Uninit() override final;
 };
