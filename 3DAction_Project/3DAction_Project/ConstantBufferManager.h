@@ -23,6 +23,12 @@
 #include <unordered_map> // ハッシュ値検索
 // バッファ設定ヘッダー
 #include "GraphicsEnums.h"
+// バインド情報ヘッダー
+#include "ConstantBufferInfo.h"
+// バインド情報を入れる配列ヘッダー
+#include <vector>
+// 使用できるシェーダーの種類を入れる
+#include "UseShaderType.h"
 // 外部ファイルにアセット名ログ出量用
 #include "AssetLogger.h"
 
@@ -47,15 +53,18 @@ public:
 	~ConstantBufferManager() { m_Logger.WriteLog(); }
 
 	// 定数バッファ作成
-	bool CreateConstantBuffer(const std::string& constantName,
+	bool CreateConstantBuffer(const std::string constantName,
 		ID3D11Device* device,
 		const void* data,
 		size_t size,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write);
 
-	// 定数バッファを探して、戻り値で返す
-	ConstantBufferData* GetFindConstantBuffer(const std::string& name);
+	// 定数バッファ更新
+	bool UpdateConstantBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size);
+
+	// 定数バッファを探して、バインド
+	bool BindConstantBuffer(const std::vector<ConstantBufferInfo>* cbInfo, ID3D11DeviceContext* context, SETSHADERTYPE type);
 
 	// 後処理
 	void ReleaseAllConstantBuffers();

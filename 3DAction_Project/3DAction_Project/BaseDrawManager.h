@@ -16,7 +16,10 @@
 // ==============================
 // ヘッダー
 // ==============================
-#include "GraphicsEnums.h" // 設定用ヘッダー
+// 設定用ヘッダー
+#include "GraphicsEnums.h"
+// 基本ヘッダー
+#include <cstdint>
 
 
 // ==============================
@@ -24,7 +27,7 @@
 // ==============================
 class BaseDrawManager
 {
-private:
+protected:
 
 public:
 	// コンストラクタ・デストラクタ
@@ -34,23 +37,33 @@ public:
 	// 描画
 	virtual void BegingDraw() = 0;
 	virtual void EndDraw() = 0;
-	virtual void Draw(const char* id, const void* data, const int size) = 0;
-
-	virtual void Draw(const char* _vsShaderName,
+	virtual void ModelDraw(const char* _vsShaderName,
 		const char* _psShaderName,
+		const char* _modelName) = 0;
+
+	virtual void PrimitiveDraw(const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vsBufferName,
 		const char* _textureNam = nullptr,
-		const char* _modelName = nullptr,
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
+	/* ------------ リソース作成 ------------ */
 	// 頂点バッファ作成
 	virtual bool CreateVertexBuffer(
-		const char* drawID, 
+		const char* modelName, 
 		const void* data, 
 		size_t size,
-		int vertexNumber,
+		uint32_t vertexNumber,
+		uint32_t maxNumber,
 		PrimitiveType type = PrimitiveType::TriangleStrip,
 		BufferUsage usage = BufferUsage::Dynamic,
 		CPUAccess access = CPUAccess::Write) = 0;
+
+	// インデックスバッファ作成
+	virtual bool CreateIndexBuffer(
+		const char* modelName,
+		const uint32_t* indexData,
+		uint32_t indexNumber) = 0;
 
 	// 定数バッファ作成
 	virtual bool CreateConstantBuffer(
@@ -72,19 +85,22 @@ public:
 
 	// テクスチャのロード
 	virtual bool LoadTexture(const char* textureName) = 0;
+	// モデルのロード
+	virtual bool LoadModel(const char* modelName, const char* modelFolderName = "") = 0;
 
 	// サンプラー作成
 	virtual bool CreateSampler(const SamplerDesc& _desc) = 0;
 
 	// View作成
 	virtual bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
-	virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
-	virtual bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
-	virtual bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
+	//virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
+	//virtual bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
+	//virtual bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
 
-	// バッファ更新
+
+	/* ------------ バッファ更新 ------------ */
 	// 頂点バッファ更新
-	virtual void UpdateVertexBuffer(const char* drawID, const void* data, int size) = 0;
+	virtual void UpdateVertexBuffer(const char* vertexName, const void* data, int size) = 0;
 	// 定数バッファ更新
 	virtual void UpdateShaderConstants(const char* constantName, const void* data, const int size) = 0;
 };

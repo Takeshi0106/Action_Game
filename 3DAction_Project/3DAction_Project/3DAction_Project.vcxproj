@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\lib\MT\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\pdb\Debug;C:\0_DXLibs\0_Assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\lib\MT\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\pdb\Relese;C:\0_DXLibs\0_Assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -158,8 +158,12 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="DirectX_FormatConverter.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="ActionGame.cpp" />
+    <ClCompile Include="IndexBufferData.cpp" />
+    <ClCompile Include="IndexBufferManager.cpp" />
     <ClCompile Include="InputLayoutInfo.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModelConversionModule.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="SamplerData.cpp" />
     <ClCompile Include="SamplerManager.cpp" />
@@ -173,7 +177,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="2DTriangle.cpp" />
-    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBufferIData.cpp" />
     <ClCompile Include="VertexBufferManager.cpp" />
     <ClCompile Include="Windows_Quaternion.cpp" />
@@ -215,9 +218,15 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="DirectX11_DrawManager.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="IndexBufferData.h" />
+    <ClInclude Include="IndexBufferManager.h" />
     <ClInclude Include="InputLayoutInfo.h" />
+    <ClInclude Include="Knight.h" />
     <ClInclude Include="Matrix4x4.h" />
+    <ClInclude Include="ModelData.h" />
+    <ClInclude Include="ModelConversionModule.h" />
     <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="MaterialData.h" />
     <ClInclude Include="Quaternionh.h" />
     <ClInclude Include="SamplerSetting.h" />
     <ClInclude Include="SamplerData.h" />
@@ -232,6 +241,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="2DTriangle.h" />
+    <ClInclude Include="UseShaderType.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="SaveLoadUtils.h" />
@@ -253,16 +263,19 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="WindowsMath_Utiles.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PS_Debug.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointName>
+    <FxCompile Include="PS_NoTexture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <FileType>Document</FileType>
     </FxCompile>
     <FxCompile Include="PS_Texture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="PS_TextureModel.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -274,17 +287,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="VS_Debug.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">main</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).cso</ObjectFileOutput>
-      <FileType>Document</FileType>
     </FxCompile>
     <FxCompile Include="VS_TriangleDebug.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -299,6 +301,9 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

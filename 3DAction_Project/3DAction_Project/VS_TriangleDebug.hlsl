@@ -3,8 +3,10 @@
 // ==================================================
 struct VS_IN
 {
-    float4 color : COLOR; // 頂点カラー
     float3 pos : POSITION; // 頂点位置
+    float3 normal : NORMAL; // 法線
+    float2 uv : TEXCOORD; // UV
+    float4 color : COLOR; // 頂点カラー
 };
 
 // ==================================================
@@ -25,7 +27,7 @@ cbuffer CameraInfo : register(b0)
     float4x4 proj;
 };
 
-cbuffer Transform1 : register(b1)
+cbuffer Transform : register(b1)
 {
     float4x4 world;
 };

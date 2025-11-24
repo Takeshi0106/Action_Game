@@ -6,6 +6,11 @@
 // 
 // 作成、管理、削除を担当
 // VertexBufferDataに重たいヘッダーがあります
+// 
+// 【注意】
+// 頂点を増やす関数が用意されていますが、
+// インデックスバッファのほうに増やす関数がないため
+// 使用することはできません
 // =====================================
 
 
@@ -46,7 +51,7 @@ public:
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
-		const std::string& name,
+		const std::string name,
 		ID3D11Device* device,
 		const void* vertices,
 		int vertexCount,
@@ -57,13 +62,15 @@ public:
 		CPUAccess access = CPUAccess::Write
 	);
 
-	// 頂点バッファを探して、戻り値で返す
-	VertexBufferData* GetFindVertexData(const std::string& name) const;
+	// 頂点バッファ更新
+	bool UpdateVertexBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size);
+
+	// 頂点バッファをバインドして描画する頂点数を返す
+	int BindVertexBuffer(const std::string& name, ID3D11DeviceContext* context) const;
+	
 	// 頂点バッファがあるかのチェック
 	bool Exists(const std::string& name) const;
 
 	// 後処理
 	void ReleaseAllVertexBuffers();
-
 };
-

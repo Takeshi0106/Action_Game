@@ -7,11 +7,16 @@
 #include "TextureData.h"
 // DirectXヘッダー
 #include <d3d11.h>        // DirectXのAPIヘッダー
-#include <wrl/client.h>   // スマートポインター
 // バッファユーリアリティヘッダー
 #include "DirectX_FormatConverter.h"
 // ログ出力
 #include "ReportMessage.h"
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+// デバッグ用
+#pragma comment(lib, "dxguid.lib")
+#endif
 
 
 // ================================
@@ -24,7 +29,7 @@ UINT ToDXBindFlag(BindFlag flags); // バインドフラグをDirectXように�
 // メンバー関数
 // =================================
 bool TextureManager::CreateTexture(
-    const std::string& name,
+    const std::string name,
     ID3D11Device* device,
     unsigned int width,
     unsigned int height,
@@ -83,6 +88,17 @@ bool TextureManager::CreateTexture(
 
 	// 名前を保存しておく
 	m_Logger.Log(name.c_str());
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+    DebugLog::OutputToConsole(("テクスチャバッファ " + name + " を作成しました").c_str());
+
+    // 名前を設定
+    m_Textures[name]->GetTexture()->SetPrivateData(
+        WKPDID_D3DDebugObjectName,
+        UINT(name.size()),
+        name.c_str());
+#endif
 
 	return true;
 }

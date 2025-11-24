@@ -3,9 +3,10 @@
 // ==================================================
 struct VS_IN
 {
-    float4 color : COLOR; // 頂点カラー
     float3 pos : POSITION; // 頂点位置
+    float3 normal : NORMAL; // 法線
     float2 uv : TEXCOORD; // UV
+    float4 color : COLOR; // 頂点カラー
 };
 
 // ==================================================
@@ -14,8 +15,9 @@ struct VS_IN
 struct VS_OUT
 {
     float4 pos : SV_POSITION; // クリッピング後の座標
+    float3 normal : NORMAL; // 法線
+    float2 uv : TEXCOORD; // UV
     float4 color : COLOR; // 頂点カラー
-    float2 uv : TEXCOORD;
 };
 
 // ==================================================
@@ -27,7 +29,7 @@ cbuffer CameraInfo : register(b0)
     float4x4 proj;
 };
 
-cbuffer Transform1 : register(b1)
+cbuffer Transform : register(b1)
 {
     float4x4 world;
 };
@@ -46,6 +48,9 @@ VS_OUT main(VS_IN vin)
     vout.pos = mul(vout.pos, world); // ワールド座標
     vout.pos = mul(vout.pos, view); // ビュー座標
     vout.pos = mul(vout.pos, proj); // プロジェクション座標
+    
+    // 法線をワールド変換する
+    vout.normal = mul(vin.normal, (float3x3) world);
     
     // そのまま返す
     vout.color = vin.color;

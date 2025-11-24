@@ -62,11 +62,6 @@ bool SamplerManager::CreateSampler(
     // 配列に保存
     m_Samplers[_desc] = samplerData;
 
-    // 作成ログ出力
-    DebugLog::OutputToConsole((
-        SamplerDescToString(&_desc) +
-        "サンプラーを作成しました").c_str());
-
     return true;
 }
 
@@ -74,19 +69,24 @@ bool SamplerManager::CreateSampler(
 // ==========================================
 // サンプラー取得
 // ==========================================
-SamplerData* SamplerManager::GetSampler(const SamplerDesc& _sampler)
+bool SamplerManager::BindSampler(const SamplerDesc& _sampler,ID3D11DeviceContext* context)
 {
+    // サンプラーを探す
     auto it = m_Samplers.find(_sampler);
+
     if (it != m_Samplers.end())
     {
-        return it->second.get();
+        ID3D11SamplerState* sampler = it->second.get()->GetSampler();
+        context->PSSetSamplers(0, 1, &sampler);
+
+        return true;
     }
+
 
     ErrorLog::OutputToConsole((
         SamplerDescToString(&_sampler) +
         "サンプラーが見つかりませんでした").c_str());
-
-    return nullptr;
+    return false;
 }
 
 

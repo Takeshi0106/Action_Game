@@ -9,11 +9,9 @@
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
 
-
-// ======================================
-// 静的メンバー配列
-// ======================================
-// std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> VertexBufferManager::m_VertexBuffers;
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment(lib, "dxguid.lib")
+#endif
 
 
 // ======================================
@@ -28,7 +26,7 @@ inline D3D11_PRIMITIVE_TOPOLOGY ToDXPrimitive(PrimitiveType type);
 // =======================================
 // 頂点バッファ作成
 bool VertexBufferManager::CreateVertexBuffer(
-    const std::string& name,
+    const std::string name,
     ID3D11Device* device,
     const void* vertices,
     int vertexCount,
@@ -67,30 +65,67 @@ bool VertexBufferManager::CreateVertexBuffer(
     // 作製した頂点バッファの名前を保存
     m_Logger.Log(name.c_str());
 
-    DebugLog::OutputToConsole((name + " を作成しました").c_str());
+#if defined(DEBUG) || defined(_DEBUG)
+    DebugLog::OutputToConsole(("頂点バッファ " + name + " を作成しました").c_str());
+
+	// 名前を設定
+    m_VertexBuffers[name]->GetVertexBuffer()->SetPrivateData(
+        WKPDID_D3DDebugObjectName,
+        UINT(name.size()),
+        name.c_str());
+#endif
 
     return true;
 }
 
 
 // =======================================
-// 頂点バッファを探して、戻り値で返す
+// 頂点バッファ更新
 // =======================================
-VertexBufferData* VertexBufferManager::GetFindVertexData(const std::string& name) const
+bool VertexBufferManager::UpdateVertexBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size)
 {
-	// 探す
-	auto it = m_VertexBuffers.find(name);
+    // 探す
+    auto it = m_VertexBuffers.find(name);
 
-	if (it != m_VertexBuffers.end())
-	{
-		// 頂点データを返す
-        return it->second.get();
-	}
-	else {
-		WarningLog::OutputToConsole(std::string(" 頂点バッファ : " + name + " が見つかりませんでした").c_str());
-	}
+    if (it != m_VertexBuffers.end())
+    {
+        // 更新
+        it->second.get()->UpdateBuffer(context, data, size);
+        return true;
+    }
 
-	return nullptr;
+    ErrorLog::OutputToConsole(std::string("頂点バッファ" + name + " が見つかりませんでした").c_str());
+    return false;
+}
+
+
+// =======================================
+// 頂点バッファをバインド
+// =======================================
+int VertexBufferManager::BindVertexBuffer(const std::string& name, ID3D11DeviceContext* context) const
+{
+    // 探す
+    auto it = m_VertexBuffers.find(name);
+
+    if (it != m_VertexBuffers.end())
+    {
+        // 入力アセンブラ
+        ID3D11Buffer* vbuffers = it->second.get()->GetVertexBuffer();
+        UINT stride = UINT(it->second.get()->GetStride());
+        UINT offset = 0;
+
+        // 頂点バッファをセット
+        context->IASetVertexBuffers(0, 1, &vbuffers, &stride, &offset);
+        it->second.get()->SetIsUpdate(false);
+
+        // トポロギー設定
+       context->IASetPrimitiveTopology(it->second.get()->GetPrimitiveType());
+
+        // 頂点データを返す
+       return it->second.get()->GetVertexCount();
+    }
+
+    return -1;
 }
 
 
@@ -110,7 +145,6 @@ void VertexBufferManager::ReleaseAllVertexBuffers()
 {
     m_VertexBuffers.clear();
 }
-
 
 
 // ========================================

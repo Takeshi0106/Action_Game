@@ -40,7 +40,7 @@ protected:
 
 public:
 	// 定数バッファ情報
-	const std::vector<ConstantBufferInfo>& GetCBInfo() const { return CBInfo; }
+	const std::vector<ConstantBufferInfo>* GetCBInfo() const { return &CBInfo; }
 };
 
 

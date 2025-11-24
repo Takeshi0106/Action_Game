@@ -1,13 +1,26 @@
-﻿#include "ActionGame.h"
+﻿
+// ==========================================
+// ヘッダー
+// ==========================================
+// 必須
+#include "ActionGame.h"
+// 計算
 #include  "Quaternionh.h"
 #include "Matrix4x4.h"
 #include "Vector3.h"
+// 色
 #include "Color.h"
+// 時間
 #include "Timer.h"
+// 定数バッファ
 #include "GraphicsEnums.h"
+// 文字列
 #include <string>
-
+// オブジェクト
 #include "Square2D.h"
+#include "Knight.h"
+// ログ出力
+#include "ReportMessage.h"
 
 
 // ==========================================
@@ -18,8 +31,9 @@ struct CameraInfo
 	Matrix4x4 ViewMatrix;
 	Matrix4x4 ProjMatrix;
 };
-
+// 四角形描画
 Square2D g_Square;
+Knight g_Knight;
 
 
 // =================================
@@ -54,7 +68,8 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 		CPUAccess::Write);
 
 	// 四角
-	g_Square.Init(m_DrawManager);
+	// g_Square.Init(m_DrawManager);
+	g_Knight.Init(m_DrawManager);
 
 	Timer::Init(); // タイマー初期化
 	Timer::Start(); // タイマー開始
@@ -69,7 +84,24 @@ void ActionGame::Update()
 	// タイマーデバッグ
 	Timer::Debug_CheckUpdate();
 
-	g_Square.Update();
+	// g_Square.Update();
+	g_Knight.Update();
+
+// #if defined(DEBUG) || defined(_DEBUG)
+	// 時間を取得
+	m_FPSTime += Timer::GetDeltaTime();
+	m_FPSCount++;
+
+	if (m_FPSTime > 1.0f)
+	{
+		// ログ出力
+		WarningLog::OutputToConsole(std::string("1フレームのFPS " + std::to_string(m_FPSCount)).c_str());
+
+		// リセット
+		m_FPSTime = 0.0f;
+		m_FPSCount = 0;
+	}
+// #endif
 
 	// タイマー更新処理
 	Timer::LastUpdate();
@@ -84,7 +116,8 @@ void ActionGame::Draw()
 	// 描画前
 	m_DrawManager->BegingDraw();
 
-	g_Square.Draw();
+	// g_Square.Draw();
+	g_Knight.Draw();
 
 	// 描画後
 	m_DrawManager->EndDraw();
@@ -96,5 +129,6 @@ void ActionGame::Draw()
 // ================================
 void ActionGame::Uninit()
 {
-	g_Square.Uninit();
+	// g_Square.Uninit();
+	g_Knight.Uninit();
 }

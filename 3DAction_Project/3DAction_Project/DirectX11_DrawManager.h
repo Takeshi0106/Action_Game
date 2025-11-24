@@ -33,8 +33,11 @@ class VertexBufferManager;
 class TextureManager;
 class ResourceViewManager;	
 class SamplerManager;
-
+class IndexBufferManager;
+class ModelManager;
+// モジュールの前方宣言
 class TextureLoader;
+class ModelConversionModule;
 
 
 // ========================================
@@ -50,16 +53,23 @@ private:
 	std::unique_ptr<TextureManager> m_TextureManager; // テクスチャマネージャー
 	std::unique_ptr<ResourceViewManager> m_ViewManager; // ビューマネージャー
 	std::unique_ptr<SamplerManager> m_SamplerManager; // サンプラーマネージャー
+	std::unique_ptr<IndexBufferManager> m_IndexBufferManager; // インデックスバッファ
+	std::unique_ptr<ModelManager> m_ModelManager; // モデルマネージャー
 
 	// モジュール
 	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
+	std::unique_ptr<ModelConversionModule> m_ModelConversionModule; // モデル変換モジュール
 
 	// 描画
-	void DrawObject(const char* _vsShaderName, 
+	bool DrawModelObject(const char* _vsShaderName,
 		const char* _psShaderName,
-		const char* _textureName, 
-		const SamplerDesc _desc,
 		const char* _modelName);
+
+	bool DrawPrimitiveObject(const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vsBufferName,
+		const char* _textureName, 
+		const SamplerDesc _desc);
 
 public:
 	// コンストラクタ
@@ -75,23 +85,33 @@ public:
 	void BegingDraw();
 	void EndDraw();
 
-	void Draw(const char* drawID, const void* data, const int size) override;
+	// 今は使用できません注意してください
+	void ModelDraw(const char* _vsShaderName, 
+		const char* _psShaderName, 
+		const char* _modelName) override;
 
-	void Draw(const char* _vsShaderName,
+	void PrimitiveDraw(const char* _vsShaderName,
 		const char* _psShaderName,
+		const char* _vsBufferName,
 		const char* _textureName = nullptr,
-		const char* _modelName = nullptr,
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override;
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
-		const char* drawID,
+		const char* modelName,
 		const void* data,
 		size_t size,
-		int vertexNumber,
+		uint32_t vertexNumber,
+		uint32_t maxNumber,
 		PrimitiveType type,
 		BufferUsage usage,
 		CPUAccess access) override;
+
+	// インデックスバッファ作成
+	bool CreateIndexBuffer(
+		const char* modelName,
+		const uint32_t* indexData,
+		uint32_t indexNumber) override;
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(
@@ -116,17 +136,18 @@ public:
 
 	// テクスチャのロード
 	bool LoadTexture(const char* textureName) override;
+	// モデルのロード
+	bool LoadModel(const char* modelName, const char* modelFolderName = "") override;
 
 	// View作成
 	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;
-	bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
-	bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) override;
-	bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	//bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	//bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	//bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) override;
 
 	// バッファ更新
 	// 定数バッファ更新
 	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override;
 	// 頂点バッファ更新
-	void UpdateVertexBuffer(const char* drawID, const void* data, int size) override;
+	void UpdateVertexBuffer(const char* vertexName, const void* data, int size) override;
 };
-

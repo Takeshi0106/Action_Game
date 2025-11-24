@@ -49,9 +49,6 @@
     <Filter Include="3_Hlsl">
       <UniqueIdentifier>{194a4f8a-d370-42ab-afab-1822f9a36484}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2_Core\SaveLoad">
-      <UniqueIdentifier>{3e9bee0c-817f-489a-9aae-9db8b36cb856}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\Faile">
       <UniqueIdentifier>{95ead3f2-344a-4d81-9eef-39297f6a26e4}</UniqueIdentifier>
     </Filter>
@@ -136,9 +133,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager">
       <UniqueIdentifier>{572aba3a-4ad9-465e-9e2b-d844f474070d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_ModelManager">
-      <UniqueIdentifier>{85da51fa-3834-46d5-b604-d84304b5459a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData">
       <UniqueIdentifier>{165837de-03f5-41e0-9c47-abf603dced7e}</UniqueIdentifier>
     </Filter>
@@ -154,32 +148,50 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter">
       <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Object">
-      <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Object\BaseObject">
-      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="3_Hlsl\Debug">
-      <UniqueIdentifier>{dac1bb92-e977-4e4d-9330-1d1fa5db6909}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3_Hlsl\Triangle">
       <UniqueIdentifier>{9d33cc3f-536f-4624-b1f3-cca34a018e39}</UniqueIdentifier>
     </Filter>
     <Filter Include="0_Main\BaseGame">
       <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Object\TAriangle">
-      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Object\Square">
-      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Object\Vertex">
-      <UniqueIdentifier>{5fbbee1c-36f8-43f4-ae53-7c5109d66842}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\6_Setting">
       <UniqueIdentifier>{b0d7046b-9219-4751-80f7-ca3155126a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\AssetUsageLogger">
+      <UniqueIdentifier>{8e5fd0c9-2970-4691-bccf-fd90bc90d16f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager">
+      <UniqueIdentifier>{bf385ec2-bb69-4e1c-948e-bdac45da98bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\SaveLoad">
+      <UniqueIdentifier>{3e9bee0c-817f-489a-9aae-9db8b36cb856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\1_MeshData">
+      <UniqueIdentifier>{fe995487-afd6-456b-972d-48ef8019a8ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\0_ModelConversion">
+      <UniqueIdentifier>{9fd92a9e-335e-47f9-ad8c-c47588245f5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager">
+      <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game">
+      <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\BaseObject">
+      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\TAriangle">
+      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\Square">
+      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\Knight">
+      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo">
+      <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -194,9 +206,6 @@
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetLogger.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager</Filter>
@@ -273,9 +282,6 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
     </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_ModelManager</Filter>
-    </ClCompile>
     <ClCompile Include="TextureData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData</Filter>
     </ClCompile>
@@ -298,13 +304,28 @@
       <Filter>0_Main</Filter>
     </ClCompile>
     <ClCompile Include="2DTriangle.cpp">
-      <Filter>4_Object\TAriangle</Filter>
+      <Filter>4_Game\TAriangle</Filter>
     </ClCompile>
     <ClCompile Include="Square2D.cpp">
-      <Filter>4_Object\Square</Filter>
+      <Filter>4_Game\Square</Filter>
     </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>4_Object\Vertex</Filter>
+    <ClCompile Include="AssetLogger.cpp">
+      <Filter>2_Core\AssetUsageLogger</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBufferData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelConversionModule.cpp">
+      <Filter>2_Core\0_ModelConversion</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>4_Game\Knight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,9 +337,6 @@
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetLogger.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager</Filter>
@@ -404,9 +422,6 @@
     <ClInclude Include="ResourceViewManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
     </ClInclude>
-    <ClInclude Include="ModelManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_ModelManager</Filter>
-    </ClInclude>
     <ClInclude Include="TextureData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager\TextureData</Filter>
     </ClInclude>
@@ -435,30 +450,51 @@
       <Filter>0_Main\BaseGame</Filter>
     </ClInclude>
     <ClInclude Include="BaseObject.h">
-      <Filter>4_Object\BaseObject</Filter>
+      <Filter>4_Game\BaseObject</Filter>
     </ClInclude>
     <ClInclude Include="2DTriangle.h">
-      <Filter>4_Object\TAriangle</Filter>
+      <Filter>4_Game\TAriangle</Filter>
     </ClInclude>
     <ClInclude Include="Square2D.h">
-      <Filter>4_Object\Square</Filter>
-    </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>4_Object\Vertex</Filter>
+      <Filter>4_Game\Square</Filter>
     </ClInclude>
     <ClInclude Include="SamplerSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetLogger.h">
+      <Filter>2_Core\AssetUsageLogger</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBufferData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="UseShaderType.h">
+      <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
+      <Filter>2_Core\1_MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>2_Core\1_MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelConversionModule.h">
+      <Filter>2_Core\0_ModelConversion</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialData.h">
+      <Filter>2_Core\1_MeshData</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>4_Game\Knight</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VS_Object.hlsl">
       <Filter>3_Hlsl</Filter>
-    </FxCompile>
-    <FxCompile Include="PS_Debug.hlsl">
-      <Filter>3_Hlsl\Debug</Filter>
-    </FxCompile>
-    <FxCompile Include="VS_Debug.hlsl">
-      <Filter>3_Hlsl\Debug</Filter>
     </FxCompile>
     <FxCompile Include="VS_TriangleDebug.hlsl">
       <Filter>3_Hlsl\Triangle</Filter>
@@ -469,5 +505,14 @@
     <FxCompile Include="PS_Texture.hlsl">
       <Filter>3_Hlsl</Filter>
     </FxCompile>
+    <FxCompile Include="PS_NoTexture.hlsl">
+      <Filter>3_Hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_TextureModel.hlsl">
+      <Filter>3_Hlsl</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
   </ItemGroup>
 </Project>
