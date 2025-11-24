@@ -37,8 +37,8 @@ private:
 	// .Objだけをロードする
 	const std::string kObjExtension = ".obj";
 
-	// モデルをロードする
-	bool ModelLoad(const std::string& modelPath, int flag, ModelData& modelData);
+	// モデルをロードする (モデルファイルはm_ModelPathの下にフォルダーを入れていたらフォルダー名を入れる)
+	bool ModelLoad(const std::string& modelPath, int flag, ModelData& modelData, const std::string& modelFile = "");
 
 public:
 	// コンストラクタ・デストラクタ
@@ -52,7 +52,9 @@ public:
 	bool ModelConversion();
 
 	// 今はモデルをロードしてモデルマネージャーに入れる関数
+	// modelFile はモデルパスの下にファイルがあった場合、ファイル名を入れる
 	bool LoadAndRegisterModelResources(const std::string& modelName,
 		BaseDrawManager& drawManager,
-		ModelManager& modelManager);
+		ModelManager& modelManager,
+		const std::string& modelFile = "");
 };

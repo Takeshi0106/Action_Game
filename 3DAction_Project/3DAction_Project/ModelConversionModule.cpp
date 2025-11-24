@@ -46,15 +46,17 @@ bool ModelConversionModule::ModelConversion()
 // モデルを読み込んで、各マネージャーに登録する
 // =====================================
 bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, 
-	BaseDrawManager& drawManager,ModelManager& modelManager)
+	BaseDrawManager& drawManager,ModelManager& modelManager,
+	const std::string& modelFile)
 {
 	// モデルデータ
 	ModelData modelData;
 
 	// モデルを読み込む
-	if (!ModelLoad(modelName, 
-		aiProcessPreset_TargetRealtime_MaxQuality,
-		modelData)) {
+	if (!ModelLoad(modelName,
+		aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded,
+		modelData,
+		modelFile)) {
 		ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 		return false;
 	}
@@ -109,6 +111,8 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 			// パスではなくファイル名に変換
 			modelData.materialDataArray[i].textureName = 
 				std::filesystem::path(materialData.textureName).filename().string();
+
+			DebugLog::OutputToConsole((modelName + " テクスチャのロードに成功しました : " + modelData.materialDataArray[i].textureName).c_str());
 		}
 	}
 
@@ -122,10 +126,23 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 // =====================================
 // モデルを読み込む関数
 // =====================================
-bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag, ModelData& modelData)
+bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag,
+	ModelData& modelData, const std::string& modelFile)
 {
-	// ファイルパスに変換
-	std::filesystem::path modelPath = std::filesystem::path(m_ModelPath) / (_modelPath + kObjExtension);
+	// モデルが入っているパスを作成
+	std::filesystem::path modelPath;
+
+	// パスを作成
+	if (!modelFile.empty()) 
+	{
+		modelPath = std::filesystem::path(m_ModelPath) / modelFile 
+			/ ((_modelPath + kObjExtension));
+	}
+	else
+	{
+		modelPath = std::filesystem::path(m_ModelPath) / (_modelPath + kObjExtension);
+	}
+
 	// 区切り文字統一
 	modelPath.make_preferred();
 
@@ -225,7 +242,7 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag, M
 		if (scene->mMaterials[i]->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
 		{
 			// プロジェクトからの相対パスを作成
-			fullPath = std::filesystem::path(m_ModelPath) / texPath.C_Str();
+			fullPath = modelPath.parent_path() / texPath.C_Str();
 			// 区切り文字を変換
 			fullPath.make_preferred();
 		}

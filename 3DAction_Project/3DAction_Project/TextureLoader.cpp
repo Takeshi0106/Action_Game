@@ -42,7 +42,7 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
     DirectX::ScratchImage image;
     HRESULT hr = DirectX::LoadFromWICFile(
         filePath.wstring().c_str(),
-        DirectX::WIC_FLAGS_FORCE_RGB | DirectX::WIC_FLAGS_IGNORE_SRGB,
+        DirectX::WIC_FLAGS_NONE,
         nullptr,
         image
     );

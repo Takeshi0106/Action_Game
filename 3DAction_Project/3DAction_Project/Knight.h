@@ -20,11 +20,11 @@ class Knight : public BaseObject
 {
 private:
 	// モデル名
-	std::string m_ModelName = "Knight_Male";
+	std::string m_ModelName = "Mech_FinnTheFrog";
 	
 	// シェーダー名
 	std::string m_VSName = "VS_Object";
-	std::string m_PSName = "PS_NoTexture";
+	std::string m_PSName = "PS_TextureModel";
 
 	// 遅延初期化
 	void LateInit() override final;

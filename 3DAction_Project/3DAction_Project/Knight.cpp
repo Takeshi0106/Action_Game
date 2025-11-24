@@ -8,7 +8,7 @@
 void Knight::LateInit()
 {
 	// モデルのロード
-	m_Draw->LoadModel(m_ModelName.c_str());
+	m_Draw->LoadModel(m_ModelName.c_str(), "Character");
 
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
@@ -19,7 +19,7 @@ void Knight::LateInit()
 		CPUAccess::Write);
 
 	// 位置を更新
-	m_SRT = Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, 0.0f, 5.0f)) * m_SRT;
+	m_SRT = Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, 0.0f, 10.0f)) * m_SRT;
 }
 
 
@@ -28,7 +28,7 @@ void Knight::LateInit()
 // ============================
 void Knight::Update()
 {
-
+	m_SRT = m_SRT * Matrix4x4::CreateRotationYMatrix_LH(0.01f);
 }
 
 

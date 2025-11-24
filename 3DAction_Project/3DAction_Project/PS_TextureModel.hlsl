@@ -21,11 +21,17 @@ cbuffer Material : register(b0)
     float4 specular;
 };
 
+// サンプラーとテクスチャの宣言
+Texture2D tex : register(t0);
+SamplerState samp : register(s0);
 
 // =============================
 // ピクセルシェーダー
 // =============================
 float4 main(PSInput input) : SV_TARGET
 {
-    return diffse;
+    // テクスチャカラーを取得
+    float4 texColor = tex.Sample(samp, input.uv);
+    
+    return texColor;
 }

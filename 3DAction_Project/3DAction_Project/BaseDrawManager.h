@@ -86,7 +86,7 @@ public:
 	// テクスチャのロード
 	virtual bool LoadTexture(const char* textureName) = 0;
 	// モデルのロード
-	virtual bool LoadModel(const char* modelName) = 0;
+	virtual bool LoadModel(const char* modelName, const char* modelFolderName = "") = 0;
 
 	// サンプラー作成
 	virtual bool CreateSampler(const SamplerDesc& _desc) = 0;

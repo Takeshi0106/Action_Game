@@ -137,7 +137,7 @@ public:
 	// テクスチャのロード
 	bool LoadTexture(const char* textureName) override;
 	// モデルのロード
-	bool LoadModel(const char* modelName) override;
+	bool LoadModel(const char* modelName, const char* modelFolderName = "") override;
 
 	// View作成
 	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;

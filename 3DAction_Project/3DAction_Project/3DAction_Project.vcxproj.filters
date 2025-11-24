@@ -508,6 +508,9 @@
     <FxCompile Include="PS_NoTexture.hlsl">
       <Filter>3_Hlsl</Filter>
     </FxCompile>
+    <FxCompile Include="PS_TextureModel.hlsl">
+      <Filter>3_Hlsl</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />

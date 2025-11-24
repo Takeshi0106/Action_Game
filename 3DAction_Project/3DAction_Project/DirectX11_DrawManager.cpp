@@ -23,6 +23,13 @@
 // ログ出力
 #include "ReportMessage.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+// 計算関数
+#include <algorithm>
+// 時間出力
+#include "Timer.h"
+#endif
+
 
 // ============================================
 // クラスのメンバー関数
@@ -311,13 +318,14 @@ bool DirectX_DrawManager::LoadTexture(const char* textureName)
 // ===========================================
 // モデルロード
 // ===========================================
-bool DirectX_DrawManager::LoadModel(const char* modelName)
+bool DirectX_DrawManager::LoadModel(const char* modelName, const char* modelFolderName)
 {
 	// モデル変換モジュールを使用してモデルをロード
 	if (!m_ModelConversionModule->LoadAndRegisterModelResources(
 		modelName,
 		*this,
-		*m_ModelManager))
+		*m_ModelManager,
+		modelFolderName))
 	{
 		ErrorLog::OutputToConsole("モデルのロードに失敗しました");
 		return false;
@@ -486,6 +494,12 @@ bool DirectX_DrawManager::DrawModelObject(
 	const char* _psShaderName,
 	const char* _modelName)
 {
+
+#if defined(DEBUG) || defined(_DEBUG)
+	//// 読み込み時間計測開始
+	//float startTime = Timer::GetDeltaTime();
+#endif
+
 	// シェーダーバインド
 	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager->BindVertexShader(_vsShaderName, DirectX11::Get::GetContext());
 	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager->BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
@@ -504,7 +518,7 @@ bool DirectX_DrawManager::DrawModelObject(
 
 		// インデックスバッファをバインド
 		uint32_t count = m_IndexBufferManager->BindIndexData(_modelName + std::to_string(i), DirectX11::Get::GetContext());
-		
+
 		// マテリアル情報取得
 		Color color[3] = {
 			data->materialData[data->meshMaterialIDs[i]].diffuse,
@@ -520,9 +534,28 @@ bool DirectX_DrawManager::DrawModelObject(
 		// ピクセルシェーダー更新
 		m_CBManager->BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
+		// テクスチャバインド
+		if (!data->materialData[data->meshMaterialIDs[i]].textureName.empty())
+		{
+			// テクスチャ バインド
+			m_ViewManager->BindSRV(data->materialData[data->meshMaterialIDs[i]].textureName.c_str(),
+				DirectX11::Get::GetContext(),
+				PIXSELSHADER);
+			// サンプラー バインド
+			m_SamplerManager->BindSampler(SamplerDesc::NormalSampler(), DirectX11::Get::GetContext());
+		}
+
 		// 描画
 		DirectX11::Get::GetContext()->DrawIndexed(count, 0, 0);
 	}
+
+#if defined(DEBUG) || defined(_DEBUG)
+	//// 読み込み時間計測終了
+	//float endTime = Timer::GetDeltaTime();
+
+	//DebugLog::OutputToConsole((std::string("モデル描画完了 : ") + _modelName + "\n"
+	//	" 読み込み時間 : " + std::to_string(endTime - startTime) + " 秒").c_str());
+#endif
 
 	return true;
 }

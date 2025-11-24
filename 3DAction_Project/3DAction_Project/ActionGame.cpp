@@ -68,6 +68,7 @@ void ActionGame::Init(BaseDrawManager* _drawManager)
 		CPUAccess::Write);
 
 	// 四角
+	// g_Square.Init(m_DrawManager);
 	g_Knight.Init(m_DrawManager);
 
 	Timer::Init(); // タイマー初期化
@@ -83,6 +84,7 @@ void ActionGame::Update()
 	// タイマーデバッグ
 	Timer::Debug_CheckUpdate();
 
+	// g_Square.Update();
 	g_Knight.Update();
 
 // #if defined(DEBUG) || defined(_DEBUG)
@@ -114,6 +116,7 @@ void ActionGame::Draw()
 	// 描画前
 	m_DrawManager->BegingDraw();
 
+	// g_Square.Draw();
 	g_Knight.Draw();
 
 	// 描画後
@@ -126,5 +129,6 @@ void ActionGame::Draw()
 // ================================
 void ActionGame::Uninit()
 {
+	// g_Square.Uninit();
 	g_Knight.Uninit();
 }
