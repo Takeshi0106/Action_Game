@@ -15,12 +15,10 @@
 #include <memory> // スマートポインター
 // 配列のヘッダー
 #include <unordered_map> // ハッシュ値検索
-// バッファセッティング
-#include "GraphicsEnums.h"
 // アセットログ出力
 #include "AssetLogger.h"
-// 文字列
-#include <string>
+// サンプラー
+#include "SamplerSetting.h"
 
 
 // =========================

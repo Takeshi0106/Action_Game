@@ -7,6 +7,12 @@
 
 
 // ==============================================
+// ヘッダー
+// ==============================================
+#include <cstdint>
+
+
+// ==============================================
 // 前方宣言
 // ==============================================
 // ウィンドウハンドルの前方宣言
@@ -26,15 +32,12 @@ struct IDXGISwapChain;
 namespace DirectX11 
 {
 	// DirectXの初期化
-	bool Init(unsigned int Width, unsigned int Height, HWND windowHandle);
+	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle);
 	// DirectXの後処理
 	void Uninit();
 
-	// デバッグ描画
-	void BeginDraw(); // 描画バッファと深度バッファの初期化処理
-	void EndDraw();   // 次のバッファに入れ替える処理
-
-	void DebugDraw(float time); // デバッグ用描画
+	// ビューポート設定
+	void SetViewPort(uint16_t width, uint16_t height);
 
 	// ゲッター関数
 	namespace Get 

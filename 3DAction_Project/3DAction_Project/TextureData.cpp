@@ -8,9 +8,25 @@
 
 
 // =======================================
+// スワップチェインからテクスチャ作成
+// =======================================
+bool SwapchainTextureData::CreateTextureFromSwapChain(IDXGISwapChain* swapChain)
+{
+    // スワップチェインが生成したバックバッファを取得する
+    HRESULT hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)m_Texture.GetAddressOf());
+    if (FAILED(hr)) {
+        ErrorLog::OutputToConsole("スワップチェインからバックバッファを取得することが出来ませんでした。");
+        return false;
+    }
+
+    return true;
+}
+
+
+// =======================================
 // テクスチャ作成関数
 // =======================================
-bool Texture2DData::CreateTexture2D(ID3D11Device* device,
+bool BindableTextureData::CreateTexture2D(ID3D11Device* device,
 	unsigned int width,
 	unsigned int height,
 	DXGI_FORMAT format,

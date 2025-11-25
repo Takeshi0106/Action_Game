@@ -1,41 +1,44 @@
-#pragma once
+ï»¿#pragma once
 
 // =================================
-// yƒNƒ‰ƒXŠT—vz
-// DirectX‚Ìƒoƒbƒtƒ@ŠÖ˜A‚Ì—ñ‹“Œ^•ÏŠ·‚ğs‚¤ƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX
+// ã€ã‚¯ãƒ©ã‚¹æ¦‚è¦ã€‘
+// DirectXã®ãƒãƒƒãƒ•ã‚¡é–¢é€£ã®åˆ—æŒ™å‹å¤‰æ›ã‚’è¡Œã†ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹
 //
-// *’ˆÓ
-// d‚½‚¢ƒwƒbƒ_[‚ğƒCƒ“ƒNƒ‹[ƒh‚µ‚Ä‚¢‚Ü‚·
-// ƒwƒbƒ_[‚ÉƒCƒ“ƒNƒ‹[ƒh”ñ„§
+// *æ³¨æ„
+// é‡ãŸã„ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã—ã¦ã„ã¾ã™
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã«ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰éæ¨å¥¨
 // =================================
 
 
 // =================================
-// ƒwƒbƒ_[
+// ãƒ˜ãƒƒãƒ€ãƒ¼
 // =================================
+// DirectXç”¨
 #include <d3d11.h>
+// ç‹¬è‡ªç”¨
 #include "GraphicsEnums.h"
-
+// ã‚µãƒ³ãƒ—ãƒ©ãƒ¼è¨­å®šç”¨
+#include "SamplerSetting.h"
 
 // =================================
-// ƒNƒ‰ƒX
+// ã‚¯ãƒ©ã‚¹
 // =================================
 class DirectX_FormatConverter
 {
 public:
-    // g—p–Ú“I‚É•ÏŠ·
+    // ä½¿ç”¨ç›®çš„ã«å¤‰æ›
     static D3D11_USAGE ToDXUsage(BufferUsage usage);
 
-    // ƒAƒNƒZƒX§ŒÀ‚É•ÏŠ·
+    // ã‚¢ã‚¯ã‚»ã‚¹åˆ¶é™ã«å¤‰æ›
     static UINT ToDXCPUAccess(CPUAccess access);
 
-    // ©ìFormat ‚©‚ç DXGI_FORMAT ‚É•ÏŠ·
+    // è‡ªä½œFormat ã‹ã‚‰ DXGI_FORMAT ã«å¤‰æ›
     static DXGI_FORMAT ToDXFormat(Format format);
 
-    // DXGI_FORMAT ‚©‚ç ©ìFormat ‚É•ÏŠ·
+    // DXGI_FORMAT ã‹ã‚‰ è‡ªä½œFormat ã«å¤‰æ›
     static Format ToSelfFormat(DXGI_FORMAT format);
 
-    // ƒTƒ“ƒvƒ‰[•ÏŠ·
+    // ã‚µãƒ³ãƒ—ãƒ©ãƒ¼å¤‰æ›
     static D3D11_FILTER ConvertFilter(SamplerFilter filter);
     static D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SamplerAddressMode mode);
     static D3D11_COMPARISON_FUNC ConvertComparisonFunc(SamplerComparisonFunc func);

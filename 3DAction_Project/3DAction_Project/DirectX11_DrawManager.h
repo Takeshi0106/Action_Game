@@ -18,6 +18,8 @@
 #include "BaseDrawManager.h"
 // std::unique_ptrを使用するため
 #include <memory>
+// 色設定
+#include "Color.h"
 
 
 // ========================================
@@ -46,6 +48,11 @@ class ModelConversionModule;
 class DirectX_DrawManager : public BaseDrawManager
 {
 private:
+	// 最終描画に使用するRTの名前
+	const char* kFinalRTName = "FinalRT";
+	const char* kFInalDSName = "FinalDS";
+	const Color kClearColor = Color(0.1f, 0.3f, 0.7f, 1.0f); // クリアカラー
+
 	// リソースマネージャー
 	std::unique_ptr<ShaderManager> m_ShaderManager;     // シェーダーマネージャー
 	std::unique_ptr<ConstantBufferManager> m_CBManager; // 定数バッファマネージャー
@@ -88,13 +95,13 @@ public:
 	// 今は使用できません注意してください
 	void ModelDraw(const char* _vsShaderName, 
 		const char* _psShaderName, 
-		const char* _modelName) override;
+		const char* _modelName) override final;
 
 	void PrimitiveDraw(const char* _vsShaderName,
 		const char* _psShaderName,
 		const char* _vsBufferName,
 		const char* _textureName = nullptr,
-		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override;
+		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override final;
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
@@ -105,13 +112,13 @@ public:
 		uint32_t maxNumber,
 		PrimitiveType type,
 		BufferUsage usage,
-		CPUAccess access) override;
+		CPUAccess access) override final;
 
 	// インデックスバッファ作成
 	bool CreateIndexBuffer(
 		const char* modelName,
 		const uint32_t* indexData,
-		uint32_t indexNumber) override;
+		uint32_t indexNumber) override final;
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(
@@ -119,7 +126,7 @@ public:
 		const void* data,
 		size_t size,
 		BufferUsage usage = BufferUsage::Dynamic,
-		CPUAccess access = CPUAccess::Write) override;
+		CPUAccess access = CPUAccess::Write) override final;
 
 	// テクスチャ作成
 	bool CreateTexture(
@@ -129,25 +136,29 @@ public:
 		Format format,
 		BindFlag bindFlag,
 		BufferUsage usage = BufferUsage::Default,
-		CPUAccess cpu = CPUAccess::None) override;
+		CPUAccess cpu = CPUAccess::None) override final;
 
 	// サンプラー作成
-	bool CreateSampler(const SamplerDesc& _desc) override;
+	bool CreateSampler(const SamplerDesc& _desc) override final;
 
 	// テクスチャのロード
-	bool LoadTexture(const char* textureName) override;
+	bool LoadTexture(const char* textureName) override final;
 	// モデルのロード
-	bool LoadModel(const char* modelName, const char* modelFolderName = "") override;
+	bool LoadModel(const char* modelName, const char* modelFolderName = "") override final;
 
 	// View作成
-	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override;
-	//bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
-	//bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) override;
-	//bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override final;
+	bool CreateRTV(const char* name, uint32_t mipSlice) override final;
+	bool CreateDSV(const char* name, Format format) override final;
 
+	//bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
+	
 	// バッファ更新
 	// 定数バッファ更新
-	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override;
+	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override final;
 	// 頂点バッファ更新
-	void UpdateVertexBuffer(const char* vertexName, const void* data, int size) override;
+	void UpdateVertexBuffer(const char* vertexName, const void* data, int size) override final;
+
+	// レンダーターゲットバインド
+	void BindRenderTarget(const char* rtvName = nullptr, const char* dsvName = nullptr) override final;
 };

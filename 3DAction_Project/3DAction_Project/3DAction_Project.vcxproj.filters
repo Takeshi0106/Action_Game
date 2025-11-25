@@ -145,9 +145,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager\SamplerData">
       <UniqueIdentifier>{3ea33533-1e78-47bc-a801-ccb51bf76d28}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter">
-      <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3_Hlsl\Triangle">
       <UniqueIdentifier>{9d33cc3f-536f-4624-b1f3-cca34a018e39}</UniqueIdentifier>
     </Filter>
@@ -192,6 +189,9 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo">
       <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter">
+      <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

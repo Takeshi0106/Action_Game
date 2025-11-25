@@ -8,6 +8,8 @@
 #include "DirectX_FormatConverter.h"
 // ログ出力
 #include "ReportMessage.h"
+// 文字列
+#include <string>
 
 
 // ===============================

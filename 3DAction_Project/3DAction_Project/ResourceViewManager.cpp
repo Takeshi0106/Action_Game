@@ -16,9 +16,9 @@
 // SRV
 // =============================
 // 作成
-bool ResourceViewManager::CreateSRV(const std::string& name,
+bool ResourceViewManager::CreateSRV(const std::string name,
 	ID3D11Device* device,
-	ID3D11Resource* resource,
+	ID3D11Texture2D* resource,
 	Format format,
 	UINT mostDetailedMip,
 	UINT mipLevels)
@@ -84,6 +84,92 @@ bool ResourceViewManager::BindSRV(const std::string& name, ID3D11DeviceContext* 
 	return false;
 }
 
+// =============================
+// RTV
+// =============================
+// 作成
+bool ResourceViewManager::CreateRTV(const std::string name,
+	ID3D11Device* device,
+	ID3D11Texture2D* resource,
+	UINT mipSlice)
+{
+	// 情報を構造体にまとめてマップに保存
+	auto rtv = std::make_unique<RTVData>();
+
+	// バッファ作成
+	if (!rtv->CreateRTV(
+		device,
+		resource,
+		mipSlice))
+	{
+		ErrorLog::OutputToConsole(std::string(("RTV の作成失敗: " + name)).c_str());
+		return false;
+	}
+
+	// 配列に代入
+	m_RTVs[name] = std::move(rtv);
+
+	// デバッグ用に名前を保存しておく
+	m_Logger.Log(("RTV : " + name).c_str());
+
+	return true;
+}
+
+// バインド
+RTVData* ResourceViewManager::GetRTV(const std::string& name)
+{
+	auto it = m_RTVs.find(name);
+
+	if (it != m_RTVs.end()) {
+		return it->second.get();
+	}
+
+	return nullptr;
+}
+
+// =============================
+// DSV
+// =============================
+// 作成
+bool ResourceViewManager::CreateDSV(const std::string& name,
+	ID3D11Device* device,
+	ID3D11Texture2D* resource,
+	Format format)
+{
+	// 情報を構造体にまとめてマップに保存
+	auto dsv = std::make_unique<DSVData>();
+
+	// バッファ作成
+	if (!dsv->CreateDSV(
+		device,
+		resource,
+		DirectX_FormatConverter::ToDXFormat(format)))
+	{
+		ErrorLog::OutputToConsole(std::string(("DSV の作成失敗: " + name)).c_str());
+		return false;
+	}
+
+	// 配列に代入
+	m_DSVs[name] = std::move(dsv);
+
+	// デバッグ用に名前を保存しておく
+	m_Logger.Log(("DSV : " + name).c_str());
+
+	return true;
+}
+
+// バインド
+DSVData* ResourceViewManager::GetDSV(const std::string& name)
+{
+	auto it = m_DSVs.find(name);
+
+	if (it != m_DSVs.end()) {
+		return it->second.get();
+	}
+
+	return nullptr;
+}
+
 
 // =============================
 // UAV
@@ -141,107 +227,12 @@ bool ResourceViewManager::BindSRV(const std::string& name, ID3D11DeviceContext* 
 //}
 
 
-// =============================
-// RTV
-// =============================
-// 作成
-//bool ResourceViewManager::CreateRTV(const std::string& name,
-//	ID3D11Device* device,
-//	ID3D11Resource* resource,
-//	Format format,
-//	UINT mipSlice)
-//{
-//	// 情報を構造体にまとめてマップに保存
-//	auto rtv = std::make_unique<RTVData>();
-//
-//	// バッファ作成
-//	if (!rtv->CreateRTV(
-//		device,
-//		resource,
-//		DirectX_FormatConverter::ToDXFormat(format),
-//		mipSlice))
-//	{
-//		ErrorLog::OutputToConsole(std::string(("RTV の作成失敗: " + name)).c_str());
-//		return false;
-//	}
-//
-//	// 配列に代入
-//	m_RTVs[name] = std::move(rtv);
-//
-//	// デバッグ用に名前を保存しておく
-//	m_Logger.Log(("RTV : " + name).c_str());
-//
-//	return true;
-//}
-
-// バインド
-//bool ResourceViewManager::BindRTV(const std::string& name, ID3D11DeviceContext* context, SETSHADERTYPE type)
-//{
-//	auto it = m_RTVs.find(name);
-//
-//	if (it != m_RTVs.end()) {
-//		return it->second.get();
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-
-
-// =============================
-// DSV
-// =============================
-// 作成
-//bool ResourceViewManager::CreateDSV(const std::string& name,
-//	ID3D11Device* device,
-//	ID3D11Resource* resource,
-//	Format format,
-//	UINT mipSlice)
-//{
-//	// 情報を構造体にまとめてマップに保存
-//	auto dsv = std::make_unique<DSVData>();
-//
-//	// バッファ作成
-//	if (!dsv->CreateDSV(
-//		device,
-//		resource,
-//		DirectX_FormatConverter::ToDXFormat(format),
-//		mipSlice))
-//	{
-//		ErrorLog::OutputToConsole(std::string(("DSV の作成失敗: " + name)).c_str());
-//		return false;
-//	}
-//
-//	// 配列に代入
-//	m_DSVs[name] = std::move(dsv);
-//
-//	// デバッグ用に名前を保存しておく
-//	m_Logger.Log(("DSV : " + name).c_str());
-//
-//	return true;
-//}
-
-// バインド
-//bool ResourceViewManager::BindDSV(const std::string& name, ID3D11DeviceContext* context)
-//{
-//	auto it = m_DSVs.find(name);
-//
-//	if (it != m_DSVs.end()) {
-//		return it->second.get();
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-
-
 // View削除
 void ResourceViewManager::ReleaseAllView()
 {
 	m_SRVs.clear();
+	m_RTVs.clear();
+	m_DSVs.clear();
+
 	//m_UAVs.clear();
-	//m_RTVs.clear();
-	//m_DSVs.clear();
 }

@@ -11,14 +11,9 @@
 #include <wrl/client.h>             // マイクロソフトが提供するスマートポインタ
 // 標準ライブラリ
 #include <cstdint>      // 整数型 uintなど
-#include <cmath>        //デバッグ描画の色変更で使用しています　後で消す
 // デバッグ用出力
 #include "ReportMessage.h"
 
-#if defined(DEBUG) || defined(_DEBUG)
-// デバッグ表示用
-#include <dxgidebug.h>     // ReportLiveObjects 用（DXGIデバッグ）
-#endif
 
 // =======================================
 // DirectX の処理
@@ -39,14 +34,6 @@ namespace DirectX11 {
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext>       d3dDeviceContext = nullptr; // 描画コマンドをGPUに送る
 		Microsoft::WRL::ComPtr<IDXGISwapChain>            d3dSwapChain     = nullptr; // バッファを制御する
 
-		// 最後の画面描画用
-		namespace FinalRender {
-			// 最終的な画面を保存するバッファ
-			Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforSRV = nullptr; // レンダラーターゲットテクスチャ 描画結果を1次的に保存しておくバッファ
-			// 最終的に描画するためのView
-			Microsoft::WRL::ComPtr<ID3D11RenderTargetView>    d3dRTV       = nullptr; // レンダーターゲットビュー  描画結果を描画対象として渡す
-		}
-
 		// UAV用　読み書き可能
 		namespace UAV {
 			Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforUAV = nullptr; // 読み書きができる記憶領域　UAV用
@@ -55,15 +42,7 @@ namespace DirectX11 {
 
 		// 深度ステンシルバッファ
 		namespace DepthStencil{
-			enum class DepthStencilFormatType
-			{
-				Depth32Bit,
-				Depth28Bit_Stencil4Bit,
-			};
 
-			Microsoft::WRL::ComPtr<ID3D11Texture2D> d3dDepthTexture   = nullptr; // Zバッファやステンシルバッファの情報を持つ記憶領域
-			Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  d3dDSV    = nullptr; // 深度情報などが入っている記憶領域と深度ステンシルステージを繋げる窓口
-			Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  d3dDSRV = nullptr; // 深度ステンシルテクスチャとシェーダーを繋げる窓口
 		}
 
 	}
@@ -80,12 +59,6 @@ namespace DirectX11 {
 			void Uninit();                // 後処理
 		}
 
-		// RTVとSRVの初期化・後処理 ---------------------------------------------------------
-		namespace FinalRender {
-			bool Init();   // 初期化
-			void Uninit(); // 後処理
-		}
-
 		// UAVの初期化・後処理 ---------------------------------------------------------------
 		namespace UAV {
 			bool Init();   // 初期化
@@ -94,13 +67,8 @@ namespace DirectX11 {
 
 		// 深度ステンシルの初期化・後処理 ---------------------------------------------------------------
 		namespace DepthStencil {
-			bool Init(DepthStencilFormatType depthStencilFormat); // 初期化
-			void Uninit();                                        // 後処理
-		}
-
-		// ビューポートの初期化・後処理 ---------------------------------------------------------------
-		namespace ViewPort {
-			void SetViewPort();   // 初期化
+			bool Init(); // 初期化
+			void Uninit(); // 後処理
 		}
 	}
 
@@ -108,7 +76,7 @@ namespace DirectX11 {
 	// =====================================================
 	// DirectX 初期化処理
 	// =====================================================
-	bool Init(unsigned int Width, unsigned int Height, HWND windowHandle)
+	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle)
 	{
 		// 描画する大きさを代入する
 		RenderWidth  = Width;
@@ -120,23 +88,16 @@ namespace DirectX11 {
 			ErrorLog::OutputToMessageBox("デバイスやスワップチェインの初期化に失敗");
 			return false;
 		}
-		// RTVとSRVの初期化
-		if (!FinalRender::Init()) {
-			ErrorLog::OutputToConsole("SRVの初期化に失敗"); 
-			return false;
-		}
 		// UAVの初期化
 		if (!UAV::Init()) {
 			ErrorLog::OutputToConsole("URVの初期化に失敗");
 			return false;
 		}
 		// 深度ステンシルの初期化
-		if (!DepthStencil::Init(DepthStencil::DepthStencilFormatType::Depth32Bit)) {
+		if (!DepthStencil::Init()) {
 			ErrorLog::OutputToConsole("深度ステンシルの初期化に失敗");
 			return false;
 		}
-		// ビューポートの初期化
-		ViewPort::SetViewPort();
 
 		DebugLog::OutputToConsole("DirectXの初期化に成功しました");
 
@@ -156,48 +117,24 @@ namespace DirectX11 {
 
 		DepthStencil::Uninit();
 		UAV::Uninit();
-		FinalRender::Uninit();
 		DXCore::Uninit();
 	}
 
 
 	// =====================================================
-    // DirectX 最初の描画処理
+    // ビューポート設定
     // =====================================================
-	void BeginDraw()
+	void SetViewPort(uint16_t width, uint16_t height)
 	{
-		// レンダーターゲットと深度ステンシルビューをセット
-		d3dDeviceContext->OMSetRenderTargets(1, FinalRender::d3dRTV.GetAddressOf(), DepthStencil::d3dDSV.Get());
+		D3D11_VIEWPORT viewPort = {};
+		viewPort.Width = (float)width;   // ビューポートの横幅
+		viewPort.Height = (float)height; // ビューポートの縦幅
+		viewPort.MinDepth = 0.0f;       // 最も近い位置 
+		viewPort.MaxDepth = 1.0f;       // 最も遠い位置 0~1で正規化する
+		viewPort.TopLeftX = 0;          // 描画を始める位置
+		viewPort.TopLeftY = 0;          // 描画を始める位置
 
-		float clearColor[4] = { 0.1f, 0.3f, 0.7f, 1.0f }; // 塗りつぶす色
-		// レンダーターゲットと深度バッファをクリア
-		d3dDeviceContext->ClearRenderTargetView(FinalRender::d3dRTV.Get(), clearColor);
-		d3dDeviceContext->ClearDepthStencilView(DepthStencil::d3dDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-		
-		// ビューポートクリア
-		ViewPort::SetViewPort();
-	}
-
-
-	// =====================================================
-	// DirectX 最後の描画処理
-	// =====================================================
-	void EndDraw()
-	{
-		d3dSwapChain->Present(1, 0); // バッファを交換して画面に表示
-	}
-
-
-	// =====================================================
-	// DirectX デバッグ用描画　背景の色を変更せる
-	// =====================================================
-	void DebugDraw(float time)
-	{
-		// クリアカラー（青っぽい色にしてみる）
-		float clearColor[4] = { std::fmod(time, 1.0f), 0.3f, 0.7f, 1.0f };
-
-		// レンダーターゲットと深度バッファをクリア
-		d3dDeviceContext->ClearRenderTargetView(FinalRender::d3dRTV.Get(), clearColor);
+		d3dDeviceContext->RSSetViewports(1, &viewPort);
 	}
 
 
@@ -328,51 +265,6 @@ namespace DirectX11 {
 
 
 		// *********************************************************************************
-		// RTVとSRVの初期化・後処理 
-		// *********************************************************************************
-		namespace FinalRender {
-
-			// -----------------------------------------------------
-            // RTV・SRVの初期化
-            // -----------------------------------------------------
-			bool Init()
-			{
-				HRESULT  hr = S_OK; // 初期化の 成功、失敗 を受け取る
-
-				// スワップチェインが生成したバックバッファを取得する
-				hr = d3dSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)d3dRTTforSRV.GetAddressOf());
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("SRVバックバッファを取得することが出来ませんでした。");
-					return false;
-				}
-
-				// レンダラーターゲットを生成
-				hr = d3dDevice->CreateRenderTargetView(d3dRTTforSRV.Get(), nullptr, d3dRTV.GetAddressOf());
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("レンダラーターゲットビューを作成することが出来ませんでした");
-					return false;
-				}
-
-				DebugLog::OutputToConsole("RT、RTV,	の初期化に成功");
-
-				return true;
-			}
-
-
-			// -----------------------------------------------------
-            // RTV・SRVの後処理
-            // -----------------------------------------------------
-			void Uninit()
-			{
-				d3dRTV.Reset();       // レンダラーターゲットを解放
-				d3dRTTforSRV.Reset(); // SRVの記憶領域を解放
-			}
-
-
-		}
-
-
-		// *********************************************************************************
         // UAVの初期化・後処理 
         // *********************************************************************************
 		namespace UAV {
@@ -441,78 +333,8 @@ namespace DirectX11 {
 			// -----------------------------------------------------
             // 深度ステンシルの初期化
             // -----------------------------------------------------
-			bool Init(DepthStencilFormatType depthStencilFormat)
+			bool Init()
 			{
-				DXGI_FORMAT depthTextureFormat = DXGI_FORMAT_UNKNOWN;                 // 深度ステンシルテクスチャのフォーマット
-				DXGI_FORMAT depthViewFormat    = DXGI_FORMAT_UNKNOWN;                 // 深度ステンシルビューのフォーマット
-				DXGI_FORMAT depthSRVFormat     = DXGI_FORMAT_UNKNOWN;                 // 深度ステンシルSRVのフォーマット
-
-				switch (depthStencilFormat)
-				{
-				case DepthStencilFormatType::Depth32Bit:             // 深度しか使用しない
-					depthTextureFormat = DXGI_FORMAT_R32_TYPELESS;
-					depthViewFormat    = DXGI_FORMAT_D32_FLOAT;
-					depthSRVFormat     = DXGI_FORMAT_R32_FLOAT;
-					break;
-
-				case DepthStencilFormatType::Depth28Bit_Stencil4Bit: // 深度とステンシルを使用する
-					depthTextureFormat = DXGI_FORMAT_R24G8_TYPELESS;
-					depthViewFormat    = DXGI_FORMAT_D24_UNORM_S8_UINT;
-					depthSRVFormat     = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-					break;
-				}
-
-				HRESULT hr = S_OK; // 成功したかのフラグ
-
-				// 深度ステンシルテクスチャ作成
-				// テクスチャの情報作成
-				D3D11_TEXTURE2D_DESC textureDesc = {};
-				textureDesc.Width          = RenderWidth;                                           // ウィンドウと同じ大きさ
-				textureDesc.Height         = RenderHeight;                                          // ウィンドウと同じ大きさ
-				textureDesc.MipLevels      = 1;                                                     // 深度バッファのため必要なし
-				textureDesc.ArraySize      = 1;                                                     // バッファの配列サイズ
-				textureDesc.Format         = depthTextureFormat;                                    // フォーマット設定
-				textureDesc.SampleDesc     = { 1,0 };                                               // ミップマップレベル
-				textureDesc.Usage          = D3D11_USAGE_DEFAULT;                                   // GPU読み書き可能　CPU直接アクセス不可
-				textureDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE; // 深度テスト・読み取り専用
-				textureDesc.CPUAccessFlags = 0;                                                     // CPUが直接アクセス禁止
-				textureDesc.MiscFlags      = 0;                                                     // 補助フラグなし
-
-				// 深度ステンシルテクスチャの作成
-				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dDepthTexture.GetAddressOf());
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("深度ステンシルテクスチャの作成に失敗しました");
-					return false;
-				}
-
-				// 深度ステンシルビューの設定
-				D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc = {};
-				depthViewDesc.Format = depthViewFormat;              // フォ―マット
-				depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;    // 参照する値を決めるフラグ
-
-				// 深度ステンシルビューの作成
-				hr = d3dDevice->CreateDepthStencilView(d3dDepthTexture.Get(), &depthViewDesc, d3dDSV.GetAddressOf());
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("深度ステンシルビューの作成に失敗しました");
-					return false;
-				}
-
-				// シェーダーリソースビューの設定
-				D3D11_SHADER_RESOURCE_VIEW_DESC depthSRVDesc = {};
-				depthSRVDesc.Format = depthSRVFormat; // フォーマット作成
-				depthSRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-				depthSRVDesc.Texture2D = { 0,1 };
-
-				// シェーダーリソースビューを作成
-				hr = d3dDevice->CreateShaderResourceView(d3dDepthTexture.Get(), &depthSRVDesc, d3dDSRV.GetAddressOf());
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("シェーダーリソースビューの作成に失敗しました");
-					return false;
-				}
-
-				d3dDeviceContext->OMSetRenderTargets(1, FinalRender::d3dRTV.GetAddressOf(), d3dDSV.Get());
-
-				DebugLog::OutputToConsole("深度ステンシルの初期化に成功");
 
 				return true;
 			}
@@ -523,39 +345,12 @@ namespace DirectX11 {
             // -----------------------------------------------------
 			void Uninit()
 			{
-				d3dDSRV.Reset();          // 深度ステンシルのSRVを解放
-				d3dDSV.Reset();           // 深度ステンシルビューの解放
-				d3dDepthTexture.Reset();  // 深度ステンシルテクスチャの解放
+
 			}
 
 
 		}
 
-
-		// *********************************************************************************
-        // ビューポート初期化・後処理 
-        // *********************************************************************************
-
-		namespace ViewPort {
-
-			// -----------------------------------------------------
-			// ビューポートの初期化
-			// -----------------------------------------------------
-			void SetViewPort()
-			{
-				D3D11_VIEWPORT viewPort = {}; 
-				viewPort.Width = RenderWidth;   // ビューポートの横幅
-				viewPort.Height = RenderHeight; // ビューポートの縦幅
-				viewPort.MinDepth = 0.0f;       // 最も近い位置 
-				viewPort.MaxDepth = 1.0f;       // 最も遠い位置 0~1で正規化する
-				viewPort.TopLeftX = 0;          // 描画を始める位置
-				viewPort.TopLeftY = 0;          // 描画を始める位置
-
-				d3dDeviceContext->RSSetViewports(1, &viewPort);
-			}
-
-
-		}
 
 	}
 

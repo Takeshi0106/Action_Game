@@ -16,9 +16,7 @@
 // DirectX用
 #include <d3d11.h>       // DirectXのAPI
 #include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
-// 名前などのデバッグ情報取得用
-#include <string>        // 名前など
-
+#include <cstdint>      // 整数型 uintなど
 
 // ================================
 // クラス
@@ -37,7 +35,7 @@ public:
 
 	// ビュー作成
 	bool CreateSRV(ID3D11Device* device, 
-		ID3D11Resource* resource,
+		ID3D11Texture2D* resource,
 		DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
 		UINT mostDetailedMip = 0,
 		UINT mipLevels = -1);
@@ -61,7 +59,7 @@ public:
 
 	// ビュー作成
 	bool CreateUAV(ID3D11Device* device,
-		ID3D11Resource* resource,
+		ID3D11Texture2D* resource,
 		DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
 		UINT mipSlice = 0);
 
@@ -76,6 +74,8 @@ class RTVData
 private:
 	// RTV
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_RTV;
+	uint32_t m_Width = 0;
+	uint32_t m_Height = 0;
 
 public:
 	// コンストラクタ・デストラクタ
@@ -83,13 +83,15 @@ public:
 	~RTVData() = default;
 
 	// ビュー作成
-	bool CreateRTV(ID3D11Device* device, 
-		ID3D11Resource* resource,
-		DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
+	bool CreateRTV(ID3D11Device* device,
+		ID3D11Texture2D* resource,
 		UINT mipSlice = 0);
 
 	// ゲッター
 	ID3D11RenderTargetView* GetRTV() { return m_RTV.Get(); }
+	ID3D11RenderTargetView** GetRTVAddress() { return m_RTV.GetAddressOf(); }
+	uint32_t GetWidth() { return m_Width; }
+	uint32_t GetHeight() { return m_Height; }
 };
 
 
@@ -107,9 +109,8 @@ public:
 
 	// ビュー作成
 	bool CreateDSV(ID3D11Device* device, 
-		ID3D11Resource* resource,
-		DXGI_FORMAT format = DXGI_FORMAT_D24_UNORM_S8_UINT,
-		UINT mipSlice = 0);
+		ID3D11Texture2D* resource,
+		DXGI_FORMAT format);
 
 	// ゲッター
 	ID3D11DepthStencilView* GetDSV() { return m_DSV.Get(); }
