@@ -23,13 +23,6 @@
 // ログ出力
 #include "ReportMessage.h"
 
-#if defined(DEBUG) || defined(_DEBUG)
-// 計算関数
-#include <algorithm>
-// 時間出力
-#include "Timer.h"
-#endif
-
 
 // ============================================
 // クラスのメンバー関数
@@ -89,6 +82,43 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 		return false;
 	}
 
+	// スワップチェインからテクスチャを作成
+	if (!m_TextureManager->CreateTextureFromSwapChain(kFinalRTName, DirectX11::Get::GetSwapChain())) {
+		ErrorLog::OutputToConsole("スワップチェインからテクスチャの作成に失敗しました");
+		return false;
+	}
+
+	// RTV作成
+	if (!CreateRTV(kFinalRTName, 0))
+	{
+		ErrorLog::OutputToConsole("スワップチェインからRTVの作成に失敗しました");
+		return false;
+	}
+
+	// 深度バッファ作成
+	if(!CreateTexture(
+		kFInalDSName,
+		width,
+		height,
+		Format::D24_UNorm_S8_UInt,
+		BindFlag::DepthStencil,
+		BufferUsage::Default,
+		CPUAccess::None))
+	{
+		ErrorLog::OutputToConsole("基本深度バッファの作成に失敗しました");
+		return false;
+	}
+
+	// DSV
+	if (!m_ViewManager->CreateDSV(
+		kFInalDSName,
+		DirectX11::Get::GetDevice(),
+		m_TextureManager->GetFindTexture2DData(kFInalDSName)->GetTexture(),
+		Format::D24_UNorm_S8_UInt)) {
+		ErrorLog::OutputToConsole("基本DSVの作成に失敗しました");
+		return false;
+	}
+
 	// シェーダー作成
 	if (!m_ShaderManager->Init(DirectX11::Get::GetDevice())) {
 		ErrorLog::OutputToMessageBox("ShaderManagerの初期化に失敗しました");
@@ -104,6 +134,9 @@ bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND win
 	// 基本サンプラーを作成
 	SamplerDesc desc = SamplerDesc::NormalSampler();
 	CreateSampler(desc);
+
+	//　RTとDSをバインド
+	BindRenderTarget();
 
 	return true;
 }
@@ -137,14 +170,30 @@ void DirectX_DrawManager::Uninit()
 // ===========================================
 void DirectX_DrawManager::BegingDraw()
 {
-	// 描画最初の処理
-	DirectX11::BeginDraw();
+	// RTV を取得
+	RTVData* rtv = m_ViewManager->GetRTV(kFinalRTName);
+	DSVData* dsv = m_ViewManager->GetDSV(kFInalDSName);
+
+	// クリアカラー配列作成
+	float clearColor[4] = {
+		kClearColor.r,
+		kClearColor.g,
+		kClearColor.b,
+		kClearColor.a
+	};
+
+	// 初期化
+	DirectX11::Get::GetContext()->ClearRenderTargetView(rtv->GetRTV(), clearColor);
+	DirectX11::Get::GetContext()->ClearDepthStencilView(dsv->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	// バインド
+	BindRenderTarget();
 }
 
 void DirectX_DrawManager::EndDraw()
 {
 	// 描画終了の処理
-	DirectX11::EndDraw();
+	DirectX11::Get::GetSwapChain()->Present(1, 0);
 }
 
 // モデル描画
@@ -337,6 +386,7 @@ bool DirectX_DrawManager::LoadModel(const char* modelName, const char* modelFold
 // ===========================================
 // View作成
 // ===========================================
+// SRV作成
 bool DirectX_DrawManager::CreateSRV(const char* name, Format format, 
 	unsigned int mostDetailedMip, unsigned int mipLevels)
 {
@@ -354,6 +404,48 @@ bool DirectX_DrawManager::CreateSRV(const char* name, Format format,
 		mipLevels))
 	{
 		ErrorLog::OutputToConsole("SRVの作成に失敗しました");
+		return false;
+	}
+
+	return true;
+}
+
+// RTV作成
+bool DirectX_DrawManager::CreateRTV(const char* name, uint32_t mipSlice)
+{
+	// リソースビュ―取得
+	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+
+	if (tex == nullptr) { return false; }
+
+	// RTV作成
+	if (!m_ViewManager->CreateRTV(name,
+		DirectX11::Get::GetDevice(),
+		tex->GetTexture(),
+		mipSlice))
+	{
+		ErrorLog::OutputToConsole("RTVの作成に失敗しました");
+		return false;
+	}
+
+	return true;
+}
+
+// DSV作成
+bool DirectX_DrawManager::CreateDSV(const char* name, Format format)
+{
+	// リソースビュ―取得
+	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
+
+	if (tex == nullptr) { return false; }
+
+	// DSV作成
+	if (!m_ViewManager->CreateDSV(name,
+		DirectX11::Get::GetDevice(),
+		tex->GetTexture(),
+		format))
+	{
+		ErrorLog::OutputToConsole("DSVの作成に失敗しました");
 		return false;
 	}
 
@@ -380,48 +472,6 @@ bool DirectX_DrawManager::CreateSRV(const char* name, Format format,
 //
 //	return true;
 //}
-//
-//bool DirectX_DrawManager::CreateRTV(const char* name, Format format, unsigned int mipSlice)
-//{
-//	// リソースビュ―取得
-//	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
-//
-//	if (tex == nullptr) { return false; }
-//
-//	// RTV作成
-//	if (!m_ViewManager->CreateRTV(name,
-//		DirectX11::Get::GetDevice(),
-//		tex->GetTexture(),
-//		format,
-//		mipSlice))
-//	{
-//		ErrorLog::OutputToConsole("RTVの作成に失敗しました");
-//		return false;
-//	}
-//
-//	return true;
-//}
-//
-//bool DirectX_DrawManager::CreateDSV(const char* name, Format format, unsigned int mipSlice)
-//{
-//	// リソースビュ―取得
-//	Texture2DData* tex = m_TextureManager->GetFindTexture2DData(name);
-//
-//	if (tex == nullptr) { return false; }
-//
-//	// DSV作成
-//	if (!m_ViewManager->CreateDSV(name,
-//		DirectX11::Get::GetDevice(),
-//		tex->GetTexture(),
-//		format,
-//		mipSlice))
-//	{
-//		ErrorLog::OutputToConsole("DSVの作成に失敗しました");
-//		return false;
-//	}
-//
-//	return true;
-//}
 
 
 // ===========================================
@@ -439,6 +489,69 @@ void DirectX_DrawManager::UpdateShaderConstants(const char* constantName, const 
 void DirectX_DrawManager::UpdateVertexBuffer(const char* vertexName, const void* data, int size)
 {
 	m_VBManager->UpdateVertexBuffer(vertexName, DirectX11::Get::GetContext(), data, size);
+}
+
+
+// =============================================
+// レンダーターゲットバインド
+// =============================================
+void DirectX_DrawManager::BindRenderTarget(const char* rtvName, const char* dsvName)
+{
+	// RTV・DSV取得
+	RTVData* rtv;
+	DSVData* dsv;
+
+	// nullptr だったら最終描画用をセット
+	if (rtvName == nullptr)
+	{
+		rtv = m_ViewManager->GetRTV(kFinalRTName);
+	}
+	else
+	{
+		rtv = m_ViewManager->GetRTV(rtvName);
+	}
+
+	if (dsvName == nullptr)
+	{
+		dsv = m_ViewManager->GetDSV(kFInalDSName);
+	}
+	else
+	{
+		dsv = m_ViewManager->GetDSV(dsvName);
+	}
+
+	// セット
+	DirectX11::Get::GetContext()->OMSetRenderTargets(1, rtv->GetRTVAddress(), dsv->GetDSV());
+
+	// ビューポート設定
+	DirectX11::SetViewPort(rtv->GetWidth(), rtv->GetHeight());
+}
+
+
+// ===================================================
+// 描画設定(カリング、塗り)
+// ===================================================
+void DirectX_DrawManager::SetDrawSetting(CullingSetting culling, FillModeSetting fillMode)
+{
+	DirectX11::SetDrawSetting(culling, fillMode);
+}
+
+
+// ===================================================
+// 深度ステンシル設定
+// ===================================================
+void DirectX_DrawManager::SetDepthStencilSetting(DepthStencilSetting depthStencil)
+{
+	DirectX11::SetDepthStencilSetting(depthStencil);
+}
+
+
+// ===================================================
+// アルファディザ設定
+// ===================================================
+void DirectX_DrawManager::SetAlphaDizaSetting(AlphaDizaSetting alphaDiza)
+{
+	DirectX11::SetAlphaDizaSetting(alphaDiza);
 }
 
 

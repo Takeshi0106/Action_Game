@@ -6,12 +6,14 @@
 #include "ResourceViewData.h"
 // レポートヘッダー
 #include "ReportMessage.h"
+// 文字列ヘッダー
+#include <string>
 
 // ===============================
 // SRV
 // ===============================
 bool SRVData::CreateSRV(ID3D11Device* device,
-    ID3D11Resource* resource,
+    ID3D11Texture2D* resource,
     DXGI_FORMAT format,
     UINT mostDetailedMip,
     UINT mipLevels)
@@ -38,7 +40,7 @@ bool SRVData::CreateSRV(ID3D11Device* device,
 // UAV
 // ================================
 bool UAVData::CreateUAV(ID3D11Device* device, 
-    ID3D11Resource* resource,
+    ID3D11Texture2D* resource,
     DXGI_FORMAT format,
     UINT mipSlice)
 {
@@ -63,15 +65,20 @@ bool UAVData::CreateUAV(ID3D11Device* device,
 // RTV
 // ==================================
 bool RTVData::CreateRTV(ID3D11Device* device,
-    ID3D11Resource* resource,
-    DXGI_FORMAT format,
+    ID3D11Texture2D* resource,
     UINT mipSlice)
 {
+	// テクスチャ情報取得
+    D3D11_TEXTURE2D_DESC textureDesc;
+    resource->GetDesc(&textureDesc);
+    m_Width = textureDesc.Width;
+    m_Height = textureDesc.Height;
+
     // 設定
     D3D11_RENDER_TARGET_VIEW_DESC desc{};
-    desc.Format = format;
+    desc.Format = textureDesc.Format;
     desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-    desc.Texture2D.MipSlice = mipSlice;
+	desc.Texture2D.MipSlice = mipSlice;
 
     // 作成
     HRESULT hr = device->CreateRenderTargetView(resource, &desc, m_RTV.GetAddressOf());
@@ -88,15 +95,13 @@ bool RTVData::CreateRTV(ID3D11Device* device,
 // DSV
 // ==================================
 bool DSVData::CreateDSV(ID3D11Device* device,
-    ID3D11Resource* resource,
-    DXGI_FORMAT format,
-    UINT mipSlice)
+    ID3D11Texture2D* resource,
+    DXGI_FORMAT format)
 {
     // 設定
     D3D11_DEPTH_STENCIL_VIEW_DESC desc{};
     desc.Format = format;
     desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    desc.Texture2D.MipSlice = mipSlice;
 
     // 作成
     HRESULT hr = device->CreateDepthStencilView(resource, &desc, m_DSV.GetAddressOf());

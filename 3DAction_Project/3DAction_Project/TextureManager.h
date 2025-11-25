@@ -49,6 +49,11 @@ public:
     TextureManager() = default;
     ~TextureManager() { m_Logger.WriteLog(); }
 
+	// スワップチェインからテクスチャを作成
+    bool CreateTextureFromSwapChain(
+        const std::string name,
+        IDXGISwapChain* swapChain);
+
     // テクスチャを作成
     bool CreateTexture(
         const std::string name,

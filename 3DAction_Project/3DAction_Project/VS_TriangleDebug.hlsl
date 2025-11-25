@@ -1,25 +1,25 @@
 // ==================================================
-// ’¸“_“ü—Í
+// é ‚ç‚¹å…¥åŠ›
 // ==================================================
 struct VS_IN
 {
-    float3 pos : POSITION; // ’¸“_ˆÊ’u
-    float3 normal : NORMAL; // –@ü
+    float3 pos : POSITION; // é ‚ç‚¹ä½ç½®
+    float3 normal : NORMAL; // æ³•ç·š
     float2 uv : TEXCOORD; // UV
-    float4 color : COLOR; // ’¸“_ƒJƒ‰[
+    float4 color : COLOR; // é ‚ç‚¹ã‚«ãƒ©ãƒ¼
 };
 
 // ==================================================
-// ’¸“_ƒVƒF[ƒ_[‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ö‚Ìo—Í
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‹ã‚‰ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¸ã®å‡ºåŠ›
 // ==================================================
 struct VS_OUT
 {
-    float4 pos : SV_POSITION; // ƒNƒŠƒbƒsƒ“ƒOŒã‚ÌÀ•W
-    float4 color : COLOR; // ’¸“_ƒJƒ‰[
+    float4 pos : SV_POSITION; // ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°å¾Œã®åº§æ¨™
+    float4 color : COLOR; // é ‚ç‚¹ã‚«ãƒ©ãƒ¼
 };
 
 // ==================================================
-// ’è”ƒoƒbƒtƒ@
+// å®šæ•°ãƒãƒƒãƒ•ã‚¡
 // ==================================================
 cbuffer CameraInfo : register(b0)
 {
@@ -34,20 +34,20 @@ cbuffer Transform : register(b1)
 
 
 // ==================================================
-// ’¸“_ƒVƒF[ƒ_[
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
 // ==================================================
 VS_OUT main(VS_IN vin)
 {
-    // PixelShader‚É“n‚·ƒf[ƒ^
+    // PixelShaderã«æ¸¡ã™ãƒ‡ãƒ¼ã‚¿
     VS_OUT vout;
 
-    // ƒXƒNƒŠ[ƒ“À•W‚ğì¬
-    vout.pos = float4(vin.pos, 1.0f); // ƒ[ƒJƒ‹À•W
-    vout.pos = mul(vout.pos, world); // ƒ[ƒ‹ƒhÀ•W
-    vout.pos = mul(vout.pos, view); // ƒrƒ…[À•W
-    vout.pos = mul(vout.pos, proj); // ƒvƒƒWƒFƒNƒVƒ‡ƒ“À•W
+    // ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã‚’ä½œæˆ
+    vout.pos = float4(vin.pos, 1.0f); // ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™
+    vout.pos = mul(vout.pos, world); // ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™
+    vout.pos = mul(vout.pos, view); // ãƒ“ãƒ¥ãƒ¼åº§æ¨™
+    vout.pos = mul(vout.pos, proj); // ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³åº§æ¨™
     
-    // ‚»‚Ì‚Ü‚Ü•Ô‚·
+    // ãã®ã¾ã¾è¿”ã™
     vout.color = vin.color;
 
     return vout;

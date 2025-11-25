@@ -18,6 +18,13 @@
 // ==============================
 // 設定用ヘッダー
 #include "GraphicsEnums.h"
+// サンプラー設定ヘッダー
+#include "SamplerSetting.h"
+// 各描画設定ヘッダー
+#include "AlphaDizaSetting.h" // アルファディザ設定
+#include "CullingSetting.h"   // カリング設定
+#include "FillModeSetting.h"  // 塗り設定
+#include "DepthStencilSetting.h" // 深度ステンシル設定
 // 基本ヘッダー
 #include <cstdint>
 
@@ -93,9 +100,10 @@ public:
 
 	// View作成
 	virtual bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
+	virtual bool CreateRTV(const char* name, uint32_t mipSlice) = 0;
+	virtual bool CreateDSV(const char* name, Format format) = 0;
+
 	//virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
-	//virtual bool CreateRTV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
-	//virtual bool CreateDSV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
 
 
 	/* ------------ バッファ更新 ------------ */
@@ -103,5 +111,22 @@ public:
 	virtual void UpdateVertexBuffer(const char* vertexName, const void* data, int size) = 0;
 	// 定数バッファ更新
 	virtual void UpdateShaderConstants(const char* constantName, const void* data, const int size) = 0;
+
+	// バインドレンダーターゲット
+	virtual void BindRenderTarget(const char* rtvName, const char* dsvName = nullptr) = 0;
+
+
+	/* ------------ 描画設定 ------------ */
+	// 描画設定(カリング、塗り)
+	virtual void SetDrawSetting(CullingSetting culling = CullingSetting::Back_Culling,
+		FillModeSetting fillMode = FillModeSetting::Solid) = 0;
+
+	// 深度ステンシル設定
+	virtual void SetDepthStencilSetting(DepthStencilSetting depthStencil 
+		= DepthStencilSetting::DepthEnableON_DepthWriteON) = 0;
+
+	// アルファディザ設定
+	virtual void SetAlphaDizaSetting(AlphaDizaSetting alphaDiza 
+		= AlphaDizaSetting::Blend_Alpha) = 0;
 };
 

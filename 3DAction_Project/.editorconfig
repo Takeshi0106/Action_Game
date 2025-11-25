@@ -11,4 +11,4 @@ charset = utf-8-bom
 charset = utf-8-bom
 
 [*.hlsl]
-charset = shift_jis
+charset = utf-8

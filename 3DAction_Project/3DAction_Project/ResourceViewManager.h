@@ -43,12 +43,22 @@ public:
 	~ResourceViewManager() { m_Logger.WriteLog(); }
 
 	// 作成
-	bool CreateSRV(const std::string& name,
+	bool CreateSRV(const std::string name,
 		ID3D11Device* device,
-		ID3D11Resource* resource,
+		ID3D11Texture2D* resource,
 		Format format,
 		UINT mostDetailedMip = 0,
 		UINT mipLevels = -1);
+
+	bool CreateRTV(const std::string name,
+		ID3D11Device* device,
+		ID3D11Texture2D* resource,
+		UINT mmipSlice = 0);
+
+	bool CreateDSV(const std::string& name,
+		ID3D11Device* device,
+		ID3D11Texture2D* resource,
+		Format format);
 
 	//bool CreateUAV(const std::string& name,
 	//	ID3D11Device* device,
@@ -56,23 +66,15 @@ public:
 	//	Format format,
 	//	UINT mmipSlice = 0);
 
-	//bool CreateRTV(const std::string& name,
-	//	ID3D11Device* device,
-	//	ID3D11Resource* resource,
-	//	Format format,
-	//	UINT mmipSlice = 0);
 
-	//bool CreateDSV(const std::string& name,
-	//	ID3D11Device* device,
-	//	ID3D11Resource* resource,
-	//	Format format,
-	//	UINT mmipSlice = 0);
 
 	// ゲッター  名前を入れて、返す
 	bool BindSRV(const std::string& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
+	RTVData* GetRTV(const std::string& name);
+	DSVData* GetDSV(const std::string& name);
+
+	
 	//bool BindUAV(const std::string& name, ID3D11DeviceContext* context);
-	//bool BindRTV(const std::string& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
-	//bool BindDSV(const std::string& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
 
 	// View削除
 	void ReleaseAllView();

@@ -28,6 +28,48 @@ UINT ToDXBindFlag(BindFlag flags); // バインドフラグをDirectXように�
 // =================================
 // メンバー関数
 // =================================
+
+// ======================================
+// スワップチェインからテクスチャを作成
+// ======================================
+    // スワップチェインからテクスチャを作成
+bool TextureManager::CreateTextureFromSwapChain(
+    const std::string name,
+    IDXGISwapChain* swapChain)
+{
+    // 情報を構造体にまとめてマップに保存
+    auto textureData = std::make_unique<SwapchainTextureData>();
+
+	// スワップチェインからテクスチャ作成
+    if (!textureData->CreateTextureFromSwapChain(swapChain))
+    {
+        DebugLog::OutputToConsole(("スワップチェインからテクスチャの作成に失敗しました " + name).c_str());
+        return false;
+	}
+
+	// 配列に代入
+	m_Textures[name] = std::move(textureData);
+
+	// 名前を保存しておく
+	m_Logger.Log(name.c_str());
+
+#if defined(DEBUG) || defined(_DEBUG)
+    DebugLog::OutputToConsole(("テクスチャバッファ " + name + " を作成しました").c_str());
+
+    // 名前を設定
+    m_Textures[name]->GetTexture()->SetPrivateData(
+        WKPDID_D3DDebugObjectName,
+        UINT(name.size()),
+        name.c_str());
+#endif
+
+    return true;
+}
+
+
+// ======================================
+// テクスチャを作成
+// ======================================
 bool TextureManager::CreateTexture(
     const std::string name,
     ID3D11Device* device,
@@ -40,7 +82,7 @@ bool TextureManager::CreateTexture(
     TextureInitData* initData)
 {
 	// 情報を構造体にまとめてマップに保存
-	auto textureData = std::make_unique<Texture2DData>();
+	auto textureData = std::make_unique<BindableTextureData>();
 
     if (initData != nullptr)
     {
