@@ -88,10 +88,10 @@ public:
 		UINT mipSlice = 0);
 
 	// ゲッター
-	ID3D11RenderTargetView* GetRTV() { return m_RTV.Get(); }
+	ID3D11RenderTargetView* GetRTV() const { return m_RTV.Get(); }
 	ID3D11RenderTargetView** GetRTVAddress() { return m_RTV.GetAddressOf(); }
-	uint32_t GetWidth() { return m_Width; }
-	uint32_t GetHeight() { return m_Height; }
+	const uint32_t GetWidth() const { return m_Width; }
+	const uint32_t GetHeight() const { return m_Height; }
 };
 
 

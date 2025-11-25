@@ -10,6 +10,10 @@
 // ヘッダー
 // ==============================================
 #include <cstdint>
+#include "DepthStencilSetting.h"
+#include "CullingSetting.h"
+#include "FillModeSetting.h"
+#include "AlphaDizaSetting.h"
 
 
 // ==============================================
@@ -38,6 +42,18 @@ namespace DirectX11
 
 	// ビューポート設定
 	void SetViewPort(uint16_t width, uint16_t height);
+
+	// 描画設定
+	void SetDrawSetting(CullingSetting culling = CullingSetting::Back_Culling,
+		FillModeSetting fillMode = FillModeSetting::Solid);
+
+	// 深度ステンシル設定
+	void SetDepthStencilState(DepthStencilSetting setting 
+		= DepthStencilSetting::DepthEnableON_DepthWriteOFF);
+
+	// アルファディザ設定
+	void SetAlphaDizaState(AlphaDizaSetting setting 
+		= AlphaDizaSetting::Blend_Alpha);
 
 	// ゲッター関数
 	namespace Get 

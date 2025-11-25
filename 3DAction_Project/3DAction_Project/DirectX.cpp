@@ -11,6 +11,8 @@
 #include <wrl/client.h>             // マイクロソフトが提供するスマートポインタ
 // 標準ライブラリ
 #include <cstdint>      // 整数型 uintなど
+// 独自深度ステンシル設定ヘッダー
+#include "DepthStencilSetting.h"
 // デバッグ用出力
 #include "ReportMessage.h"
 
@@ -26,31 +28,38 @@ namespace DirectX11 {
 	namespace {
 
 		// 描画する大きさ
-		uint16_t RenderWidth  = 0;
+		uint16_t RenderWidth = 0;
 		uint16_t RenderHeight = 0;
 
 		// スワップチェインやデバイス
-		Microsoft::WRL::ComPtr<ID3D11Device>              d3dDevice        = nullptr; // リソースの作成
+		Microsoft::WRL::ComPtr<ID3D11Device>              d3dDevice = nullptr; // リソースの作成
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext>       d3dDeviceContext = nullptr; // 描画コマンドをGPUに送る
-		Microsoft::WRL::ComPtr<IDXGISwapChain>            d3dSwapChain     = nullptr; // バッファを制御する
+		Microsoft::WRL::ComPtr<IDXGISwapChain>            d3dSwapChain = nullptr; // バッファを制御する
 
-		// UAV用　読み書き可能
-		namespace UAV {
-			Microsoft::WRL::ComPtr<ID3D11Texture2D>           d3dRTTforUAV = nullptr; // 読み書きができる記憶領域　UAV用
-			Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> d3dUAV       = nullptr; // 読み書きができる記憶領域とコンピュートシェーダーなどを繋げる窓口
+		// 描画設定
+		namespace DrawSetting {
+			// 描画設定配列
+			Microsoft::WRL::ComPtr<ID3D11RasterizerState> drawSetting[CullingSetting::Culling_Setting_Max * FillModeSetting::FillMode_Max];
 		}
 
 		// 深度ステンシルバッファ
-		namespace DepthStencil{
+		namespace DepthStencil {
+			// 深度ステンシル設定配列
+			Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilSetting[DepthStencilSetting::Depth_Setting_Max];
+		}
 
+		// アルファディザ
+		namespace AlphaDiza {
+			// アルファディザ設定配列
+			Microsoft::WRL::ComPtr<ID3D11BlendState> alphaDizaSetting[AlphaDizaSetting::Blend_Setting_Max];
 		}
 
 	}
 
 
 	// =====================================================
-    // プロトタイプ宣言
-    // =====================================================
+	// プロトタイプ宣言
+	// =====================================================
 	namespace { // 同じcppファイル内の無名名前空間は共通
 
 		// デバイスとスワップチェインの初期化・後処理 --------------------------------------
@@ -59,9 +68,9 @@ namespace DirectX11 {
 			void Uninit();                // 後処理
 		}
 
-		// UAVの初期化・後処理 ---------------------------------------------------------------
-		namespace UAV {
-			bool Init();   // 初期化
+		// 描画設定の初期化・後処理
+		namespace DrawSetting {
+			bool Init(); // 初期化
 			void Uninit(); // 後処理
 		}
 
@@ -70,6 +79,13 @@ namespace DirectX11 {
 			bool Init(); // 初期化
 			void Uninit(); // 後処理
 		}
+
+		// アルファディザ設定の初期化・後処理 -----------------------------------------------------------
+		namespace AlphaDiza {
+			bool Init(); // 初期化
+			void Uninit(); // 後処理
+		}
+
 	}
 
 
@@ -79,23 +95,31 @@ namespace DirectX11 {
 	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle)
 	{
 		// 描画する大きさを代入する
-		RenderWidth  = Width;
+		RenderWidth = Width;
 		RenderHeight = Height;
 
 		// デバイスやスワップチェインの初期化
-		if(!DXCore::Init(windowHandle)){
+		if (!DXCore::Init(windowHandle)) {
 			// メッセージボックス出力 環境の問題かもしれないためユーザーに分かるようにする
 			ErrorLog::OutputToMessageBox("デバイスやスワップチェインの初期化に失敗");
 			return false;
 		}
-		// UAVの初期化
-		if (!UAV::Init()) {
-			ErrorLog::OutputToConsole("URVの初期化に失敗");
+
+		// 描画設定の初期化
+		if (!DrawSetting::Init()) {
+			ErrorLog::OutputToConsole("描画設定の初期化に失敗");
 			return false;
 		}
+
 		// 深度ステンシルの初期化
 		if (!DepthStencil::Init()) {
 			ErrorLog::OutputToConsole("深度ステンシルの初期化に失敗");
+			return false;
+		}
+
+		// アルファディザ設定の初期化
+		if (!AlphaDiza::Init()) {
+			ErrorLog::OutputToConsole("アルファディザ設定の初期化に失敗");
 			return false;
 		}
 
@@ -106,24 +130,25 @@ namespace DirectX11 {
 
 
 	// =====================================================
-    // DirectX 後処理
-    // =====================================================
+	// DirectX 後処理
+	// =====================================================
 	void Uninit()
 	{
 		// バインド解除
 		d3dDeviceContext->ClearState();
 		d3dDeviceContext->Flush();
 
-
+		// 後処理
+		AlphaDiza::Uninit();
 		DepthStencil::Uninit();
-		UAV::Uninit();
+		DrawSetting::Uninit();
 		DXCore::Uninit();
 	}
 
 
 	// =====================================================
-    // ビューポート設定
-    // =====================================================
+	// ビューポート設定
+	// =====================================================
 	void SetViewPort(uint16_t width, uint16_t height)
 	{
 		D3D11_VIEWPORT viewPort = {};
@@ -139,18 +164,47 @@ namespace DirectX11 {
 
 
 	// =====================================================
-    // DirectX のゲッター
-    // =====================================================
-	namespace Get {
-		ID3D11Device*        GetDevice()    { return d3dDevice.Get(); }
-		ID3D11DeviceContext* GetContext()   { return d3dDeviceContext.Get(); }
-		IDXGISwapChain*      GetSwapChain() { return d3dSwapChain.Get(); }
+	// 描画設定
+	// =====================================================
+	void SetDrawSetting(CullingSetting culling, FillModeSetting fillMode)
+	{
+		d3dDeviceContext->RSSetState(DrawSetting::drawSetting[culling * FillModeSetting::FillMode_Max + fillMode].Get());
 	}
 
 
 	// =====================================================
-    // プロトタイプ宣言の実態関数
-    // =====================================================
+	// 深度ステンシル設定
+	// =====================================================
+	void SetDepthStencilState(DepthStencilSetting setting)
+	{
+		d3dDeviceContext->OMSetDepthStencilState(DepthStencil::depthStencilSetting[setting].Get(), 0);
+	}
+
+
+	// =====================================================
+	// アルファディザ設定
+	// =====================================================
+	void SetAlphaDizaState(AlphaDizaSetting setting)
+	{
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		UINT  sampleMask = 0xffffffff;
+		d3dDeviceContext->OMSetBlendState(AlphaDiza::alphaDizaSetting[setting].Get(), blendFactor, sampleMask);
+	}
+
+
+	// =====================================================
+	// DirectX のゲッター
+	// =====================================================
+	namespace Get {
+		ID3D11Device* GetDevice() { return d3dDevice.Get(); }
+		ID3D11DeviceContext* GetContext() { return d3dDeviceContext.Get(); }
+		IDXGISwapChain* GetSwapChain() { return d3dSwapChain.Get(); }
+	}
+
+
+	// =====================================================
+	// プロトタイプ宣言の実態関数
+	// =====================================================
 	namespace {
 
 		// ********************************************************************************
@@ -159,8 +213,8 @@ namespace DirectX11 {
 		namespace DXCore {
 
 			// -----------------------------------------------------
-            // デバイスとスワップチェインの初期化
-            // -----------------------------------------------------
+			// デバイスとスワップチェインの初期化
+			// -----------------------------------------------------
 			bool Init(HWND windowHandle)
 			{
 				HRESULT  hr;             // 初期化の 成功、失敗 を受け取る
@@ -193,18 +247,18 @@ namespace DirectX11 {
 				// スワップチェインの構成 -------------------------------------------------------------------
 				DXGI_SWAP_CHAIN_DESC swapChainDesc = {};                                                                      // C++のためこっちで初期化
 				// ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));                                                  // 全てに0を代入して、初期化する
-				swapChainDesc.BufferCount                        = 2;                                                         // ダブルバッファ
-				swapChainDesc.BufferDesc.Width                   = RenderWidth;                                               // 画面の縦幅 今はウィンドウサイズと同じにしている
-				swapChainDesc.BufferDesc.Height                  = RenderHeight;                                              // 画面の横幅 今はウィンドウサイズと同じにしている
-				swapChainDesc.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;                                // RGBA 各8ビット 0.0~1.0に正規化　＊一般的でどの環境でも動きやすい
-				swapChainDesc.BufferDesc.RefreshRate.Numerator   = 0;                                                         // リフレッシュレート　分母 (0の場合,OSに任せる)
+				swapChainDesc.BufferCount = 2;                                                         // ダブルバッファ
+				swapChainDesc.BufferDesc.Width = RenderWidth;                                               // 画面の縦幅 今はウィンドウサイズと同じにしている
+				swapChainDesc.BufferDesc.Height = RenderHeight;                                              // 画面の横幅 今はウィンドウサイズと同じにしている
+				swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;                                // RGBA 各8ビット 0.0~1.0に正規化　＊一般的でどの環境でも動きやすい
+				swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;                                                         // リフレッシュレート　分母 (0の場合,OSに任せる)
 				swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;                                                         // リフレッシュレート　分子 (*ウィンドウモードの時は適用されない)
-				swapChainDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;                           // バックバッファの使用用途
-				swapChainDesc.OutputWindow                       = windowHandle;                                              // 描画するウィンドウのハンドルを渡す
-				swapChainDesc.SampleDesc.Count                   = 1;                                                         // マルチサンプリング　アンチエイリアス 1は無効
-				swapChainDesc.SampleDesc.Quality                 = 0;                                                         // 品質レベル　大きい値ほど良くなる(フォーマットとサンプリング数で上限が決まる)
-				swapChainDesc.Windowed                           = TRUE;                                                      // ウィンドウモード (FALSEにするとフルスクリーンモードになる)
-				swapChainDesc.SwapEffect                         = DXGI_SWAP_EFFECT_FLIP_DISCARD;                             // 推奨されている
+				swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;                           // バックバッファの使用用途
+				swapChainDesc.OutputWindow = windowHandle;                                              // 描画するウィンドウのハンドルを渡す
+				swapChainDesc.SampleDesc.Count = 1;                                                         // マルチサンプリング　アンチエイリアス 1は無効
+				swapChainDesc.SampleDesc.Quality = 0;                                                         // 品質レベル　大きい値ほど良くなる(フォーマットとサンプリング数で上限が決まる)
+				swapChainDesc.Windowed = TRUE;                                                      // ウィンドウモード (FALSEにするとフルスクリーンモードになる)
+				swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;                             // 推奨されている
 
 				// デバイスとスワップチェインの作成 -----------------------------------------------------------
 				for (unsigned int i = 0; i < numDriverTypes; i++) // 使用できるドライバーを見つけるまでループする
@@ -225,7 +279,7 @@ namespace DirectX11 {
 						d3dDeviceContext.GetAddressOf() // 成功時に代入される
 					);
 
-					if (SUCCEEDED(hr)){
+					if (SUCCEEDED(hr)) {
 						break; // ドライバが成功したらループを抜ける
 					}
 				}
@@ -236,14 +290,14 @@ namespace DirectX11 {
 				}
 
 				DebugLog::OutputToConsole("デバイス・スワップチェインの初期化に成功");
-				
+
 				return true;
 			}
 
 
 			// -----------------------------------------------------
-            // デバイスとスワップチェインの後処理
-            // -----------------------------------------------------
+			// デバイスとスワップチェインの後処理
+			// -----------------------------------------------------
 			void Uninit()
 			{
 #if defined(DEBUG) || defined(_DEBUG)
@@ -265,60 +319,132 @@ namespace DirectX11 {
 
 
 		// *********************************************************************************
-        // UAVの初期化・後処理 
-        // *********************************************************************************
-		namespace UAV {
+		// 描画設定の初期化・後処理 
+		// *********************************************************************************
+		namespace DrawSetting {
 
 			// -----------------------------------------------------
-			// UAVの初期化
+			// 描画設定の初期化
 			// -----------------------------------------------------
 			bool Init()
 			{
-				HRESULT  hr = S_OK; // 初期化の 成功、失敗 を受け取る
+				// カリング設定
+				D3D11_RASTERIZER_DESC rasterDesc = {};
+				rasterDesc.FillMode = D3D11_FILL_SOLID;                   // ポリゴンの塗りつぶし方法 (線画・塗りつぶし)
+				rasterDesc.CullMode = D3D11_CULL_BACK;                    // カリング方法 (裏面をカリング)
+				rasterDesc.FrontCounterClockwise = false;                 // 頂点の並び順 (時計回りが表面)
+				rasterDesc.DepthClipEnable = true;                        // 深度クリッピングを有効化
 
-                // UAV用のテクスチャの構成
-				D3D11_TEXTURE2D_DESC textureDesc = {};
-				textureDesc.Width      = RenderWidth;                    // テクスチャの横のピクセル数
-				textureDesc.Height     = RenderHeight;                   // テクスチャの縦のピクセル数
-				textureDesc.MipLevels  = 1;                              // ミップマップのレベル（1の場合、ミップマップを使用しない）
-				textureDesc.ArraySize  = 1;                              // 配列のサイズ
-				textureDesc.Format     = DXGI_FORMAT_R32G32B32A32_FLOAT; // ピクセルのフォーマット
-				textureDesc.SampleDesc = { 1,0 };                        // マルチサンプリング（アンチエイリアス無効）
-				textureDesc.Usage      = D3D11_USAGE_DEFAULT;            // GPUが主にアクセスする
-				textureDesc.BindFlags  = D3D11_BIND_UNORDERED_ACCESS;    // フラグ UAVのみで使用なので読み書き可能フラグ
+				// カリング設定パターン
+				D3D11_CULL_MODE cullModePattern[] = {
+					D3D11_CULL_BACK,   // 裏面カリング
+					D3D11_CULL_FRONT,  // 表面カリング
+					D3D11_CULL_NONE,   // カリング無し
+				};
 
-				// バッファを作成
-				hr = d3dDevice->CreateTexture2D(&textureDesc, nullptr, d3dRTTforUAV.GetAddressOf());
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("UAVテクスチャの作成に失敗しました");
-					return false;
+				D3D11_FILL_MODE fillModePattern[] = {
+					D3D11_FILL_SOLID,     // 塗りつぶし
+					D3D11_FILL_WIREFRAME, // ワイヤーフレーム
+				};
+
+				// カリング設定の作成
+				for (int i = 0; i < CullingSetting::Culling_Setting_Max * FillModeSetting::FillMode_Max; i++)
+				{
+					// カリング設定を作成
+					rasterDesc.CullMode = cullModePattern[i / FillModeSetting::FillMode_Max];
+					rasterDesc.FillMode = fillModePattern[i % FillModeSetting::FillMode_Max];
+
+					HRESULT hr = d3dDevice->CreateRasterizerState(&rasterDesc, drawSetting[i].GetAddressOf());
+
+					if (FAILED(hr)) {
+						DebugLog::OutputToConsole("カリング設定の作成に失敗しました");
+						return false;
+					}
 				}
 
-				// UAVを作成
-				D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
-				uavDesc.Format             = textureDesc.Format;            // UAVテクスチャフォーマットを使用する
-				uavDesc.ViewDimension      = D3D11_UAV_DIMENSION_TEXTURE2D; // アクセスする値フラグを渡す
-				uavDesc.Texture2D.MipSlice = 0;                             // ミップマップレベル（０の場合 自動的に最大数使用してくれる）
+				// 初期状態は裏面カリングにする
+				SetDrawSetting(CullingSetting::Back_Culling, FillModeSetting::Solid);
+				return true;
+			}
 
-				hr = d3dDevice->CreateUnorderedAccessView(d3dRTTforUAV.Get(), &uavDesc, d3dUAV.GetAddressOf()); // UAVを作成
-				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("UAVの作成に失敗しました");
-					return false;
+
+			// -----------------------------------------------------
+			// カリング設定の後処理
+			// -----------------------------------------------------
+			void Uninit()
+			{
+				for (int i = 0; i < CullingSetting::Culling_Setting_Max * FillModeSetting::FillMode_Max; i++)
+				{
+					drawSetting[i].Reset();
+				}
+			}
+
+		}
+
+
+		// *********************************************************************************
+		// 深度ステンシルの初期化・後処理 
+		// *********************************************************************************
+		namespace DepthStencil {
+
+			// -----------------------------------------------------
+			// 深度ステンシルの初期化
+			// -----------------------------------------------------
+			bool Init()
+			{
+				// 深度設定
+				D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+				dsDesc.DepthEnable = true; // 深度テストを有効化
+				dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL; // 描画する深度
+				dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 深度の書き込みを有効化
+				dsDesc.StencilEnable = true; // ステンシルテストを有効化
+				dsDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK; // ステンシルの読み取りマスク
+				dsDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK; // ステンシルの書き込みマスク
+				dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // ステンシルテスト失敗時の動作 (変更しない)
+				dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP; // ステンシルテストは成功、深度テスト失敗時の動作 (変更しない)
+				dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR; // ステンシルテスト・深度テスト共に成功時の動作 (値を増やす)
+				dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_GREATER_EQUAL; // ステンシルテストの比較方法 (大きいか等しい場合成功)
+				dsDesc.BackFace = dsDesc.FrontFace; // 裏面も同じ設定にする
+
+				bool enablePattern[] = { true, true, false };
+
+				D3D11_DEPTH_WRITE_MASK maskPattern[] = {
+					D3D11_DEPTH_WRITE_MASK_ALL,
+					D3D11_DEPTH_WRITE_MASK_ZERO,
+					D3D11_DEPTH_WRITE_MASK_ZERO,
+				};
+
+				for (int i = 0; i < DepthStencilSetting::Depth_Setting_Max; i++)
+				{
+					// 深度ステンシル状態を作成
+					dsDesc.DepthEnable = enablePattern[i];
+					dsDesc.StencilEnable = false;
+					dsDesc.DepthWriteMask = maskPattern[i];
+
+					HRESULT hr = d3dDevice->CreateDepthStencilState(&dsDesc, depthStencilSetting[i].GetAddressOf());
+
+					if (FAILED(hr)) {
+						DebugLog::OutputToConsole("深度ステンシルの作成に失敗しました");
+						return false;
+					}
 				}
 
-				DebugLog::OutputToConsole("UAVの初期化に成功");
+				// 初期状態は深度テスト・書き込みONにする
+				SetDepthStencilState(DepthEnableON_DepthWriteON);
 
 				return true;
 			}
 
 
 			// -----------------------------------------------------
-            // UAVの後処理
-            // -----------------------------------------------------
+			// 深度ステンシルの後処理
+			// -----------------------------------------------------
 			void Uninit()
 			{
-				d3dUAV.Reset();       // UAVを解放
-				d3dRTTforUAV.Reset(); // UAVの記憶領域を解放
+				for (int i = 0; i < DepthStencilSetting::Depth_Setting_Max; i++)
+				{
+					depthStencilSetting[i].Reset();
+				}
 			}
 
 
@@ -326,33 +452,66 @@ namespace DirectX11 {
 
 
 		// *********************************************************************************
-        // 深度ステンシルの初期化・後処理 
-        // *********************************************************************************
-		namespace DepthStencil {
+		// アルファディザ設定の初期化・後処理 
+		// *********************************************************************************
+		namespace AlphaDiza {
 
 			// -----------------------------------------------------
-            // 深度ステンシルの初期化
-            // -----------------------------------------------------
+			// アルファディザ設定の初期化
+			// -----------------------------------------------------
 			bool Init()
 			{
+				// ブレンドステートの設定
+				D3D11_BLEND_DESC blendDesc = {};
+				blendDesc.AlphaToCoverageEnable = FALSE;
+				blendDesc.IndependentBlendEnable = FALSE;
+				blendDesc.RenderTarget[0].BlendEnable = TRUE;
+				blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+				blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+				blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+				blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+				blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+				D3D11_BLEND blend[AlphaDizaSetting::Blend_Setting_Max][2] = {
+					{D3D11_BLEND_ONE, D3D11_BLEND_ZERO},
+					{D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_INV_SRC_ALPHA},
+					{D3D11_BLEND_ONE, D3D11_BLEND_ONE},
+					{D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_ONE},
+					{D3D11_BLEND_ZERO, D3D11_BLEND_INV_SRC_COLOR},
+					{D3D11_BLEND_INV_DEST_COLOR, D3D11_BLEND_ONE},
+				};
+
+				// ブレンド設定の作成
+				for (int i = 0; i < AlphaDizaSetting::Blend_Setting_Max; i++)
+				{
+					blendDesc.RenderTarget[0].SrcBlend = blend[i][0];
+					blendDesc.RenderTarget[0].DestBlend = blend[i][1];
+
+					HRESULT hr = d3dDevice->CreateBlendState(&blendDesc, alphaDizaSetting[i].GetAddressOf());
+
+					if (FAILED(hr)) {
+						DebugLog::OutputToConsole("アルファディザ設定の作成に失敗しました");
+						return false;
+					}
+				}
+
+				// 初期状態は標準アルファブレンドを設定する
+				SetAlphaDizaState(AlphaDizaSetting::Blend_Alpha);
 
 				return true;
 			}
 
 
 			// -----------------------------------------------------
-            // 深度ステンシルの後処理
-            // -----------------------------------------------------
+			// アルファディザ設定の後処理
+			// -----------------------------------------------------
 			void Uninit()
 			{
-
+				for (int i = 0; i < AlphaDizaSetting::Blend_Setting_Max; i++)
+				{
+					alphaDizaSetting[i].Reset();
+				}
 			}
-
-
 		}
-
-
 	}
-
-
 }

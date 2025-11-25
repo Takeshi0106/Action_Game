@@ -203,13 +203,17 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Windows_Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AlphaDizaSetting.h" />
     <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseDrawManager.h" />
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
+    <ClInclude Include="CullingSetting.h" />
+    <ClInclude Include="DepthStencilSetting.h" />
     <ClInclude Include="DirectX_FormatConverter.h" />
     <ClInclude Include="ActionGame.h" />
+    <ClInclude Include="FillModeSetting.h" />
     <ClInclude Include="GraphicsEnums.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBufferData.h" />

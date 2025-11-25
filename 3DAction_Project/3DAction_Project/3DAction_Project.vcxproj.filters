@@ -491,6 +491,18 @@
     <ClInclude Include="Knight.h">
       <Filter>4_Game\Knight</Filter>
     </ClInclude>
+    <ClInclude Include="DepthStencilSetting.h">
+      <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="CullingSetting.h">
+      <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="FillModeSetting.h">
+      <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaDizaSetting.h">
+      <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VS_Object.hlsl">
