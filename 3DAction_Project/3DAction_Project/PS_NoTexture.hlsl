@@ -1,18 +1,18 @@
 
 // =============================
-// “ü—Íî•ñ
+// å…¥åŠ›æƒ…å ±
 // =============================
 struct PSInput
 {
-    float4 pos : SV_POSITION; // ƒNƒŠƒbƒsƒ“ƒOŒã‚ÌÀ•W
-    float3 normal : NORMAL; // –@ü
+    float4 pos : SV_POSITION; // ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°å¾Œã®åº§æ¨™
+    float3 normal : NORMAL; // æ³•ç·š
     float2 uv : TEXCOORD; // UV
-    float4 color : COLOR; // ’¸“_ƒJƒ‰[
+    float4 color : COLOR; // é ‚ç‚¹ã‚«ãƒ©ãƒ¼
 };
 
 
 // =============================
-// ’è”ƒoƒbƒtƒ@
+// å®šæ•°ãƒãƒƒãƒ•ã‚¡
 // =============================
 cbuffer Material : register(b0)
 {
@@ -23,7 +23,7 @@ cbuffer Material : register(b0)
 
 
 // =============================
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
 // =============================
 float4 main(PSInput input) : SV_TARGET
 {
