@@ -48,11 +48,11 @@ namespace DirectX11
 		FillModeSetting fillMode = FillModeSetting::Solid);
 
 	// 深度ステンシル設定
-	void SetDepthStencilState(DepthStencilSetting setting 
+	void SetDepthStencilSetting(DepthStencilSetting setting 
 		= DepthStencilSetting::DepthEnableON_DepthWriteOFF);
 
 	// アルファディザ設定
-	void SetAlphaDizaState(AlphaDizaSetting setting 
+	void SetAlphaDizaSetting(AlphaDizaSetting setting 
 		= AlphaDizaSetting::Blend_Alpha);
 
 	// ゲッター関数

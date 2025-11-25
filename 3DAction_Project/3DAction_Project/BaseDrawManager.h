@@ -20,6 +20,11 @@
 #include "GraphicsEnums.h"
 // サンプラー設定ヘッダー
 #include "SamplerSetting.h"
+// 各描画設定ヘッダー
+#include "AlphaDizaSetting.h" // アルファディザ設定
+#include "CullingSetting.h"   // カリング設定
+#include "FillModeSetting.h"  // 塗り設定
+#include "DepthStencilSetting.h" // 深度ステンシル設定
 // 基本ヘッダー
 #include <cstdint>
 
@@ -109,5 +114,19 @@ public:
 
 	// バインドレンダーターゲット
 	virtual void BindRenderTarget(const char* rtvName, const char* dsvName = nullptr) = 0;
+
+
+	/* ------------ 描画設定 ------------ */
+	// 描画設定(カリング、塗り)
+	virtual void SetDrawSetting(CullingSetting culling = CullingSetting::Back_Culling,
+		FillModeSetting fillMode = FillModeSetting::Solid) = 0;
+
+	// 深度ステンシル設定
+	virtual void SetDepthStencilSetting(DepthStencilSetting depthStencil 
+		= DepthStencilSetting::DepthEnableON_DepthWriteON) = 0;
+
+	// アルファディザ設定
+	virtual void SetAlphaDizaSetting(AlphaDizaSetting alphaDiza 
+		= AlphaDizaSetting::Blend_Alpha) = 0;
 };
 

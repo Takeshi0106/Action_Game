@@ -529,6 +529,33 @@ void DirectX_DrawManager::BindRenderTarget(const char* rtvName, const char* dsvN
 
 
 // ===================================================
+// 描画設定(カリング、塗り)
+// ===================================================
+void DirectX_DrawManager::SetDrawSetting(CullingSetting culling, FillModeSetting fillMode)
+{
+	DirectX11::SetDrawSetting(culling, fillMode);
+}
+
+
+// ===================================================
+// 深度ステンシル設定
+// ===================================================
+void DirectX_DrawManager::SetDepthStencilSetting(DepthStencilSetting depthStencil)
+{
+	DirectX11::SetDepthStencilSetting(depthStencil);
+}
+
+
+// ===================================================
+// アルファディザ設定
+// ===================================================
+void DirectX_DrawManager::SetAlphaDizaSetting(AlphaDizaSetting alphaDiza)
+{
+	DirectX11::SetAlphaDizaSetting(alphaDiza);
+}
+
+
+// ===================================================
 // 自作メッシュを描画
 // ===================================================
 bool DirectX_DrawManager::DrawPrimitiveObject(

@@ -161,4 +161,17 @@ public:
 
 	// レンダーターゲットバインド
 	void BindRenderTarget(const char* rtvName = nullptr, const char* dsvName = nullptr) override final;
+
+	/* ------------ 描画設定 ------------ */
+	// 描画設定(カリング、塗り)
+	void SetDrawSetting(CullingSetting culling = CullingSetting::Back_Culling,
+		FillModeSetting fillMode = FillModeSetting::Solid) override final;
+
+	// 深度ステンシル設定
+	void SetDepthStencilSetting(DepthStencilSetting depthStencil
+		= DepthStencilSetting::DepthEnableON_DepthWriteON) override final;
+
+	// アルファディザ設定
+	void SetAlphaDizaSetting(AlphaDizaSetting alphaDiza
+		= AlphaDizaSetting::Blend_Alpha) override final;
 };

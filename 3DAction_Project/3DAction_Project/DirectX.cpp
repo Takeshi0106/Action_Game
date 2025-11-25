@@ -175,7 +175,7 @@ namespace DirectX11 {
 	// =====================================================
 	// 深度ステンシル設定
 	// =====================================================
-	void SetDepthStencilState(DepthStencilSetting setting)
+	void SetDepthStencilSetting(DepthStencilSetting setting)
 	{
 		d3dDeviceContext->OMSetDepthStencilState(DepthStencil::depthStencilSetting[setting].Get(), 0);
 	}
@@ -184,7 +184,7 @@ namespace DirectX11 {
 	// =====================================================
 	// アルファディザ設定
 	// =====================================================
-	void SetAlphaDizaState(AlphaDizaSetting setting)
+	void SetAlphaDizaSetting(AlphaDizaSetting setting)
 	{
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		UINT  sampleMask = 0xffffffff;
@@ -430,7 +430,7 @@ namespace DirectX11 {
 				}
 
 				// 初期状態は深度テスト・書き込みONにする
-				SetDepthStencilState(DepthEnableON_DepthWriteON);
+				SetDepthStencilSetting(DepthEnableON_DepthWriteON);
 
 				return true;
 			}
@@ -496,7 +496,7 @@ namespace DirectX11 {
 				}
 
 				// 初期状態は標準アルファブレンドを設定する
-				SetAlphaDizaState(AlphaDizaSetting::Blend_Alpha);
+				SetAlphaDizaSetting(AlphaDizaSetting::Blend_Alpha);
 
 				return true;
 			}
