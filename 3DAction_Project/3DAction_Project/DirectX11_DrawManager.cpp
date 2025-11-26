@@ -584,10 +584,6 @@ bool DirectX_DrawManager::DrawPrimitiveObject(
 	// テクスチャバインド
 	if (_textureName != nullptr)
 	{
-		// 描画コンテキスト取得
-		DirectX11::Get::GetContext()->OMSetDepthStencilState(nullptr, 0);
-		DirectX11::Get::GetContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
-
 		// テクスチャ・サンプラー バインド
 		m_ViewManager->BindSRV(_textureName, DirectX11::Get::GetContext(), PIXSELSHADER);
 		m_SamplerManager->BindSampler(_sampler, DirectX11::Get::GetContext());
