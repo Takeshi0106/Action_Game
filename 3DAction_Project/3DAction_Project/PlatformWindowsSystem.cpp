@@ -1,4 +1,5 @@
 ﻿
+
 // ===============================================
 // 【クラス概要】
 // Windowsプラットフォームの初期化
@@ -13,10 +14,10 @@
 #include "PlatformWindowsSystem.h"  // 自分のヘッダー
 // ウィンドウ作成用のヘッダー
 #include <Windows.h>  // ウィンドウ作成用
-// 標準ヘッダー
-#include <cstdint>   // 整数型 uintなど
 // 描画マネージャー
 #include "DirectX11_DrawManager.h"
+// 入力ヘッダー
+#include "DirectX_Input.h"  // DirectX用入力情報取得クラス
 // ログ出力用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
 
@@ -48,17 +49,8 @@ public:
 APPLICATIONHANDLE PlatformWindowsSystem::m_AppInstance = nullptr;
 HWND              PlatformWindowsSystem::m_WinInstance = nullptr;
 
-DirectX_DrawManager PlatformWindowsSystem::m_DrawManager;
-
-
-// =====================================================
-// デバッグ用
-// =====================================================
-#if defined(DEBUG) || defined(_DEBUG)
-namespace {
-    bool IsUninit = false;
-}
-#endif
+std::unique_ptr<DirectX_DrawManager> PlatformWindowsSystem::m_DrawManager = nullptr;
+std::unique_ptr<DirectX_Input> PlatformWindowsSystem::m_Input = nullptr;
 
 
 // =====================================================
@@ -68,17 +60,22 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 
 
 // =====================================================
+// コンストラクタ・デストラクタ
+// ===================================================== 
+// コンストラクタ
+PlatformWindowsSystem::PlatformWindowsSystem(unsigned int Width, unsigned int Height, 
+    const wchar_t* WindowClassName, const wchar_t* WindowName)
+    :m_Width(Width), m_Height(Height), m_WindowClassName(WindowClassName), m_WindowName(WindowName) 
+{
+	// 実態作成
+	m_DrawManager = std::make_unique<DirectX_DrawManager>();
+	m_Input = std::make_unique<DirectX_Input>();
+}
+
 // デストラクタ
-// =====================================================
 PlatformWindowsSystem::~PlatformWindowsSystem()
 {
-#if defined(DEBUG) || defined(_DEBUG)
-    if (IsUninit)
-    {
-        ErrorLog::OutputToConsole("PlatformWindowsSystem : 後処理が実行されていません");
-        Uninit();
-    }
-#endif
+
 }
 
 
@@ -210,9 +207,13 @@ void PlatformWindowsSystem::Uninit()
 bool PlatformWindowsSystem::GameInit()
 {
     // 描画マネージャーの初期化
-    m_DrawManager.Init(m_Width,m_Height,m_WinInstance);
+    m_DrawManager->Init(m_Width,m_Height,m_WinInstance);
+
+    // 入力情報作成
+    m_Input->Init();
+    
     // ゲームの初期化
-    m_Game->Init(&m_DrawManager);
+    m_Game->Init(m_DrawManager.get(), m_Input.get());
 
     return true;
 }
@@ -228,6 +229,9 @@ void PlatformWindowsSystem::GameMain()
 
     // ゲームの描画処理
     m_Game->Draw();
+
+    // 入力情報更新
+    m_Input->Update();
 }
 
 
@@ -238,8 +242,13 @@ void PlatformWindowsSystem::GameUninit()
 {
     // ゲームの後処理
     m_Game->Uninit();
+
     // 描画マネージャーの後処理
-    m_DrawManager.Uninit();
+    m_DrawManager->Uninit();
+
+    // 開放
+	m_DrawManager.reset();
+	m_Input.reset();
 }
 
 
@@ -269,6 +278,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
         {
             PostMessage(hWnd, WM_CLOSE, wp, lp);//ウィンドウプロシージャにWM_CLOSEを送る
         }
+        break;
+
+    case WM_INPUT:
+        // 入力イベント受け取り時に呼び出す。
+        DirectX_Input::HandleRawInput(lp);
         break;
 
     default:

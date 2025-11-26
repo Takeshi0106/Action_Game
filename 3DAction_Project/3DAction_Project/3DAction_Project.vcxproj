@@ -156,6 +156,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="DirectX_FormatConverter.cpp" />
+    <ClCompile Include="DirectX_Input.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="ActionGame.cpp" />
     <ClCompile Include="IndexBufferData.cpp" />
@@ -213,6 +214,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DepthStencilSetting.h" />
     <ClInclude Include="DirectX_FormatConverter.h" />
     <ClInclude Include="ActionGame.h" />
+    <ClInclude Include="DirectX_Input.h" />
     <ClInclude Include="FillModeSetting.h" />
     <ClInclude Include="GraphicsEnums.h" />
     <ClInclude Include="Color.h" />
@@ -224,6 +226,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="IndexBufferData.h" />
     <ClInclude Include="IndexBufferManager.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="InputLayoutInfo.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Matrix4x4.h" />
