@@ -164,8 +164,8 @@ public:
 
 	/* ------------ 描画設定 ------------ */
 	// 描画設定(カリング、塗り)
-	void SetDrawSetting(CullingSetting culling = CullingSetting::Back_Culling,
-		FillModeSetting fillMode = FillModeSetting::Solid) override final;
+	void SetDrawSetting(FillModeSetting fillMode = FillModeSetting::Solid,
+		CullingSetting culling = CullingSetting::Back_Culling) override final;
 
 	// 深度ステンシル設定
 	void SetDepthStencilSetting(DepthStencilSetting depthStencil

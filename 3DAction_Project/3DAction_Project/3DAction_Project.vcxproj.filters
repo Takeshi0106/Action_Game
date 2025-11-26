@@ -243,9 +243,6 @@
     <ClCompile Include="FileUtils.cpp">
       <Filter>2_Core\Faile</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX11_DrawManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
-    </ClCompile>
     <ClCompile Include="WindowsMath_Utiles.cpp">
       <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
     </ClCompile>
@@ -326,6 +323,12 @@
     </ClCompile>
     <ClCompile Include="Knight.cpp">
       <Filter>4_Game\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX_Input.cpp">
+      <Filter>1_Platform\Windows\3_Input</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_DrawManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +505,12 @@
     </ClInclude>
     <ClInclude Include="AlphaDizaSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>1_Platform\Base\3_PlatformInput</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX_Input.h">
+      <Filter>1_Platform\Windows\3_Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

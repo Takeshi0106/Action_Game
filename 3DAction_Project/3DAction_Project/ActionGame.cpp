@@ -39,10 +39,8 @@ Knight g_Knight;
 // =================================
 // 初期化
 // =================================
-void ActionGame::Init(BaseDrawManager* _drawManager)
+void ActionGame::DerivativeInit()
 {
-	m_DrawManager = _drawManager;
-
 	// 定数バッファ初期化
 	// ビュー行列（カメラを少し離す）
 	Vector3 eye(0, 0, -5);   // カメラ位置
@@ -87,7 +85,7 @@ void ActionGame::Update()
 	// g_Square.Update();
 	g_Knight.Update();
 
-// #if defined(DEBUG) || defined(_DEBUG)
+
 	// 時間を取得
 	m_FPSTime += Timer::GetDeltaTime();
 	m_FPSCount++;
@@ -101,7 +99,21 @@ void ActionGame::Update()
 		m_FPSTime = 0.0f;
 		m_FPSCount = 0;
 	}
-// #endif
+
+	// デバッグ用描画モード切り替え
+	if (m_Input->GetMouseTrigger(Mouse_Left))
+	{
+		m_DrawManager->SetDrawSetting(FillModeSetting::Wireframe);
+		DebugLog::OutputToConsole("ワイヤーフレームモード");
+	}
+	else if (m_Input->GetMouseRelease(Mouse_Left))
+	{
+		m_DrawManager->SetDrawSetting(FillModeSetting::Solid);
+		DebugLog::OutputToConsole("通常描画モード");
+	}
+
+	DebugLog::OutputToConsole(std::string("マウス座標 X:" + std::to_string(m_Input->GetMousePos().x) +
+		" Y:" + std::to_string(m_Input->GetMousePos().y)).c_str());
 
 	// タイマー更新処理
 	Timer::LastUpdate();

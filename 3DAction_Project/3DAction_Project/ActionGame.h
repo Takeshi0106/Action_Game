@@ -16,8 +16,6 @@
 class ActionGame :public BaseGame
 {
 private:
-	// 描画マネージャー
-	BaseDrawManager* m_DrawManager = nullptr;
 	// フレーム計測用
 	float m_FPSTime = 0.0f;
 	int m_FPSCount = 0;
@@ -27,12 +25,12 @@ public:
 	~ActionGame() = default;
 
 	// 初期化
-	void Init(BaseDrawManager* _drawManager) override;
+	void DerivativeInit() override final;
 	// 更新
-	void Update() override;
+	void Update() override final;
 	// 描画
-	void Draw() override;
+	void Draw() override final;
 	// 後処理
-	void Uninit() override;
+	void Uninit() override final;
 };
 

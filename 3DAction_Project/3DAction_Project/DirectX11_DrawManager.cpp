@@ -531,7 +531,7 @@ void DirectX_DrawManager::BindRenderTarget(const char* rtvName, const char* dsvN
 // ===================================================
 // 描画設定(カリング、塗り)
 // ===================================================
-void DirectX_DrawManager::SetDrawSetting(CullingSetting culling, FillModeSetting fillMode)
+void DirectX_DrawManager::SetDrawSetting(FillModeSetting fillMode, CullingSetting culling)
 {
 	DirectX11::SetDrawSetting(culling, fillMode);
 }

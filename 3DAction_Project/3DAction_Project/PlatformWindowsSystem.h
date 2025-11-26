@@ -13,6 +13,8 @@
 // ==========================================
 // 基底クラスのヘッダー
 #include "PlatformSystem.h"
+// 動的確保
+#include <memory>
 
 
 // =====================================================
@@ -25,6 +27,8 @@ struct HWND__;
 using HWND = HWND__*;
 // DirectX用描画マネージャー
 class DirectX_DrawManager;
+// 入力情報受け取りクラス
+class DirectX_Input;
 
 
 // =====================================================
@@ -40,7 +44,8 @@ private:
 	const wchar_t*          m_WindowName;        // ウィンドウの名前
 	const wchar_t*          m_WindowClassName;   // ウィンドウのクラス名
 
-	static DirectX_DrawManager m_DrawManager; // 描画マネージャー
+	static std::unique_ptr<DirectX_Input> m_Input; // 入力情報
+	static std::unique_ptr<DirectX_DrawManager> m_DrawManager; // 描画マネージャー
 
 	// オーバーライド関数
 	bool Init()       override; // 初期化処理
@@ -51,11 +56,8 @@ private:
 	void GameUninit() override; // ゲームの後処理
 
 public:
-	// コンストラクタ
-	PlatformWindowsSystem(unsigned int Width, unsigned int Height, const wchar_t* WindowClassName, const wchar_t* WindowName)
-		:m_Width(Width), m_Height(Height), m_WindowClassName(WindowClassName), m_WindowName(WindowName) {}
-
-	// デストラクタ
+	// コンストラクタ・デストラクタ
+	PlatformWindowsSystem(unsigned int Width, unsigned int Height, const wchar_t* WindowClassName, const wchar_t* WindowName);
 	~PlatformWindowsSystem();
 
 	// ゲッター
