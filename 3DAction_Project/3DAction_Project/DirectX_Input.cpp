@@ -153,7 +153,7 @@ void DirectX_Input::HandleRawInput(LPARAM lparam)
 // 押された瞬間
 bool DirectX_Input::GetKeyTrigger(KeyCode key)
 {
-	if(m_NowKey[kKeyCodeToDXKeyCode[key]] &&
+	if (m_NowKey[kKeyCodeToDXKeyCode[key]] &&
 		!m_OldKey[kKeyCodeToDXKeyCode[key]])
 	{
 		return true;
@@ -165,7 +165,7 @@ bool DirectX_Input::GetKeyTrigger(KeyCode key)
 // 離れた瞬間
 bool DirectX_Input::GetKeyRelease(KeyCode key)
 {
-	if(!m_NowKey[kKeyCodeToDXKeyCode[key]] &&
+	if (!m_NowKey[kKeyCodeToDXKeyCode[key]] &&
 		m_OldKey[kKeyCodeToDXKeyCode[key]])
 	{
 		return true;
@@ -177,7 +177,8 @@ bool DirectX_Input::GetKeyRelease(KeyCode key)
 // 押されている間
 bool DirectX_Input::GetKeyPress(KeyCode key)
 {
-	if (m_OldKey[kKeyCodeToDXKeyCode[key]])
+	if (m_NowKey[kKeyCodeToDXKeyCode[key]] &&
+		m_OldKey[kKeyCodeToDXKeyCode[key]])
 	{
 		return true;
 	}
@@ -192,7 +193,7 @@ bool DirectX_Input::GetKeyPress(KeyCode key)
 // 押した瞬間
 bool DirectX_Input::GetMouseTrigger(MouseCode button)
 {
-	if(m_NowMouse[button] &&
+	if (m_NowMouse[button] &&
 		!m_OldMouse[button])
 	{
 		return true;
@@ -204,7 +205,7 @@ bool DirectX_Input::GetMouseTrigger(MouseCode button)
 // 離した瞬間
 bool DirectX_Input::GetMouseRelease(MouseCode button)
 {
-	if(!m_NowMouse[button] &&
+	if (!m_NowMouse[button] &&
 		m_OldMouse[button])
 	{
 		return true;
@@ -216,7 +217,8 @@ bool DirectX_Input::GetMouseRelease(MouseCode button)
 // 押されている間
 bool DirectX_Input::GetMousePress(MouseCode button)
 {
-	if (m_NowMouse[button])
+	if (m_NowMouse[button] &&
+		m_OldMouse[button])
 	{
 		return true;
 	}

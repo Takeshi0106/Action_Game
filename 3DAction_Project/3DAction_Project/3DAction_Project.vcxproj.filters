@@ -193,6 +193,12 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter">
       <UniqueIdentifier>{b92cbb73-1d59-4839-9fe8-232f272d33a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Base\0_PlatformSystem\CursorController">
+      <UniqueIdentifier>{2f986957-edfe-42f2-8c00-b9756edb440f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\0_System\DirectX_Controller">
+      <UniqueIdentifier>{bc7d1dbb-d566-491a-825a-61077992d929}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -329,6 +335,9 @@
     </ClCompile>
     <ClCompile Include="DirectX11_DrawManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX_CursorController.cpp">
+      <Filter>1_Platform\Windows\0_System\DirectX_Controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,6 +520,12 @@
     </ClInclude>
     <ClInclude Include="DirectX_Input.h">
       <Filter>1_Platform\Windows\3_Input</Filter>
+    </ClInclude>
+    <ClInclude Include="CursorController.h">
+      <Filter>1_Platform\Base\0_PlatformSystem\CursorController</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX_CursorController.h">
+      <Filter>1_Platform\Windows\0_System\DirectX_Controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
