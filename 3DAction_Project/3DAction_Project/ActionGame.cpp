@@ -104,16 +104,15 @@ void ActionGame::Update()
 	if (m_Input->GetMouseTrigger(Mouse_Left))
 	{
 		m_DrawManager->SetDrawSetting(FillModeSetting::Wireframe);
+		m_CursorController->SetCursorMode(CursorMode::CursorMode_Hidden);
 		DebugLog::OutputToConsole("ワイヤーフレームモード");
 	}
 	else if (m_Input->GetMouseRelease(Mouse_Left))
 	{
+		m_CursorController->SetCursorMode(CursorMode::CursorMode_Normal);
 		m_DrawManager->SetDrawSetting(FillModeSetting::Solid);
 		DebugLog::OutputToConsole("通常描画モード");
 	}
-
-	DebugLog::OutputToConsole(std::string("マウス座標 X:" + std::to_string(m_Input->GetMousePos().x) +
-		" Y:" + std::to_string(m_Input->GetMousePos().y)).c_str());
 
 	// タイマー更新処理
 	Timer::LastUpdate();

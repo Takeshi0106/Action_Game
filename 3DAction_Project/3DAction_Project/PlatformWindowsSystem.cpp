@@ -18,6 +18,8 @@
 #include "DirectX11_DrawManager.h"
 // 入力ヘッダー
 #include "DirectX_Input.h"  // DirectX用入力情報取得クラス
+// カーソル制御クラス
+#include "DirectX_CursorController.h" // DirectX用カーソル制御クラス
 // ログ出力用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
 
@@ -51,6 +53,7 @@ HWND              PlatformWindowsSystem::m_WinInstance = nullptr;
 
 std::unique_ptr<DirectX_DrawManager> PlatformWindowsSystem::m_DrawManager = nullptr;
 std::unique_ptr<DirectX_Input> PlatformWindowsSystem::m_Input = nullptr;
+std::unique_ptr<DirectX_CursorController> PlatformWindowsSystem::m_CursorController = nullptr;
 
 
 // =====================================================
@@ -67,9 +70,7 @@ PlatformWindowsSystem::PlatformWindowsSystem(unsigned int Width, unsigned int He
     const wchar_t* WindowClassName, const wchar_t* WindowName)
     :m_Width(Width), m_Height(Height), m_WindowClassName(WindowClassName), m_WindowName(WindowName) 
 {
-	// 実態作成
-	m_DrawManager = std::make_unique<DirectX_DrawManager>();
-	m_Input = std::make_unique<DirectX_Input>();
+
 }
 
 // デストラクタ
@@ -206,14 +207,20 @@ void PlatformWindowsSystem::Uninit()
 // =====================================================
 bool PlatformWindowsSystem::GameInit()
 {
-    // 描画マネージャーの初期化
+    // 描画マネージャー作成
+    m_DrawManager = std::make_unique<DirectX_DrawManager>();
     m_DrawManager->Init(m_Width,m_Height,m_WinInstance);
 
     // 入力情報作成
+    m_Input = std::make_unique<DirectX_Input>();
     m_Input->Init();
-    
+
+	// カーソル制御クラス作成
+	m_CursorController = std::make_unique<DirectX_CursorController>(&m_WinInstance);
+	m_CursorController->SetCursorMode(CursorMode::CursorMode_Normal);
+
     // ゲームの初期化
-    m_Game->Init(m_DrawManager.get(), m_Input.get());
+    m_Game->Init(m_DrawManager.get(), m_Input.get(), m_CursorController.get());
 
     return true;
 }
@@ -226,12 +233,13 @@ void PlatformWindowsSystem::GameMain()
 {
     // ゲーム更新処理
     m_Game->Update();
-
     // ゲームの描画処理
     m_Game->Draw();
 
     // 入力情報更新
     m_Input->Update();
+	// カーソル更新
+	m_CursorController->Update();
 }
 
 

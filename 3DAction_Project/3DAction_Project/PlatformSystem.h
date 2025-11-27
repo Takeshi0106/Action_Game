@@ -28,9 +28,11 @@ public:
 #if defined(DEBUG) || defined(_DEBUG)
 	static bool m_IsCreated; // １つしかないことを保証する
 #endif
-	BaseGame* m_Game = nullptr;
 
 protected:
+	// ゲーム本体のポインター
+	BaseGame* m_Game = nullptr;
+
 	// -----------------------------------------------------------------
 	// プラットフォームごとにオーバーライドする
 	// -----------------------------------------------------------------

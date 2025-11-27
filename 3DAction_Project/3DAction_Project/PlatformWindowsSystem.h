@@ -29,6 +29,8 @@ using HWND = HWND__*;
 class DirectX_DrawManager;
 // 入力情報受け取りクラス
 class DirectX_Input;
+// カーソル制御クラス
+class DirectX_CursorController;
 
 
 // =====================================================
@@ -46,6 +48,7 @@ private:
 
 	static std::unique_ptr<DirectX_Input> m_Input; // 入力情報
 	static std::unique_ptr<DirectX_DrawManager> m_DrawManager; // 描画マネージャー
+	static std::unique_ptr<DirectX_CursorController> m_CursorController; // カーソル制御クラス
 
 	// オーバーライド関数
 	bool Init()       override; // 初期化処理
