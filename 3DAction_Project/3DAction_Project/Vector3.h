@@ -39,6 +39,12 @@ struct Vector3
 	Vector3 operator+ () const noexcept { return *this; }
 	Vector3 operator- () const noexcept { return Vector3(-x, -y, -z); }
 
+	// 代入演算子
+	Vector3 operator+=(const Vector3& vec) noexcept;
+	Vector3 operator-=(const Vector3& vec) noexcept;
+	Vector3 operator*=(float scalar) noexcept;
+	Vector3 operator/=(float scalar) noexcept;
+
 	// 計算関数// 計算関数
 	float Dot(const Vector3& vec1) const noexcept; // 内積
 	Vector3 Cross(const Vector3& vec1) const noexcept; // 外積
