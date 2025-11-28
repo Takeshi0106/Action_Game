@@ -58,7 +58,8 @@ bool DirectX_Input::m_NowMouse[MouseCode::Mouse_Max] = {false};
 bool DirectX_Input::m_OldMouse[MouseCode::Mouse_Max] = {false};
 
 // マウス位置
-Vector2 DirectX_Input::m_MousePos = {};
+Vector2 DirectX_Input::m_NowMousePos = {};
+Vector2 DirectX_Input::m_OldMousePos = {};
 
 
 // ===============================
@@ -102,6 +103,9 @@ void DirectX_Input::Update()
 
 	// 毎フレーム OldMouse を更新
 	memcpy(m_OldMouse, m_NowMouse, sizeof(m_NowMouse));
+
+	// マウス位置更新
+	m_OldMousePos = m_NowMousePos;
 }
 
 
@@ -137,8 +141,8 @@ void DirectX_Input::HandleRawInput(LPARAM lparam)
 	else if (raw->header.dwType == RIM_TYPEMOUSE)
 	{
 		// マウス位置更新
-		m_MousePos.x += (float)raw->data.mouse.lLastX;
-		m_MousePos.y += (float)raw->data.mouse.lLastY;
+		m_NowMousePos.x += (float)raw->data.mouse.lLastX;
+		m_NowMousePos.y += (float)raw->data.mouse.lLastY;
 
 		// ボタン状態更新
 		m_NowMouse[MouseCode::Mouse_Left] = (raw->data.mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN) != 0;
@@ -229,5 +233,11 @@ bool DirectX_Input::GetMousePress(MouseCode button)
 // 現在のカーソル位置
 Vector2 DirectX_Input::GetMousePos()
 {
-	return m_MousePos;
+	return m_NowMousePos;
+}
+
+// 位置フレーム前のカーソル位置からどれくらい動いたか
+Vector2 DirectX_Input::GetMouseMoveAmount()
+{
+	return m_NowMousePos - m_OldMousePos;
 }
