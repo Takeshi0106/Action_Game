@@ -171,6 +171,37 @@ Vector2 operator/(const Vector2& vec1, float scalar) noexcept
 	return FromXMVECTOR2(division);
 }
 
+// =====================================
+// 代入演算子
+// =====================================
+// 加算代入演算子
+Vector2 Vector2::operator+=(const Vector2& vec2) noexcept
+{
+	*this = *this + vec2;
+	return *this;
+}
+
+// 減算代入演算子
+Vector2 Vector2::operator-=(const Vector2& vec2) noexcept
+{
+	*this = *this - vec2;
+	return *this;
+}
+
+// 乗算代入演算子
+Vector2 Vector2::operator*=(float scalar) noexcept
+{
+	*this = *this * scalar;
+	return *this;
+}
+
+// 除算代入演算子
+Vector2 Vector2::operator/=(float scalar) noexcept
+{
+	*this = *this / scalar;
+	return *this;
+}
+
 
 // =====================================
 // 関数

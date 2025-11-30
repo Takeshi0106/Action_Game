@@ -5,10 +5,12 @@
 // ゲームの処理を行うクラス
 // =======================================
 
+
 // =======================================
 // ヘッダー
 // =======================================
 #include "BaseGame.h"
+
 
 // =======================================
 // クラス
@@ -20,12 +22,13 @@ private:
 	float m_FPSTime = 0.0f;
 	int m_FPSCount = 0;
 
+	// 初期化
+	bool DerivativeInit() override final;
+
 public:
 	ActionGame() = default;
 	~ActionGame() = default;
 
-	// 初期化
-	void DerivativeInit() override final;
 	// 更新
 	void Update() override final;
 	// 描画
@@ -33,4 +36,3 @@ public:
 	// 後処理
 	void Uninit() override final;
 };
-

@@ -31,6 +31,12 @@ struct Vector2
 	Vector2 operator+ () const noexcept { return *this; }
 	Vector2 operator- () const noexcept { return Vector2(-x, -y); }
 
+	// 代入演算子
+	Vector2 operator+=(const Vector2& vec2) noexcept;
+	Vector2 operator-=(const Vector2& vec2) noexcept;
+	Vector2 operator*=(float scalar) noexcept;
+	Vector2 operator/=(float scalar) noexcept;
+
 	// チェック演算子
 	constexpr bool operator==(const Vector2& vec2) const noexcept
 	{

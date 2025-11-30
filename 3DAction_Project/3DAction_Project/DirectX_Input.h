@@ -30,7 +30,8 @@ private:
 	static bool m_OldMouse[MouseCode::Mouse_Max];
 
 	// マウス位置
-	static Vector2 m_MousePos;
+	static Vector2 m_NowMousePos;
+	static Vector2 m_OldMousePos;
 
 public:
 	// コンストラクタ・デストラクタ
@@ -54,4 +55,5 @@ public:
 	bool GetMouseRelease(MouseCode button) override final ;  // 離した瞬間
 	bool GetMousePress(MouseCode button) override final;    // 押されている間
 	Vector2 GetMousePos() override final;  // 現在のカーソル位置
+	Vector2 GetMouseMoveAmount() override final; // マウスの移動量取得
 };

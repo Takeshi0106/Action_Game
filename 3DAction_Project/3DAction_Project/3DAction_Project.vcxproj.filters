@@ -148,9 +148,6 @@
     <Filter Include="3_Hlsl\Triangle">
       <UniqueIdentifier>{9d33cc3f-536f-4624-b1f3-cca34a018e39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="0_Main\BaseGame">
-      <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\6_Setting">
       <UniqueIdentifier>{b0d7046b-9219-4751-80f7-ca3155126a0d}</UniqueIdentifier>
     </Filter>
@@ -163,29 +160,11 @@
     <Filter Include="2_Core\SaveLoad">
       <UniqueIdentifier>{3e9bee0c-817f-489a-9aae-9db8b36cb856}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2_Core\1_MeshData">
-      <UniqueIdentifier>{fe995487-afd6-456b-972d-48ef8019a8ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2_Core\0_ModelConversion">
-      <UniqueIdentifier>{9fd92a9e-335e-47f9-ad8c-c47588245f5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager">
       <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
     </Filter>
     <Filter Include="4_Game">
       <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\BaseObject">
-      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\TAriangle">
-      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\Square">
-      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\Knight">
-      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo">
       <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
@@ -198,6 +177,60 @@
     </Filter>
     <Filter Include="1_Platform\Windows\0_System\DirectX_Controller">
       <UniqueIdentifier>{bc7d1dbb-d566-491a-825a-61077992d929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\Model">
+      <UniqueIdentifier>{2c0bc9be-a51f-49ea-a444-1ed7fe80ebf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\Model\1_MeshData">
+      <UniqueIdentifier>{fe995487-afd6-456b-972d-48ef8019a8ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\Model\0_ModelConversion">
+      <UniqueIdentifier>{9fd92a9e-335e-47f9-ad8c-c47588245f5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\Imgui">
+      <UniqueIdentifier>{d7b83e73-9eca-4246-a3da-008cebcd0e8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\0_Game">
+      <UniqueIdentifier>{2520de8b-a8a8-4330-b75a-a8b7b4d50a46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\0_Game\BaseGame">
+      <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_Camera">
+      <UniqueIdentifier>{5cc3908a-7cbf-4568-90a0-8b1306a200f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Object">
+      <UniqueIdentifier>{969080dd-a2f8-4562-bb06-4298bfdaf32a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Object\Square">
+      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Object\Knight">
+      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Object\0_BaseObject">
+      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_Camera\0_BaseCamera">
+      <UniqueIdentifier>{a38b1d75-ed52-4742-b7a1-7d6f8e969305}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\1_Scene">
+      <UniqueIdentifier>{446616d3-ff4a-4e18-801c-ad9a5ffcdc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Core">
+      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Core\Controller">
+      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Core\Controller\0_DCCCamera3D_Controller">
+      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Object\Traiangle">
+      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_Camera\DCCCamera3D">
+      <UniqueIdentifier>{b5a178c6-50c2-4cc1-9e7c-58c10e88aeaa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -303,14 +336,11 @@
     <ClCompile Include="DirectX_FormatConverter.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClCompile>
-    <ClCompile Include="ActionGame.cpp">
-      <Filter>0_Main</Filter>
-    </ClCompile>
     <ClCompile Include="2DTriangle.cpp">
-      <Filter>4_Game\TAriangle</Filter>
+      <Filter>4_Game\3_Object\Traiangle</Filter>
     </ClCompile>
     <ClCompile Include="Square2D.cpp">
-      <Filter>4_Game\Square</Filter>
+      <Filter>4_Game\3_Object\Square</Filter>
     </ClCompile>
     <ClCompile Include="AssetLogger.cpp">
       <Filter>2_Core\AssetUsageLogger</Filter>
@@ -325,10 +355,10 @@
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClCompile>
     <ClCompile Include="ModelConversionModule.cpp">
-      <Filter>2_Core\0_ModelConversion</Filter>
+      <Filter>2_Core\Model\0_ModelConversion</Filter>
     </ClCompile>
     <ClCompile Include="Knight.cpp">
-      <Filter>4_Game\Knight</Filter>
+      <Filter>4_Game\3_Object\Knight</Filter>
     </ClCompile>
     <ClCompile Include="DirectX_Input.cpp">
       <Filter>1_Platform\Windows\3_Input</Filter>
@@ -338,6 +368,42 @@
     </ClCompile>
     <ClCompile Include="DirectX_CursorController.cpp">
       <Filter>1_Platform\Windows\0_System\DirectX_Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>2_Core\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>2_Core\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>2_Core\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
+      <Filter>2_Core\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>2_Core\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>2_Core\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>2_Core\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionGame.cpp">
+      <Filter>4_Game\0_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DCCCamera3D.cpp">
+      <Filter>4_Game\2_Camera\DCCCamera3D</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>4_Game\4_Core\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="DCCCamera3D_Controller.cpp">
+      <Filter>4_Game\4_Core\Controller\0_DCCCamera3D_Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseCamera.cpp">
+      <Filter>4_Game\2_Camera\0_BaseCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -455,20 +521,17 @@
     <ClInclude Include="DirectX_FormatConverter.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClInclude>
-    <ClInclude Include="ActionGame.h">
-      <Filter>0_Main</Filter>
-    </ClInclude>
     <ClInclude Include="BaseGame.h">
-      <Filter>0_Main\BaseGame</Filter>
+      <Filter>4_Game\0_Game\BaseGame</Filter>
     </ClInclude>
     <ClInclude Include="BaseObject.h">
-      <Filter>4_Game\BaseObject</Filter>
+      <Filter>4_Game\3_Object\0_BaseObject</Filter>
     </ClInclude>
     <ClInclude Include="2DTriangle.h">
-      <Filter>4_Game\TAriangle</Filter>
+      <Filter>4_Game\3_Object\Traiangle</Filter>
     </ClInclude>
     <ClInclude Include="Square2D.h">
-      <Filter>4_Game\Square</Filter>
+      <Filter>4_Game\3_Object\Square</Filter>
     </ClInclude>
     <ClInclude Include="SamplerSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
@@ -489,19 +552,19 @@
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClInclude>
     <ClInclude Include="ModelData.h">
-      <Filter>2_Core\1_MeshData</Filter>
+      <Filter>2_Core\Model\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>2_Core\1_MeshData</Filter>
+      <Filter>2_Core\Model\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="ModelConversionModule.h">
-      <Filter>2_Core\0_ModelConversion</Filter>
+      <Filter>2_Core\Model\0_ModelConversion</Filter>
     </ClInclude>
     <ClInclude Include="MaterialData.h">
-      <Filter>2_Core\1_MeshData</Filter>
+      <Filter>2_Core\Model\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Knight.h">
-      <Filter>4_Game\Knight</Filter>
+      <Filter>4_Game\3_Object\Knight</Filter>
     </ClInclude>
     <ClInclude Include="DepthStencilSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
@@ -526,6 +589,45 @@
     </ClInclude>
     <ClInclude Include="DirectX_CursorController.h">
       <Filter>1_Platform\Windows\0_System\DirectX_Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx11.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>2_Core\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionGame.h">
+      <Filter>4_Game\0_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCamera.h">
+      <Filter>4_Game\2_Camera\0_BaseCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="DCCCamera3D.h">
+      <Filter>4_Game\2_Camera\DCCCamera3D</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>4_Game\4_Core\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="DCCCamera3D_Controller.h">
+      <Filter>4_Game\4_Core\Controller\0_DCCCamera3D_Controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

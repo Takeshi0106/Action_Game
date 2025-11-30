@@ -10,13 +10,12 @@
 // ヘッダー
 // ==============================
 #include "BaseObject.h"
-#include "Matrix4x4.h"
 #include <string>
 
 // ==============================
 // クラス
 // ==============================
-class Knight : public BaseObject
+class Knight final : public BaseObject
 {
 private:
 	// モデル名

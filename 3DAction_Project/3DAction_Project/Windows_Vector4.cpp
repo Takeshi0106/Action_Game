@@ -162,6 +162,38 @@ Vector4 operator/(const Vector4& vec1, float scalar) noexcept
 
 
 // =====================================
+// 代入演算子
+// =====================================
+// 加算代入演算子
+Vector4 Vector4::operator+=(const Vector4& vec) noexcept
+{
+	*this = *this + vec;
+	return *this;
+}
+
+// 減算代入演算子
+Vector4 Vector4::operator-=(const Vector4& vec) noexcept
+{
+	*this = *this - vec;
+	return *this;
+}
+
+// 乗算代入演算子
+Vector4 Vector4::operator*=(float scalar) noexcept
+{
+	*this = *this * scalar;
+	return *this;
+}
+
+// 除算代入演算子
+Vector4 Vector4::operator/=(float scalar) noexcept
+{
+	*this = *this / scalar;
+	return *this;
+}
+
+
+// =====================================
 // 関数
 // =====================================
 // XMVECTORをVector3に変換

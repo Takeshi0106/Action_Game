@@ -39,6 +39,12 @@ struct Vector4
 	Vector4 operator+ () const noexcept { return *this; }
 	Vector4 operator- () const noexcept { return Vector4(-x, -y, -z, -w); }
 
+	// 代入演算子
+	Vector4 operator+=(const Vector4& vec) noexcept;
+	Vector4 operator-=(const Vector4& vec) noexcept;
+	Vector4 operator*=(float scalar) noexcept;
+	Vector4 operator/=(float scalar) noexcept;
+
 	// 計算関数
 	// 計算関数
 	float Dot(const Vector4& vec1) const noexcept; // 内積

@@ -29,7 +29,7 @@ enum KeyCode
 	KeyCode_W,            // W
 	KeyCode_A,            // A
 	KeyCode_S,            // S
-	keyCode_D,            // D
+	KeyCode_D,            // D
 
 	KeyCode_Max
 };
@@ -64,4 +64,5 @@ public:
 	virtual bool GetMouseRelease(MouseCode button) = 0;  // 離した瞬間
 	virtual bool GetMousePress(MouseCode button) = 0;    // 押されている間
 	virtual Vector2 GetMousePos() = 0;  // 現在のカーソル位置
+	virtual Vector2 GetMouseMoveAmount() = 0; // マウスの移動量取得
 };
