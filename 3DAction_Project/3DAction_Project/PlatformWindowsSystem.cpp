@@ -210,6 +210,7 @@ bool PlatformWindowsSystem::GameInit()
     // 描画マネージャー作成
     m_DrawManager = std::make_unique<DirectX_DrawManager>();
     m_DrawManager->Init(m_Width,m_Height,m_WinInstance);
+	m_DrawManager->SetDrawSetting(FillModeSetting::Solid, CullingSetting::Back_Culling);
 
     // 入力情報作成
     m_Input = std::make_unique<DirectX_Input>();
