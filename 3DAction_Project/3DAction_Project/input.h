@@ -29,7 +29,7 @@ enum KeyCode
 	KeyCode_W,            // W
 	KeyCode_A,            // A
 	KeyCode_S,            // S
-	keyCode_D,            // D
+	KeyCode_D,            // D
 
 	KeyCode_Max
 };

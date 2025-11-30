@@ -220,7 +220,10 @@ bool PlatformWindowsSystem::GameInit()
 	m_CursorController->SetCursorMode(CursorMode::CursorMode_Normal);
 
     // ゲームの初期化
-    m_Game->Init(m_DrawManager.get(), m_Input.get(), m_CursorController.get());
+    if (!m_Game->Init(m_DrawManager.get(), m_Input.get(), m_CursorController.get())) {
+        ErrorLog::OutputToConsole("ゲームの初期化に失敗しました");
+        return false;
+    }
 
     return true;
 }

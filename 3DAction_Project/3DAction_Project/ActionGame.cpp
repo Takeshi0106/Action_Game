@@ -5,18 +5,18 @@
 // 必須
 #include "ActionGame.h"
 // 計算
-#include  "Quaternionh.h"
 #include "Matrix4x4.h"
 #include "Vector3.h"
-// 色
-#include "Color.h"
 // 時間
 #include "Timer.h"
-// 定数バッファ
+// 定数バッファ設定
 #include "GraphicsEnums.h"
+// メモリ
+#include <memory>
 // 文字列
 #include <string>
 // オブジェクト
+#include "DCCCamera3D.h"
 #include "Square2D.h"
 #include "Knight.h"
 // ログ出力
@@ -34,36 +34,36 @@ struct CameraInfo
 // 四角形描画
 Square2D g_Square;
 Knight g_Knight;
+// DCCカメラ
+std::unique_ptr<BaseCamera> g_Camera;
 
 
 // =================================
 // 初期化
 // =================================
-void ActionGame::DerivativeInit()
+bool ActionGame::DerivativeInit()
 {
-	// 定数バッファ初期化
-	// ビュー行列（カメラを少し離す）
-	Vector3 eye(0, 0, -5);   // カメラ位置
-	Vector3 at(0, 0, 0);     // 注視点
-	Vector3 up(0, 1, 0);     // 上方向
-	Matrix4x4 view = Matrix4x4::CreateViewMatrix_LH(eye, at, up);
+	// DCCカメラ初期化
+	std::unique_ptr<DCCCamera3D> camera = std::make_unique<DCCCamera3D>();
+	// カメラ初期化
+	camera->SetInput(m_Input);
+	g_Camera = std::move(camera);
+
+	// カメラ初期化
+	if (!g_Camera->Init(m_DrawManager)) {
+		ErrorLog::OutputToConsole("DCCカメラの初期化に失敗");
+		return false;
+	}
 
 	// プロジェクション行列（透視投影）
-	float fov = 3.14159265f / 4.0f;     // 視野角45°
+	float fov = 3.14159265f / 4.0f;
 	float aspect = 1280.0f / 720.0f;
 	float nearZ = 0.1f;
 	float farZ = 100.0f;
-	Matrix4x4 proj = Matrix4x4::CreateProjectionMatrix_LH(fov, aspect, nearZ, farZ);
+	CameraProjInfo proj = { fov, aspect, nearZ, farZ };
 
-	CameraInfo mat = { view.toGPU(),proj.toGPU() };
-
-	// 定数バッファ作成
-	m_DrawManager->CreateConstantBuffer(
-		"CameraInfo",
-		&mat,
-		sizeof(mat),
-		BufferUsage::Dynamic,
-		CPUAccess::Write);
+	// カメラに設定
+	g_Camera->SetProjection(proj);
 
 	// 四角
 	// g_Square.Init(m_DrawManager);
@@ -71,6 +71,8 @@ void ActionGame::DerivativeInit()
 
 	Timer::Init(); // タイマー初期化
 	Timer::Start(); // タイマー開始
+
+	return true;
 }
 
 
@@ -85,6 +87,8 @@ void ActionGame::Update()
 	// g_Square.Update();
 	g_Knight.Update();
 
+	// カメラ更新
+	g_Camera->Update();
 
 	// 時間を取得
 	m_FPSTime += Timer::GetDeltaTime();
@@ -124,6 +128,9 @@ void ActionGame::Update()
 // ================================
 void ActionGame::Draw()
 {
+	// カメラ情報をGPUに送る
+	g_Camera->UpdateToGPU();
+
 	// 描画前
 	m_DrawManager->BegingDraw();
 
@@ -142,4 +149,5 @@ void ActionGame::Uninit()
 {
 	// g_Square.Uninit();
 	g_Knight.Uninit();
+	g_Camera->Uninit();
 }
