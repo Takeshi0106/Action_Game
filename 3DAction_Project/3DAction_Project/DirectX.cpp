@@ -337,9 +337,9 @@ namespace DirectX11 {
 
 				// カリング設定パターン
 				D3D11_CULL_MODE cullModePattern[] = {
-					D3D11_CULL_BACK,   // 裏面カリング
-					D3D11_CULL_FRONT,  // 表面カリング
 					D3D11_CULL_NONE,   // カリング無し
+					D3D11_CULL_FRONT,  // 表面カリング
+					D3D11_CULL_BACK,   // 裏面カリング
 				};
 
 				D3D11_FILL_MODE fillModePattern[] = {

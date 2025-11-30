@@ -232,6 +232,12 @@
     <Filter Include="4_Game\2_Camera\DCCCamera3D">
       <UniqueIdentifier>{b5a178c6-50c2-4cc1-9e7c-58c10e88aeaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\1_Scene\SceneState">
+      <UniqueIdentifier>{394f532b-6a18-4ea4-b2ca-8a4aef866a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\1_Scene\SceneState\BaseScene">
+      <UniqueIdentifier>{2a76e1de-d426-4bb1-83e7-300f23b33974}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -404,6 +410,12 @@
     </ClCompile>
     <ClCompile Include="BaseCamera.cpp">
       <Filter>4_Game\2_Camera\0_BaseCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>4_Game\1_Scene\SceneState</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>4_Game\1_Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -628,6 +640,18 @@
     </ClInclude>
     <ClInclude Include="DCCCamera3D_Controller.h">
       <Filter>4_Game\4_Core\Controller\0_DCCCamera3D_Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScene.h">
+      <Filter>4_Game\1_Scene\SceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>4_Game\1_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneEvent.h">
+      <Filter>4_Game\1_Scene\SceneState\BaseScene</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseSceneState.h">
+      <Filter>4_Game\1_Scene\SceneState\BaseScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
