@@ -156,6 +156,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DCCCamera3D_Controller.cpp" />
     <ClCompile Include="DCCCamera3D.cpp" />
+    <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="DirectX_CursorController.cpp" />
@@ -180,6 +181,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="SamplerData.cpp" />
     <ClCompile Include="SamplerManager.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Square2D.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="ResourceViewData.cpp" />
@@ -223,10 +225,12 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
+    <ClInclude Include="BaseSceneState.h" />
     <ClInclude Include="CullingSetting.h" />
     <ClInclude Include="CursorController.h" />
     <ClInclude Include="DCCCamera3D_Controller.h" />
     <ClInclude Include="DCCCamera3D.h" />
+    <ClInclude Include="DebugScene.h" />
     <ClInclude Include="DepthStencilSetting.h" />
     <ClInclude Include="DirectX_CursorController.h" />
     <ClInclude Include="DirectX_FormatConverter.h" />
@@ -264,6 +268,8 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="SamplerSetting.h" />
     <ClInclude Include="SamplerData.h" />
     <ClInclude Include="SamplerManager.h" />
+    <ClInclude Include="SceneEvent.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Square2D.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="ResourceViewData.h" />

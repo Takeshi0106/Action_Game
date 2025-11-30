@@ -17,10 +17,10 @@
 class BaseGame
 {
 protected:
+	// マネージャー
 	BaseDrawManager* m_DrawManager = nullptr;
 	Input* m_Input = nullptr;
 	CursorController* m_CursorController = nullptr;
-
 
 	// 派生初期化
 	virtual bool DerivativeInit() = 0;

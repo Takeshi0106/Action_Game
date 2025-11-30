@@ -9,7 +9,10 @@
 // =======================================
 // ヘッダー
 // =======================================
+// 基底クラス
 #include "BaseGame.h"
+// シーンマネージャー
+#include "SceneManager.h"
 
 
 // =======================================
@@ -18,6 +21,9 @@
 class ActionGame :public BaseGame
 {
 private:
+	// シーンマネージャー
+	SceneManager m_SceneManager;
+
 	// フレーム計測用
 	float m_FPSTime = 0.0f;
 	int m_FPSCount = 0;
