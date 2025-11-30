@@ -145,8 +145,21 @@ void DirectX_Input::HandleRawInput(LPARAM lparam)
 		m_NowMousePos.y += (float)raw->data.mouse.lLastY;
 
 		// ボタン状態更新
-		m_NowMouse[MouseCode::Mouse_Left] = (raw->data.mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN) != 0;
-		m_NowMouse[MouseCode::Mouse_Right] = (raw->data.mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN) != 0;
+		// 左ボタン
+		if (raw->data.mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN) {
+			m_NowMouse[Mouse_Left] = true;
+		}
+		else if (raw->data.mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_UP) {
+			m_NowMouse[Mouse_Left] = false;
+		}
+
+		// 右ボタン
+		if (raw->data.mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN) {
+			m_NowMouse[Mouse_Right] = true;
+		}
+		if (raw->data.mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_UP) {
+			m_NowMouse[Mouse_Right] = false;
+		}
 	}
 }
 
