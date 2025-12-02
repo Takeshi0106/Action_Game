@@ -176,7 +176,9 @@ void PlatformWindowsSystem::GameLoop()
             else
             {
                 // ゲームメイン
-                GameMain();
+                if (!GameMain()) {
+                    break;
+                }
             }
         }
     }
@@ -233,10 +235,14 @@ bool PlatformWindowsSystem::GameInit()
 // =====================================================
 // ゲームの更新処理
 // =====================================================
-void PlatformWindowsSystem::GameMain()
+bool PlatformWindowsSystem::GameMain()
 {
     // ゲーム更新処理
-    m_Game->Update();
+    if (!m_Game->Update()) {
+		ErrorLog::OutputToConsole("ゲームの更新に失敗しました");
+        return false;
+    }
+
     // ゲームの描画処理
     m_Game->Draw();
 
@@ -244,6 +250,8 @@ void PlatformWindowsSystem::GameMain()
     m_Input->Update();
 	// カーソル更新
 	m_CursorController->Update();
+
+    return true;
 }
 
 

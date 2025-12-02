@@ -16,10 +16,26 @@ struct PSInput
 // =============================
 cbuffer Material : register(b0)
 {
-    float4 diffse;
-    float4 ambient;
-    float4 specular;
+    float4 Material_Diffse;
+    float4 Material_Ambient;
+    float4 Material_Specular;
 };
+
+// =============================
+// ライト情報
+// =============================
+cbuffer SunLight : register(b1)
+{
+	// 光の情報
+    float4 Light_Diffuse;
+    float4 Light_Ambient;
+    float4 Light_Specular;
+    // ライトの方向
+    float3 Light_Direction;
+    // パディング
+    float pad0;
+};
+
 
 // サンプラーとテクスチャの宣言
 Texture2D tex : register(t0);
@@ -31,7 +47,23 @@ SamplerState samp : register(s0);
 float4 main(PSInput input) : SV_TARGET
 {
     // テクスチャカラーを取得
-    float4 texColor = tex.Sample(samp, input.uv);
+    float4 color = tex.Sample(samp, input.uv) * Material_Diffse;
     
-    return texColor;
+    float3 N = normalize(input.normal);
+    float3 L = normalize(-Light_Direction.xyz);
+    
+    // ランバート反射
+    float lambert = saturate(dot(N, L));
+    
+    // 拡散反射
+    float3 diffuse = lambert * Light_Diffuse.rgb;
+    // 
+    float3 ambient = Material_Ambient.rgb * Light_Ambient.rgb;
+    
+    // float4 specular = Light_Specular * Material_Specular;
+    
+    // 光の明るさを計算
+    color.rgb *= (diffuse + ambient);
+
+    return color;
 }

@@ -10,12 +10,8 @@
 // ========================================
 // シーンの基底クラス
 #include "BaseSceneState.h"
-// 入力
-#include "input.h"
-// 描画マネージャー
-#include "BaseDrawManager.h"
-// カーソル
-#include "CursorController.h"
+// モジュール
+#include "GameModule.h"
 // 動的確保
 #include <memory>
 
@@ -27,24 +23,22 @@ class SceneManager
 {
 private:
 	// マネージャー
-	BaseDrawManager* m_DrawManager = nullptr;
-	Input* m_Input = nullptr;
-	CursorController* m_CursorController = nullptr;
+	GameModules* m_Modules = nullptr;
 
 	// 現在のシーン
 	std::unique_ptr<BaseSceneState> m_CurrentSceneState;
 
 public:
 	// シーンの初期化
-	void Init(BaseDrawManager* _drawManager, Input* _input, CursorController* _cursor);
+	bool Init(GameModules* _modules);
 	// シーンの更新
-	void Update(float time);
+	bool Update(float time);
 	// シーンの描画
 	void Draw();
 	// シーンの終了処理
 	void Uninit();
 
 	// シーンの切り替え
-	void ChangeScene(SceneEvent event);
+	bool ChangeScene(SceneEvent event);
 };
 

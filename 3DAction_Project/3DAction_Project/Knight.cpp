@@ -28,7 +28,7 @@ void Knight::LateInit()
 // ============================
 void Knight::Update()
 {
-	m_SRT = m_SRT * Matrix4x4::CreateRotationYMatrix_LH(0.01f);
+	// m_SRT = m_SRT * Matrix4x4::CreateRotationYMatrix_LH(0.01f);
 }
 
 

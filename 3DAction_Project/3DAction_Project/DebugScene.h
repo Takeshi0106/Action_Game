@@ -12,12 +12,14 @@
 #include "BaseSceneState.h"
 // 基本カメラ
 #include "BaseCamera.h"
-// 動的確保
-#include <memory>
+// 基本ライト
+#include "BaseLight.h"
 // 四角形描画
 #include "Square2D.h"
 // ナイトモデル
 #include "Knight.h"
+// 動的確保
+#include <memory>
 
 
 // ===============================
@@ -28,6 +30,8 @@ class DebugScene : public BaseSceneState
 private:
 	// カメラ
 	std::unique_ptr<BaseCamera> m_Camera;
+	// ライト
+	std::unique_ptr<BaseLight> m_Light;
 	
 	// オブジェクト
 	Square2D m_Square;

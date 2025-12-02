@@ -40,7 +40,7 @@ protected:
 	virtual void Uninit() = 0;		// 後処理
 	virtual void GameLoop() = 0;    // ゲームループ
 	virtual bool GameInit() = 0;    // ゲーム初期化
-	virtual void GameMain() = 0;    // ゲームメイン
+	virtual bool GameMain() = 0;    // ゲームメイン
 	virtual void GameUninit() = 0;  // ゲーム後処理
 
 public:

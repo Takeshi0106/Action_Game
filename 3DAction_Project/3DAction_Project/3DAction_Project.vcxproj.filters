@@ -217,15 +217,6 @@
     <Filter Include="4_Game\1_Scene">
       <UniqueIdentifier>{446616d3-ff4a-4e18-801c-ad9a5ffcdc85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\4_Core">
-      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Core\Controller">
-      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Core\Controller\0_DCCCamera3D_Controller">
-      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
-    </Filter>
     <Filter Include="4_Game\3_Object\Traiangle">
       <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
     </Filter>
@@ -237,6 +228,24 @@
     </Filter>
     <Filter Include="4_Game\1_Scene\SceneState\BaseScene">
       <UniqueIdentifier>{2a76e1de-d426-4bb1-83e7-300f23b33974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Core">
+      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Core\Controller">
+      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Core\Controller\0_DCCCamera3D_Controller">
+      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Light">
+      <UniqueIdentifier>{0018c568-8fda-458b-936f-7df5197514d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Light\Base">
+      <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Core\Module">
+      <UniqueIdentifier>{4bd76209-b744-4666-80e7-233002cd6dc2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -403,10 +412,10 @@
       <Filter>4_Game\2_Camera\DCCCamera3D</Filter>
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
-      <Filter>4_Game\4_Core\Controller</Filter>
+      <Filter>4_Game\5_Core\Controller</Filter>
     </ClCompile>
     <ClCompile Include="DCCCamera3D_Controller.cpp">
-      <Filter>4_Game\4_Core\Controller\0_DCCCamera3D_Controller</Filter>
+      <Filter>4_Game\5_Core\Controller\0_DCCCamera3D_Controller</Filter>
     </ClCompile>
     <ClCompile Include="BaseCamera.cpp">
       <Filter>4_Game\2_Camera\0_BaseCamera</Filter>
@@ -416,6 +425,9 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>4_Game\1_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SunLight.cpp">
+      <Filter>4_Game\4_Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -636,10 +648,10 @@
       <Filter>4_Game\2_Camera\DCCCamera3D</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
-      <Filter>4_Game\4_Core\Controller</Filter>
+      <Filter>4_Game\5_Core\Controller</Filter>
     </ClInclude>
     <ClInclude Include="DCCCamera3D_Controller.h">
-      <Filter>4_Game\4_Core\Controller\0_DCCCamera3D_Controller</Filter>
+      <Filter>4_Game\5_Core\Controller\0_DCCCamera3D_Controller</Filter>
     </ClInclude>
     <ClInclude Include="DebugScene.h">
       <Filter>4_Game\1_Scene\SceneState</Filter>
@@ -652,6 +664,15 @@
     </ClInclude>
     <ClInclude Include="BaseSceneState.h">
       <Filter>4_Game\1_Scene\SceneState\BaseScene</Filter>
+    </ClInclude>
+    <ClInclude Include="SunLight.h">
+      <Filter>4_Game\4_Light</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseLight.h">
+      <Filter>4_Game\4_Light\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModule.h">
+      <Filter>4_Game\5_Core\Module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

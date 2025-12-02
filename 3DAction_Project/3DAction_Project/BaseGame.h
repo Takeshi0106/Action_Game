@@ -3,12 +3,8 @@
 // =======================
 // ヘッダー
 // =======================
-// 描画マネージャー
-#include "BaseDrawManager.h"
-// 入力情報
-#include "input.h"
-// カーソル制御
-#include "CursorController.h"
+// モジュール
+#include "GameModule.h"
 
 
 // =======================
@@ -18,9 +14,7 @@ class BaseGame
 {
 protected:
 	// マネージャー
-	BaseDrawManager* m_DrawManager = nullptr;
-	Input* m_Input = nullptr;
-	CursorController* m_CursorController = nullptr;
+	GameModules m_Modules;
 
 	// 派生初期化
 	virtual bool DerivativeInit() = 0;
@@ -34,16 +28,16 @@ public:
 	bool Init(BaseDrawManager* drawManager, Input* input, CursorController* cursorController) 
 	{
 		// 各情報初期化
-		m_DrawManager = drawManager;
-		m_Input = input;
-		m_CursorController = cursorController;
+		m_Modules.drawManager = drawManager;
+		m_Modules.input = input;
+		m_Modules.cursor = cursorController;
 
 		// 派生クラスの初期化
 		return DerivativeInit();
 	}
 
 	// 基本関数
-	virtual void Update() = 0;
+	virtual bool Update() = 0;
 	virtual void Draw() = 0;
 	virtual void Uninit() = 0;
 };

@@ -8,12 +8,8 @@
 // ========================================
 // ヘッダー
 // ========================================
-// 入力
-#include "input.h"
-// 描画マネージャー
-#include "BaseDrawManager.h"
-// カーソル
-#include "CursorController.h"
+// モジュール
+#include "GameModule.h"
 // シーンイベント
 #include "SceneEvent.h"
 
@@ -25,9 +21,7 @@ class BaseSceneState
 {
 protected:
 	// マネージャー
-	BaseDrawManager* m_DrawManager = nullptr;
-	Input* m_Input = nullptr;
-	CursorController* m_CursorController = nullptr;
+	GameModules* m_Modules = nullptr;
 
 	// シーンイベント
 	SceneEvent m_SceneEvent = SCENE_EVENT_NONE;
@@ -41,11 +35,9 @@ public:
 	virtual ~BaseSceneState() = default;
 	
 	// シーンの初期化
-	bool Init(BaseDrawManager* drawManager, Input* input, CursorController* cursorController) {
+	bool Init(GameModules* _modules) {
 		// 各情報初期化
-		m_DrawManager = drawManager;
-		m_Input = input;
-		m_CursorController = cursorController;
+		m_Modules = _modules;
 
 		// 派生クラスの初期化
 		return DerivativeInit();

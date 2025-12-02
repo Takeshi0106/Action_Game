@@ -18,7 +18,10 @@
 bool ActionGame::DerivativeInit()
 {
 	// シーンマネージャー初期化
-	m_SceneManager.Init(m_DrawManager, m_Input, m_CursorController);
+	if (!m_SceneManager.Init(&m_Modules)) {
+		ErrorLog::OutputToConsole("シーンマネージャーの初期化に失敗");
+		return false;
+	}
 
 	// タイマー初期化・開始
 	Timer::Init();
@@ -31,13 +34,16 @@ bool ActionGame::DerivativeInit()
 // ================================
 // 更新
 // ================================
-void ActionGame::Update()
+bool ActionGame::Update()
 {
 	// タイマーデバッグ
 	Timer::Debug_CheckUpdate();
 
 	// シーン更新
-	m_SceneManager.Update(Timer::GetDeltaTime());
+	if (!m_SceneManager.Update(Timer::GetDeltaTime())) {
+		ErrorLog::OutputToConsole("シーンの更新に失敗");
+		return false;
+	}
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 時間を取得
@@ -57,6 +63,8 @@ void ActionGame::Update()
 
 	// タイマー更新処理
 	Timer::LastUpdate();
+
+	return true;
 }
 
 
@@ -66,13 +74,13 @@ void ActionGame::Update()
 void ActionGame::Draw()
 {
 	// 描画前
-	m_DrawManager->BegingDraw();
+	m_Modules.drawManager->BegingDraw();
 
 	// シーン描画
 	m_SceneManager.Draw();
 
 	// 描画後
-	m_DrawManager->EndDraw();
+	m_Modules.drawManager->EndDraw();
 }
 
 

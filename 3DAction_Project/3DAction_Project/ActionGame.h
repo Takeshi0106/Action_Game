@@ -36,7 +36,7 @@ public:
 	~ActionGame() = default;
 
 	// 更新
-	void Update() override final;
+	bool Update() override final;
 	// 描画
 	void Draw() override final;
 	// 後処理

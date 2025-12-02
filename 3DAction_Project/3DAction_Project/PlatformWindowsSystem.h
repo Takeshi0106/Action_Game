@@ -55,7 +55,7 @@ private:
 	void GameLoop()   override; // ゲームループ
 	void Uninit()     override; // 後処理
 	bool GameInit()   override; // ゲームの開始処理
-	void GameMain()   override; // ゲームのメイン処理
+	bool GameMain()   override; // ゲームのメイン処理
 	void GameUninit() override; // ゲームの後処理
 
 public:
