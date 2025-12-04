@@ -31,14 +31,17 @@ private:
 	// 初期化
 	bool DerivativeInit() override final;
 
+	// Imgui使用 ＊リリース時は実行しません
+	void DebugImgui();
+
 public:
 	ActionGame() = default;
 	~ActionGame() = default;
 
-	// 更新
-	void Update() override final;
 	// 描画
 	void Draw() override final;
+	// 更新
+	bool Update() override final;
 	// 後処理
 	void Uninit() override final;
 };

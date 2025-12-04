@@ -6,40 +6,48 @@
 #include "SceneManager.h"
 // シーンヘッダー
 #include "DebugScene.h"
+#include "TitleScene.h"
+// ログ出力ヘッダー
+#include "ReportMessage.h"
 
 
 // ========================================
 // シーンの初期化
 // ========================================
-void SceneManager::Init(BaseDrawManager* _drawManager, Input* _input, CursorController* _cursor)
+bool SceneManager::Init(GameModules* modules)
 {
 	// マネージャー保存
-	m_DrawManager = _drawManager;
-	m_Input = _input;
-	m_CursorController = _cursor;
+	m_Modules = modules;
 
 	// 最初のシーンを設定する
 	m_CurrentSceneState = std::make_unique<DebugScene>();
 	// シーン初期化
-	m_CurrentSceneState->Init(m_DrawManager, m_Input, m_CursorController);
+	if (!m_CurrentSceneState->Init(m_Modules)) {
+		ErrorLog::OutputToConsole("シーンの初期化に失敗");
+		return false;
+	}
+
+	return true;
 }
 
 
 // ========================================
 // シーンの更新
 // ========================================
-void SceneManager::Update(float time)
+bool SceneManager::Update(float time)
 {
 	// シーン更新
 	m_CurrentSceneState->Update(time);
 
 	// シーンイベント取得
-	SceneEvent event = m_CurrentSceneState->GetSceneEvent();
+	SceneEventID event = m_CurrentSceneState->GetSceneEvent();
 
-	if (!event == SceneEvent::SCENE_EVENT_NONE) 
+	if (event != SceneEventID::NONE)
 	{
-		ChangeScene(event);
+		return ChangeScene(event);
 	}
+
+	return true;
 }
 
 
@@ -67,7 +75,7 @@ void SceneManager::Uninit()
 // ========================================
 // シーンの切り替え
 // ========================================
-void SceneManager::ChangeScene(SceneEvent event)
+bool SceneManager::ChangeScene(SceneEventID event)
 {
 	// 現在のシーンの終了処理
 	m_CurrentSceneState->Uninit();
@@ -76,11 +84,21 @@ void SceneManager::ChangeScene(SceneEvent event)
 	// 新しいシーンを設定する
 	switch (event)
 	{
-	case SCENE_EVENT_DEBUG_SCENE:
+		// デバッグシーン
+	case SceneEventID::DEBUGSCENE:
 		m_CurrentSceneState = std::make_unique<DebugScene>();
+		break;
+		// タイトルシーン
+	case SceneEventID::TITLESCENE:
+		m_CurrentSceneState = std::make_unique<TitleScene>();
 		break;
 	}
 
 	// 新しいシーンの初期化
-	m_CurrentSceneState->Init(m_DrawManager, m_Input, m_CursorController);
+	if (m_CurrentSceneState->Init(m_Modules)) {
+		ErrorLog::OutputToConsole("シーンの初期化に失敗");
+		return false;
+	}
+
+	return true;
 }

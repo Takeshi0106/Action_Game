@@ -556,6 +556,22 @@ void DirectX_DrawManager::SetAlphaDizaSetting(AlphaDizaSetting alphaDiza)
 
 
 // ===================================================
+// ゲッター
+// ===================================================
+// デバイス取得
+ID3D11Device* DirectX_DrawManager::GetDevice()
+{
+	return DirectX11::Get::GetDevice();
+}
+
+// デバイスコンテキスト取得
+ID3D11DeviceContext* DirectX_DrawManager::GetDeviceContext()
+{
+	return DirectX11::Get::GetContext();
+}
+
+
+// ===================================================
 // 自作メッシュを描画
 // ===================================================
 bool DirectX_DrawManager::DrawPrimitiveObject(

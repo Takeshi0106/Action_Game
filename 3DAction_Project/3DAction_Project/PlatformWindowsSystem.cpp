@@ -20,8 +20,17 @@
 #include "DirectX_Input.h"  // DirectX用入力情報取得クラス
 // カーソル制御クラス
 #include "DirectX_CursorController.h" // DirectX用カーソル制御クラス
+// モジュールをまとめるクラス
+#include "GameModule.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"  // デバッグ出力やメッセージボックス出力
+
+#if defined(DEBUG) || defined(_DEBUG)
+// Imgui用ヘッダー
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx11.h"
+#endif
 
 
 // =====================================================
@@ -59,7 +68,13 @@ std::unique_ptr<DirectX_CursorController> PlatformWindowsSystem::m_CursorControl
 // =====================================================
 // プロトタイプ宣言
 // =====================================================
+// ウィンドウプロシージャ関数
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
+
+#if defined(DEBUG) || defined(_DEBUG)
+// Imgui用　＊リリース時は何も実行しません
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif
 
 
 // =====================================================
@@ -176,7 +191,9 @@ void PlatformWindowsSystem::GameLoop()
             else
             {
                 // ゲームメイン
-                GameMain();
+                if (!GameMain()) {
+                    break;
+                }
             }
         }
     }
@@ -220,8 +237,17 @@ bool PlatformWindowsSystem::GameInit()
 	m_CursorController = std::make_unique<DirectX_CursorController>(&m_WinInstance);
 	m_CursorController->SetCursorMode(CursorMode::CursorMode_Normal);
 
+    // Imgui初期化
+    InitImGui();
+
+    // モジュールデータ作成
+    GameModules modules = {
+        static_cast<BaseDrawManager*>(m_DrawManager.get()),
+        static_cast<Input*>(m_Input.get()),
+        static_cast<CursorController*>(m_CursorController.get()) };
+
     // ゲームの初期化
-    if (!m_Game->Init(m_DrawManager.get(), m_Input.get(), m_CursorController.get())) {
+    if (!m_Game->Init(modules)) {
         ErrorLog::OutputToConsole("ゲームの初期化に失敗しました");
         return false;
     }
@@ -233,17 +259,35 @@ bool PlatformWindowsSystem::GameInit()
 // =====================================================
 // ゲームの更新処理
 // =====================================================
-void PlatformWindowsSystem::GameMain()
+bool PlatformWindowsSystem::GameMain()
 {
+	// Imgui更新
+	UpdateImGui();
+
     // ゲーム更新処理
-    m_Game->Update();
+    if (!m_Game->Update()) {
+		ErrorLog::OutputToConsole("ゲームの更新に失敗しました");
+        return false;
+    }
+
+
+    // 描画前処理
+    m_DrawManager->BegingDraw();
+
     // ゲームの描画処理
     m_Game->Draw();
+    // Imgui描画
+	DrawImGui();
+
+    // 描画後処理
+    m_DrawManager->EndDraw();
 
     // 入力情報更新
     m_Input->Update();
 	// カーソル更新
 	m_CursorController->Update();
+
+    return true;
 }
 
 
@@ -254,6 +298,8 @@ void PlatformWindowsSystem::GameUninit()
 {
     // ゲームの後処理
     m_Game->Uninit();
+    // Imguiの後処理
+    UninitImGui();
 
     // 描画マネージャーの後処理
     m_DrawManager->Uninit();
@@ -261,7 +307,69 @@ void PlatformWindowsSystem::GameUninit()
     // 開放
 	m_DrawManager.reset();
 	m_Input.reset();
+    m_CursorController.reset();
 }
+
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+// =====================================================
+// Imgui用関数
+// =====================================================
+// 初期化
+void PlatformWindowsSystem::InitImGui()
+{
+    // IMGUI初期化
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    // 入力設定
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+    // スタイル設定
+    ImGui::StyleColorsDark();
+
+    // Win32 + DirectX11 初期化
+    ImGui_ImplWin32_Init(m_WinInstance);
+    ImGui_ImplDX11_Init(m_DrawManager->GetDevice(),
+        m_DrawManager->GetDeviceContext());
+}
+
+// 更新
+void PlatformWindowsSystem::UpdateImGui()
+{
+    // フレーム開始
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+}
+
+// 描画
+void PlatformWindowsSystem::DrawImGui()
+{
+    // 描画
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+}
+
+// 後処理
+void PlatformWindowsSystem::UninitImGui()
+{
+    // IMGUI後処理
+    ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+}
+
+#else
+// リリース時は何も実行しない
+void PlatformWindowsSystem::InitImGui() {}
+void PlatformWindowsSystem::UpdateImGui() {}
+void PlatformWindowsSystem::DrawImGui() {}
+void PlatformWindowsSystem::UninitImGui() {}
+#endif
 
 
 // =====================================================
@@ -269,6 +377,14 @@ void PlatformWindowsSystem::GameUninit()
 // =====================================================
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
+
+#if defined(DEBUG) || defined(_DEBUG)
+	// Imgui用のウィンドウプロシージャ呼び出し
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wp, lp)) {
+        return true;
+    }
+#endif
+
     switch (msg)
     {
     case WM_DESTROY: // ウィンドウ破棄

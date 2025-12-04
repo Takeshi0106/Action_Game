@@ -55,8 +55,16 @@ private:
 	void GameLoop()   override; // ゲームループ
 	void Uninit()     override; // 後処理
 	bool GameInit()   override; // ゲームの開始処理
-	void GameMain()   override; // ゲームのメイン処理
+	bool GameMain()   override; // ゲームのメイン処理
 	void GameUninit() override; // ゲームの後処理
+
+
+	// Imgui用関数　＊リリース時は何も実行しません
+	void InitImGui();
+	void UpdateImGui();
+	void DrawImGui();
+	void UninitImGui();
+
 
 public:
 	// コンストラクタ・デストラクタ
