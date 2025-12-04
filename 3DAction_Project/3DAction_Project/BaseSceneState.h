@@ -11,7 +11,12 @@
 // モジュール
 #include "GameModule.h"
 // シーンイベント
-#include "SceneEvent.h"
+#include "SceneIDSetting.h"
+
+#if defined(DEBUG) || defined(_DEBUG)
+// Imgui用ヘッダー
+#include "imgui/imgui.h"
+#endif
 
 
 // ========================================
@@ -24,10 +29,17 @@ protected:
 	GameModules* m_Modules = nullptr;
 
 	// シーンイベント
-	SceneEvent m_SceneEvent = SCENE_EVENT_NONE;
+	SceneEventID m_SceneEvent = NONE;
 
-	// 派生初期化
+	// 派生初期化・更新
 	virtual bool DerivativeInit() = 0;
+	virtual void DerivatIveUpdate(float _delta) = 0;
+
+#if defined(DEBUG) || defined(_DEBUG)
+	// Imgui使用 ＊リリース時は実行しません
+	// 派生でImGuiを使用する場合はオーバーライドしてください
+	virtual void DerivatDebugImgui() {}
+#endif
 
 public:
 	// コンストラクタ・デストラクタ
@@ -44,13 +56,22 @@ public:
 	}
 
 	// シーンの更新
-	virtual void Update(float _deltaTime) = 0;
+	void Update(float _deltaTime) {
+		// 派生クラスの更新
+		DerivatIveUpdate(_deltaTime);
+
+#if defined(DEBUG) || defined(_DEBUG)
+		// Imguiをデバッグ時のみ更新
+		DerivatDebugImgui();
+#endif
+	}
+
 	// シーンの描画
 	virtual void Draw() = 0;
 	// シーンの終了処理
 	virtual void Uninit() = 0;
 
 	// シーンイベント取得
-	SceneEvent GetSceneEvent() const { return m_SceneEvent; }
+	SceneEventID GetSceneEvent() const { return m_SceneEvent; }
 };
 

@@ -162,8 +162,10 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="DirectX_CursorController.cpp" />
     <ClCompile Include="DirectX_FormatConverter.cpp" />
     <ClCompile Include="DirectX_Input.cpp" />
+    <ClCompile Include="FadeManager.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="ActionGame.cpp" />
+    <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -179,6 +181,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="ModelConversionModule.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SamplerData.cpp" />
     <ClCompile Include="SamplerManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -193,6 +196,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="2DTriangle.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="VertexBufferIData.cpp" />
     <ClCompile Include="VertexBufferManager.cpp" />
     <ClCompile Include="Windows_Quaternion.cpp" />
@@ -223,6 +227,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseCamera.h" />
     <ClInclude Include="BaseDrawManager.h" />
+    <ClInclude Include="BaseFadeState.h" />
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseLight.h" />
     <ClInclude Include="BaseObject.h" />
@@ -238,7 +243,10 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DirectX_FormatConverter.h" />
     <ClInclude Include="ActionGame.h" />
     <ClInclude Include="DirectX_Input.h" />
+    <ClInclude Include="FadeManager.h" />
+    <ClInclude Include="FadeIDSetting.h" />
     <ClInclude Include="FillModeSetting.h" />
+    <ClInclude Include="GameMain.h" />
     <ClInclude Include="GameModule.h" />
     <ClInclude Include="GraphicsEnums.h" />
     <ClInclude Include="Color.h" />
@@ -268,10 +276,11 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="MaterialData.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Quaternionh.h" />
+    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SamplerSetting.h" />
     <ClInclude Include="SamplerData.h" />
     <ClInclude Include="SamplerManager.h" />
-    <ClInclude Include="SceneEvent.h" />
+    <ClInclude Include="SceneIDSetting.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Square2D.h" />
     <ClInclude Include="SunLight.h" />
@@ -284,6 +293,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="2DTriangle.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="UseShaderType.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />

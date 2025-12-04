@@ -25,7 +25,7 @@
 // ===============================
 // クラス
 // ===============================
-class DebugScene : public BaseSceneState
+class DebugScene final : public BaseSceneState
 {
 private:
 	// カメラ
@@ -37,14 +37,15 @@ private:
 	Square2D m_Square;
 	Knight m_Knight;
 
+	// シーンの初期化
+	bool DerivativeInit() override final;
+	// シーンの更新
+	void DerivatIveUpdate(float _delta) override final;
+
 public:
 	DebugScene() = default;
 	~DebugScene() = default;
 
-	// シーンの初期化
-	bool DerivativeInit();
-	// シーンの更新
-	void Update(float _deltaTime);
 	// シーンの描画
 	void Draw();
 	// シーンの終了処理

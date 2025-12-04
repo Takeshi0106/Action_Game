@@ -40,6 +40,9 @@ class ModelManager;
 // モジュールの前方宣言
 class TextureLoader;
 class ModelConversionModule;
+// DirectXの前方宣言
+struct ID3D11Device;
+struct ID3D11DeviceContext;
 
 
 // ========================================
@@ -174,4 +177,9 @@ public:
 	// アルファディザ設定
 	void SetAlphaDizaSetting(AlphaDizaSetting alphaDiza
 		= AlphaDizaSetting::Blend_Alpha) override final;
+
+
+	// ゲッター
+	ID3D11Device* GetDevice();
+	ID3D11DeviceContext* GetDeviceContext();
 };

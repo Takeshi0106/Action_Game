@@ -58,7 +58,7 @@ bool DebugScene::DerivativeInit()
 // =============================
 // シーンの更新
 // =============================
-void DebugScene::Update(float _deltaTime)
+void DebugScene::DerivatIveUpdate(float _deltaTime)
 {
 	// デバッグ用描画モード切り替え
 	if (m_Modules->input->GetMouseTrigger(Mouse_Left))

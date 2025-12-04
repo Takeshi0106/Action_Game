@@ -58,6 +58,14 @@ private:
 	bool GameMain()   override; // ゲームのメイン処理
 	void GameUninit() override; // ゲームの後処理
 
+
+	// Imgui用関数　＊リリース時は何も実行しません
+	void InitImGui();
+	void UpdateImGui();
+	void DrawImGui();
+	void UninitImGui();
+
+
 public:
 	// コンストラクタ・デストラクタ
 	PlatformWindowsSystem(unsigned int Width, unsigned int Height, const wchar_t* WindowClassName, const wchar_t* WindowName);

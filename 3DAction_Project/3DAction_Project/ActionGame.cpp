@@ -4,12 +4,15 @@
 // ==========================================
 // 必須
 #include "ActionGame.h"
-// 文字列
-#include <string>
 // ログ出力
 #include "ReportMessage.h"
 // タイマー
 #include "Timer.h"
+
+#if defined(DEBUG) || defined(_DEBUG)
+// Imgui 使用ヘッダー
+#include "imgui/imgui.h"
+#endif
 
 
 // =================================
@@ -39,27 +42,17 @@ bool ActionGame::Update()
 	// タイマーデバッグ
 	Timer::Debug_CheckUpdate();
 
+	// 時間取得
+	float time = Timer::GetDeltaTime();
+
 	// シーン更新
-	if (!m_SceneManager.Update(Timer::GetDeltaTime())) {
+	if (!m_SceneManager.Update(time)) {
 		ErrorLog::OutputToConsole("シーンの更新に失敗");
 		return false;
 	}
 
-#if defined(DEBUG) || defined(_DEBUG)
-	// 時間を取得
-	m_FPSTime += Timer::GetDeltaTime();
-	m_FPSCount++;
-
-	if (m_FPSTime > 1.0f)
-	{
-		// ログ出力
-		WarningLog::OutputToConsole(std::string("1フレームのFPS " + std::to_string(m_FPSCount)).c_str());
-
-		// リセット
-		m_FPSTime = 0.0f;
-		m_FPSCount = 0;
-	}
-#endif
+	// Imguiを実行
+	DebugImgui();
 
 	// タイマー更新処理
 	Timer::LastUpdate();
@@ -73,14 +66,8 @@ bool ActionGame::Update()
 // ================================
 void ActionGame::Draw()
 {
-	// 描画前
-	m_Modules.drawManager->BegingDraw();
-
 	// シーン描画
 	m_SceneManager.Draw();
-
-	// 描画後
-	m_Modules.drawManager->EndDraw();
 }
 
 
@@ -94,3 +81,22 @@ void ActionGame::Uninit()
 	// タイマー削除
 	Timer::Label::ClearTimers();
 }
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+// ================================
+// Imgui使用
+// ================================
+void ActionGame::DebugImgui()
+{
+	// FPS出力
+	ImGui::Begin("Debug Information");
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+	ImGui::End();
+}
+#else
+// リリース時は何も実行しない
+void ActionGame::DebugImgui() {}
+#endif

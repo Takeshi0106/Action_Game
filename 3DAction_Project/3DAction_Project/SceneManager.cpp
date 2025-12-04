@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 // シーンヘッダー
 #include "DebugScene.h"
+#include "TitleScene.h"
 // ログ出力ヘッダー
 #include "ReportMessage.h"
 
@@ -39,9 +40,9 @@ bool SceneManager::Update(float time)
 	m_CurrentSceneState->Update(time);
 
 	// シーンイベント取得
-	SceneEvent event = m_CurrentSceneState->GetSceneEvent();
+	SceneEventID event = m_CurrentSceneState->GetSceneEvent();
 
-	if (!event == SceneEvent::SCENE_EVENT_NONE) 
+	if (event != SceneEventID::NONE)
 	{
 		return ChangeScene(event);
 	}
@@ -74,7 +75,7 @@ void SceneManager::Uninit()
 // ========================================
 // シーンの切り替え
 // ========================================
-bool SceneManager::ChangeScene(SceneEvent event)
+bool SceneManager::ChangeScene(SceneEventID event)
 {
 	// 現在のシーンの終了処理
 	m_CurrentSceneState->Uninit();
@@ -83,8 +84,13 @@ bool SceneManager::ChangeScene(SceneEvent event)
 	// 新しいシーンを設定する
 	switch (event)
 	{
-	case SCENE_EVENT_DEBUG_SCENE:
+		// デバッグシーン
+	case SceneEventID::DEBUGSCENE:
 		m_CurrentSceneState = std::make_unique<DebugScene>();
+		break;
+		// タイトルシーン
+	case SceneEventID::TITLESCENE:
+		m_CurrentSceneState = std::make_unique<TitleScene>();
 		break;
 	}
 

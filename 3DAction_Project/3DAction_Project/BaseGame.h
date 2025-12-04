@@ -25,12 +25,10 @@ public:
 	virtual ~BaseGame() = default;
 
 	// 共通初期化
-	bool Init(BaseDrawManager* drawManager, Input* input, CursorController* cursorController) 
+	bool Init(GameModules& modules) 
 	{
 		// 各情報初期化
-		m_Modules.drawManager = drawManager;
-		m_Modules.input = input;
-		m_Modules.cursor = cursorController;
+		m_Modules = modules;
 
 		// 派生クラスの初期化
 		return DerivativeInit();
