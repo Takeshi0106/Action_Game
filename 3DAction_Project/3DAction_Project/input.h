@@ -25,6 +25,7 @@ enum KeyCode
 	KeyCode_Space,         // スペース
 	KeyCode_Enter,         // エンター
 	KeyCode_Escape,        // エスケープ
+	KeyCode_Shift,         // シフト
 
 	KeyCode_W,            // W
 	KeyCode_A,            // A

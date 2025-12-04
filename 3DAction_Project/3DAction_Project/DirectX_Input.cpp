@@ -24,6 +24,7 @@ struct VK
 	static constexpr uint16_t Space = VK_SPACE;
 	static constexpr uint16_t Enter = VK_RETURN;
 	static constexpr uint16_t Escape = VK_ESCAPE;
+	static constexpr uint16_t Shift = VK_SHIFT;
 
 	static constexpr uint16_t W = 'W';
 	static constexpr uint16_t A = 'A';
@@ -35,6 +36,7 @@ struct VK
 // ===============================
 // 静的メンバ変数定義・初期化
 // ===============================
+// 自作 KeyCode と添え字を合わせてください。
 const uint16_t DirectX_Input::kKeyCodeToDXKeyCode[KeyCode::KeyCode_Max] =
 {
 	VK::Up,
@@ -44,6 +46,8 @@ const uint16_t DirectX_Input::kKeyCodeToDXKeyCode[KeyCode::KeyCode_Max] =
 	VK::Space,
 	VK::Enter,
 	VK::Escape,
+	VK::Shift,
+
 	VK::W,
 	VK::A,
 	VK::S,
