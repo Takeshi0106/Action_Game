@@ -24,10 +24,6 @@ private:
 	// シーンマネージャー
 	SceneManager m_SceneManager;
 
-	// フレーム計測用
-	float m_FPSTime = 0.0f;
-	int m_FPSCount = 0;
-
 	// 初期化
 	bool DerivativeInit() override final;
 

@@ -23,6 +23,13 @@ bool ResourceViewManager::CreateSRV(const std::string name,
 	UINT mostDetailedMip,
 	UINT mipLevels)
 {
+	// 同じ名前のものが存在するか確認
+	if (m_SRVs.find(name) != m_SRVs.end())
+	{
+		ErrorLog::OutputToConsole(std::string(("同じ名前のSRVが存在します: " + name)).c_str());
+		return false;
+	}
+
 	// 情報を構造体にまとめてマップに保存
 	auto srv = std::make_unique<SRVData>();
 
@@ -93,6 +100,13 @@ bool ResourceViewManager::CreateRTV(const std::string name,
 	ID3D11Texture2D* resource,
 	UINT mipSlice)
 {
+	// 同じ名前のものが存在するか確認
+	if (m_RTVs.find(name) != m_RTVs.end())
+	{
+		ErrorLog::OutputToConsole(std::string(("同じ名前のRTVが存在します: " + name)).c_str());
+		return false;
+	}
+
 	// 情報を構造体にまとめてマップに保存
 	auto rtv = std::make_unique<RTVData>();
 
@@ -136,6 +150,13 @@ bool ResourceViewManager::CreateDSV(const std::string& name,
 	ID3D11Texture2D* resource,
 	Format format)
 {
+	// 同じ名前のものが存在するか確認
+	if (m_DSVs.find(name) != m_DSVs.end())
+	{
+		ErrorLog::OutputToConsole(std::string(("同じ名前のDSVが存在します: " + name)).c_str());
+		return false;
+	}
+
 	// 情報を構造体にまとめてマップに保存
 	auto dsv = std::make_unique<DSVData>();
 

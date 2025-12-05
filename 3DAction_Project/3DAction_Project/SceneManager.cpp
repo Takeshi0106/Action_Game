@@ -95,7 +95,7 @@ bool SceneManager::ChangeScene(SceneEventID event)
 	}
 
 	// 新しいシーンの初期化
-	if (m_CurrentSceneState->Init(m_Modules)) {
+	if (!m_CurrentSceneState->Init(m_Modules)) {
 		ErrorLog::OutputToConsole("シーンの初期化に失敗");
 		return false;
 	}

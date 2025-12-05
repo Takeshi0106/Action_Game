@@ -14,6 +14,8 @@
 #include <Windows.h> // メッセージボックス出力
 // コンソール出力用ヘッダー
 #include <iostream>  // コンソールに書き出す
+// 停止ヘッダー
+#include <cstdlib>
 
 
 namespace {
@@ -37,6 +39,11 @@ namespace ErrorLog
     void OutputToConsole(const char* message)
     {
         std::cerr << RED << "ERROR :" << message << RESET << std::endl;
+
+#if defined(DEBUG) || defined(_DEBUG)
+        // プロジェクト停止
+        std::abort();
+#endif
     }
 
 
@@ -46,6 +53,11 @@ namespace ErrorLog
     void OutputToMessageBox(const char* message)
     {
         MessageBoxA(nullptr, message, "Error", MB_ICONERROR | MB_OK);
+
+#if defined(DEBUG) || defined(_DEBUG)
+        // プロジェクト停止
+        std::abort();
+#endif
     }
 
 

@@ -81,6 +81,13 @@ bool TextureManager::CreateTexture(
     CPUAccess flag,
     TextureInitData* initData)
 {
+	// すでに存在しているか確認
+    if (m_Textures.find(name) != m_Textures.end()) {
+        // すでに存在している
+        WarningLog::OutputToConsole(("テクスチャ : " + name + " はすでに存在しています").c_str());
+        return false;
+    }
+
 	// 情報を構造体にまとめてマップに保存
 	auto textureData = std::make_unique<BindableTextureData>();
 
@@ -164,6 +171,23 @@ Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
 
     return nullptr;
 }
+
+
+// ========================================
+// テクスチャが存在するか
+// ========================================
+bool TextureManager::IsExistTexture(const std::string& name)
+{
+    // 探す
+    auto it = m_Textures.find(name);
+    if (it != m_Textures.end())
+    {
+        // 存在する
+        return true;
+    }
+    // 存在しない
+    return false;
+}   
 
 
 // ========================================

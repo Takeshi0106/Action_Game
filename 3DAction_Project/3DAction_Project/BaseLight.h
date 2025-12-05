@@ -44,10 +44,13 @@ public:
 	virtual ~BaseLight() = default;
 
 	// GPU転送用仮想関数
-	virtual bool Init(BaseDrawManager* _Draw) {
+	bool Init(BaseDrawManager* _Draw) 
+	{
 		m_Draw = _Draw;
 		return DerivativeInit();
 	}
+
+	// 更新
 	virtual void Update() = 0;
 	virtual void UpdateToGPU() = 0;
 	virtual void Uninit() = 0;
