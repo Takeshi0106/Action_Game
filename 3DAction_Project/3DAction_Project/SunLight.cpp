@@ -7,6 +7,11 @@
 // ログ出力ヘッダー
 #include "ReportMessage.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+// Imgui用ヘッダー
+#include "imgui/imgui.h"
+#endif
+
 
 // ===============================
 // 構造体
@@ -61,6 +66,8 @@ bool SunLight::DerivativeInit()
 void SunLight::Update()
 {
 
+	// デバッグ用
+	DebugImgui();
 }
 
 
@@ -88,3 +95,46 @@ void SunLight::Uninit()
 {
 
 }
+
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+// ===============================
+// デバッグ用imgui関数
+// ===============================
+void SunLight::DebugImgui()
+{
+	// ウィンドウ開始
+	ImGui::Begin("SunLight");
+
+	// 光の色スライダー
+	float diffuse[4] = { m_Diffuse.r, m_Diffuse.g, m_Diffuse.b, m_Diffuse.a };
+	if (ImGui::ColorEdit4("Diffuse", diffuse))
+	{
+		m_Diffuse = Color(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+	}
+	// 環境光スライダー
+	float ambient[4] = { m_Ambient.r, m_Ambient.g, m_Ambient.b, m_Ambient.a };
+	if (ImGui::ColorEdit4("Ambient", ambient))
+	{
+		m_Ambient = Color(ambient[0], ambient[1], ambient[2], ambient[3]);
+	}
+	// 鏡面反射光スライダー
+	float specular[4] = { m_Specular.r, m_Specular.g, m_Specular.b, m_Specular.a };
+	if (ImGui::ColorEdit4("Specular", specular))
+	{
+		m_Specular = Color(specular[0], specular[1], specular[2], specular[3]);
+	}
+	// 光の方向スライダー
+	float dir[3] = { m_Direction.x, m_Direction.y, m_Direction.z };
+	if (ImGui::SliderFloat3("Direction", dir, -1.0f, 1.0f))
+	{
+		m_Direction = Vector3(dir[0], dir[1], dir[2]).Normalize();
+	}
+
+	// ウィンドウ終了
+	ImGui::End();
+}
+#else
+void SunLight::DebugImgui() {}
+#endif

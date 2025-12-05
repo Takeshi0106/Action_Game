@@ -17,7 +17,7 @@
 // ===============================
 // クラス
 // ===============================
-class SunLight : public BaseLight
+class SunLight final : public BaseLight
 {
 private:
 	// 光の方向
@@ -28,6 +28,9 @@ private:
 	// 派生初期化
 	bool DerivativeInit();
 
+	// デバッグ用imgui関数
+	void DebugImgui();
+
 public:
 	// コンストラクタ / デストラクタ
 	SunLight()
@@ -36,9 +39,9 @@ public:
 	~SunLight() = default;
 
 	// 基本関数
-	void Update();
-	void UpdateToGPU();
-	void Uninit();
+	void Update() override final;
+	void UpdateToGPU() override final;
+	void Uninit() override final;
 
 	// セッター
 	void SetDirection(const Vector3& direction) { m_Direction = direction; }
