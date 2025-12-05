@@ -38,7 +38,7 @@ bool VertexBufferManager::CreateVertexBuffer(
 {
     // 既に作成済み
     if (Exists(name)) { 
-        DebugLog::OutputToConsole((name + " 頂点バッファが既に作成されていました").c_str());
+        WarningLog::OutputToConsole((name + " 頂点バッファが既に作成されていました").c_str());
         return true; 
     }
 

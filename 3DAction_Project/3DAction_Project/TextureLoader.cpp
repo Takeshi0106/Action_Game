@@ -38,6 +38,15 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
     // 区切り文字を統一する
     filePath.make_preferred();
 
+    // 登録名
+    std::string keyName = filePath.filename().string();
+
+	// すでに登録されているか確認
+    if (m_TextureManager->IsExistTexture(keyName)) {
+        DebugLog::OutputToConsole((keyName + " はすでに登録されています。").c_str());
+		return true;
+    }
+
     // 画像のロード
     DirectX::ScratchImage image;
     HRESULT hr = DirectX::LoadFromWICFile(
@@ -67,9 +76,6 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
     initData.data = img->pixels;
     initData.rowPitch = img->rowPitch;
     initData.slicePitch = img->slicePitch;
-
-    // 登録名
-    std::string keyName = filePath.filename().string();
 
     // TextureManagerに登録
     if (!m_TextureManager->CreateTexture(
