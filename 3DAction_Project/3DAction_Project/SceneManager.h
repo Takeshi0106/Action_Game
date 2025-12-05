@@ -33,6 +33,10 @@ private:
 	std::unique_ptr<BaseSceneState> m_CurrentSceneState;
 
 public:
+	// コンストラクタ・デストラクタ
+	SceneManager() = default;
+	~SceneManager() = default;
+
 	// シーンの初期化
 	bool Init(GameModules* _modules);
 	// シーンの更新
