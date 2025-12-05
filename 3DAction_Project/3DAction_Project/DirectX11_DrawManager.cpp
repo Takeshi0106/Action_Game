@@ -74,8 +74,12 @@ DirectX_DrawManager::~DirectX_DrawManager()
 // ==========================================
 // 初期化
 // ==========================================
-bool DirectX_DrawManager::Init(unsigned int width, unsigned int height, HWND windowHandle)
+bool DirectX_DrawManager::Init(uint16_t width, uint16_t height, HWND windowHandle)
 {
+	// 画面サイズ保存
+	m_Width = width;
+	m_Height = height;
+
 	// DirectXの初期化
 	if (!DirectX11::Init(width, height, windowHandle)) {
 		ErrorLog::OutputToMessageBox("DirectXの初期化に失敗しました");
@@ -307,8 +311,8 @@ bool DirectX_DrawManager::CreateConstantBuffer(
 // =========================================
 bool DirectX_DrawManager::CreateTexture(
 	const char* name,
-	unsigned int width,
-	unsigned int height,
+	uint32_t width,
+	uint32_t height,
 	Format format,
 	BindFlag bindFlag,
 	BufferUsage usage,

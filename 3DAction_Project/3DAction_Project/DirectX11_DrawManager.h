@@ -20,6 +20,8 @@
 #include <memory>
 // 色設定
 #include "Color.h"
+// 標準ライブラリ
+#include <cstdint>
 
 
 // ========================================
@@ -51,6 +53,10 @@ struct ID3D11DeviceContext;
 class DirectX_DrawManager : public BaseDrawManager
 {
 private:
+	// 画面の幅・高さ
+	uint16_t m_Width = 0;
+	uint16_t m_Height = 0;
+
 	// 最終描画に使用するRTの名前
 	const char* kFinalRTName = "FinalRT";
 	const char* kFInalDSName = "FinalDS";
@@ -87,7 +93,7 @@ public:
 	~DirectX_DrawManager();
 
 	// 初期化
-	bool Init(unsigned int Width, unsigned int Height, HWND windowHandle);
+	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle);
 	// 後処理
 	void Uninit();
 
@@ -134,8 +140,8 @@ public:
 	// テクスチャ作成
 	bool CreateTexture(
 		const char* name,
-		unsigned int width,
-		unsigned int height,
+		uint32_t width,
+		uint32_t height,
 		Format format,
 		BindFlag bindFlag,
 		BufferUsage usage = BufferUsage::Default,
