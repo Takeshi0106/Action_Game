@@ -32,7 +32,7 @@ bool ConstantBufferManager::CreateConstantBuffer(
 		auto& existing = m_ConstantBuffers[constantName];
 
 		// サイズ比較
-		if (existing->GetSize() != size) {
+		if (existing->GetSize() != (size + 15) / 16 * 16) {
 			ErrorLog::OutputToConsole(
 				(constantName + " 同じ名前の定数バッファが作成されましたが、サイズが異なります").c_str());
 
