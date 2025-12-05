@@ -450,13 +450,13 @@
     <ClCompile Include="DebugScene.cpp">
       <Filter>4_Game\2_SceneState\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GameMain.cpp">
+    <ClCompile Include="GameMainState.cpp">
       <Filter>4_Game\2_SceneState\GameMain</Filter>
     </ClCompile>
-    <ClCompile Include="ResultScene.cpp">
+    <ClCompile Include="ResultSceneState.cpp">
       <Filter>4_Game\2_SceneState\Result</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
+    <ClCompile Include="TitleSceneState.cpp">
       <Filter>4_Game\2_SceneState\Title</Filter>
     </ClCompile>
     <ClCompile Include="FadeManager.cpp">
@@ -704,13 +704,13 @@
     <ClInclude Include="DebugScene.h">
       <Filter>4_Game\2_SceneState\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="GameMain.h">
+    <ClInclude Include="GameMainState.h">
       <Filter>4_Game\2_SceneState\GameMain</Filter>
     </ClInclude>
-    <ClInclude Include="ResultScene.h">
+    <ClInclude Include="ResultSceneState.h">
       <Filter>4_Game\2_SceneState\Result</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
+    <ClInclude Include="TitleSceneState.h">
       <Filter>4_Game\2_SceneState\Title</Filter>
     </ClInclude>
     <ClInclude Include="FadeManager.h">

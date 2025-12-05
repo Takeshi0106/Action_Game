@@ -1,20 +1,21 @@
 ﻿#pragma once
 
 // ========================================
-// タイトルシーン
+// クラス概要
+// リザルトシーン
 // ========================================
 
 
 // ========================================
 // ヘッダー
 // ========================================
-// 基底クラス
 #include "BaseSceneState.h"
+
 
 // ========================================
 // クラス
 // ========================================
-class TitleScene final : public BaseSceneState
+class ResultSceneState final : public BaseSceneState
 {
 private:
 	// シーンの初期化
@@ -23,12 +24,14 @@ private:
 	void DerivatIveUpdate(float _delta) override final;
 
 public:
-	TitleScene() = default;
-	~TitleScene() = default;
+	// コンストラクタ・デストラクタ
+	ResultSceneState() = default;
+	~ResultSceneState() = default;
 
 	// シーンの描画
-	void Draw() override final;
+	void Draw();
 	// シーンの終了処理
-	void Uninit() override final;
+	void Uninit();
+
 };
 

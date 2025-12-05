@@ -43,6 +43,7 @@ private:
 	void DerivatIveUpdate(float _delta) override final;
 
 public:
+	// コンストラクタ・デストラクタ
 	DebugScene() = default;
 	~DebugScene() = default;
 
