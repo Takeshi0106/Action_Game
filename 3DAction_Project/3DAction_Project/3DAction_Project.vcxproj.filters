@@ -196,77 +196,77 @@
     <Filter Include="4_Game\0_Game\BaseGame">
       <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\1_Scene">
-      <UniqueIdentifier>{446616d3-ff4a-4e18-801c-ad9a5ffcdc85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\1_Scene\SceneState">
-      <UniqueIdentifier>{394f532b-6a18-4ea4-b2ca-8a4aef866a63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\1_Scene\SceneState\BaseScene">
-      <UniqueIdentifier>{2a76e1de-d426-4bb1-83e7-300f23b33974}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\1_Scene\SceneState\GameMain">
-      <UniqueIdentifier>{507c4456-fbdd-4ebb-89f4-ead9a6b46826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\1_Scene\SceneState\Result">
-      <UniqueIdentifier>{db186405-445f-4161-af59-cb23edf9615f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\1_Scene\SceneState\Debug">
-      <UniqueIdentifier>{9e259aa6-d3e4-45b4-ab77-52021393bd82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\1_Scene\SceneState\Title">
-      <UniqueIdentifier>{9a139805-67f0-429f-8621-3fe6fb63047f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\3_Camera">
-      <UniqueIdentifier>{5cc3908a-7cbf-4568-90a0-8b1306a200f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\3_Camera\0_BaseCamera">
-      <UniqueIdentifier>{a38b1d75-ed52-4742-b7a1-7d6f8e969305}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\3_Camera\DCCCamera3D">
-      <UniqueIdentifier>{b5a178c6-50c2-4cc1-9e7c-58c10e88aeaa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Object">
-      <UniqueIdentifier>{969080dd-a2f8-4562-bb06-4298bfdaf32a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Object\Square">
-      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Object\Knight">
-      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Object\0_BaseObject">
-      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Object\Traiangle">
-      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="4_Game\5_Light">
       <UniqueIdentifier>{0018c568-8fda-458b-936f-7df5197514d2}</UniqueIdentifier>
     </Filter>
     <Filter Include="4_Game\5_Light\Base">
       <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\6_Core">
-      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
+    <Filter Include="4_Game\1_SceneManager">
+      <UniqueIdentifier>{446616d3-ff4a-4e18-801c-ad9a5ffcdc85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\6_Core\Controller">
-      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Core\Controller\0_DCCCamera3D_Controller">
-      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Core\Module">
-      <UniqueIdentifier>{4bd76209-b744-4666-80e7-233002cd6dc2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\2_Fade">
+    <Filter Include="4_Game\3_Fade">
       <UniqueIdentifier>{577a3665-d054-4068-a864-454642dc738e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\2_Fade\FadeState">
+    <Filter Include="4_Game\3_Fade\FadeState">
       <UniqueIdentifier>{b55bdf52-4512-48da-8726-aadae7c48133}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\2_Fade\FadeState\Base">
+    <Filter Include="4_Game\3_Fade\FadeState\Base">
       <UniqueIdentifier>{c3225e31-f847-421f-9042-607236affdeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Camera">
+      <UniqueIdentifier>{5cc3908a-7cbf-4568-90a0-8b1306a200f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Camera\0_BaseCamera">
+      <UniqueIdentifier>{a38b1d75-ed52-4742-b7a1-7d6f8e969305}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Camera\DCCCamera3D">
+      <UniqueIdentifier>{b5a178c6-50c2-4cc1-9e7c-58c10e88aeaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object">
+      <UniqueIdentifier>{969080dd-a2f8-4562-bb06-4298bfdaf32a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\Square">
+      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\Knight">
+      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\0_BaseObject">
+      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\Traiangle">
+      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Core">
+      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Core\Controller">
+      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Core\Controller\0_DCCCamera3D_Controller">
+      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Core\Module">
+      <UniqueIdentifier>{4bd76209-b744-4666-80e7-233002cd6dc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState">
+      <UniqueIdentifier>{394f532b-6a18-4ea4-b2ca-8a4aef866a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\GameMain">
+      <UniqueIdentifier>{507c4456-fbdd-4ebb-89f4-ead9a6b46826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\Result">
+      <UniqueIdentifier>{db186405-445f-4161-af59-cb23edf9615f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\Debug">
+      <UniqueIdentifier>{9e259aa6-d3e4-45b4-ab77-52021393bd82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\Title">
+      <UniqueIdentifier>{9a139805-67f0-429f-8621-3fe6fb63047f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\0_Base">
+      <UniqueIdentifier>{2a76e1de-d426-4bb1-83e7-300f23b33974}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -373,10 +373,10 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\99_DirectXFormatConverter</Filter>
     </ClCompile>
     <ClCompile Include="2DTriangle.cpp">
-      <Filter>4_Game\4_Object\Traiangle</Filter>
+      <Filter>4_Game\6_Object\Traiangle</Filter>
     </ClCompile>
     <ClCompile Include="Square2D.cpp">
-      <Filter>4_Game\4_Object\Square</Filter>
+      <Filter>4_Game\6_Object\Square</Filter>
     </ClCompile>
     <ClCompile Include="AssetLogger.cpp">
       <Filter>2_Core\AssetUsageLogger</Filter>
@@ -394,7 +394,7 @@
       <Filter>2_Core\Model\0_ModelConversion</Filter>
     </ClCompile>
     <ClCompile Include="Knight.cpp">
-      <Filter>4_Game\4_Object\Knight</Filter>
+      <Filter>4_Game\6_Object\Knight</Filter>
     </ClCompile>
     <ClCompile Include="DirectX_Input.cpp">
       <Filter>1_Platform\Windows\3_Input</Filter>
@@ -430,37 +430,37 @@
       <Filter>4_Game\0_Game</Filter>
     </ClCompile>
     <ClCompile Include="DCCCamera3D.cpp">
-      <Filter>4_Game\3_Camera\DCCCamera3D</Filter>
+      <Filter>4_Game\4_Camera\DCCCamera3D</Filter>
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
-      <Filter>4_Game\6_Core\Controller</Filter>
+      <Filter>4_Game\7_Core\Controller</Filter>
     </ClCompile>
     <ClCompile Include="DCCCamera3D_Controller.cpp">
-      <Filter>4_Game\6_Core\Controller\0_DCCCamera3D_Controller</Filter>
+      <Filter>4_Game\7_Core\Controller\0_DCCCamera3D_Controller</Filter>
     </ClCompile>
     <ClCompile Include="BaseCamera.cpp">
-      <Filter>4_Game\3_Camera\0_BaseCamera</Filter>
+      <Filter>4_Game\4_Camera\0_BaseCamera</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>4_Game\1_Scene</Filter>
+      <Filter>4_Game\1_SceneManager</Filter>
     </ClCompile>
     <ClCompile Include="SunLight.cpp">
       <Filter>4_Game\5_Light</Filter>
     </ClCompile>
     <ClCompile Include="DebugScene.cpp">
-      <Filter>4_Game\1_Scene\SceneState\Debug</Filter>
+      <Filter>4_Game\2_SceneState\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GameMain.cpp">
-      <Filter>4_Game\1_Scene\SceneState\GameMain</Filter>
+      <Filter>4_Game\2_SceneState\GameMain</Filter>
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
-      <Filter>4_Game\1_Scene\SceneState\Result</Filter>
+      <Filter>4_Game\2_SceneState\Result</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
-      <Filter>4_Game\1_Scene\SceneState\Title</Filter>
+      <Filter>4_Game\2_SceneState\Title</Filter>
     </ClCompile>
     <ClCompile Include="FadeManager.cpp">
-      <Filter>4_Game\2_Fade</Filter>
+      <Filter>4_Game\3_Fade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -582,13 +582,13 @@
       <Filter>4_Game\0_Game\BaseGame</Filter>
     </ClInclude>
     <ClInclude Include="BaseObject.h">
-      <Filter>4_Game\4_Object\0_BaseObject</Filter>
+      <Filter>4_Game\6_Object\0_BaseObject</Filter>
     </ClInclude>
     <ClInclude Include="2DTriangle.h">
-      <Filter>4_Game\4_Object\Traiangle</Filter>
+      <Filter>4_Game\6_Object\Traiangle</Filter>
     </ClInclude>
     <ClInclude Include="Square2D.h">
-      <Filter>4_Game\4_Object\Square</Filter>
+      <Filter>4_Game\6_Object\Square</Filter>
     </ClInclude>
     <ClInclude Include="SamplerSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
@@ -621,7 +621,7 @@
       <Filter>2_Core\Model\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Knight.h">
-      <Filter>4_Game\4_Object\Knight</Filter>
+      <Filter>4_Game\6_Object\Knight</Filter>
     </ClInclude>
     <ClInclude Include="DepthStencilSetting.h">
       <Filter>1_Platform\Base\6_Setting</Filter>
@@ -675,22 +675,22 @@
       <Filter>4_Game\0_Game</Filter>
     </ClInclude>
     <ClInclude Include="BaseCamera.h">
-      <Filter>4_Game\3_Camera\0_BaseCamera</Filter>
+      <Filter>4_Game\4_Camera\0_BaseCamera</Filter>
     </ClInclude>
     <ClInclude Include="DCCCamera3D.h">
-      <Filter>4_Game\3_Camera\DCCCamera3D</Filter>
+      <Filter>4_Game\4_Camera\DCCCamera3D</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
-      <Filter>4_Game\6_Core\Controller</Filter>
+      <Filter>4_Game\7_Core\Controller</Filter>
     </ClInclude>
     <ClInclude Include="DCCCamera3D_Controller.h">
-      <Filter>4_Game\6_Core\Controller\0_DCCCamera3D_Controller</Filter>
+      <Filter>4_Game\7_Core\Controller\0_DCCCamera3D_Controller</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>4_Game\1_Scene</Filter>
+      <Filter>4_Game\1_SceneManager</Filter>
     </ClInclude>
     <ClInclude Include="BaseSceneState.h">
-      <Filter>4_Game\1_Scene\SceneState\BaseScene</Filter>
+      <Filter>4_Game\2_SceneState\0_Base</Filter>
     </ClInclude>
     <ClInclude Include="SunLight.h">
       <Filter>4_Game\5_Light</Filter>
@@ -699,31 +699,31 @@
       <Filter>4_Game\5_Light\Base</Filter>
     </ClInclude>
     <ClInclude Include="GameModule.h">
-      <Filter>4_Game\6_Core\Module</Filter>
+      <Filter>4_Game\7_Core\Module</Filter>
     </ClInclude>
     <ClInclude Include="DebugScene.h">
-      <Filter>4_Game\1_Scene\SceneState\Debug</Filter>
+      <Filter>4_Game\2_SceneState\Debug</Filter>
     </ClInclude>
     <ClInclude Include="GameMain.h">
-      <Filter>4_Game\1_Scene\SceneState\GameMain</Filter>
+      <Filter>4_Game\2_SceneState\GameMain</Filter>
     </ClInclude>
     <ClInclude Include="ResultScene.h">
-      <Filter>4_Game\1_Scene\SceneState\Result</Filter>
+      <Filter>4_Game\2_SceneState\Result</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h">
-      <Filter>4_Game\1_Scene\SceneState\Title</Filter>
+      <Filter>4_Game\2_SceneState\Title</Filter>
     </ClInclude>
     <ClInclude Include="FadeManager.h">
-      <Filter>4_Game\2_Fade</Filter>
+      <Filter>4_Game\3_Fade</Filter>
     </ClInclude>
     <ClInclude Include="BaseFadeState.h">
-      <Filter>4_Game\2_Fade\FadeState\Base</Filter>
+      <Filter>4_Game\3_Fade\FadeState\Base</Filter>
     </ClInclude>
     <ClInclude Include="FadeIDSetting.h">
-      <Filter>4_Game\2_Fade</Filter>
+      <Filter>4_Game\3_Fade</Filter>
     </ClInclude>
     <ClInclude Include="SceneIDSetting.h">
-      <Filter>4_Game\1_Scene</Filter>
+      <Filter>4_Game\1_SceneManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
