@@ -60,20 +60,6 @@ bool DebugScene::DerivativeInit()
 // =============================
 void DebugScene::DerivatIveUpdate(float _deltaTime)
 {
-	// デバッグ用描画モード切り替え
-	if (m_Modules->input->GetMouseTrigger(Mouse_Left))
-	{
-		m_Modules->drawManager->SetDrawSetting(FillModeSetting::Wireframe);
-		m_Modules->cursor->SetCursorMode(CursorMode::CursorMode_Hidden);
-		DebugLog::OutputToConsole("ワイヤーフレームモード");
-	}
-	else if (m_Modules->input->GetMouseRelease(Mouse_Left))
-	{
-		m_Modules->drawManager->SetDrawSetting(FillModeSetting::Solid);
-		m_Modules->cursor->SetCursorMode(CursorMode::CursorMode_Normal);
-		DebugLog::OutputToConsole("通常描画モード");
-	}
-
 	// カメラ更新
 	m_Camera->Update();
 	// ライト更新
@@ -82,6 +68,11 @@ void DebugScene::DerivatIveUpdate(float _deltaTime)
 	// オブジェクト更新
 	m_Square.Update();
 	m_Knight.Update();
+
+	// シーン遷移イベント更新
+	if (m_Modules->input->GetKeyTrigger(KeyCode_Enter)) {
+		m_SceneEvent = SceneEventID::TITLESCENE;
+	}
 }
 
 
