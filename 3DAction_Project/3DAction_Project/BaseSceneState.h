@@ -13,11 +13,6 @@
 // シーンイベント
 #include "SceneIDSetting.h"
 
-#if defined(DEBUG) || defined(_DEBUG)
-// Imgui用ヘッダー
-#include "imgui/imgui.h"
-#endif
-
 
 // ========================================
 // クラス
@@ -34,12 +29,6 @@ protected:
 	// 派生初期化・更新
 	virtual bool DerivativeInit() = 0;
 	virtual void DerivatIveUpdate(float _delta) = 0;
-
-#if defined(DEBUG) || defined(_DEBUG)
-	// Imgui使用 ＊リリース時は実行しません
-	// 派生でImGuiを使用する場合はオーバーライドしてください
-	virtual void DerivatDebugImgui() {}
-#endif
 
 public:
 	// コンストラクタ・デストラクタ
@@ -59,11 +48,6 @@ public:
 	void Update(float _deltaTime) {
 		// 派生クラスの更新
 		DerivatIveUpdate(_deltaTime);
-
-#if defined(DEBUG) || defined(_DEBUG)
-		// Imguiをデバッグ時のみ更新
-		DerivatDebugImgui();
-#endif
 	}
 
 	// シーンの描画
