@@ -196,12 +196,6 @@
     <Filter Include="4_Game\0_Game\BaseGame">
       <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\5_Light">
-      <UniqueIdentifier>{0018c568-8fda-458b-936f-7df5197514d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\5_Light\Base">
-      <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
-    </Filter>
     <Filter Include="4_Game\1_SceneManager">
       <UniqueIdentifier>{446616d3-ff4a-4e18-801c-ad9a5ffcdc85}</UniqueIdentifier>
     </Filter>
@@ -267,6 +261,12 @@
     </Filter>
     <Filter Include="4_Game\2_SceneState\0_Base">
       <UniqueIdentifier>{2a76e1de-d426-4bb1-83e7-300f23b33974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Light">
+      <UniqueIdentifier>{0018c568-8fda-458b-936f-7df5197514d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Light\Base">
+      <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
