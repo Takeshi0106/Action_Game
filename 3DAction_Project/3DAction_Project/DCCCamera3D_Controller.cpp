@@ -49,6 +49,8 @@ Vector2 DCCCamera3D_Controller::GetPositionVector()
 
 	// 反転適応
 	moveVec.x *= m_IsInvertX;
+	// 感度適応
+	moveVec *= m_CameraPositionSensitivity;
 
 	return moveVec;
 }

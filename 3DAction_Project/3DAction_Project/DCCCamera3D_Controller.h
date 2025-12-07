@@ -23,6 +23,8 @@ private:
 	Input* m_Input = nullptr;
 	// マウス感度
 	float m_MouseSensitivity = 0.002f;
+	// カメラの位置感度
+	float m_CameraPositionSensitivity = 0.5f;
 	// マウスのXを反転
 	float m_IsInvertX = -1.0f;
 
