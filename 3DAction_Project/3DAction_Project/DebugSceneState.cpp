@@ -3,7 +3,7 @@
 // ヘッダー
 // ===============================
 // 必須ヘッダー
-#include "DebugScene.h"
+#include "DebugSceneState.h"
 // カメラヘッダー
 #include "DCCCamera3D.h"
 // ライトヘッダー
@@ -15,7 +15,7 @@
 // ==============================
 // シーンの初期化
 // ==============================
-bool DebugScene::DerivativeInit()
+bool DebugSceneState::DerivativeInit()
 {
 	// DCCカメラ初期化
 	std::unique_ptr<DCCCamera3D> camera = std::make_unique<DCCCamera3D>();
@@ -58,7 +58,7 @@ bool DebugScene::DerivativeInit()
 // =============================
 // シーンの更新
 // =============================
-void DebugScene::DerivatIveUpdate(float _deltaTime)
+void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 {
 	// カメラ更新
 	m_Camera->Update();
@@ -79,7 +79,7 @@ void DebugScene::DerivatIveUpdate(float _deltaTime)
 // =============================
 // シーンの描画
 // =============================
-void DebugScene::Draw()
+void DebugSceneState::Draw()
 {
 	// カメラ情報をGPUに送る
 	m_Camera->UpdateToGPU();
@@ -99,7 +99,7 @@ void DebugScene::Draw()
 // =============================
 // シーンの終了処理
 // =============================
-void DebugScene::Uninit()
+void DebugSceneState::Uninit()
 {
 	// カメラ後処理
 	m_Camera->Uninit();

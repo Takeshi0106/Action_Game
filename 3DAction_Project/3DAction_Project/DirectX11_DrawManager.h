@@ -101,7 +101,7 @@ public:
 	void BegingDraw();
 	void EndDraw();
 
-	// 今は使用できません注意してください
+	// モデル描画
 	void ModelDraw(const char* _vsShaderName, 
 		const char* _psShaderName, 
 		const char* _modelName) override final;

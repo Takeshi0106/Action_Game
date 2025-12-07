@@ -149,6 +149,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABBCollider.cpp" />
     <ClCompile Include="AssetLogger.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
     <ClCompile Include="ConstantBufferData.cpp" />
@@ -156,7 +157,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DCCCamera3D_Controller.cpp" />
     <ClCompile Include="DCCCamera3D.cpp" />
-    <ClCompile Include="DebugScene.cpp" />
+    <ClCompile Include="DebugSceneState.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="DirectX_CursorController.cpp" />
@@ -223,6 +224,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Windows_Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="AlphaDizaSetting.h" />
     <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseCamera.h" />
@@ -237,7 +239,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="CursorController.h" />
     <ClInclude Include="DCCCamera3D_Controller.h" />
     <ClInclude Include="DCCCamera3D.h" />
-    <ClInclude Include="DebugScene.h" />
+    <ClInclude Include="DebugSceneState.h" />
     <ClInclude Include="DepthStencilSetting.h" />
     <ClInclude Include="DirectX_CursorController.h" />
     <ClInclude Include="DirectX_FormatConverter.h" />

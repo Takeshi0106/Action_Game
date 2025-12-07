@@ -14,7 +14,7 @@
 // ========================================
 // クラス
 // ========================================
-class TitleScene final : public BaseSceneState
+class TitleSceneState final : public BaseSceneState
 {
 private:
 	// シーンの初期化
@@ -24,8 +24,8 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	TitleScene() = default;
-	~TitleScene() = default;
+	TitleSceneState() = default;
+	~TitleSceneState() = default;
 
 	// シーンの描画
 	void Draw() override final;

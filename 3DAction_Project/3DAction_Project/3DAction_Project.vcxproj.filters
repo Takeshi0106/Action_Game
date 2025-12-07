@@ -268,6 +268,12 @@
     <Filter Include="4_Game\5_Light\Base">
       <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\7_Core\Collider">
+      <UniqueIdentifier>{07b7bbac-99f6-46dc-ac8d-c59d98def23a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Core\Collider\AABB">
+      <UniqueIdentifier>{8ea06ef6-69fd-42e2-9e85-a4fe9e3dc4e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -447,7 +453,7 @@
     <ClCompile Include="SunLight.cpp">
       <Filter>4_Game\5_Light</Filter>
     </ClCompile>
-    <ClCompile Include="DebugScene.cpp">
+    <ClCompile Include="DebugSceneState.cpp">
       <Filter>4_Game\2_SceneState\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GameMainState.cpp">
@@ -461,6 +467,9 @@
     </ClCompile>
     <ClCompile Include="FadeManager.cpp">
       <Filter>4_Game\3_Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBCollider.cpp">
+      <Filter>4_Game\7_Core\Collider\AABB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -701,7 +710,7 @@
     <ClInclude Include="GameModule.h">
       <Filter>4_Game\7_Core\Module</Filter>
     </ClInclude>
-    <ClInclude Include="DebugScene.h">
+    <ClInclude Include="DebugSceneState.h">
       <Filter>4_Game\2_SceneState\Debug</Filter>
     </ClInclude>
     <ClInclude Include="GameMainState.h">
@@ -724,6 +733,9 @@
     </ClInclude>
     <ClInclude Include="SceneIDSetting.h">
       <Filter>4_Game\1_SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBCollider.h">
+      <Filter>4_Game\7_Core\Collider\AABB</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

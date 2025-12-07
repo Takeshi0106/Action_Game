@@ -25,7 +25,7 @@
 // ===============================
 // クラス
 // ===============================
-class DebugScene final : public BaseSceneState
+class DebugSceneState final : public BaseSceneState
 {
 private:
 	// カメラ
@@ -44,12 +44,12 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	DebugScene() = default;
-	~DebugScene() = default;
+	DebugSceneState() = default;
+	~DebugSceneState() = default;
 
 	// シーンの描画
-	void Draw();
+	void Draw() override final;
 	// シーンの終了処理
-	void Uninit();
+	void Uninit()  override final;
 };
 
