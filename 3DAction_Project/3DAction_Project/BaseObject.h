@@ -29,18 +29,20 @@ protected:
 	// このオブジェクトが更新する定数バッファ名
 	const std::string m_TransformCBName = "Transform";
 
-	// 当たり判定譲歩
+	// 当たり判定識別子
 	ColliderInfo m_AABBColliderInfo;
 
 	// SRT情報
 	Vector3 m_Position = { 0.0f,0.0f,0.0f };
 	Quaternion m_Rotation = Quaternion::CreateQuaternionFromAxisAngle({ 0,1,0 }, 0);
 	Vector3 m_Scale{ 1,1,1 };
+	// ワールド行列
 	Matrix4x4 m_WorldMatrix = Matrix4x4::CreateIdentityMatrix();
-
 
 	// 遅延初期化
 	virtual void LateInit() = 0;
+
+	// SRT行列を作成する関数
 	void CreateWorldMatrix() {
 		// ワールド行列計算
 		m_WorldMatrix =
@@ -54,11 +56,11 @@ public:
 	BaseObject() = default;
 	virtual ~BaseObject() = default;
 
-	// 基本関数
+	// 初期化
 	void Init(BaseDrawManager* _drawManager,
 		ColliderManager* _colliderManager)
 	{
-		// 保存
+		// マネージャー保存
 		m_Draw = _drawManager;
 		m_Collider = _colliderManager;
 
@@ -68,7 +70,9 @@ public:
 
 	// 描画
 	virtual void Draw() = 0;
+	// 更新
 	virtual void Update() = 0;
+	// 後処理
 	virtual void Uninit() = 0;
 
 	// ゲッター
