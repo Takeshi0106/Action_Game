@@ -81,6 +81,15 @@ private:
 		const char* _psShaderName,
 		const char* _modelName);
 
+	// インデックスバッファを使用したメッシュ描画
+	bool DrawIndexObject(
+		const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vbName,
+		const char* _ibName,
+		const char* _textureName,
+		const SamplerDesc _sampler);
+
 	bool DrawPrimitiveObject(const char* _vsShaderName,
 		const char* _psShaderName,
 		const char* _vsBufferName,
@@ -106,6 +115,16 @@ public:
 		const char* _psShaderName, 
 		const char* _modelName) override final;
 
+	// インデックスバッファを使用したメッシュ描画
+	void IndexedDraw(
+		const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vbName,
+		const char* _ibName,
+		const char* _textureName = nullptr,
+		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override final;
+	
+	// プリミティブ描画
 	void PrimitiveDraw(const char* _vsShaderName,
 		const char* _psShaderName,
 		const char* _vsBufferName,

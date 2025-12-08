@@ -208,6 +208,18 @@ void DirectX_DrawManager::ModelDraw(const char* _vsShaderName,
 	DrawModelObject(_vsShaderName, _psShaderName, _modelName);
 }
 
+// インデックスバッファを使用したメッシュ描画
+void DirectX_DrawManager::IndexedDraw(
+	const char* _vsShaderName,
+	const char* _psShaderName,
+	const char* _vbName,
+	const char* _ibName,
+	const char* _textureName,
+	const SamplerDesc& _sampler)
+{
+	DrawIndexObject(_vsShaderName, _psShaderName, _vbName, _ibName, _textureName, _sampler);
+}
+
 // 描画情報を記載して描画
 void DirectX_DrawManager::PrimitiveDraw(const char* _vsShaderName,
 	const char* _psShaderName,
@@ -614,6 +626,54 @@ bool DirectX_DrawManager::DrawPrimitiveObject(
 	
 	return true;
 }
+
+// ===================================================
+// インデックスバッファを使用したメッシュ描画
+// ===================================================
+bool DirectX_DrawManager::DrawIndexObject(
+	const char* _vsShaderName,
+	const char* _psShaderName,
+	const char* _vbName,
+	const char* _ibName,
+	const char* _textureName,
+	const SamplerDesc _sampler)
+{
+	// シェーダーバインド
+	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager->BindVertexShader(_vsShaderName, DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager->BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
+
+	// 頂点バッファをバインド
+	int vertexCount = m_VBManager->BindVertexBuffer(_vbName, DirectX11::Get::GetContext());
+	if (vertexCount == -1)
+	{
+		ErrorLog::OutputToConsole("頂点バッファが見つかりませんでした");
+		return false;
+	}
+	// インデックスバッファをバインド
+	uint32_t indexCount = m_IndexBufferManager->BindIndexData(_ibName, DirectX11::Get::GetContext());
+	if (indexCount == UINT_FAST32_MAX) {
+		ErrorLog::OutputToConsole("インデックスバッファが見つかりませんでした");
+		return false;
+	}
+
+	// シェーダーの定数バッファ情報をバインド
+	m_CBManager->BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
+	m_CBManager->BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
+
+	// テクスチャバインド
+	if (_textureName != nullptr)
+	{
+		// テクスチャ・サンプラー バインド
+		m_ViewManager->BindSRV(_textureName, DirectX11::Get::GetContext(), PIXSELSHADER);
+		m_SamplerManager->BindSampler(_sampler, DirectX11::Get::GetContext());
+	}
+
+	// 描画
+	DirectX11::Get::GetContext()->DrawIndexed(indexCount, 0, 0);
+
+	return true;
+}
+
 
 // ===================================================
 // モデルを描画

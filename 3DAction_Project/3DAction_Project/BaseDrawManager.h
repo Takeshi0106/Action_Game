@@ -47,7 +47,17 @@ public:
 	virtual void ModelDraw(const char* _vsShaderName,
 		const char* _psShaderName,
 		const char* _modelName) = 0;
+	
+	// インデックス描画
+	virtual void IndexedDraw(
+		const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vsBufferName,
+		const char* _indexBufferName,
+		const char* _textureNam = nullptr,
+		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
+	// プリミティブ描画
 	virtual void PrimitiveDraw(const char* _vsShaderName,
 		const char* _psShaderName,
 		const char* _vsBufferName,
