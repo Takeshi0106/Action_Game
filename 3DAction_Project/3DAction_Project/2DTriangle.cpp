@@ -26,11 +26,14 @@ void Triangle2D::LateInit()
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
+	// 行列SRT作成
+	Matrix4x4 world = Matrix4x4::CreateIdentityMatrix().toGPU();
+
 	// ワールド作成
 	m_Draw->CreateConstantBuffer(
 		m_TransformCBName.c_str(),
-		&m_SRT,
-		sizeof(m_SRT),
+		&world,
+		sizeof(world),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 }
@@ -53,18 +56,14 @@ void Triangle2D::Update()
 	// ワールド行列（回転のみ）
 	Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), g_angle);
 	Matrix4x4 rotationMatrix = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
+	m_Rotation = m_Rotation * rotQuat;
 
 	// 移動
 	static float offset = 0.0f;
 	offset += 1.0f * time; // 時間経過で移動
 
 	Matrix4x4 translationMatrix = Matrix4x4::CreateTranslationMatrix_LH(Vector3(offset, 0.0f, 0.0f));
-
-	// ワールド行列
-	Matrix4x4 world = translationMatrix * rotationMatrix;
-
-	// 代入
-	m_SRT = world;
+	m_Position.x = offset;
 }
 
 
@@ -74,7 +73,8 @@ void Triangle2D::Update()
 void Triangle2D::Draw()
 {
 	// GPUように変換
-	Matrix4x4 world = m_SRT.toGPU();
+	CreateWorldMatrix();
+	Matrix4x4 world = m_WorldMatrix.toGPU();
 
 	// 定数バッファ更新
 	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));

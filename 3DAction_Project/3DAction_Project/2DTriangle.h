@@ -3,9 +3,6 @@
 // ヘッダー
 #include "BaseObject.h"
 #include <string>
-#include "Vector3.h"
-#include "Matrix4x4.h"
-#include "Color.h"
 #include "Vertex.h"
 
 

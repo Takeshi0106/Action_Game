@@ -21,11 +21,15 @@ void Square2D::LateInit()
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
+	// SRT情報からワールド行列計算
+	CreateWorldMatrix();
+	Matrix4x4 world = m_WorldMatrix.toGPU();
+
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
 		m_TransformCBName.c_str(),
-		&m_SRT,
-		sizeof(m_SRT),
+		&world,
+		sizeof(world),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
@@ -39,6 +43,7 @@ void Square2D::LateInit()
 // =====================================
 void Square2D::Update()
 {
+	// 更新
 
 }
 
@@ -48,10 +53,9 @@ void Square2D::Update()
 // =====================================
 void Square2D::Draw()
 {
-	// GPUように変換
-	Matrix4x4 world = m_SRT.toGPU();
-
 	// 定数バッファ更新
+	CreateWorldMatrix();
+	Matrix4x4 world = m_WorldMatrix.toGPU();
 	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));
 
 	// 描画

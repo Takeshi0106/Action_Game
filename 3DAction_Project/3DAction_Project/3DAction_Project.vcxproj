@@ -151,6 +151,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
   <ItemGroup>
     <ClCompile Include="AssetLogger.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
+    <ClCompile Include="BOX.cpp" />
     <ClCompile Include="ColliderManager.cpp" />
     <ClCompile Include="CollisionSystemModule.cpp" />
     <ClCompile Include="ConstantBufferData.cpp" />
@@ -233,6 +234,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="BaseFadeState.h" />
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseLight.h" />
+    <ClInclude Include="BOX.h" />
     <ClInclude Include="ColliderManager.h" />
     <ClInclude Include="CollisionSystemModule.h" />
     <ClInclude Include="TemplateManager.h" />

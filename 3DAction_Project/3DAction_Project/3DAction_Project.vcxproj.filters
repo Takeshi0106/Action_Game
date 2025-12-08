@@ -232,18 +232,6 @@
     <Filter Include="4_Game\6_Object\Traiangle">
       <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\7_Core">
-      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\7_Core\Controller">
-      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\7_Core\Controller\0_DCCCamera3D_Controller">
-      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\7_Core\Module">
-      <UniqueIdentifier>{4bd76209-b744-4666-80e7-233002cd6dc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="4_Game\2_SceneState">
       <UniqueIdentifier>{394f532b-6a18-4ea4-b2ca-8a4aef866a63}</UniqueIdentifier>
     </Filter>
@@ -268,14 +256,32 @@
     <Filter Include="4_Game\5_Light\Base">
       <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\7_Core\Collider">
-      <UniqueIdentifier>{07b7bbac-99f6-46dc-ac8d-c59d98def23a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\7_Core\Collider\AABB">
-      <UniqueIdentifier>{8ea06ef6-69fd-42e2-9e85-a4fe9e3dc4e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\0_TemplateManager">
       <UniqueIdentifier>{7537375e-20b5-49e1-bcb6-ffb072bca813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Draw">
+      <UniqueIdentifier>{cd92cbe2-9106-44b5-8c9c-57f27d52d099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Draw\BOX">
+      <UniqueIdentifier>{376a9165-02aa-49c7-b6e5-8799c865be0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core">
+      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Controller">
+      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Controller\0_DCCCamera3D_Controller">
+      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Module">
+      <UniqueIdentifier>{4bd76209-b744-4666-80e7-233002cd6dc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Collider">
+      <UniqueIdentifier>{07b7bbac-99f6-46dc-ac8d-c59d98def23a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Collider\AABB">
+      <UniqueIdentifier>{8ea06ef6-69fd-42e2-9e85-a4fe9e3dc4e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -442,10 +448,10 @@
       <Filter>4_Game\4_Camera\DCCCamera3D</Filter>
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
-      <Filter>4_Game\7_Core\Controller</Filter>
+      <Filter>4_Game\8_Core\Controller</Filter>
     </ClCompile>
     <ClCompile Include="DCCCamera3D_Controller.cpp">
-      <Filter>4_Game\7_Core\Controller\0_DCCCamera3D_Controller</Filter>
+      <Filter>4_Game\8_Core\Controller\0_DCCCamera3D_Controller</Filter>
     </ClCompile>
     <ClCompile Include="BaseCamera.cpp">
       <Filter>4_Game\4_Camera\0_BaseCamera</Filter>
@@ -472,10 +478,13 @@
       <Filter>4_Game\3_Fade</Filter>
     </ClCompile>
     <ClCompile Include="ColliderManager.cpp">
-      <Filter>4_Game\7_Core\Collider</Filter>
+      <Filter>4_Game\8_Core\Collider</Filter>
     </ClCompile>
     <ClCompile Include="CollisionSystemModule.cpp">
-      <Filter>4_Game\7_Core\Collider</Filter>
+      <Filter>4_Game\8_Core\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="BOX.cpp">
+      <Filter>4_Game\7_Draw\BOX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -696,10 +705,10 @@
       <Filter>4_Game\4_Camera\DCCCamera3D</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
-      <Filter>4_Game\7_Core\Controller</Filter>
+      <Filter>4_Game\8_Core\Controller</Filter>
     </ClInclude>
     <ClInclude Include="DCCCamera3D_Controller.h">
-      <Filter>4_Game\7_Core\Controller\0_DCCCamera3D_Controller</Filter>
+      <Filter>4_Game\8_Core\Controller\0_DCCCamera3D_Controller</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>4_Game\1_SceneManager</Filter>
@@ -714,7 +723,7 @@
       <Filter>4_Game\5_Light\Base</Filter>
     </ClInclude>
     <ClInclude Include="GameModule.h">
-      <Filter>4_Game\7_Core\Module</Filter>
+      <Filter>4_Game\8_Core\Module</Filter>
     </ClInclude>
     <ClInclude Include="DebugSceneState.h">
       <Filter>4_Game\2_SceneState\Debug</Filter>
@@ -741,16 +750,19 @@
       <Filter>4_Game\1_SceneManager</Filter>
     </ClInclude>
     <ClInclude Include="AABBCollider.h">
-      <Filter>4_Game\7_Core\Collider\AABB</Filter>
+      <Filter>4_Game\8_Core\Collider\AABB</Filter>
     </ClInclude>
     <ClInclude Include="TemplateManager.h">
       <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
     <ClInclude Include="ColliderManager.h">
-      <Filter>4_Game\7_Core\Collider</Filter>
+      <Filter>4_Game\8_Core\Collider</Filter>
     </ClInclude>
     <ClInclude Include="CollisionSystemModule.h">
-      <Filter>4_Game\7_Core\Collider</Filter>
+      <Filter>4_Game\8_Core\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="BOX.h">
+      <Filter>4_Game\7_Draw\BOX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
