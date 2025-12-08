@@ -18,6 +18,8 @@
 #include "Square2D.h"
 // ナイトモデル
 #include "Knight.h"
+// コライダーマネージャー
+#include "ColliderManager.h"
 // 動的確保
 #include <memory>
 
@@ -36,11 +38,19 @@ private:
 	// オブジェクト
 	Square2D m_Square;
 	Knight m_Knight;
+	Knight m_Knight2;
+
+	// コライダーマネージャー
+	ColliderManager m_ColliderManager;
 
 	// シーンの初期化
 	bool DerivativeInit() override final;
 	// シーンの更新
 	void DerivatIveUpdate(float _delta) override final;
+	// 当たり判定更新
+	void UpdateCollision();
+	// Imguiデバッグ
+	void DebugImgui();
 
 public:
 	// コンストラクタ・デストラクタ

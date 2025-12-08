@@ -11,6 +11,11 @@
 // ログ出力ヘッダー
 #include "ReportMessage.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+// Imguiヘッダー
+#include "imgui/imgui.h"
+#endif
+
 
 // ==============================
 // シーンの初期化
@@ -48,8 +53,10 @@ bool DebugSceneState::DerivativeInit()
 	}
 
 	// オブジェクト初期化
-	m_Square.Init(m_Modules->drawManager);
-	m_Knight.Init(m_Modules->drawManager);
+	m_Square.Init(m_Modules->drawManager,&m_ColliderManager);
+	m_Knight.Init(m_Modules->drawManager,&m_ColliderManager);
+	m_Knight2.Init(m_Modules->drawManager, &m_ColliderManager);
+	m_Knight2.SetPosition({ 5.0f,0.0f,0.0f });
 
 	return true;
 }
@@ -68,11 +75,17 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 	// オブジェクト更新
 	m_Square.Update();
 	m_Knight.Update();
+	m_Knight2.Update();
+
+	// 当たったかチェック
+	UpdateCollision();
 
 	// シーン遷移イベント更新
 	if (m_Modules->input->GetKeyTrigger(KeyCode_Enter)) {
 		m_SceneEvent = SceneEventID::TITLESCENE;
 	}
+
+	DebugImgui();
 }
 
 
@@ -89,6 +102,7 @@ void DebugSceneState::Draw()
 	// オブジェクト描画
 	m_Modules->drawManager->SetDepthStencilSetting(DepthStencilSetting::DepthEnableON_DepthWriteON);
 	m_Knight.Draw();
+	m_Knight2.Draw();
 
 	// 透明物書き込み
 	m_Modules->drawManager->SetDepthStencilSetting(DepthStencilSetting::DepthEnableON_DepthWriteOFF);
@@ -109,4 +123,42 @@ void DebugSceneState::Uninit()
 	// オブジェクト後処理
 	m_Square.Uninit();
 	m_Knight.Uninit();
+	m_Knight2.Uninit();
 }
+
+
+// =============================
+// 当たり判定更新
+// =============================
+void DebugSceneState::UpdateCollision()
+{
+	if (m_ColliderManager.CheckCollision(
+		m_Knight.GetAABBColliderInfo(), m_Knight.GetPosition(), m_Knight.GetScale(),
+		m_Knight2.GetAABBColliderInfo(), m_Knight2.GetPosition(), m_Knight2.GetScale()))
+	{
+		DebugLog::OutputToConsole("当たってるよ！");
+	}
+}
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+// =============================
+// Imguiデバッグ
+// =============================
+void DebugSceneState::DebugImgui()
+{
+	Vector3 pos = m_Knight.GetPosition();
+	float position[3] = {};
+
+	ImGui::Begin("Knight1");
+
+	ImGui::DragFloat3("Position", position, 1.0f, 10.0f);
+
+	ImGui::End();
+
+	// 反映
+	m_Knight.SetPosition({ pos.x + position[0], pos.y + position[1], pos.z + position[2] });
+}
+#else
+void DebugSceneState::DebugImgui() {}
+#endif
