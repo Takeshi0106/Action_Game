@@ -73,7 +73,7 @@ void Knight::Draw()
 	m_Draw->ModelDraw(m_VSName.c_str(), m_PSName.c_str(), m_ModelName.c_str());
 
 	// デバッグ用BOX描画
-	DebugDrawBox();
+	// DebugDrawBox();
 }
 
 
