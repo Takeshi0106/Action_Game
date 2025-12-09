@@ -55,15 +55,17 @@ void Triangle2D::Update()
 
 	// ワールド行列（回転のみ）
 	Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), g_angle);
-	Matrix4x4 rotationMatrix = Matrix4x4::CreateRotationQuaternion_LH(rotQuat);
-	m_Rotation = m_Rotation * rotQuat;
+	m_SRT.rotation = m_SRT.rotation * rotQuat;
 
 	// 移動
 	static float offset = 0.0f;
 	offset += 1.0f * time; // 時間経過で移動
 
 	Matrix4x4 translationMatrix = Matrix4x4::CreateTranslationMatrix_LH(Vector3(offset, 0.0f, 0.0f));
-	m_Position.x = offset;
+	m_SRT.position.x = offset;
+
+	// ワールド行列更新
+	m_SRT.UpdateWorldMatrix();
 }
 
 
@@ -73,8 +75,7 @@ void Triangle2D::Update()
 void Triangle2D::Draw()
 {
 	// GPUように変換
-	CreateWorldMatrix();
-	Matrix4x4 world = m_WorldMatrix.toGPU();
+	Matrix4x4 world = m_SRT.world.toGPU();
 
 	// 定数バッファ更新
 	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));

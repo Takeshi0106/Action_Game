@@ -283,6 +283,9 @@
     <Filter Include="4_Game\8_Core\Collider\AABB">
       <UniqueIdentifier>{8ea06ef6-69fd-42e2-9e85-a4fe9e3dc4e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\6_Object\Player">
+      <UniqueIdentifier>{e733579f-b903-4629-beb0-cca8953977b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -477,14 +480,14 @@
     <ClCompile Include="FadeManager.cpp">
       <Filter>4_Game\3_Fade</Filter>
     </ClCompile>
-    <ClCompile Include="ColliderManager.cpp">
-      <Filter>4_Game\8_Core\Collider</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionSystemModule.cpp">
       <Filter>4_Game\8_Core\Collider</Filter>
     </ClCompile>
     <ClCompile Include="BOX.cpp">
       <Filter>4_Game\7_Draw\BOX</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>4_Game\6_Object\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -755,14 +758,20 @@
     <ClInclude Include="TemplateManager.h">
       <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
-    <ClInclude Include="ColliderManager.h">
-      <Filter>4_Game\8_Core\Collider</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionSystemModule.h">
       <Filter>4_Game\8_Core\Collider</Filter>
     </ClInclude>
     <ClInclude Include="BOX.h">
       <Filter>4_Game\7_Draw\BOX</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>4_Game\6_Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SRT.h">
+      <Filter>4_Game\6_Object\0_BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderConfig.h">
+      <Filter>4_Game\8_Core\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

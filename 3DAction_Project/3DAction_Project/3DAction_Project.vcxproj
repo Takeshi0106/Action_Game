@@ -152,7 +152,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="AssetLogger.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
     <ClCompile Include="BOX.cpp" />
-    <ClCompile Include="ColliderManager.cpp" />
     <ClCompile Include="CollisionSystemModule.cpp" />
     <ClCompile Include="ConstantBufferData.cpp" />
     <ClCompile Include="ConstantBufferInfo.cpp" />
@@ -183,6 +182,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModelConversionModule.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="ResultSceneState.cpp" />
     <ClCompile Include="SamplerData.cpp" />
@@ -227,6 +227,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABBCollider.h" />
+    <ClInclude Include="ColliderConfig.h" />
     <ClInclude Include="AlphaDizaSetting.h" />
     <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseCamera.h" />
@@ -235,8 +236,9 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseLight.h" />
     <ClInclude Include="BOX.h" />
-    <ClInclude Include="ColliderManager.h" />
     <ClInclude Include="CollisionSystemModule.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SRT.h" />
     <ClInclude Include="TemplateManager.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />

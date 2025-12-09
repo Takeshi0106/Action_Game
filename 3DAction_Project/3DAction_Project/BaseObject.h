@@ -5,14 +5,16 @@
 // ========================
 // 描画マネージャー
 #include "BaseDrawManager.h"
-// コライダーマネージャー
-#include "ColliderManager.h"
-// 数学計ヘッダー
-#include "Vector3.h"
-#include "Quaternionh.h"
-#include "Matrix4x4.h"
+// SRT情報
+#include "SRT.h"
 // 文字列
 #include <string>
+
+
+// =========================
+// 構造体定義
+// =========================
+
 
 
 // =========================
@@ -23,33 +25,15 @@ class BaseObject
 protected:
 	// 描画マネージャー
 	BaseDrawManager* m_Draw = nullptr;
-	// コライダーマネージャー
-	ColliderManager* m_Collider = nullptr;
 
 	// このオブジェクトが更新する定数バッファ名
 	const std::string m_TransformCBName = "Transform";
 
-	// 当たり判定識別子
-	ColliderInfo m_AABBColliderInfo;
-
 	// SRT情報
-	Vector3 m_Position = { 0.0f,0.0f,0.0f };
-	Quaternion m_Rotation = Quaternion::CreateQuaternionFromAxisAngle({ 0,1,0 }, 0);
-	Vector3 m_Scale{ 1,1,1 };
-	// ワールド行列
-	Matrix4x4 m_WorldMatrix = Matrix4x4::CreateIdentityMatrix();
+	SRT m_SRT = {};
 
 	// 遅延初期化
 	virtual void LateInit() = 0;
-
-	// SRT行列を作成する関数
-	void CreateWorldMatrix() {
-		// ワールド行列計算
-		m_WorldMatrix =
-			Matrix4x4::CreateScalingMatrix_LH(m_Scale) *
-			Matrix4x4::CreateRotationQuaternion_LH(m_Rotation) *
-			Matrix4x4::CreateTranslationMatrix_LH(m_Position);
-	}
 
 public:
 	// コンストラクタ・デストラクタ
@@ -57,12 +41,10 @@ public:
 	virtual ~BaseObject() = default;
 
 	// 初期化
-	void Init(BaseDrawManager* _drawManager,
-		ColliderManager* _colliderManager)
+	void Init(BaseDrawManager* _drawManager)
 	{
 		// マネージャー保存
 		m_Draw = _drawManager;
-		m_Collider = _colliderManager;
 
 		// 派生初期化呼び出し
 		LateInit();
@@ -75,17 +57,12 @@ public:
 	// 後処理
 	virtual void Uninit() = 0;
 
-	// ゲッター
-	const ColliderInfo& GetAABBColliderInfo() const { return m_AABBColliderInfo; }
 	// SRT
-	const Vector3& GetPosition() const { return m_Position; }
-	const Quaternion& GetRotation() const { return m_Rotation; }
-	const Vector3& GetScale() const { return m_Scale; }
+	const SRT& GetSRT() const { return m_SRT; }
 
 	// セッター
-	void SetPosition(const Vector3& pos) { m_Position = pos; }
-	void SetRotation(const Quaternion& rot) { m_Rotation = rot; }
-	void SetScale(const Vector3& scale) { m_Scale = scale; }
+	void SetSRT(const SRT& srt) { m_SRT = srt; }
+	void SetPosition(const Vector3& pos) { m_SRT.position = pos; }
 
 };
 
