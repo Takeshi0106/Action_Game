@@ -22,6 +22,8 @@
 enum ColliderShapeType
 {
 	AABB = 0,
+
+	MAX_SHAPE_TYPE
 };
 
 // コライダータグ
