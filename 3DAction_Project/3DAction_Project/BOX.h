@@ -57,11 +57,11 @@ public:
 	~BOX() = default;
 
 	// 初期化
-	bool Init(BaseDrawManager* drawManager);
+	static bool Init(BaseDrawManager* drawManager);
 
 	// 描画
 	static void Draw(BaseDrawManager* drawManager, const Color& color);
 	// AABB描画
-	static void DrawAABB(BaseDrawManager* drawManager, const AABBCollider* aabb, const Color& color);
+	static void DrawAABB(BaseDrawManager* drawManager, const AABBCollider& aabb, const Color& color);
 };
 

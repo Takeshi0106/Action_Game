@@ -146,13 +146,13 @@ void BOX::Draw(BaseDrawManager* drawManager, const Color& color)
 
 
 // AABB描画
-void BOX::DrawAABB(BaseDrawManager* drawManager, const AABBCollider* aabb, const Color& color)
+void BOX::DrawAABB(BaseDrawManager* drawManager, const AABBCollider& aabb, const Color& color)
 {
 	// サイズ計算
-	Vector3 size = aabb->max - aabb->min;
+	Vector3 size = aabb.max - aabb.min;
 
 	// 中心位置計算
-	Vector3 center = (aabb->min + aabb->max) * 0.5f;
+	Vector3 center = (aabb.min + aabb.max) * 0.5f;
 
 	// ワールド行列計算
 	Matrix4x4 world =
