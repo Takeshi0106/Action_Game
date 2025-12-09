@@ -18,6 +18,8 @@
 #include "Square2D.h"
 // ナイトモデル
 #include "Knight.h"
+// 当たり判定チェック
+#include "CollisionSystemModule.h"
 // 動的確保
 #include <memory>
 
@@ -28,6 +30,12 @@
 class DebugSceneState final : public BaseSceneState
 {
 private:
+	// --------------------------------
+	// メンバー変数
+	// --------------------------------
+	// 当たり判定チェックモジュール
+	CollisionSystemModule m_CollisionSystem;
+
 	// カメラ
 	std::unique_ptr<BaseCamera> m_Camera;
 	// ライト
@@ -38,23 +46,40 @@ private:
 	Knight m_Knight;
 	Knight m_Knight2;
 
+
+	// --------------------------------
+	// メンバー関数
+	// --------------------------------
 	// シーンの初期化
 	bool DerivativeInit() override final;
 	// シーンの更新
 	void DerivatIveUpdate(float _delta) override final;
 	// 当たり判定更新
 	void UpdateCollision();
-	// Imguiデバッグ
-	void DebugImgui();
+
+
+	// --------------------------------
+	// デバッグ関数
+	// --------------------------------
+	// デバッグ初期化
+	void DebugInit();
+	// デバッグ更新
+	void DebugUpdate();
+	// デバッグ描画
+	void DebugDraw();
 
 public:
+	// --------------------------------
 	// コンストラクタ・デストラクタ
+	// --------------------------------
 	DebugSceneState() = default;
 	~DebugSceneState() = default;
 
+	// --------------------------------
+	// 関数
+	// --------------------------------
 	// シーンの描画
 	void Draw() override final;
 	// シーンの終了処理
 	void Uninit()  override final;
 };
-

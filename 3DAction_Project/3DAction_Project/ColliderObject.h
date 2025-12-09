@@ -26,6 +26,8 @@ private:
 	// --------------------------------
 	// コライダー情報
 	AABBCollider m_AABBCol = {};
+	// 当たったか判定
+	bool m_IsHit = false;
 
 protected:
 	// --------------------------------
@@ -77,10 +79,16 @@ public:
 		// 派生更新
 		DerivationUpdate();
 
+		// 当たり判定の初期化
+		m_IsHit = false;
 		// AABBコライダーを毎フレーム更新
 		m_AABBCol = m_AABBCol.UpdateAABB(m_SRT);
 	}
 
-	// コライダー取得
+	// ゲッター
 	const AABBCollider& GetAABBCollider() const { return m_AABBCol; }
+	const bool GetIsHit() const { return m_IsHit; }
+
+	// セッター
+	void SetIsHit(const bool isHit) { m_IsHit = isHit; }
 };

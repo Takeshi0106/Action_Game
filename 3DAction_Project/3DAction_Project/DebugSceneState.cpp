@@ -8,12 +8,16 @@
 #include "DCCCamera3D.h"
 // ライトヘッダー
 #include "SunLight.h"
+// コライダーヘッダー
+#include "CollisionSystemModule.h"
 // ログ出力ヘッダー
 #include "ReportMessage.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 // Imguiヘッダー
 #include "imgui/imgui.h"
+// BOX描画
+#include "BOX.h"
 #endif
 
 
@@ -55,8 +59,12 @@ bool DebugSceneState::DerivativeInit()
 	// オブジェクト初期化
 	m_Square.Init(m_Modules->drawManager);
 	m_Knight.Init(m_Modules->drawManager);
+	m_Knight.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_Knight2.Init(m_Modules->drawManager);
 	m_Knight2.SetPosition(Vector3(5.0f, 0.0f, 0.0f));
+
+	// デバッグ初期化
+	DebugInit();
 
 	return true;
 }
@@ -85,7 +93,8 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 		m_SceneEvent = SceneEventID::TITLESCENE;
 	}
 
-	DebugImgui();
+	// デバッグ更新
+	DebugUpdate();
 }
 
 
@@ -107,6 +116,9 @@ void DebugSceneState::Draw()
 	// 透明物書き込み
 	m_Modules->drawManager->SetDepthStencilSetting(DepthStencilSetting::DepthEnableON_DepthWriteOFF);
 	m_Square.Draw();
+
+	// デバッグ描画
+	DebugDraw();
 }
 
 
@@ -132,17 +144,36 @@ void DebugSceneState::Uninit()
 // =============================
 void DebugSceneState::UpdateCollision()
 {
-
+	// 当たり判定チェック
+	if (m_CollisionSystem.CheckCollision(
+		ColliderShapeType::AABB,
+		(void*)&m_Knight.GetAABBCollider(),
+		ColliderShapeType::AABB,
+		(void*)&m_Knight2.GetAABBCollider()))
+	{
+		m_Knight.SetIsHit(true);
+		m_Knight2.SetIsHit(true);
+	}
 }
 
 
 #if defined(DEBUG) || defined(_DEBUG)
 // =============================
-// Imguiデバッグ
+// デバッグ初期化
 // =============================
-void DebugSceneState::DebugImgui()
+void DebugSceneState::DebugInit()
 {
-	Vector3 pos = m_Knight.GetSRT().position;
+	// BOX描画初期化
+	BOX::Init(m_Modules->drawManager);
+}
+
+
+// =============================
+// デバッグ更新
+// =============================
+void DebugSceneState::DebugUpdate()
+{
+	Vector3 pos = m_Knight2.GetSRT().position;
 	float position[3] = {};
 
 	ImGui::Begin("Knight1");
@@ -152,8 +183,42 @@ void DebugSceneState::DebugImgui()
 	ImGui::End();
 
 	// 反映
-	m_Knight.SetPosition({ pos.x + position[0], pos.y + position[1], pos.z + position[2] });
+	m_Knight2.SetPosition({ pos.x + position[0], pos.y + position[1], pos.z + position[2] });
 }
+
+
+// ----------------------------
+// デバッグ描画
+// ----------------------------
+void DebugSceneState::DebugDraw()
+{
+	// アルファブレンド設定
+
+	// AABB描画
+	if (m_Knight.GetIsHit())
+	{
+		BOX::DrawAABB(m_Modules->drawManager, m_Knight.GetAABBCollider(), Color(1.0f, 0.0f, 0.0f, 0.3f));
+	}
+	else
+	{
+		BOX::DrawAABB(m_Modules->drawManager, m_Knight.GetAABBCollider(), Color(1.0f, 1.0f, 1.0f, 0.3f));
+	}
+
+	// AABB描画
+	if (m_Knight2.GetIsHit())
+	{
+		BOX::DrawAABB(m_Modules->drawManager, m_Knight2.GetAABBCollider(), Color(1.0f, 0.0f, 0.0f, 0.3f));
+	}
+	else
+	{
+		BOX::DrawAABB(m_Modules->drawManager, m_Knight2.GetAABBCollider(), Color(1.0f, 1.0f, 1.0f, 0.3f));
+	}
+}
+
 #else
-void DebugSceneState::DebugImgui() {}
+// リリース時のダミー関数
+void DebugSceneState::DebugInit() {}
+void DebugSceneState::DebugUpdate() {}
+void DebugSceneState::DebugDraw() {}
+
 #endif
