@@ -22,7 +22,9 @@ bool TitleSceneState::DerivativeInit()
 // ============================
 void TitleSceneState::DerivatIveUpdate(float _delta)
 {
-	if (m_Modules->input->GetKeyPress(KeyCode_Enter)) {
+
+	// シーン遷移
+	if (m_Modules->input->GetKeyTrigger(KeyCode_Enter)) {
 		m_SceneEvent = SceneEventID::DEBUGSCENE;
 	}
 }
