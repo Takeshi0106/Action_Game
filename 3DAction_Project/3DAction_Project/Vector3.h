@@ -42,6 +42,7 @@ struct Vector3
 	// 代入演算子
 	Vector3 operator+=(const Vector3& vec) noexcept;
 	Vector3 operator-=(const Vector3& vec) noexcept;
+	Vector3 operator*=(const Vector3& vec) noexcept;
 	Vector3 operator*=(float scalar) noexcept;
 	Vector3 operator/=(float scalar) noexcept;
 
@@ -61,5 +62,6 @@ struct Vector3
 // 演算子
 Vector3 operator+(const Vector3& vec1, const Vector3& vec2) noexcept;
 Vector3 operator-(const Vector3& vec1, const Vector3& vec2) noexcept;
+Vector3 operator*(const Vector3& vec1, const Vector3& vec2) noexcept;
 Vector3 operator*(const Vector3& vec1, float scalar) noexcept;
 Vector3 operator/(const Vector3& vec1, float scalar) noexcept;

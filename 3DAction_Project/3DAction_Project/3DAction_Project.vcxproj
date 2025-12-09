@@ -202,6 +202,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="TitleSceneState.cpp" />
     <ClCompile Include="VertexBufferIData.cpp" />
     <ClCompile Include="VertexBufferManager.cpp" />
+    <ClCompile Include="Windows_Matrix3x3.cpp" />
     <ClCompile Include="Windows_Quaternion.cpp" />
     <ClCompile Include="Windows_Color.cpp" />
     <ClCompile Include="Windows_Matrix4x4.cpp" />
@@ -236,7 +237,9 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseLight.h" />
     <ClInclude Include="BOX.h" />
+    <ClInclude Include="ColliderObject.h" />
     <ClInclude Include="CollisionSystemModule.h" />
+    <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SRT.h" />
     <ClInclude Include="TemplateManager.h" />

@@ -286,6 +286,9 @@
     <Filter Include="4_Game\6_Object\Player">
       <UniqueIdentifier>{e733579f-b903-4629-beb0-cca8953977b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\6_Object\1_ColliderObject">
+      <UniqueIdentifier>{4abf6e12-acaa-49dc-bb8a-b8c83f2d0148}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -488,6 +491,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>4_Game\6_Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows_Matrix3x3.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Matrix</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -772,6 +778,12 @@
     </ClInclude>
     <ClInclude Include="ColliderConfig.h">
       <Filter>4_Game\8_Core\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderObject.h">
+      <Filter>4_Game\6_Object\1_ColliderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix3x3.h">
+      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
