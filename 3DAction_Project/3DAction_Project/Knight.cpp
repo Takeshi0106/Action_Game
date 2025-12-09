@@ -9,6 +9,25 @@
 
 
 // ============================
+// 定数
+// ============================
+namespace Knight_AABB {
+	// コライダーオフセット
+	constexpr Vector3 CENTER_OFFSET = { 0.0f,1.5f,0.0f };
+	// ヒットボックススケール
+	constexpr Vector3 HITBOX_SCALE = { 3.5f, 3.0f, 2.8f };
+
+	// プレイヤーのコライダー設定
+	constexpr ColliderPresetConfig COLLIDER_CONFIG = {
+		CENTER_OFFSET,
+		HITBOX_SCALE,
+		ColliderShapeType::AABB,
+		ColliderTag::PLAYER };
+}
+
+
+
+// ============================
 // 初期化
 // ============================
 void Knight::DerivationInit()
@@ -18,7 +37,7 @@ void Knight::DerivationInit()
 
 	// 位置を更新
 	m_SRT.position = { 0.0f, 0.0f, 5.0f };
-	m_SRT.scale = { 1.0f, 1.0f, 1.0f };
+	m_SRT.scale = { 1.5f, 1.5f, 1.5f };
 
 	// SRT行列
 	Matrix4x4 world = m_SRT.UpdateWorldMatrix().toGPU();
@@ -30,6 +49,9 @@ void Knight::DerivationInit()
 		sizeof(world),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
+
+	// AABBコライダー設定
+	AABBCollisonSetting(Knight_AABB::COLLIDER_CONFIG);
 }
 
 
@@ -38,7 +60,7 @@ void Knight::DerivationInit()
 // ============================
 void Knight::DerivationUpdate()
 {
-
+	m_SRT.UpdateWorldMatrix();
 }
 
 
