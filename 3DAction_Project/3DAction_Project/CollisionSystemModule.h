@@ -23,9 +23,7 @@ class CollisionSystemModule
 {
 public:
 	// AABB同士の当たり判定
-	bool CheckCollision(
-		const AABBCollider& _aCol, const Vector3& _aPos, const Vector3& _aSize,
-		const AABBCollider& _bCol, const Vector3& _bPos, const Vector3& _bSize);
+	bool CheckCollision(const AABBCollider& _aCol, const AABBCollider& _bCol);
 
 };
 

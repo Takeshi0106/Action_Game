@@ -10,24 +10,19 @@
 // AABB同士の当たり判定
 // ======================================
 bool CollisionSystemModule::CheckCollision(
-	const AABBCollider& _aCol, const Vector3& _aPos, const Vector3& _aSize,
-	const AABBCollider& _bCol, const Vector3& _bPos, const Vector3& _bSize)
+	const AABBCollider& _aCol, const AABBCollider& _bCol)
 {
-	// AABBコライダーを更新
-	AABBCollider aabbA = _aCol.UpdateAABB(_aPos, _aSize);
-	AABBCollider aabbB = _bCol.UpdateAABB(_bPos, _bSize);
-
 	// 当たり判定
-	if (aabbA.max.x < aabbB.min.x || 
-		aabbA.min.x > aabbB.max.x) {
+	if (_aCol.max.x < _bCol.min.x ||
+		_aCol.min.x > _bCol.max.x) {
 		return false;
 	}
-	if (aabbA.max.y < aabbB.min.y || 
-		aabbA.min.y > aabbB.max.y) {
+	if (_aCol.max.y < _bCol.min.y ||
+		_aCol.min.y > _bCol.max.y) {
 		return false;
 	}
-	if (aabbA.max.z < aabbB.min.z || 
-		aabbA.min.z > aabbB.max.z) {
+	if (_aCol.max.z < _bCol.min.z ||
+		_aCol.min.z > _bCol.max.z) {
 		return false;
 	}
 

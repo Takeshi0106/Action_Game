@@ -11,6 +11,8 @@
 // ===================================
 // 計算ヘッダー
 #include "Vector3.h"
+#include "SRT.h"
+#include "Matrix3x3.h"
 // コライダー設定ヘッダー
 #include "ColliderConfig.h"
 
@@ -30,11 +32,8 @@ struct AABBCollider
 
 	// コライダー設定
 	// 更新したAABBコライダーを返す
-	const AABBCollider UpdateAABB(const Vector3& _position, const Vector3& _size) const
+	const AABBCollider& UpdateAABB(const Vector3& _position, const Vector3& _size)
 	{
-		// 更新後のコライダー
-		AABBCollider updateCollider;
-
 		// サイズの半分を計
 		Vector3 finalSize = Vector3(_size.x * config.sizeScale.x,
 			_size.y * config.sizeScale.y, _size.z * config.sizeScale.z);
@@ -44,11 +43,35 @@ struct AABBCollider
 		Vector3 centerPos = _position + config.offset;
 
 		// 最小位置 最大位置を計算して設定
-		updateCollider.min = centerPos - halfSize;
-		updateCollider.max = centerPos + halfSize;
+		min = centerPos - halfSize;
+		max = centerPos + halfSize;
 
-		return updateCollider;
+		return *this;
 	}
+
+	// コライダー更新
+	const AABBCollider& UpdateAABB(const SRT& _srt)
+	{
+		// 当たり判定の半径
+		Vector3 localExtent = (_srt.scale * config.sizeScale) * 0.5;
+
+		// ローカル中心位置
+		Vector3 rotatedCenter = _srt.rotation.RotateVector(config.offset);
+		Vector3 worldCenter = _srt.position + rotatedCenter;
+
+		// 回転行列の絶対値計算
+		Matrix3x3 R = Matrix3x3::CreateRotationQuaternion_LH(_srt.rotation);
+		Matrix3x3 absR = R.Abs();
+
+		Vector3 worldExtent = absR * localExtent;
+
+		// AABB
+		min = worldCenter - worldExtent;
+		max = worldCenter + worldExtent;
+
+		return *this;
+	}
+
 };
 
 
