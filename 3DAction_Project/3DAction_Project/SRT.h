@@ -20,9 +20,9 @@ struct SRT {
 	// --------------------------------
 	// SRT情報
 	// --------------------------------
-	Vector3 position = {};
+	Vector3 position = { };
 	Quaternion rotation = {};
-	Vector3 scale = {};
+	Vector3 scale = { 1.0f,1.0f,1.0f };
 
 	// ワールド行列
 	Matrix4x4 world = {};
@@ -34,9 +34,10 @@ struct SRT {
 	Matrix4x4& UpdateWorldMatrix()
 	{
 		// ワールド行列計算
-		world = Matrix4x4::CreateScalingMatrix_LH(scale) *
+		world =
+			Matrix4x4::CreateTranslationMatrix_LH(position) *
 			Matrix4x4::CreateRotationQuaternion_LH(rotation) *
-			Matrix4x4::CreateTranslationMatrix_LH(position);
+			Matrix4x4::CreateScalingMatrix_LH(scale);
 
 		return world;
 	}
