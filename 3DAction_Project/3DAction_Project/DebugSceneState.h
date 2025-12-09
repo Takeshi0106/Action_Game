@@ -18,8 +18,6 @@
 #include "Square2D.h"
 // ナイトモデル
 #include "Knight.h"
-// コライダーマネージャー
-#include "ColliderManager.h"
 // 動的確保
 #include <memory>
 
@@ -39,9 +37,6 @@ private:
 	Square2D m_Square;
 	Knight m_Knight;
 	Knight m_Knight2;
-
-	// コライダーマネージャー
-	ColliderManager m_ColliderManager;
 
 	// シーンの初期化
 	bool DerivativeInit() override final;

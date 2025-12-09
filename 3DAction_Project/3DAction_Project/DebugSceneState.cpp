@@ -53,10 +53,10 @@ bool DebugSceneState::DerivativeInit()
 	}
 
 	// オブジェクト初期化
-	m_Square.Init(m_Modules->drawManager,&m_ColliderManager);
-	m_Knight.Init(m_Modules->drawManager,&m_ColliderManager);
-	m_Knight2.Init(m_Modules->drawManager, &m_ColliderManager);
-	m_Knight2.SetPosition({ 5.0f,0.0f,0.0f });
+	m_Square.Init(m_Modules->drawManager);
+	m_Knight.Init(m_Modules->drawManager);
+	m_Knight2.Init(m_Modules->drawManager);
+	m_Knight2.SetPosition(Vector3(5.0f, 0.0f, 0.0f));
 
 	return true;
 }
@@ -132,12 +132,7 @@ void DebugSceneState::Uninit()
 // =============================
 void DebugSceneState::UpdateCollision()
 {
-	if (m_ColliderManager.CheckCollision(
-		m_Knight.GetAABBColliderInfo(), m_Knight.GetPosition(), m_Knight.GetScale(),
-		m_Knight2.GetAABBColliderInfo(), m_Knight2.GetPosition(), m_Knight2.GetScale()))
-	{
-		DebugLog::OutputToConsole("当たってるよ！");
-	}
+
 }
 
 
@@ -147,7 +142,7 @@ void DebugSceneState::UpdateCollision()
 // =============================
 void DebugSceneState::DebugImgui()
 {
-	Vector3 pos = m_Knight.GetPosition();
+	Vector3 pos = m_Knight.GetSRT().position;
 	float position[3] = {};
 
 	ImGui::Begin("Knight1");
