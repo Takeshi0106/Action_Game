@@ -55,14 +55,17 @@ struct AABBCollider
 		// 当たり判定の半径
 		Vector3 localExtent = (_srt.scale * config.sizeScale) * 0.5;
 
-		// ローカル中心位置
-		Vector3 rotatedCenter = _srt.rotation.RotateVector(config.offset);
+		// ローカル中心位置を計算
+		Vector3 rotatedCenter = _srt.rotation.RotateVector(config.offset * _srt.scale);
+		
+		// ワールド中心位置を計算
 		Vector3 worldCenter = _srt.position + rotatedCenter;
 
 		// 回転行列の絶対値計算
 		Matrix3x3 R = Matrix3x3::CreateRotationQuaternion_LH(_srt.rotation);
 		Matrix3x3 absR = R.Abs();
 
+		// ワールドの拡張ベクトル計算
 		Vector3 worldExtent = absR * localExtent;
 
 		// AABB
@@ -78,31 +81,14 @@ struct AABBCollider
 // ====================================
 // コライダー作成関数
 // ====================================
-inline AABBCollider CreateAABB(const Vector3& size)
+inline AABBCollider CreateAABB(const SRT& _srt, const ColliderPresetConfig& _config)
 {
-
 	AABBCollider aabb;
 
-	// 半分の大きさを計算
-	const float halfWidth = size.x * 0.5f;
-	const float halfHeight = size.y * 0.5f;
-	const float halfDepth = size.z * 0.5f;
-
-	// 最小位置 最大位置を計算して設定
-	aabb.min = Vector3(-halfWidth, -halfHeight, -halfDepth);
-	aabb.max = Vector3(halfWidth, halfHeight, halfDepth);
-
-	return aabb;
-}
-
-inline AABBCollider CreateAABB(const Vector3& size, const Vector3& _offset, const Vector3& scale)
-{
-	// 基本のAABB作成
-	AABBCollider aabb = CreateAABB(size);
-
-	// オフセットとスケールを設定
-	aabb.config.offset = _offset;
-	aabb.config.sizeScale = scale;
+	// 情報セット
+	aabb.config = _config;
+	// コライダー更新
+	aabb.UpdateAABB(_srt);
 
 	return aabb;
 }
