@@ -8,7 +8,7 @@
 // =====================================
 // 初期化
 // =====================================
-void Square2D::LateInit()
+void Square2D::DerivationInit()
 {
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(

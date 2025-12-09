@@ -11,15 +11,28 @@
 // ===================================
 // 計算ヘッダー
 #include "Vector3.h"
+// 固定長整数ヘッダー
+#include <cstdint>
 
 
 // ===================================
-// コライダーのタグ
+// 列挙型
 // ===================================
-enum ColliderTag {
-	NON = -1, // タグなし
+// コライダー形状タイプ
+enum ColliderShapeType
+{
+	AABB = 0,
 };
 
+// コライダータグ
+enum ColliderTag : uint32_t
+{
+	NOTAG = 0,
+	PLAYER = 1 << 0,
+	ENEMY = 1 << 1,
+	ITEM = 1 << 2,
+};
+ 
 
 // ===================================
 // 構造体
@@ -32,6 +45,8 @@ struct ColliderPresetConfig
 	// サイズスケール
 	Vector3 sizeScale = {};
 
-	// コライダーのタイプなどを追加予定
+	// コライダーの形状タイプ
+	ColliderShapeType shapeType;
+	// コライダータイプ
 	ColliderTag tag;
 };

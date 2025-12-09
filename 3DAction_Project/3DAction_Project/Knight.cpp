@@ -6,20 +6,22 @@
 #include "Knight.h"
 // 計算ヘッダー
 #include "Vector3.h"
-// 当たり判定
-#include "AABBCollider.h"
 
 
 // ============================
 // 初期化
 // ============================
-void Knight::LateInit()
+void Knight::DerivationInit()
 {
 	// モデルのロード
 	m_Draw->LoadModel(m_ModelName.c_str(), "Character");
 
+	// 位置を更新
+	m_SRT.position = { 0.0f, 0.0f, 5.0f };
+	m_SRT.scale = { 1.0f, 1.0f, 1.0f };
+
 	// SRT行列
-	Matrix4x4 world = m_SRT.world.toGPU();
+	Matrix4x4 world = m_SRT.UpdateWorldMatrix().toGPU();
 
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
@@ -28,27 +30,15 @@ void Knight::LateInit()
 		sizeof(world),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
-
-	// 位置を更新
-	m_SRT.position = { 0.0f, 0.0f, 5.0f };
-	m_SRT.scale = { 1.0f, 1.0f, 1.0f };
-
-	// 当たり判定作成
-	AABBCollider collider = CreateAABB(m_SRT.scale);
-
-#if defined(DEBUG) || defined(_DEBUG)
-	// デバッグ用BOX初期化
-	m_DebugBox.Init(m_Draw);
-#endif
 }
 
 
 // ============================
 // 更新
 // ============================
-void Knight::Update()
+void Knight::DerivationUpdate()
 {
-	// m_SRT = m_SRT * Matrix4x4::CreateRotationYMatrix_LH(0.01f);
+
 }
 
 
@@ -57,7 +47,7 @@ void Knight::Update()
 // ============================
 void Knight::Draw()
 {
-	m_SRT.UpdateWorldMatrix();
+	// ワールド行列取得
 	Matrix4x4 world = m_SRT.world.toGPU();
 
 	// 定数バッファ更新
@@ -65,9 +55,6 @@ void Knight::Draw()
 
 	// 描画
 	m_Draw->ModelDraw(m_VSName.c_str(), m_PSName.c_str(), m_ModelName.c_str());
-
-	// デバッグ用BOX描画
-	DebugDrawBox();
 }
 
 
@@ -78,17 +65,3 @@ void Knight::Uninit()
 {
 
 }
-
-
-
-#if defined(DEBUG) || defined(_DEBUG)
-// ============================
-// デバッグ用BOX描画
-// ============================
-void Knight::DebugDrawBox()
-{
-
-}
-#else
-void Knight::DebugDrawBox() {}
-#endif

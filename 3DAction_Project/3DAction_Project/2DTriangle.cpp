@@ -13,7 +13,7 @@ float g_angle = 0.0f;
 // =====================================
 // 初期化
 // =====================================
-void Triangle2D::LateInit()
+void Triangle2D::DerivationInit()
 {
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(

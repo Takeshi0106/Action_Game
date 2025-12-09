@@ -7,13 +7,32 @@
 // 計算ヘッダー
 #include "Vector3.h"
 // 当たり判定
+#include "ColliderConfig.h"
 #include "AABBCollider.h"
+
+
+// ============================
+// 定数
+// ============================
+namespace Player_AABB{
+	// コライダーオフセット
+	constexpr Vector3 CENTER_OFFSET = { 0.0f,1.5f,0.0f };
+	// ヒットボックススケール
+	constexpr Vector3 HITBOX_SCALE = { 3.5f, 3.0f, 2.8f };
+
+	// プレイヤーのコライダー設定
+	constexpr ColliderPresetConfig COLLIDER_CONFIG = {
+		CENTER_OFFSET,
+		HITBOX_SCALE,
+		ColliderShapeType::AABB,
+		ColliderTag::PLAYER };
+}
 
 
 // ============================
 // オブジェクトの初期化
 // ============================
-void Player::LateInit()
+void Player::DerivationInit()
 {
 	// モデルのロード
 	m_Draw->LoadModel(m_ModelName.c_str(), "Character");
@@ -34,17 +53,15 @@ void Player::LateInit()
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
-#if defined(DEBUG) || defined(_DEBUG)
-	// デバッグ用BOX初期化
-	m_DebugBox.Init(m_Draw);
-#endif
+	// AABBコライダー設定
+	AABBCollisonSetting(Player_AABB::COLLIDER_CONFIG);
 }
 
 
 // ============================
 // オブジェクトの更新
 // ============================
-void Player::Update()
+void Player::DerivationUpdate()
 {
 
 }
@@ -72,17 +89,5 @@ void Player::Draw()
 // ============================
 void Player::Uninit()
 {
-}
-
-
-#if defined(DEBUG) || defined(_DEBUG)
-// ============================
-// デバッグ用BOX描画
-// ============================
-void Player::DebugDrawBox()
-{
 
 }
-#else
-void Player::DebugDrawBox() {}
-#endif

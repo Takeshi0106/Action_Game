@@ -9,22 +9,19 @@
 // ==============================
 // ヘッダー
 // ==============================
-#include "BaseObject.h"
+#include "ColliderObject.h"
 #include <string>
-
-
-#if defined(DEBUG) || defined(_DEBUG)
-// ＢＯＸ描画
-#include "Box.h"
-#endif
 
 
 // ==============================
 // クラス
 // ==============================
-class Knight final : public BaseObject
+class Knight final : public ColliderObject
 {
 private:
+	// --------------------------------
+	// メンバー変数
+	// --------------------------------
 	// モデル名
 	std::string m_ModelName = "Mech_FinnTheFrog";
 	
@@ -32,18 +29,22 @@ private:
 	std::string m_VSName = "VS_Object";
 	std::string m_PSName = "PS_TextureModel";
 
-	// BOX描画
-	BOX m_DebugBox;
 
+	//--------------------------------
+	// 非仮想関数
+	// --------------------------------
 	// 遅延初期化
-	void LateInit() override final;
-	// デバッグ描画
-	void DebugDrawBox();
+	void DerivationInit() override final;
+	// 更新
+	void DerivationUpdate() override final;
 
 public:
-	// 基本関数
-	void Update() override final;
+	// --------------------------------
+	// 非仮想関数
+	// --------------------------------
+	// 描画
 	void Draw() override final;
+	// 後処理
 	void Uninit() override final;
 };
 

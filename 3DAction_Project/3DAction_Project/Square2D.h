@@ -53,7 +53,7 @@ private:
 	};
 
 	// 基本関数
-	void LateInit() override final;
+	void DerivationInit() override final;
 
 public:
 	void Update() override final;
