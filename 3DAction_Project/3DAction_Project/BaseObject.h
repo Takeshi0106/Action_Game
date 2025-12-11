@@ -73,5 +73,7 @@ public:
 	// セッター
 	void SetSRT(const SRT& srt) { m_SRT = srt; }
 	void SetPosition(const Vector3& pos) { m_SRT.position = pos; }
+	void SetRotation(const Quaternion& rot) { m_SRT.rotation = rot; }
+	void SetScale(const Vector3& scale) { m_SRT.scale = scale; }
 };
 

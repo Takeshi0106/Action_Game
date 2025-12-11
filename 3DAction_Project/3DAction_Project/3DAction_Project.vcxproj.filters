@@ -289,6 +289,12 @@
     <Filter Include="4_Game\6_Object\1_ColliderObject\Player">
       <UniqueIdentifier>{e733579f-b903-4629-beb0-cca8953977b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\8_Core\Collider\AABBTree">
+      <UniqueIdentifier>{b8d80341-289c-4b8b-a05c-89bea238ac02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Collider\AABBTree\Node">
+      <UniqueIdentifier>{4c105de7-b4ef-499d-8196-19c74398b6df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -494,6 +500,9 @@
     </ClCompile>
     <ClCompile Include="Windows_Matrix3x3.cpp">
       <Filter>1_Platform\Windows\2_Math\MathStrut\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBTree.cpp">
+      <Filter>4_Game\8_Core\Collider\AABBTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -784,6 +793,12 @@
     </ClInclude>
     <ClInclude Include="Matrix3x3.h">
       <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBNode.h">
+      <Filter>4_Game\8_Core\Collider\AABBTree\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBTree.h">
+      <Filter>4_Game\8_Core\Collider\AABBTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

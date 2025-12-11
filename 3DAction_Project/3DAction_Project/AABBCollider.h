@@ -75,3 +75,22 @@ inline AABBCollider CreateAABB(const SRT& _srt, const ColliderPresetConfig& _con
 
 	return aabb;
 }
+
+
+// ====================================
+// ファットAABB作成関数
+// ====================================
+inline AABBCollider CreateFatAABB(const AABBCollider& aabb, const Vector3& velocity, float padding = 0.1f)
+{
+	AABBCollider fat = aabb;
+
+	Vector3 expand = velocity * 1.0f; // 次フレームで動きそうな距離
+	fat.min -= expand;
+	fat.max += expand;
+
+	// さらに少し余裕を持たせる
+	fat.min -= Vector3(padding,padding,padding);
+	fat.max += Vector3(padding,padding,padding);
+
+	return fat;
+}

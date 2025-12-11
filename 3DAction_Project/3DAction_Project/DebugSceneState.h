@@ -19,7 +19,7 @@
 // ナイトモデル
 #include "Knight.h"
 // 当たり判定チェック
-#include "CollisionSystemModule.h"
+#include "AABBTree.h"
 // 動的確保
 #include <memory>
 
@@ -43,9 +43,12 @@ private:
 	
 	// オブジェクト
 	Square2D m_Square;
-	Knight m_Knight;
+	Knight m_Knight[1];
+	int m_KnightCount = 1;
 	Knight m_Knight2;
 
+	// システム
+	AABBTree m_AABBTree;
 
 	// --------------------------------
 	// メンバー関数
