@@ -157,11 +157,11 @@ void DebugSceneState::Uninit()
 void DebugSceneState::UpdateCollision()
 {
 	// AABB登録
-	uint32_t knightID = m_AABBTree.AddNode(m_Knight[0].GetAABBCollider(), 0);
-	uint32_t knight2ID = m_AABBTree.AddNode(m_Knight2.GetAABBCollider(), 0);
+	uint32_t knightID = m_AABBTree.AddNode(m_Knight[0].GetAABBCollider(), m_Knight[0].GetObjectInfo());
+	uint32_t knight2ID = m_AABBTree.AddNode(m_Knight2.GetAABBCollider(), m_Knight2.GetObjectInfo());
 
 	// 衝突候補取得
-	std::vector<uint32_t> results;
+	std::vector<ObjectInfo> results;
 
 	m_AABBTree.Query(m_Knight[0].GetAABBCollider(), results);
 	if (results.size() > 1)

@@ -16,8 +16,6 @@
 #include <vector>
 // 固定長整数ヘッダー
 #include <cstdint>
-// 当たり判定チェック
-#include "CollisionSystemModule.h"
 
 
 // ===================================
@@ -33,15 +31,13 @@ private:
 	std::vector<AABBNode> m_Nodes;
 	// ルートノードインデックス
 	uint32_t m_RootNodeIndex = UINT32_MAX;
-	// コライダーシステム
-	CollisionSystemModule m_System;
 
 
 	// --------------------------------
 	// メンバー関数
 	// --------------------------------
 	uint32_t ChooseBestSibling(uint32_t current, const AABBCollider& aabb);
-	void UpdateAncestors(int index);
+	void UpdateAncestors(uint32_t index);
 
 public:
 	// --------------------------------
@@ -61,11 +57,11 @@ public:
 	}
 
 	// ノード追加関数
-	uint32_t AddNode(const AABBCollider& aabb, const uint32_t objectIndex);
+	uint32_t AddNode(const AABBCollider& aabb, const ObjectInfo& info);
 	// ノード削除
 	void Remove(uint32_t index);
     // AABB検索（候補取得）
-    void Query(const AABBCollider& box, std::vector<uint32_t>& results);
+    void Query(const AABBCollider& box, std::vector<ObjectInfo>& results);
 
 };
 

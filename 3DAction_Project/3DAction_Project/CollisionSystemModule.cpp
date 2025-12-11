@@ -68,19 +68,6 @@ bool CollisionSystemModule::AABB_AABB_Check(void* _a, void* _b)
 	AABBCollider* _aCol = static_cast<AABBCollider*>(_a);
 	AABBCollider* _bCol = static_cast<AABBCollider*>(_b);
 
-	// 当たり判定
-	if (_aCol->max.x < _bCol->min.x ||
-		_aCol->min.x > _bCol->max.x) {
-		return false;
-	}
-	if (_aCol->max.y < _bCol->min.y ||
-		_aCol->min.y > _bCol->max.y) {
-		return false;
-	}
-	if (_aCol->max.z < _bCol->min.z ||
-		_aCol->min.z > _bCol->max.z) {
-		return false;
-	}
-
-	return true;
+	// 当たり判定計算
+	return CheckAABBCollision(*_aCol, *_bCol);
 }

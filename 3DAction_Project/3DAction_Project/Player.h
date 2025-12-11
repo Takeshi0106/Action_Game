@@ -34,8 +34,6 @@ private:
 	// --------------------------------
 	// 遅延初期化
 	void DerivationInit() override final;
-	// 派生後処理
-	void DerivationUpdate() override final;	
 
 public:
 	// --------------------------------
@@ -48,6 +46,8 @@ public:
 	// ---------------------------------
 	// 非仮想関数
 	// ---------------------------------
+	// 更新
+	void Update() override final;
 	// 描画
 	void Draw() override final;
 	// 後処理

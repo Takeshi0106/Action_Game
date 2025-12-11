@@ -6,12 +6,14 @@
 #include "Knight.h"
 // 計算ヘッダー
 #include "Vector3.h"
+// コライダー設定
+#include "ColliderConfig.h"
 
 
 // ============================
 // 定数
 // ============================
-namespace Knight_AABB {
+namespace Debug_AABB {
 	// コライダーオフセット
 	constexpr Vector3 CENTER_OFFSET = { 0.0f,1.5f,0.0f };
 	// ヒットボックススケール
@@ -22,7 +24,7 @@ namespace Knight_AABB {
 		CENTER_OFFSET,
 		HITBOX_SCALE,
 		ColliderShapeType::AABB,
-		ColliderTag::PLAYER };
+		ObjectInfo{0, ObjectTag::NOTAG} };
 }
 
 
@@ -50,17 +52,24 @@ void Knight::DerivationInit()
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
-	// AABBコライダー設定
-	AABBCollisonSetting(Knight_AABB::COLLIDER_CONFIG);
+	// オブジェクト情報設定
+	m_ObjectInfo = Debug_AABB::COLLIDER_CONFIG.objectInfo;
 }
 
 
 // ============================
 // 更新
 // ============================
-void Knight::DerivationUpdate()
+void Knight::Update()
 {
+	// 当たり判定の初期化
+	m_IsHit = false;
+
+	// 行列更新
 	m_SRT.UpdateWorldMatrix();
+
+	// AABBコライダーを毎フレーム更新
+	m_AABBCol = CreateAABB(m_SRT, Debug_AABB::CENTER_OFFSET, Debug_AABB::HITBOX_SCALE);
 }
 
 

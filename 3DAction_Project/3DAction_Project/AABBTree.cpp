@@ -20,10 +20,11 @@ inline float SurfaceArea(AABBCollider& col);
 // ===================================
 // ノード追加関数
 // ===================================
-uint32_t AABBTree::AddNode(const AABBCollider& aabb, const uint32_t objectIndex)
+uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 {
 	// ノード作成
-	AABBNode node(aabb, objectIndex);
+	AABBNode node(aabb);
+	node.objectInfo = info;
 
 	// 配列に追加
 	m_Nodes.emplace_back(node);
@@ -41,10 +42,10 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const uint32_t objectIndex)
 	uint32_t sibling = ChooseBestSibling(currentIndex, aabb);
 
 	// 新しい親ノードを作る
-	int oldParent = m_Nodes[sibling].parentIndex;
+	uint32_t oldParent = m_Nodes[sibling].parentIndex;
 	AABBCollider mergedAABB = CreateMargeAABB(m_Nodes[sibling].aabb, aabb);
 
-	AABBNode parentNode(mergedAABB, objectIndex);
+	AABBNode parentNode(mergedAABB);
 	parentNode.leftIndex = sibling;
 	parentNode.rightIndex = currentIndex;
 	parentNode.parentIndex = oldParent;
@@ -67,7 +68,8 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const uint32_t objectIndex)
 	}
 	else
 	{
-		currentIndex = newParentIndex;
+		// ルートノードを更新
+		m_RootNodeIndex = newParentIndex;
 	}
 
 	// 祖先ノードを更新
@@ -118,7 +120,7 @@ void AABBTree::Remove(uint32_t index)
 // ==================================
 // AABB検索（候補取得）
 // ==================================
-void AABBTree::Query(const AABBCollider& box, std::vector<uint32_t>& results)
+void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 {
 	if (m_RootNodeIndex == -1) return;
 
@@ -133,18 +135,15 @@ void AABBTree::Query(const AABBCollider& box, std::vector<uint32_t>& results)
 		const AABBNode& node = m_Nodes[index];
 
 		// 衝突判定チェック
-		if (!m_System.CheckCollision(
-			node.aabb.config.shapeType,
-			(void*)&node.aabb,
-			box.config.shapeType,
-			(void*)&box)) 
+		if (CheckAABBCollision(box, node.aabb))
 		{
 			continue;
 		}
 
 		if (node.isLeaf())
 		{
-			results.push_back(node.objectIndex);
+			// オブジェクト情報を接触配列に代入
+			results.push_back(node.objectInfo);
 		}
 		else
 		{
@@ -157,11 +156,11 @@ void AABBTree::Query(const AABBCollider& box, std::vector<uint32_t>& results)
 // ===================================
 // ノードの祖先ノードを更新する関数
 // ===================================
-void AABBTree::UpdateAncestors(int index)
+void AABBTree::UpdateAncestors(uint32_t index)
 {
 	int current = index;
 
-	while (current != -1)
+	while (current != UINT32_MAX)
 	{
 		AABBNode& node = m_Nodes[current];
 		if (!node.isLeaf())

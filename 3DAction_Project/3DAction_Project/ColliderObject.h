@@ -11,6 +11,8 @@
 // ===================================
 // 基底オブジェクト
 #include "BaseObject.h"
+// オブジェクト情報
+#include "ColliderConfig.h"
 // 当たり判定ヘッダー
 #include "AABBCollider.h"
 
@@ -20,7 +22,7 @@
 // ===================================
 class ColliderObject : public BaseObject
 {
-private:
+protected:
 	// --------------------------------
 	// メンバー変数
 	// --------------------------------
@@ -28,30 +30,21 @@ private:
 	AABBCollider m_AABBCol = {};
 	// 当たったか判定
 	bool m_IsHit = false;
+	// オブジェクト情報
+	ObjectInfo m_ObjectInfo = {};
 
-protected:
+
 	// --------------------------------
 	// 仮想関数
 	// --------------------------------
 	// 派生初期化
 	void DerivationInit() override = 0;
-	// 派生更新
-	virtual void DerivationUpdate() = 0;
 
 	// 当たっているときの詳細判定
 	virtual void OnCollisionDetail() {}
 	// 当たった時の処理
 	virtual void OnCollisionStay() {}
 
-
-	// --------------------------------
-	// 純粋仮想関数
-	// --------------------------------
-	// AABBコライダー設定
-	void AABBCollisonSetting(const ColliderPresetConfig& config)
-	{
-		m_AABBCol.config = config;
-	}
 
 public:
 	// --------------------------------
@@ -74,21 +67,14 @@ public:
 	// 非仮想関数
 	// --------------------------------
 	// 更新
-	void Update() override final
-	{
-		// 派生更新
-		DerivationUpdate();
-
-		// 当たり判定の初期化
-		m_IsHit = false;
-		// AABBコライダーを毎フレーム更新
-		m_AABBCol = m_AABBCol.UpdateAABB(m_SRT);
-	}
+	void Update() override = 0;
 
 	// ゲッター
 	const AABBCollider& GetAABBCollider() const { return m_AABBCol; }
 	const bool GetIsHit() const { return m_IsHit; }
+	const ObjectInfo& GetObjectInfo() const { return m_ObjectInfo; }
 
 	// セッター
 	void SetIsHit(const bool isHit) { m_IsHit = isHit; }
+	void SetObjectInfo(const ObjectInfo& info) { m_ObjectInfo = info; }
 };

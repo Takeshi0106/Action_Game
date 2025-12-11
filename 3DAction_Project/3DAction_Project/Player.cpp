@@ -25,7 +25,7 @@ namespace Player_AABB{
 		CENTER_OFFSET,
 		HITBOX_SCALE,
 		ColliderShapeType::AABB,
-		ColliderTag::PLAYER };
+		ObjectInfo{ 0, ObjectTag::PLAYER } };
 }
 
 
@@ -53,17 +53,22 @@ void Player::DerivationInit()
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
-	// AABBコライダー設定
-	AABBCollisonSetting(Player_AABB::COLLIDER_CONFIG);
+	// オブジェクト情報設定
+	m_ObjectInfo = Player_AABB::COLLIDER_CONFIG.objectInfo;
 }
 
 
 // ============================
 // オブジェクトの更新
 // ============================
-void Player::DerivationUpdate()
+void Player::Update()
 {
+	// 当たり判定の初期化
+	m_IsHit = false;
 
+
+	// AABBコライダーを毎フレーム更新
+	m_AABBCol = CreateAABB(m_SRT, Player_AABB::CENTER_OFFSET, Player_AABB::HITBOX_SCALE);
 }
 
 

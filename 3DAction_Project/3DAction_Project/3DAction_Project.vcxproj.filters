@@ -743,9 +743,6 @@
     <ClInclude Include="GameModule.h">
       <Filter>4_Game\8_Core\Module</Filter>
     </ClInclude>
-    <ClInclude Include="DebugSceneState.h">
-      <Filter>4_Game\2_SceneState\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="GameMainState.h">
       <Filter>4_Game\2_SceneState\GameMain</Filter>
     </ClInclude>
@@ -799,6 +796,9 @@
     </ClInclude>
     <ClInclude Include="AABBTree.h">
       <Filter>4_Game\8_Core\Collider\AABBTree</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugSceneState.h">
+      <Filter>4_Game\2_SceneState\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

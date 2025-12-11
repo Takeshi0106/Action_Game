@@ -35,13 +35,13 @@ private:
 	// --------------------------------
 	// 遅延初期化
 	void DerivationInit() override final;
-	// 更新
-	void DerivationUpdate() override final;
 
 public:
 	// --------------------------------
 	// 非仮想関数
 	// --------------------------------
+	// 更新
+	void Update() override final;
 	// 描画
 	void Draw() override final;
 	// 後処理

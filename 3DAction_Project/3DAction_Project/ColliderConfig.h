@@ -26,8 +26,8 @@ enum ColliderShapeType
 	MAX_SHAPE_TYPE
 };
 
-// コライダータグ
-enum ColliderTag : uint32_t
+// タグ
+enum ObjectTag : uint32_t
 {
 	NOTAG = 0,
 	PLAYER = 1 << 0,
@@ -39,6 +39,15 @@ enum ColliderTag : uint32_t
 // ===================================
 // 構造体
 // ===================================
+struct ObjectInfo
+{
+	// オブジェクトID
+	uint32_t objectID = UINT32_MAX;
+	// タグ
+	ObjectTag tag = ObjectTag::NOTAG;
+};
+
+
 // コライダー設定構造体
 struct ColliderPresetConfig
 {
@@ -49,6 +58,7 @@ struct ColliderPresetConfig
 
 	// コライダーの形状タイプ
 	ColliderShapeType shapeType;
-	// コライダータイプ
-	ColliderTag tag;
+
+	// オブジェクト情報
+	ObjectInfo objectInfo = {};
 };
