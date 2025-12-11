@@ -38,8 +38,8 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 		return currentIndex;
 	}
 
-	// 挿入場所を探す
-	uint32_t sibling = ChooseBestSibling(currentIndex, aabb);
+	// 挿入場所を検索
+	uint32_t sibling = ChooseBestSibling(m_RootNodeIndex, aabb);
 
 	// 新しい親ノードを作る
 	uint32_t oldParent = m_Nodes[sibling].parentIndex;
@@ -61,10 +61,12 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 	// 兄弟ノードの親を更新
 	if (oldParent != UINT32_MAX)
 	{
-		if (m_Nodes[oldParent].leftIndex == sibling)
+		if (m_Nodes[oldParent].leftIndex == sibling) {
 			m_Nodes[oldParent].leftIndex = newParentIndex;
-		else
+		}
+		else {
 			m_Nodes[oldParent].rightIndex = newParentIndex;
+		}
 	}
 	else
 	{
@@ -129,13 +131,13 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 
 	while (!stack.empty())
 	{
-		int index = stack.top();
+		uint32_t index = stack.top();
 		stack.pop();
 
 		const AABBNode& node = m_Nodes[index];
 
 		// 衝突判定チェック
-		if (CheckAABBCollision(box, node.aabb))
+		if (!CheckAABBCollision(box, node.aabb))
 		{
 			continue;
 		}
@@ -181,10 +183,11 @@ uint32_t AABBTree::ChooseBestSibling(uint32_t current, const AABBCollider& aabb)
 	// 葉ノードを探す
 	while (!m_Nodes[current].isLeaf())
 	{
-		// AABBをマージして計算する
+		// AABBをマージ
 		AABBCollider leftcol = CreateMargeAABB(m_Nodes[m_Nodes[current].leftIndex].aabb, aabb);
 		AABBCollider rightcol = CreateMargeAABB(m_Nodes[m_Nodes[current].rightIndex].aabb, aabb);
 
+		// 表面積を計算
 		float leftCost = SurfaceArea(leftcol);
 		float rightCost = SurfaceArea(rightcol);
 
