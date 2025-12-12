@@ -298,6 +298,12 @@
     <Filter Include="4_Game\7_Draw\Board">
       <UniqueIdentifier>{7f8bf257-8280-4f40-82f3-fc8eaa804e34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\6_Object\2_ObjectSystem">
+      <UniqueIdentifier>{adbf4c5b-1237-4dd3-9ddc-383f60a9d184}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\2_ObjectSystem\MoveObjectSystem">
+      <UniqueIdentifier>{93cef4cc-d9a8-454f-bf6a-53a0acdefbd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -509,6 +515,12 @@
     </ClCompile>
     <ClCompile Include="Board.cpp">
       <Filter>4_Game\7_Draw\Board</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSystem.cpp">
+      <Filter>4_Game\6_Object\2_ObjectSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObjectSystem.cpp">
+      <Filter>4_Game\6_Object\2_ObjectSystem\MoveObjectSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -808,6 +820,12 @@
     </ClInclude>
     <ClInclude Include="Board.h">
       <Filter>4_Game\7_Draw\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSystem.h">
+      <Filter>4_Game\6_Object\2_ObjectSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObjectSystem.h">
+      <Filter>4_Game\6_Object\2_ObjectSystem\MoveObjectSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
