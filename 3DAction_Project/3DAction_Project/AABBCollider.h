@@ -26,6 +26,12 @@ struct AABBCollider
 	Vector3 max = {};
 };
 
+// Fat AABBコライダー構造体
+struct FatAABBCollider
+{
+	AABBCollider aabb = {};
+	bool isUpdated = false;
+};
 
 // ====================================
 // AABBコライダー作成関数
@@ -66,20 +72,24 @@ inline AABBCollider CreateAABB(
 // ====================================
 // ファットAABB作成関数
 // ====================================
-inline AABBCollider CreateFatAABB(const AABBCollider& aabb, 
+inline FatAABBCollider CreateFatAABB(const AABBCollider& aabb, 
 	const Vector3& velocity,
 	const float lookAheadTime = 1.0f,
 	const float padding = 0.1f)
 {
-	AABBCollider fat = aabb;
+	AABBCollider fataabb = aabb;
 
 	Vector3 expand = velocity * lookAheadTime;
-	fat.min -= expand;
-	fat.max += expand;
+	fataabb.min -= expand;
+	fataabb.max += expand;
 
 	// さらに少し余裕を持たせる
-	fat.min -= Vector3(padding,padding,padding);
-	fat.max += Vector3(padding,padding,padding);
+	fataabb.min -= Vector3(padding,padding,padding);
+	fataabb.max += Vector3(padding,padding,padding);
+
+	FatAABBCollider fat;
+	fat.aabb = fataabb;
+	fat.isUpdated = true;
 
 	return fat;
 }
@@ -96,5 +106,20 @@ inline bool CheckAABBCollision(const AABBCollider& a, const AABBCollider& b)
 	if (a.max.z < b.min.z || a.min.z > b.max.z) { return false; }
 
 	// 全ての軸で重なっている
+	return true;
+}
+
+
+// =====================================
+// AABB内包判定関数
+// =====================================
+inline bool IsAABBInside(const AABBCollider& inner, const FatAABBCollider& outer)
+{
+	// 各軸で判定
+	if (inner.min.x < outer.aabb.min.x || inner.max.x > outer.aabb.max.x) { return false; }
+	if (inner.min.y < outer.aabb.min.y || inner.max.y > outer.aabb.max.y) { return false; }
+	if (inner.min.z < outer.aabb.min.z || inner.max.z > outer.aabb.max.z) { return false; }
+
+	// 全ての軸で内包している
 	return true;
 }

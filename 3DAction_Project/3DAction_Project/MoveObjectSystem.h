@@ -25,6 +25,8 @@ private:
 	// 共通変数
 	// --------------------------------
 	const float kMoveVelocity = 0.1f;
+	const float kRotateSpeed = 3.0f;
+
 	const uint16_t kObjectCount = 100;
 
 	// 大きさ
@@ -49,12 +51,18 @@ private:
 	// メンバー配列変数
 	// --------------------------------
 	std::vector<Vector3> m_Positions;
+	std::vector<Quaternion> m_Rotations;
 	// AABBコライダー配列
-	std::vector<AABBCollider> m_FatAABBColliders;
+	std::vector<FatAABBCollider> m_FatAABBColliders;
 	std::vector<AABBCollider> m_AABBColliders;
+	// 当たっているオブジェクトのインデックス配列
+	std::vector<AABBTreeHandle> m_AABBHandle;
+
+	// 補正値配列
+	std::vector<Vector3> m_Correction;
 
 	// 向かう位置
-	Vector3 m_TargetPos = { 0.0f, 0.0f, 0.0f };
+	Vector3 m_TargetPos = { 0.0f, -10.0f, 10.0f };
 
 public:
 	// --------------------------------
@@ -73,13 +81,17 @@ public:
 	void Uninit() override final;
 
 	// 当たり判定処理
-	void OnCollision() override final;
+	Vector3 ComputeMTV(uint32_t _selfInd, uint32_t _partnerInd);
+	// 押し戻し更新
+	void UpdateCorrection();
 
 	// セッター
 	void SetTargetPos(const Vector3& targetPos) { m_TargetPos = targetPos; }
 
 	// ゲッター
 	std::vector<AABBCollider>& GetAABBColliders() { return m_AABBColliders; }
-	std::vector<AABBCollider>& GetFatAABBColliders() { return m_FatAABBColliders; }
+	std::vector<FatAABBCollider>& GetFatAABBColliders() { return m_FatAABBColliders; }
+	std::vector<AABBTreeHandle>& GetAABBHandle() { return m_AABBHandle; }
+	std::vector<Vector3>& GetCorrection() { return m_Correction; }
 };
 

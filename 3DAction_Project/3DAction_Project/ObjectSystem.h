@@ -37,8 +37,5 @@ public:
 	virtual void Update(float deltaTime) = 0;
 	virtual void Draw() = 0;
 	virtual void Uninit() = 0;
-
-	// 当たり判定処理
-	virtual void OnCollision() = 0;
 };
 

@@ -18,6 +18,8 @@
 #include "Square2D.h"
 // ナイトモデル
 #include "Knight.h"
+// 移動オブジェクトシステム
+#include "MoveObjectSystem.h"
 // 当たり判定チェック
 #include "AABBTree.h"
 #include "CollisionSystemModule.h"
@@ -41,11 +43,8 @@ private:
 	std::unique_ptr<BaseCamera> m_Camera;
 	// ライト
 	std::unique_ptr<BaseLight> m_Light;
-	
-	// オブジェクト
-	Square2D m_Square;
-	Knight m_Knight[100];
-	int m_KnightCount = 100;
+
+	MoveObjectSystem m_MoveObjectSystem;
 
 	// システム
 	AABBTree m_AABBTree;
@@ -57,6 +56,8 @@ private:
 	bool DerivativeInit() override final;
 	// シーンの更新
 	void DerivatIveUpdate(float _delta) override final;
+	// コライダー更新チェック
+	void UpdateColliderCheck();
 	// 当たり判定更新
 	void UpdateCollision();
 

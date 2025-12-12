@@ -130,6 +130,60 @@ Vector3 Quaternion::RotateVector(const Vector3& v) const noexcept
 	);
 }
 
+// 指定した方向を向くクォータニオンを作成
+Quaternion LookRotation(const Vector3& forward, const Vector3& up) noexcept
+{
+	// forward の長さチェック（ゼロベクトルは不可）
+	Vector3 f = forward;
+	if (f.Length() < 0.000001f) {
+		return Quaternion(); // 単位クォータニオン
+	}
+
+	// 正規化
+	f = f.Normalize();
+	Vector3 u = up.Normalize();
+
+	// 右方向 = up × forward（右手系）
+	Vector3 r = u.Cross(f);
+	if (r.Length() < 0.000001f)
+	{
+		// up と forward がほぼ平行 → 適当な軸を設定
+		r = Vector3(1.0f, 0.0f, 0.0f);
+	}
+	else {
+		r = r.Normalize();
+	}
+
+	// 正しい up を作り直す（forward × right）
+	u = f.Cross(r);
+
+	// DirectXMath の行列を構築（X,Y,Z の順）
+	DirectX::XMMATRIX rotationMatrix(
+		DirectX::XMVectorSet(r.x, r.y, r.z, 0.0f), // X 軸（Right）
+		DirectX::XMVectorSet(u.x, u.y, u.z, 0.0f), // Y 軸（Up）
+		DirectX::XMVectorSet(f.x, f.y, f.z, 0.0f), // Z 軸（Forward）
+		DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f)
+	);
+
+	// 行列からクォータニオンへ変換
+	DirectX::XMVECTOR q = DirectX::XMQuaternionRotationMatrix(rotationMatrix);
+
+	// あなたの自作 Quaternion に変換
+	return CreateQuaternionFromXMVECTOR(q);
+}
+
+// Slerp補間
+Quaternion Quaternion::Slerp(const Quaternion& target, float t) const noexcept
+{
+	// XMVECTORに変換
+	DirectX::XMVECTOR q1 = DirectX::XMVectorSet(x, y, z, w);
+	DirectX::XMVECTOR q2 = DirectX::XMVectorSet(target.x, target.y, target.z, target.w);
+	// Slerp補間
+	DirectX::XMVECTOR result = DirectX::XMQuaternionSlerp(q1, q2, t);
+	// Quaternion作成
+	return CreateQuaternionFromXMVECTOR(result);
+}
+
 // GPUに送るデータに変換
 Quaternion Quaternion::toGPU() const noexcept
 {

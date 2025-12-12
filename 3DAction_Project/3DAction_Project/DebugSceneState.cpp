@@ -61,46 +61,25 @@ bool DebugSceneState::DerivativeInit()
 		return false;
 	}
 
-	// オブジェクト初期化
-	m_Square.Init(m_Modules->drawManager);
-	for (int i = 0; i < m_KnightCount; i++)
-	{
-		m_Knight[i].Init(m_Modules->drawManager);
-		m_Knight[i].SetPosition(Vector3(static_cast<float>(i * 10.0f), 0.0f, 0.0f));
-		m_Knight[i].Update();
-	}
+	// 初期化
+	m_MoveObjectSystem.Init(m_Modules->drawManager);
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// １フレームの時間
 	float time = Timer::GetDeltaTime();
 #endif
 
-	// AABB登録
-	std::vector<AABBTreeHandle> nodeIDs;
-	nodeIDs.reserve(m_KnightCount + 1);
-	m_AABBTree.Reserve(m_KnightCount + 1);
+	std::vector<FatAABBCollider>& col = m_MoveObjectSystem.GetFatAABBColliders();
+	std::vector<AABBTreeHandle>& handles = m_MoveObjectSystem.GetAABBHandle();
 
-	for (int i = 0; i < m_KnightCount; i++)
+	for (uint32_t i = 0; i < col.size(); i++)
 	{
-		// オブジェクト情報取得
-		ObjectInfo info = m_Knight[i].GetObjectInfo();
-		info.objectID = i;
-		m_Knight[i].SetObjectInfo(info);
-
-		// ノード追加
-		AABBTreeHandle knightID = m_AABBTree.AddNode(m_Knight[i].GetAABBCollider(), m_Knight[i].GetObjectInfo());
-		nodeIDs.push_back(knightID);
+		AABBTreeHandle handle = m_AABBTree.AddNode(col[i].aabb, ObjectInfo(i, ObjectTag::NOTAG));
+		handles.push_back(handle);
 	}
 
 	// ツリー再ビルド
 	m_AABBTree.RebuildTree();
-
-	// 0を消してみる
-	for (int i = 0; i < nodeIDs.size(); i++)
-	{
-		m_AABBTree.Remove(nodeIDs[i]);
-		m_AABBTree.AddNode(m_Knight[i].GetAABBCollider(), m_Knight[i].GetObjectInfo());
-	}
 
 	// 深度情報取得
 	TreeBalance  balance = m_AABBTree.CalculateBalance();
@@ -131,11 +110,10 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 	m_Light->Update();
 
 	// オブジェクト更新
-	m_Square.Update();
-	for (int i = 0; i < m_KnightCount; i++)
-	{
-		m_Knight[i].Update();
-	}
+	m_MoveObjectSystem.Update(_deltaTime);
+
+	// 
+	UpdateColliderCheck();
 
 	// 当たったかチェック
 	UpdateCollision();
@@ -166,14 +144,7 @@ void DebugSceneState::Draw()
 
 	// オブジェクト描画
 	m_Modules->drawManager->SetDepthStencilSetting(DepthStencilSetting::DepthEnableON_DepthWriteON);
-	for (int i = 0; i < m_KnightCount; i++)
-	{
-		m_Knight[i].Draw();
-	}
-
-	// 透明物書き込み
-	m_Modules->drawManager->SetDepthStencilSetting(DepthStencilSetting::DepthEnableON_DepthWriteOFF);
-	m_Square.Draw();
+	m_MoveObjectSystem.Draw();
 
 	// デバッグ描画
 	DebugDraw();
@@ -191,11 +162,7 @@ void DebugSceneState::Uninit()
 	m_Light->Uninit();
 
 	// オブジェクト後処理
-	m_Square.Uninit();
-	for (int i = 0; i < m_KnightCount; i++)
-	{
-		m_Knight[i].Uninit();
-	}
+	m_MoveObjectSystem.Uninit();
 }
 
 
@@ -210,19 +177,42 @@ void DebugSceneState::UpdateCollision()
 #endif
 
 	// 衝突候補取得
-	std::vector<ObjectInfo> results;
-	results.reserve(m_KnightCount + 1);
+	std::vector<FatAABBCollider>& fatcol = m_MoveObjectSystem.GetFatAABBColliders();
+	std::vector<AABBCollider>& col = m_MoveObjectSystem.GetAABBColliders();
+	std::vector<Vector3>& correction = m_MoveObjectSystem.GetCorrection();
 
-	for (int i = 0; i < m_KnightCount; i++)
+	// 当たり判定
+	for (uint32_t i = 0; i < fatcol.size(); i++)
 	{
-		m_AABBTree.Query(m_Knight[i].GetAABBCollider(), results);
-		if (results.size() > 1)
+		// 接触候補配列
+		std::vector<ObjectInfo> results;
+		// ツリー検索
+		m_AABBTree.Query(fatcol[i].aabb, results);
+
+		// 接触候補と当たり判定
+		for (const auto& result : results)
 		{
-			m_Knight[i].SetIsHit(true);
+			// 自分自身は除外
+			if (result.objectID == i) { continue; }
+
+			// 厳密な当たり判定
+			if (m_CollisionSystem.CheckCollision(
+				ColliderShapeType::AABB,
+				&col[i],
+				ColliderShapeType::AABB,
+				&col[result.objectID]))
+			{
+
+				Vector3 mtv = m_MoveObjectSystem.ComputeMTV(i, result.objectID);
+
+				correction[i] += mtv * 0.5f;
+				correction[result.objectID] += -mtv * 0.5f;
+			}
 		}
-		results.clear();
-		results.reserve(m_KnightCount + 1);
 	}
+
+	// 押し戻し更新
+	m_MoveObjectSystem.UpdateCorrection();
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 時間出力
@@ -231,6 +221,26 @@ void DebugSceneState::UpdateCollision()
 	ImGui::Text((std::to_string(outputTime) + "秒 : 当たり判定更新時間").c_str());
 	ImGui::End();
 #endif
+}
+
+
+// =============================
+// コライダー更新チェック
+// =============================
+void DebugSceneState::UpdateColliderCheck()
+{
+	std::vector<FatAABBCollider>& fatcol = m_MoveObjectSystem.GetFatAABBColliders();
+	std::vector<AABBTreeHandle>& handles = m_MoveObjectSystem.GetAABBHandle();
+
+	for (uint32_t i = 0; i < fatcol.size(); i++)
+	{
+		if (fatcol[i].isUpdated)
+		{
+			m_AABBTree.Remove(handles[i]);
+			handles[i] = m_AABBTree.AddNode(fatcol[i].aabb, ObjectInfo(i, ObjectTag::NOTAG));
+			fatcol[i].isUpdated = false;
+		}
+	}
 }
 
 
@@ -250,24 +260,24 @@ void DebugSceneState::DebugInit()
 // =============================
 void DebugSceneState::DebugUpdate()
 {
-	Vector3 pos = m_Knight[0].GetSRT().position;
-	Quaternion rot = m_Knight[0].GetSRT().rotation;
+	//Vector3 pos = m_Knight[0].GetSRT().position;
+	//Quaternion rot = m_Knight[0].GetSRT().rotation;
 
-	float position[3] = {};
-	float rotation[3] = {};
+	//float position[3] = {};
+	//float rotation[3] = {};
 
-	ImGui::Begin("Knight1");
+	//ImGui::Begin("Knight1");
 
-	ImGui::DragFloat3("Position", position, 1.0f, 10.0f);
-	ImGui::DragFloat3("Rotation", rotation, 1.0f, 360.0f);
+	//ImGui::DragFloat3("Position", position, 1.0f, 10.0f);
+	//ImGui::DragFloat3("Rotation", rotation, 1.0f, 360.0f);
 
-	ImGui::End();
+	//ImGui::End();
 
-	// 反映
-	m_Knight[0].SetPosition({pos.x + position[0], pos.y + position[1], pos.z + position[2]});
-	// オイラー角をクォータニオンに変換
-	Quaternion newRot = Quaternion::CreateQuaternionFromEuler(rotation[0], rotation[1], rotation[2]);
-	m_Knight[0].SetRotation(rot * newRot);
+	//// 反映
+	//m_Knight[0].SetPosition({pos.x + position[0], pos.y + position[1], pos.z + position[2]});
+	//// オイラー角をクォータニオンに変換
+	//Quaternion newRot = Quaternion::CreateQuaternionFromEuler(rotation[0], rotation[1], rotation[2]);
+	//m_Knight[0].SetRotation(rot * newRot);
 }
 
 
@@ -276,18 +286,6 @@ void DebugSceneState::DebugUpdate()
 // ----------------------------
 void DebugSceneState::DebugDraw()
 {
-	for (int i = 0 ; i < m_KnightCount; i++)
-	{
-		// AABB描画
-		if (m_Knight[i].GetIsHit())
-		{
-			BOX::DrawAABB(m_Modules->drawManager, m_Knight[i].GetAABBCollider(), Color(1.0f, 0.0f, 0.0f, 0.3f));
-		}
-		else
-		{
-			BOX::DrawAABB(m_Modules->drawManager, m_Knight[i].GetAABBCollider(), Color(1.0f, 1.0f, 1.0f, 0.3f));
-		}
-	}
 }
 
 #else
