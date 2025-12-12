@@ -152,6 +152,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="AABBTree.cpp" />
     <ClCompile Include="AssetLogger.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="BOX.cpp" />
     <ClCompile Include="CollisionSystemModule.cpp" />
     <ClCompile Include="ConstantBufferData.cpp" />
@@ -231,6 +232,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="AABBNode.h" />
     <ClInclude Include="AABBTree.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="ColliderConfig.h" />
     <ClInclude Include="AlphaDizaSetting.h" />
     <ClInclude Include="AssetLogger.h" />

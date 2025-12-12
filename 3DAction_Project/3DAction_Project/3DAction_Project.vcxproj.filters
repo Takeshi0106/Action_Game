@@ -295,6 +295,9 @@
     <Filter Include="4_Game\8_Core\Collider\AABBTree\Node">
       <UniqueIdentifier>{4c105de7-b4ef-499d-8196-19c74398b6df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\7_Draw\Board">
+      <UniqueIdentifier>{7f8bf257-8280-4f40-82f3-fc8eaa804e34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -503,6 +506,9 @@
     </ClCompile>
     <ClCompile Include="AABBTree.cpp">
       <Filter>4_Game\8_Core\Collider\AABBTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>4_Game\7_Draw\Board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -799,6 +805,9 @@
     </ClInclude>
     <ClInclude Include="DebugSceneState.h">
       <Filter>4_Game\2_SceneState\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>4_Game\7_Draw\Board</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
