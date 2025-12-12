@@ -49,6 +49,8 @@ private:
 	std::vector<T> m_Datas;
 	// 世代を入れる配列
 	std::vector<uint32_t> m_Generations;
+	// オブジェクトがいくつハンドルを参照しているかを保存する配列
+	std::vector<uint32_t> m_RefHandleCounts;
 	// 何も入っていない空の添え字を保存する配列
 	std::vector<uint32_t> m_FreeIndexs;
 
@@ -69,6 +71,7 @@ public:
 		// 各配列をリザーブ
 		m_Datas.reserve(size);
 		m_Generations.reserve(size);
+		m_RefHandleCounts.reserve(size);
 		m_FreeIndexs.reserve(size);
 
 		m_NameToHandleMap.reserve(size);
@@ -83,7 +86,11 @@ public:
 	{
 		// 名前が既に存在する場合はハンドルを返す
 		auto it = m_NameToHandleMap.find(name);
-		if (it != m_NameToHandleMap.end()) {
+
+		if (it != m_NameToHandleMap.end()) 
+		{
+			// 参照カウントを増やす
+			m_RefHandleCounts[it->second.index]++;
 			return it->second;
 		}
 
@@ -103,6 +110,8 @@ public:
 			m_Datas[handle.index] = data;
 			// 名前を保存
 			m_IndexToNames[handle.index] = name;
+			// 参照を更新
+			m_RefHandleCounts[handle.index] = 1;
 		}
 		else
 		{
@@ -113,6 +122,8 @@ public:
 			m_Datas.push_back(data);
 			// 名前を更新
 			m_IndexToNames.push_back(name);
+			// 参照を初期化
+			m_RefHandleCounts.push_back(1);
 
 			// 世代を初期化
 			m_Generations.push_back(0);
@@ -165,16 +176,23 @@ public:
 		// 名前が空かチェック
 		if (name.empty()) { return; }
 
-		// 世代を更新
-		m_Generations[handle.index]++;
+		// 参照カウントをデクリメント
+		m_RefHandleCounts[handle.index]--;
 
-		// 空き添え字に追加
-		m_FreeIndexs.push_back(handle.index);
-		
-		// 配列から削除
-		m_NameToHandleMap.erase(name);
-		// ハンドルから名前を削除
-		m_IndexToNames[handle.index].clear();
+		// 参照カウントが0未満なら削除
+		if (m_RefHandleCounts[handle.index] == 0)
+		{
+			// 世代を更新
+			m_Generations[handle.index]++;
+
+			// 空き添え字に追加
+			m_FreeIndexs.push_back(handle.index);
+
+			// 配列から削除
+			m_NameToHandleMap.erase(name);
+			// ハンドルから名前を削除
+			m_IndexToNames[handle.index].clear();
+		}
 	}
 
 
@@ -185,6 +203,7 @@ public:
 	{
 		m_Datas.clear();
 		m_Generations.clear();
+		m_RefHandleCounts.clear();
 		m_FreeIndexs.clear();
 
 		m_NameToHandleMap.clear();
