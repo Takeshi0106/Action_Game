@@ -76,23 +76,41 @@ bool DebugSceneState::DerivativeInit()
 #endif
 
 	// AABB登録
-	std::vector<uint32_t> nodeIDs;
+	std::vector<AABBTreeHandle> nodeIDs;
 	nodeIDs.reserve(m_KnightCount + 1);
 	m_AABBTree.Reserve(m_KnightCount + 1);
 
 	for (int i = 0; i < m_KnightCount; i++)
 	{
-		uint32_t knightID = m_AABBTree.AddNode(m_Knight[i].GetAABBCollider(), m_Knight[i].GetObjectInfo());
+		// オブジェクト情報取得
+		ObjectInfo info = m_Knight[i].GetObjectInfo();
+		info.objectID = i;
+		m_Knight[i].SetObjectInfo(info);
+
+		// ノード追加
+		AABBTreeHandle knightID = m_AABBTree.AddNode(m_Knight[i].GetAABBCollider(), m_Knight[i].GetObjectInfo());
 		nodeIDs.push_back(knightID);
 	}
 
 	// ツリー再ビルド
 	m_AABBTree.RebuildTree();
 
+	// 0を消してみる
+	for (int i = 0; i < nodeIDs.size(); i++)
+	{
+		m_AABBTree.Remove(nodeIDs[i]);
+		m_AABBTree.AddNode(m_Knight[i].GetAABBCollider(), m_Knight[i].GetObjectInfo());
+	}
+
+	// 深度情報取得
+	TreeBalance  balance = m_AABBTree.CalculateBalance();
+
 #if defined(DEBUG) || defined(_DEBUG)
 	// 時間出力
 	float outputTime = Timer::GetDeltaTime() - time;
 	DebugLog::OutputToConsole((std::to_string(outputTime) + "秒 : AABB登録時間").c_str());
+	DebugLog::OutputToConsole((std::to_string(balance.averageDepth) + " : 平均深度").c_str());
+	DebugLog::OutputToConsole((std::to_string(balance.maxDepth) + " : 最大深度").c_str());
 #endif
 
 	// デバッグ初期化
@@ -125,6 +143,10 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 	// シーン遷移イベント更新
 	if (m_Modules->input->GetKeyTrigger(KeyCode_Enter)) {
 		m_SceneEvent = SceneEventID::TITLESCENE;
+	}
+
+	if (m_Modules->input->GetKeyTrigger(KeyCode_Down)) {
+		m_SceneEvent = SceneEventID::STOP_GAME;
 	}
 
 	// デバッグ更新
