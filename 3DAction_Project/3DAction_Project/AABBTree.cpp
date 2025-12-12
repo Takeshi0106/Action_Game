@@ -6,6 +6,8 @@
 #include "AABBTree.h"
 // スタック
 #include <stack>
+// アルゴリズム
+#include <algorithm>
 
 
 // ===================================
@@ -115,9 +117,8 @@ void AABBTree::Remove(uint32_t index)
 		m_RootNodeIndex = sibling;
 		m_Nodes[sibling].parentIndex = -1;
 	}
-
-	// 注: nodes配列はそのまま、フリーリスト管理すると高速化可能
 }
+
 
 // ==================================
 // AABB検索（候補取得）
@@ -155,23 +156,50 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 	}
 }
 
-// ===================================
-// ノードの祖先ノードを更新する関数
-// ===================================
-void AABBTree::UpdateAncestors(uint32_t index)
-{
-	int current = index;
 
-	while (current != UINT32_MAX)
+// ===================================
+// ツリーを再構築する関数
+// ===================================
+void AABBTree::RebuildTree()
+{
+	// ノードを一時保存
+	std::vector<LeafData> temporary;
+	// AABBの数取得
+	size_t aabbCount = m_Nodes.size();
+	// 一応、すべてのAABB数分確保
+	temporary.reserve(aabbCount);
+
+	for (const auto& n : m_Nodes)
 	{
-		AABBNode& node = m_Nodes[current];
-		if (!node.isLeaf())
+		// 葉だけ取得する
+		if (n.isLeaf())
 		{
-			// AABBを再計算
-			node.aabb = CreateMargeAABB(m_Nodes[node.leftIndex].aabb, m_Nodes[node.rightIndex].aabb);
+			LeafData data;
+			data.aabb = n.aabb;
+			data.info = n.objectInfo;
+			data.center = (n.aabb.min + n.aabb.max) * 0.5f;
+
+			// 配列に保存
+			temporary.push_back(data);
 		}
-		current = node.parentIndex;
 	}
+
+	// 葉の数を取得
+	size_t leafCount = temporary.size();
+
+	// 初期化する
+	m_Nodes.clear();
+	m_Nodes.reserve(aabbCount);
+	m_RootNodeIndex = UINT32_MAX;
+
+	// 葉がなければ戻る
+	if (leafCount == 0) {
+		return;
+	}
+
+	// 最構築
+	uint32_t root = BuildSubTree(temporary, 0, static_cast<uint32_t>(leafCount));
+	m_RootNodeIndex = root;
 }
 
 
@@ -195,6 +223,118 @@ uint32_t AABBTree::ChooseBestSibling(uint32_t current, const AABBCollider& aabb)
 		current = (leftCost < rightCost) ? m_Nodes[current].leftIndex : m_Nodes[current].rightIndex;
 	}
 	return current;
+}
+
+
+// ===================================
+// ノードの祖先ノードを更新する関数
+// ===================================
+void AABBTree::UpdateAncestors(uint32_t index)
+{
+	int current = index;
+
+	while (current != UINT32_MAX)
+	{
+		AABBNode& node = m_Nodes[current];
+		if (!node.isLeaf())
+		{
+			// AABBを再計算
+			node.aabb = CreateMargeAABB(m_Nodes[node.leftIndex].aabb, m_Nodes[node.rightIndex].aabb);
+		}
+		current = node.parentIndex;
+	}
+}
+
+
+// ====================================
+// 再構築用サブツリー構築関数
+// ====================================
+uint32_t AABBTree::BuildSubTree(std::vector<LeafData>& leaves, uint32_t start, uint32_t end)
+{
+	// 葉の数を計算
+	uint32_t count = end - start;
+
+	// 葉ノードが１つの場合
+	if (count == 1) 
+	{
+		// 葉ノードを作成
+		AABBNode leaf(leaves[start].aabb);
+		leaf.objectInfo = leaves[start].info;
+
+		// 親ノード・子ノードは未設定
+		leaf.parentIndex = UINT32_MAX;
+		leaf.leftIndex = UINT32_MAX;
+		leaf.rightIndex = UINT32_MAX;
+
+		// 配列に保存
+		m_Nodes.push_back(leaf);
+		// 添え字を返す
+		return static_cast<uint32_t>(m_Nodes.size() - 1);
+	}
+
+	// 分割軸を計算
+	Vector3 minC = leaves[start].center;
+	Vector3 maxC = leaves[start].center;
+
+	// 最小・最大位置を計算
+	for (uint32_t i = start + 1; i < end; ++i)
+	{
+		minC.x = std::min(minC.x, leaves[i].center.x);
+		minC.y = std::min(minC.y, leaves[i].center.y);
+		minC.z = std::min(minC.z, leaves[i].center.z);
+
+		maxC.x = std::max(maxC.x, leaves[i].center.x);
+		maxC.y = std::max(maxC.y, leaves[i].center.y);
+		maxC.z = std::max(maxC.z, leaves[i].center.z);
+	}
+
+	// 幅を検索
+	Vector3 extent = maxC - minC;
+	int axis = 0;
+
+	// 最も広い軸を選択
+	if (extent.y > extent.x && extent.y >= extent.z) { 
+		axis = 1; 
+	}
+	else if (extent.z > extent.x && extent.z > extent.y) { 
+		axis = 2; 
+	}
+
+	// 中央で分割
+	uint32_t mid = start + count / 2;
+
+	// 軸に基づいてソートするラムダ式
+	auto cmp = [axis](const LeafData& a, const LeafData& b) 
+		{
+		if (axis == 0) return a.center.x < b.center.x;
+		if (axis == 1) return a.center.y < b.center.y;
+		return a.center.z < b.center.z;};
+
+	// ソート
+	std::nth_element(leaves.begin() + start, leaves.begin() + mid, leaves.begin() + end, cmp);
+
+	// 左右を再帰構築
+	uint32_t leftIdx = BuildSubTree(leaves, start, mid);
+	uint32_t rightIdx = BuildSubTree(leaves, mid, end);
+
+	// 親ノードを作成
+	AABBCollider merged;
+	merged = CreateMargeAABB(m_Nodes[leftIdx].aabb, m_Nodes[rightIdx].aabb);
+
+	AABBNode parent(merged);
+	parent.leftIndex = leftIdx;
+	parent.rightIndex = rightIdx;
+	parent.parentIndex = UINT32_MAX;
+
+	// 配列に追加
+	m_Nodes.push_back(parent);
+	uint32_t parentIdx = static_cast<uint32_t>(m_Nodes.size() - 1);
+
+	// 子に parent をセット
+	m_Nodes[leftIdx].parentIndex = parentIdx;
+	m_Nodes[rightIdx].parentIndex = parentIdx;
+
+	return parentIdx;
 }
 
 
