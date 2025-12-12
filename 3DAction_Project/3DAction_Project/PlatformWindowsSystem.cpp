@@ -266,7 +266,7 @@ bool PlatformWindowsSystem::GameMain()
 
     // ゲーム更新処理
     if (!m_Game->Update()) {
-		ErrorLog::OutputToConsole("ゲームの更新に失敗しました");
+        DebugLog::OutputToConsole("ゲームを終了します");
         return false;
     }
 

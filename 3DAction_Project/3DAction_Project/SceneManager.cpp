@@ -42,8 +42,15 @@ bool SceneManager::Update(float time)
 	// シーンイベント取得
 	SceneEventID event = m_CurrentSceneState->GetSceneEvent();
 
+	// シーン切り替え
 	if (event != SceneEventID::NONE)
 	{
+		// ゲーム終了イベントならfalseを返す
+		if (event == SceneEventID::STOP_GAME)
+		{
+			return false;
+		}
+
 		return ChangeScene(event);
 	}
 

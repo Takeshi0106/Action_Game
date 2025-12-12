@@ -6,6 +6,7 @@
 // ===============================
 enum SceneEventID
 {
+	STOP_GAME = -2, // ゲーム終了
 	NONE = -1, // イベントなし
 
 	DEBUGSCENE = 0, // デバッグシーン
