@@ -19,8 +19,6 @@
 #include <string>
 // 固定長整数ヘッダー
 #include <cstdint>
-// ログ出力用ヘッダー
-#include "ReportMessage.h"
 
 
 // ===================================
