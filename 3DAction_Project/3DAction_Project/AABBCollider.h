@@ -66,11 +66,14 @@ inline AABBCollider CreateAABB(
 // ====================================
 // ファットAABB作成関数
 // ====================================
-inline AABBCollider CreateFatAABB(const AABBCollider& aabb, const Vector3& velocity, float padding = 0.1f)
+inline AABBCollider CreateFatAABB(const AABBCollider& aabb, 
+	const Vector3& velocity,
+	const float lookAheadTime = 1.0f,
+	const float padding = 0.1f)
 {
 	AABBCollider fat = aabb;
 
-	Vector3 expand = velocity * 1.0f; // 次フレームで動きそうな距離
+	Vector3 expand = velocity * lookAheadTime;
 	fat.min -= expand;
 	fat.max += expand;
 
