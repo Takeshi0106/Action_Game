@@ -38,7 +38,6 @@ void Player::DerivationInit()
 	m_Draw->LoadModel(m_ModelName.c_str(), "Character");
 
 	// 位置を更新
-	m_SRT.position = { 0.0f, 0.0f, 5.0f };
 	m_SRT.scale = { 1.0f, 1.0f, 1.0f };
 
 	// SRT行列
@@ -55,6 +54,9 @@ void Player::DerivationInit()
 
 	// オブジェクト情報設定
 	m_ObjectInfo = Player_AABB::COLLIDER_CONFIG.objectInfo;
+
+	// AABBコライダーを毎フレーム更新
+	m_AABBCol = CreateAABB(m_SRT, Player_AABB::CENTER_OFFSET, Player_AABB::HITBOX_SCALE);
 }
 
 

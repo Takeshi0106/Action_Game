@@ -54,6 +54,9 @@ void Knight::DerivationInit()
 
 	// オブジェクト情報設定
 	m_ObjectInfo = Debug_AABB::COLLIDER_CONFIG.objectInfo;
+
+	// AABBコライダーを毎フレーム更新
+	m_AABBCol = CreateAABB(m_SRT, Debug_AABB::CENTER_OFFSET, Debug_AABB::HITBOX_SCALE);
 }
 
 
