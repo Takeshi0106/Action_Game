@@ -18,6 +18,10 @@
 #include "imgui/imgui.h"
 // BOX描画
 #include "BOX.h"
+// 時間
+#include "Timer.h"
+// 文字列
+#include <string>
 #endif
 
 
@@ -26,6 +30,9 @@
 // ==============================
 bool DebugSceneState::DerivativeInit()
 {
+	Timer::Init();
+	Timer::Start();
+
 	// DCCカメラ初期化
 	std::unique_ptr<DCCCamera3D> camera = std::make_unique<DCCCamera3D>();
 	// カメラ初期化
@@ -61,10 +68,34 @@ bool DebugSceneState::DerivativeInit()
 	for (int i = 0; i < m_KnightCount; i++)
 	{
 		m_Knight[i].Init(m_Modules->drawManager);
-		m_Knight[i].SetPosition(Vector3(static_cast<float>(i * 2), 0.0f, 0.0f));
+		m_Knight[i].SetPosition(Vector3(static_cast<float>(i * 10.0f), 0.0f, 0.0f));
+		m_Knight[i].Update();
 	}
-	m_Knight2.Init(m_Modules->drawManager);
-	m_Knight2.SetPosition(Vector3(5.0f, 0.0f, 0.0f));
+
+#if defined(DEBUG) || defined(_DEBUG)
+	// １フレームの時間
+	float time = Timer::GetDeltaTime();
+#endif
+
+	// AABB登録
+	std::vector<uint32_t> nodeIDs;
+	nodeIDs.reserve(m_KnightCount + 1);
+	m_AABBTree.Reserve(m_KnightCount + 1);
+
+	for (int i = 0; i < m_KnightCount; i++)
+	{
+		uint32_t knightID = m_AABBTree.AddNode(m_Knight[i].GetAABBCollider(), m_Knight[i].GetObjectInfo());
+		nodeIDs.push_back(knightID);
+	}
+
+	// ツリー再ビルド
+	m_AABBTree.RebuildTree();
+
+#if defined(DEBUG) || defined(_DEBUG)
+	// 時間出力
+	float outputTime = Timer::GetDeltaTime() - time;
+	DebugLog::OutputToConsole((std::to_string(outputTime) + "秒 : AABB登録時間").c_str());
+#endif
 
 	// デバッグ初期化
 	DebugInit();
@@ -89,7 +120,6 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 	{
 		m_Knight[i].Update();
 	}
-	m_Knight2.Update();
 
 	// 当たったかチェック
 	UpdateCollision();
@@ -120,7 +150,6 @@ void DebugSceneState::Draw()
 	{
 		m_Knight[i].Draw();
 	}
-	m_Knight2.Draw();
 
 	// 透明物書き込み
 	m_Modules->drawManager->SetDepthStencilSetting(DepthStencilSetting::DepthEnableON_DepthWriteOFF);
@@ -147,7 +176,6 @@ void DebugSceneState::Uninit()
 	{
 		m_Knight[i].Uninit();
 	}
-	m_Knight2.Uninit();
 }
 
 
@@ -156,38 +184,33 @@ void DebugSceneState::Uninit()
 // =============================
 void DebugSceneState::UpdateCollision()
 {
-	// AABB登録
-	uint32_t knightID = m_AABBTree.AddNode(m_Knight[0].GetAABBCollider(), m_Knight[0].GetObjectInfo());
-	uint32_t knight2ID = m_AABBTree.AddNode(m_Knight2.GetAABBCollider(), m_Knight2.GetObjectInfo());
+#if defined(DEBUG) || defined(_DEBUG)
+	// １フレームの時間
+	float time = Timer::GetDeltaTime();
+#endif
 
 	// 衝突候補取得
 	std::vector<ObjectInfo> results;
+	results.reserve(m_KnightCount + 1);
 
-	m_AABBTree.Query(m_Knight[0].GetAABBCollider(), results);
-	if (results.size() > 1)
+	for (int i = 0; i < m_KnightCount; i++)
 	{
-		m_Knight[0].SetIsHit(true);
-	}
-	else
-	{
-		m_Knight[0].SetIsHit(false);
-	}
-	
-	results.clear();
-
-	m_AABBTree.Query(m_Knight2.GetAABBCollider(), results);
-	if (results.size() > 1)
-	{
-		m_Knight2.SetIsHit(true);
-	}
-	else
+		m_AABBTree.Query(m_Knight[i].GetAABBCollider(), results);
+		if (results.size() > 1)
 		{
-		m_Knight2.SetIsHit(false);
+			m_Knight[i].SetIsHit(true);
+		}
+		results.clear();
+		results.reserve(m_KnightCount + 1);
 	}
 
-	// AABB削除
-	m_AABBTree.Remove(knightID);
-	m_AABBTree.Remove(knight2ID);
+#if defined(DEBUG) || defined(_DEBUG)
+	// 時間出力
+	float outputTime = Timer::GetDeltaTime() - time;
+	ImGui::Begin("CollisionTime");
+	ImGui::Text((std::to_string(outputTime) + "秒 : 当たり判定更新時間").c_str());
+	ImGui::End();
+#endif
 }
 
 
@@ -207,8 +230,8 @@ void DebugSceneState::DebugInit()
 // =============================
 void DebugSceneState::DebugUpdate()
 {
-	Vector3 pos = m_Knight2.GetSRT().position;
-	Quaternion rot = m_Knight2.GetSRT().rotation;
+	Vector3 pos = m_Knight[0].GetSRT().position;
+	Quaternion rot = m_Knight[0].GetSRT().rotation;
 
 	float position[3] = {};
 	float rotation[3] = {};
@@ -221,10 +244,10 @@ void DebugSceneState::DebugUpdate()
 	ImGui::End();
 
 	// 反映
-	m_Knight2.SetPosition({ pos.x + position[0], pos.y + position[1], pos.z + position[2] });
+	m_Knight[0].SetPosition({pos.x + position[0], pos.y + position[1], pos.z + position[2]});
 	// オイラー角をクォータニオンに変換
 	Quaternion newRot = Quaternion::CreateQuaternionFromEuler(rotation[0], rotation[1], rotation[2]);
-	m_Knight2.SetRotation(rot * newRot);
+	m_Knight[0].SetRotation(rot * newRot);
 }
 
 
@@ -235,24 +258,17 @@ void DebugSceneState::DebugDraw()
 {
 	// アルファブレンド設定
 
-	// AABB描画
-	if (m_Knight[0].GetIsHit())
+	for (int i = 0 ; i < m_KnightCount; i++)
 	{
-		BOX::DrawAABB(m_Modules->drawManager, m_Knight[0].GetAABBCollider(), Color(1.0f, 0.0f, 0.0f, 0.3f));
-	}
-	else
-	{
-		BOX::DrawAABB(m_Modules->drawManager, m_Knight[0].GetAABBCollider(), Color(1.0f, 1.0f, 1.0f, 0.3f));
-	}
-
-	// AABB描画
-	if (m_Knight2.GetIsHit())
-	{
-		BOX::DrawAABB(m_Modules->drawManager, m_Knight2.GetAABBCollider(), Color(1.0f, 0.0f, 0.0f, 0.3f));
-	}
-	else
-	{
-		BOX::DrawAABB(m_Modules->drawManager, m_Knight2.GetAABBCollider(), Color(1.0f, 1.0f, 1.0f, 0.3f));
+		// AABB描画
+		if (m_Knight[i].GetIsHit())
+		{
+			BOX::DrawAABB(m_Modules->drawManager, m_Knight[i].GetAABBCollider(), Color(1.0f, 0.0f, 0.0f, 0.3f));
+		}
+		else
+		{
+			BOX::DrawAABB(m_Modules->drawManager, m_Knight[i].GetAABBCollider(), Color(1.0f, 1.0f, 1.0f, 0.3f));
+		}
 	}
 }
 

@@ -44,9 +44,8 @@ private:
 	
 	// オブジェクト
 	Square2D m_Square;
-	Knight m_Knight[1];
-	int m_KnightCount = 1;
-	Knight m_Knight2;
+	Knight m_Knight[100];
+	int m_KnightCount = 100;
 
 	// システム
 	AABBTree m_AABBTree;
