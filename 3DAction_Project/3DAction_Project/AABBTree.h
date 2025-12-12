@@ -49,11 +49,11 @@ private:
 	// メンバー関数
 	// --------------------------------
 	// 最適な兄弟ノードを選択する関数
-	uint32_t ChooseBestSibling(uint32_t current, const AABBCollider& aabb);
-	// ノードの祖先ノードを更新する関数
-	void UpdateAncestors(uint32_t index);
+	uint32_t ChooseBestSibling(uint32_t _current, const AABBCollider& _aabb);
+	// ノードの祖先ノードをすべて更新する関数
+	void UpdateAncestors(uint32_t _index);
 	// 再構築用サブツリー構築関数
-	uint32_t BuildSubTree(std::vector<LeafData>& leaves, uint32_t start, uint32_t end);
+	uint32_t BuildSubTree(std::vector<LeafData>& _leaves, uint32_t _start, uint32_t _end);
 
 public:
 	// --------------------------------
@@ -67,17 +67,17 @@ public:
 	// ノード処理関数
 	// --------------------------------
 	// リザーブ関数
-	void Reserve(const uint32_t size)
+	void Reserve(const uint32_t _size)
 	{
-		m_Nodes.reserve(size * 2);
+		m_Nodes.reserve(_size * 2);
 	}
 
 	// ノード追加関数
-	uint32_t AddNode(const AABBCollider& aabb, const ObjectInfo& info);
+	uint32_t AddNode(const AABBCollider& _aabb, const ObjectInfo& _info);
 	// ノード削除
-	void Remove(uint32_t index);
+	void Remove(uint32_t _index);
     // AABB検索（候補取得）
-    void Query(const AABBCollider& box, std::vector<ObjectInfo>& results);
+    void Query(const AABBCollider& _box, std::vector<ObjectInfo>& _results);
 
 	// ツリーを再構築する関数
 	void RebuildTree();

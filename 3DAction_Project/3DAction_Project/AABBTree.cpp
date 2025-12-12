@@ -9,11 +9,16 @@
 // アルゴリズム
 #include <algorithm>
 
+#if defined(DEBUG) || defined(_DEBUG)
+#include <string>
+#include "ReportMessage.h"
+#endif
+
 
 // ===================================
 // 前方宣言
 // ===================================
-// ２つのAABBをマージするAABB作成
+// ２つのAABBを内包するAABBを作成
 inline AABBCollider CreateMargeAABB(const AABBCollider& a, const AABBCollider& b);
 // AABBの表面積計算
 inline float SurfaceArea(AABBCollider& col);
@@ -40,33 +45,43 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 		return currentIndex;
 	}
 
-	// 挿入場所を検索
+	// 登録したAABBと近い場所の葉を探す
 	uint32_t sibling = ChooseBestSibling(m_RootNodeIndex, aabb);
 
+	// -------------------------------
 	// 新しい親ノードを作る
+	// -------------------------------
+	// 近いAABBの親を保存
 	uint32_t oldParent = m_Nodes[sibling].parentIndex;
+	// 登録したAABBと近いAABBを内包するAABBを作成
 	AABBCollider mergedAABB = CreateMargeAABB(m_Nodes[sibling].aabb, aabb);
-
+	// AABBノード作成
 	AABBNode parentNode(mergedAABB);
+	// 左右と親を設定
 	parentNode.leftIndex = sibling;
 	parentNode.rightIndex = currentIndex;
+	// 前の親を親に設定
 	parentNode.parentIndex = oldParent;
 
 	// 配列に追加
 	m_Nodes.push_back(parentNode);
+	// 新しく追加した親ノードのインデックスを取得
 	uint32_t newParentIndex = static_cast<uint32_t>(m_Nodes.size() - 1);
 
-	// 親を更新
+	// 親を新しいノードに更新
 	m_Nodes[sibling].parentIndex = newParentIndex;
 	m_Nodes[currentIndex].parentIndex = newParentIndex;
 
-	// 兄弟ノードの親を更新
+	// 前の親ノードの左右を更新
 	if (oldParent != UINT32_MAX)
 	{
-		if (m_Nodes[oldParent].leftIndex == sibling) {
+		// 前のノードが左か右かで判定
+		if (m_Nodes[oldParent].leftIndex == sibling) 
+		{
 			m_Nodes[oldParent].leftIndex = newParentIndex;
 		}
-		else {
+		else 
+		{
 			m_Nodes[oldParent].rightIndex = newParentIndex;
 		}
 	}
@@ -76,7 +91,7 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 		m_RootNodeIndex = newParentIndex;
 	}
 
-	// 祖先ノードを更新
+	// 祖先ノードをすべて更新
 	UpdateAncestors(newParentIndex);
 
 	// 追加したノードのインデックスを返す
@@ -129,11 +144,14 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 
 	std::stack<uint32_t> stack;
 	stack.push(m_RootNodeIndex);
+	uint32_t count = 0;
+	uint32_t downCount = 0;
 
 	while (!stack.empty())
 	{
 		uint32_t index = stack.top();
 		stack.pop();
+		count++;
 
 		const AABBNode& node = m_Nodes[index];
 
@@ -152,8 +170,12 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 		{
 			stack.push(node.leftIndex);
 			stack.push(node.rightIndex);
+
+			downCount++;
 		}
 	}
+
+	DebugLog::OutputToConsole(("カウント: " + std::to_string(count) + " 深さ: " + std::to_string(downCount)).c_str());
 }
 
 
@@ -208,10 +230,10 @@ void AABBTree::RebuildTree()
 // ===================================
 uint32_t AABBTree::ChooseBestSibling(uint32_t current, const AABBCollider& aabb)
 {
-	// 葉ノードを探す
+	// 葉が見つかるまで探索
 	while (!m_Nodes[current].isLeaf())
 	{
-		// AABBをマージ
+		// 左右のノードを内包したAABBを作成
 		AABBCollider leftcol = CreateMargeAABB(m_Nodes[m_Nodes[current].leftIndex].aabb, aabb);
 		AABBCollider rightcol = CreateMargeAABB(m_Nodes[m_Nodes[current].rightIndex].aabb, aabb);
 
@@ -222,26 +244,31 @@ uint32_t AABBTree::ChooseBestSibling(uint32_t current, const AABBCollider& aabb)
 		// コストが小さいほうの枝に移動する
 		current = (leftCost < rightCost) ? m_Nodes[current].leftIndex : m_Nodes[current].rightIndex;
 	}
+
 	return current;
 }
 
 
 // ===================================
-// ノードの祖先ノードを更新する関数
+// ノードの祖先ノードをすべて更新する関数
 // ===================================
 void AABBTree::UpdateAncestors(uint32_t index)
 {
-	int current = index;
-
-	while (current != UINT32_MAX)
+	// 親ルードをたどりながら更新
+	while (index != UINT32_MAX)
 	{
-		AABBNode& node = m_Nodes[current];
+		// 現在のノードを取得
+		AABBNode& node = m_Nodes[index];
+
+		// 子ノードがある場合
 		if (!node.isLeaf())
 		{
 			// AABBを再計算
 			node.aabb = CreateMargeAABB(m_Nodes[node.leftIndex].aabb, m_Nodes[node.rightIndex].aabb);
 		}
-		current = node.parentIndex;
+
+		// 親ノードへ移動
+		index = node.parentIndex;
 	}
 }
 
