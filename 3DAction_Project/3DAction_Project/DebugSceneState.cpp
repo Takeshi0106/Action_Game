@@ -89,7 +89,7 @@ bool DebugSceneState::DerivativeInit()
 	}
 
 	// ツリー再ビルド
-	m_AABBTree.RebuildTree();
+	// m_AABBTree.RebuildTree();
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 時間出力
@@ -256,8 +256,6 @@ void DebugSceneState::DebugUpdate()
 // ----------------------------
 void DebugSceneState::DebugDraw()
 {
-	// アルファブレンド設定
-
 	for (int i = 0 ; i < m_KnightCount; i++)
 	{
 		// AABB描画

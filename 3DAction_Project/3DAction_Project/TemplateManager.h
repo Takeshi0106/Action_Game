@@ -5,7 +5,8 @@
 // 【クラス概要】
 // テンプレートを使用したマネージャー
 // vectorで実際のデータを保存し、
-// unordered_mapで名前からインデックスを取得する
+// unordered_mapで名前からハンドルを返す
+// resizeで配列を確保すると効率が良くなる
 // ===================================
 
 
@@ -22,6 +23,18 @@
 
 
 // ===================================
+// 構造体定義
+// ===================================
+struct Handle 
+{
+	// 添え字
+	uint32_t index;
+	// 世代
+	uint32_t generation;
+};
+
+
+// ===================================
 // クラス
 // ===================================
 // テンプレートマネージャークラス
@@ -33,76 +46,97 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// データを保存する配列
-	std::vector<T> m_DataArray;
-	// IDとデータ保存配列の添え字を紐づける配列
-	std::unordered_map<uint32_t, uint32_t> m_IDToIndex;
-	// 添え字からIDに逆変換する配列 (削除時に更新するために使用する)
-	std::vector<uint32_t> m_IDArray;
+	std::vector<T> m_Datas;
+	// 世代を入れる配列
+	std::vector<uint32_t> m_Generations;
+	// 何も入っていない空の添え字を保存する配列
+	std::vector<uint32_t> m_FreeIndexs;
 
-	// 名前からIDを取得する配列
-	std::unordered_map<std::string, uint32_t> m_NameToIDMap;
-
-	// 次に追加するインデックス
-	uint32_t m_NextID = 0;
+	// 名前からハンドルを取得する配列 (複数制作しない用)
+	std::unordered_map<std::string, Handle> m_NameToHandleMap;
+	// インデックスから名前を取得する配列 (複数制作しない用)
+	std::vector<std::string> m_IndexToNames;
 
 public:
 	TemplateManager() = default;
 	~TemplateManager() = default;
 
 	// ==============================
-	// リサーブ
+	// 配列をリザーブする
 	// ==============================
 	void Reserve(const uint32_t& size)
 	{
-		// 各配列のリザーブ
-		m_DataArray.reserve(size);
-		m_IDArray.reserve(size);
-		m_IDToIndex.reserve(size);
-		m_NameToIDMap.reserve(size);
+		// 各配列をリザーブ
+		m_Datas.reserve(size);
+		m_Generations.reserve(size);
+		m_FreeIndexs.reserve(size);
+
+		m_NameToHandleMap.reserve(size);
+		m_IndexToNames.reserve(size);
 	}
 
 
 	// ==============================
 	// データ追加
 	// ==============================
-	uint32_t AddData(const std::string& name, const T& data)
+	Handle AddData(const std::string& name, const T& data)
 	{
-		// 名前が既に存在する場合はIDを返す
-		if (m_NameToIDMap.find(name) != m_NameToIDMap.end()) {
-			return m_NameToIDMap[name];
+		// 名前が既に存在する場合はハンドルを返す
+		auto it = m_NameToHandleMap.find(name);
+		if (it != m_NameToHandleMap.end()) {
+			return it->second;
 		}
 
-		// 新しいIDを取得
-		uint32_t currentID = m_NextID;
-		m_NextID++;
+		// ハンドル
+		Handle handle;
 
-		// データを配列に追加.
-		m_DataArray.push_back(data);
-		// 添え字を配列に追加
-		m_IDArray.push_back(currentID);
-		// IDをキーに添え字をマップに追加
-		m_IDToIndex[currentID] = static_cast<uint32_t>(m_DataArray.size() - 1);
-		// 名前とインデックスをマップに追加
-		m_NameToIDMap[name] = currentID;
+		// 空いている添え字がある場合
+		if (!m_FreeIndexs.empty())
+		{
+			// 空いている添え字を取得して、配列から削除
+			handle.index = m_FreeIndexs.back();
+			m_FreeIndexs.pop_back();
 
-		// IDを返す
-		return currentID;
+			// 世代を取得 (削除時に更新しているため、そのまま使用)
+			handle.generation = m_Generations[handle.index];
+			// データを更新
+			m_Datas[handle.index] = data;
+			// 名前を保存
+			m_IndexToNames[handle.index] = name;
+		}
+		else
+		{
+			// 添え字を作成
+			handle.index = (uint32_t)m_Datas.size();
+
+			// データを更新
+			m_Datas.push_back(data);
+			// 名前を更新
+			m_IndexToNames.push_back(name);
+
+			// 世代を初期化
+			m_Generations.push_back(0);
+			handle.generation = 0;
+		}
+
+		// 名前からハンドルを保存
+		m_NameToHandleMap[name] = handle;
+		return handle;
 	}
 
 
 	// ================================
 	// データ取得
 	// ================================
-	T* GetData(const uint32_t& ID)
+	T* GetData(const Handle& handle)
 	{
-		// 存在チェック
-		auto it = m_IDToIndex.find(ID);
+		// 添え字をチェック
+		if (handle.index >= m_Datas.size()) { return nullptr; }
 
-		if (it == m_IDToIndex.end()) {
-			return nullptr;
-		}
+		// 世代をチェック
+		if (handle.generation != m_Generations[handle.index]) { return nullptr; }
 
-		return &m_DataArray[it->second];
+		return &m_Datas[handle.index];
 	}
 	
 
@@ -111,47 +145,36 @@ public:
 	// ================================
 	bool Exists(const std::string& name) const
 	{
-		return m_NameToIDMap.find(name) != m_NameToIDMap.end();
+		return m_NameToHandleMap.find(name) != m_NameToHandleMap.end();
 	}
 
 
 	// ================================
 	// 削除
 	// ================================
-	void Remove(uint32_t entityID)
+	void Remove(Handle handle)
 	{
 		// 存在チェック
-		auto it = m_IDToIndex.find(entityID);
+		if (m_IndexToNames.size() <= handle.index) { return; }
+		// 世代チェック
+		if (handle.generation != m_Generations[handle.index]) { return; }
 
-		if (it == m_IDToIndex.end()) { return; }
+		// ハンドルから名前を取得
+		std::string& name = m_IndexToNames[handle.index];
+
+		// 名前が空かチェック
+		if (name.empty()) { return; }
+
+		// 世代を更新
+		m_Generations[handle.index]++;
+
+		// 空き添え字に追加
+		m_FreeIndexs.push_back(handle.index);
 		
-		// 添え字取得
-		uint32_t index = it->second;
-		// 最後の要素の添え字取得
-		uint32_t lastIndex = static_cast<uint32_t>(m_DataArray.size() - 1);
-
-		// 最後の要素を穴に移動
-		m_DataArray[index] = m_DataArray[lastIndex];
-		// 添え字も移動
-		uint32_t lastID = m_IDArray[lastIndex];
-
-		// ID配列とマップも更新
-		m_IDArray[index] = lastID;
-		m_IDToIndex[lastID] = index;
-
-		// 配列の最後を削除
-		m_DataArray.pop_back();
-		m_IDArray.pop_back();
-		m_IDToIndex.erase(entityID);
-
-		// 名前マップも削除
-		for (auto itName = m_NameToIDMap.begin(); itName != m_NameToIDMap.end(); ++itName)
-		{
-			if (itName->second == entityID) {
-				m_NameToIDMap.erase(itName);
-				break;
-			}
-		}
+		// 配列から削除
+		m_NameToHandleMap.erase(name);
+		// ハンドルから名前を削除
+		m_IndexToNames[handle.index].clear();
 	}
 
 
@@ -160,12 +183,12 @@ public:
 	// ================================
 	void ALLClear()
 	{
-		m_DataArray.clear();
-		m_IDArray.clear();
-		m_IDToIndex.clear();
+		m_Datas.clear();
+		m_Generations.clear();
+		m_FreeIndexs.clear();
 
-		m_NameToIDMap.clear();
-		m_NextID = 0;
+		m_NameToHandleMap.clear();
+		m_IndexToNames.clear();
 	}
 
 };
