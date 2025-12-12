@@ -27,22 +27,44 @@ inline float SurfaceArea(AABBCollider& col);
 // ===================================
 // ノード追加関数
 // ===================================
-uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
+const AABBTreeHandle AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 {
 	// ノード作成
 	AABBNode node(aabb);
 	node.objectInfo = info;
 
-	// 配列に追加
-	m_Nodes.emplace_back(node);
-	// 今のインデックス
-	uint32_t currentIndex = static_cast<uint32_t>(m_Nodes.size() - 1);
+	// 追加したハンドルを計算
+	AABBTreeHandle handle;
+
+	// フリーパス配列が空でなかったら
+	if (!m_FreeNodeIDs.empty())
+	{
+		// 後ろを取得・削除
+		handle.index = m_FreeNodeIDs.back();
+		m_FreeNodeIDs.pop_back();
+
+		// ノードを保存
+		m_Nodes[handle.index] = node;
+		// 世代はそのまま使用
+		handle.generation = m_Generations[handle.index];
+	}
+	else
+	{
+		// 新規追加
+		handle.index = static_cast<uint32_t>(m_Nodes.size());
+		// 配列に保存
+		m_Nodes.push_back(node);
+
+		// 世代を追加
+		m_Generations.push_back(0);
+		handle.generation = 0;
+	}
 
 	// ルートノードが未設定の場合は設定
 	if (m_RootNodeIndex == UINT32_MAX)
 	{
-		m_RootNodeIndex = currentIndex;
-		return currentIndex;
+		m_RootNodeIndex = handle.index;
+		return handle;
 	}
 
 	// 登録したAABBと近い場所の葉を探す
@@ -59,18 +81,37 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 	AABBNode parentNode(mergedAABB);
 	// 左右と親を設定
 	parentNode.leftIndex = sibling;
-	parentNode.rightIndex = currentIndex;
+	parentNode.rightIndex = handle.index;
 	// 前の親を親に設定
 	parentNode.parentIndex = oldParent;
 
-	// 配列に追加
-	m_Nodes.push_back(parentNode);
-	// 新しく追加した親ノードのインデックスを取得
-	uint32_t newParentIndex = static_cast<uint32_t>(m_Nodes.size() - 1);
+	// 新しい親の添え字
+	uint32_t newParentIndex;
+
+	// フリーパス配列が空でなかったら
+	if (!m_FreeNodeIDs.empty())
+	{
+		// 後ろを取得・削除
+		newParentIndex = m_FreeNodeIDs.back();
+		m_FreeNodeIDs.pop_back();
+
+		// ノードを保存
+		m_Nodes[newParentIndex] = parentNode;
+	}
+	else
+	{
+		// 新規追加
+		newParentIndex = static_cast<uint32_t>(m_Nodes.size());
+		// 配列に保存
+		m_Nodes.push_back(parentNode);
+
+		// 世代を追加
+		m_Generations.push_back(0);
+	}
 
 	// 親を新しいノードに更新
 	m_Nodes[sibling].parentIndex = newParentIndex;
-	m_Nodes[currentIndex].parentIndex = newParentIndex;
+	m_Nodes[handle.index].parentIndex = newParentIndex;
 
 	// 前の親ノードの左右を更新
 	if (oldParent != UINT32_MAX)
@@ -94,43 +135,72 @@ uint32_t AABBTree::AddNode(const AABBCollider& aabb, const ObjectInfo& info)
 	// 祖先ノードをすべて更新
 	UpdateAncestors(newParentIndex);
 
-	// 追加したノードのインデックスを返す
-	return currentIndex;
+	// 新しく追加したノードのハンドルを返す
+	return handle;
 }
 
 
 // ===================================
 // ノード削除関数
 // ===================================
-void AABBTree::Remove(uint32_t index)
+void AABBTree::Remove(const AABBTreeHandle& _handle)
 {
+	// 無効
+	if (_handle.generation != m_Generations[_handle.index]) {
+		return;
+	}
+
 	// 親ノードを取得
-	uint32_t parentIndex = m_Nodes[index].parentIndex;
+	uint32_t parentIndex = m_Nodes[_handle.index].parentIndex;
 
 	// ルートノードだったら終了
 	if (parentIndex == UINT32_MAX)
 	{
-		m_RootNodeIndex = -1;
+		m_RootNodeIndex = UINT32_MAX;
+		m_Generations[_handle.index]++;
+		m_FreeNodeIDs.push_back(_handle.index);
 		return;
 	}
 
 	// 親ノードを取得
 	uint32_t grandParent = m_Nodes[parentIndex].parentIndex;
-	int sibling = (m_Nodes[parentIndex].leftIndex == index) ? m_Nodes[parentIndex].rightIndex : m_Nodes[parentIndex].leftIndex;
+	uint32_t sibling = (m_Nodes[parentIndex].leftIndex == _handle.index) ? 
+		m_Nodes[parentIndex].rightIndex : 
+		m_Nodes[parentIndex].leftIndex;
+
+	// 葉を無効化する
+	m_Generations[_handle.index]++;
+	m_FreeNodeIDs.push_back(_handle.index);
 
 	if (grandParent != UINT32_MAX)
 	{
+		// ノードの左右で更新を設定
 		if (m_Nodes[grandParent].leftIndex == parentIndex)
+		{
 			m_Nodes[grandParent].leftIndex = sibling;
+		}
 		else
+		{
 			m_Nodes[grandParent].rightIndex = sibling;
+		}
+
+		// 親の親を親にする
 		m_Nodes[sibling].parentIndex = grandParent;
 		UpdateAncestors(grandParent);
+
+		// 親のノードを無効化しておく
+		m_Generations[parentIndex]++;
+		m_FreeNodeIDs.push_back(parentIndex);
 	}
 	else
 	{
+		// ルートに設定
 		m_RootNodeIndex = sibling;
-		m_Nodes[sibling].parentIndex = -1;
+		m_Nodes[sibling].parentIndex = UINT32_MAX;
+
+		// 親のノードを無効化しておく
+		m_Generations[parentIndex]++;
+		m_FreeNodeIDs.push_back(parentIndex);
 	}
 }
 
@@ -174,8 +244,6 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 			downCount++;
 		}
 	}
-
-	DebugLog::OutputToConsole(("カウント: " + std::to_string(count) + " 深さ: " + std::to_string(downCount)).c_str());
 }
 
 
@@ -184,44 +252,97 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 // ===================================
 void AABBTree::RebuildTree()
 {
-	// ノードを一時保存
+	// 葉を一時保存
 	std::vector<LeafData> temporary;
 	// AABBの数取得
 	size_t aabbCount = m_Nodes.size();
 	// 一応、すべてのAABB数分確保
 	temporary.reserve(aabbCount);
 
-	for (const auto& n : m_Nodes)
+	for (uint32_t i = 0; i < m_Nodes.size(); i++)
 	{
 		// 葉だけ取得する
-		if (n.isLeaf())
+		if (m_Nodes[i].isLeaf())
 		{
 			LeafData data;
-			data.aabb = n.aabb;
-			data.info = n.objectInfo;
-			data.center = (n.aabb.min + n.aabb.max) * 0.5f;
+			data.index = i;
+			data.center = (m_Nodes[i].aabb.min + m_Nodes[i].aabb.max) * 0.5f;
 
 			// 配列に保存
 			temporary.push_back(data);
 		}
+		else
+		{
+			// 親の添え字を消す
+			m_FreeNodeIDs.push_back(i);
+			m_Generations[i]++;
+		}
 	}
 
-	// 葉の数を取得
-	size_t leafCount = temporary.size();
-
-	// 初期化する
-	m_Nodes.clear();
-	m_Nodes.reserve(aabbCount);
-	m_RootNodeIndex = UINT32_MAX;
-
 	// 葉がなければ戻る
-	if (leafCount == 0) {
+	if (temporary.empty()) {
 		return;
 	}
 
 	// 最構築
-	uint32_t root = BuildSubTree(temporary, 0, static_cast<uint32_t>(leafCount));
+	uint32_t root = BuildSubTree(temporary, 0, static_cast<uint32_t>(temporary.size()));
 	m_RootNodeIndex = root;
+}
+
+
+// ===================================
+// ツリーの深度チェック
+// ===================================
+TreeBalance AABBTree::CalculateBalance() const
+{
+	// 深度保存変数
+	TreeBalance balance;
+
+	if (m_RootNodeIndex == UINT32_MAX) { return balance; }
+
+	// 添え字と、深度
+	struct StackEntry
+	{
+		uint32_t index;
+		uint32_t depth;
+	};
+
+	std::stack<StackEntry> stack;
+	stack.push({ m_RootNodeIndex, 0 });
+
+	// 葉の数・深度
+	uint32_t leafCount = 0;
+	uint32_t depthSum = 0;
+
+	while (!stack.empty())
+	{
+		// 取り出し
+		StackEntry entry = stack.top();
+		stack.pop();
+
+		const AABBNode& node = m_Nodes[entry.index];
+
+		if (node.isLeaf())
+		{
+			// 葉の数と最大深度を更新
+			leafCount++;
+			depthSum += entry.depth;
+			balance.maxDepth = std::max(balance.maxDepth, entry.depth);
+		}
+		else
+		{
+			// 次に捜査する場所を保存
+			stack.push({ node.leftIndex, entry.depth + 1 });
+			stack.push({ node.rightIndex, entry.depth + 1 });
+		}
+	}
+
+	// 平均を求める
+	if (leafCount > 0) {
+		balance.averageDepth = static_cast<float>(depthSum) / static_cast<float>(leafCount);
+	}
+
+	return balance;
 }
 
 
@@ -284,19 +405,16 @@ uint32_t AABBTree::BuildSubTree(std::vector<LeafData>& leaves, uint32_t start, u
 	// 葉ノードが１つの場合
 	if (count == 1) 
 	{
-		// 葉ノードを作成
-		AABBNode leaf(leaves[start].aabb);
-		leaf.objectInfo = leaves[start].info;
+		// 
+		uint32_t leafIndex = leaves[start].index;
 
-		// 親ノード・子ノードは未設定
-		leaf.parentIndex = UINT32_MAX;
-		leaf.leftIndex = UINT32_MAX;
-		leaf.rightIndex = UINT32_MAX;
+		// 親ノード・子ノードを未設定
+		m_Nodes[leafIndex].parentIndex = UINT32_MAX;
+		m_Nodes[leafIndex].leftIndex = UINT32_MAX;
+		m_Nodes[leafIndex].rightIndex = UINT32_MAX;
 
-		// 配列に保存
-		m_Nodes.push_back(leaf);
 		// 添え字を返す
-		return static_cast<uint32_t>(m_Nodes.size() - 1);
+		return leafIndex;
 	}
 
 	// 分割軸を計算
@@ -352,10 +470,25 @@ uint32_t AABBTree::BuildSubTree(std::vector<LeafData>& leaves, uint32_t start, u
 	parent.leftIndex = leftIdx;
 	parent.rightIndex = rightIdx;
 	parent.parentIndex = UINT32_MAX;
+	
+	uint32_t parentIdx;
 
 	// 配列に追加
-	m_Nodes.push_back(parent);
-	uint32_t parentIdx = static_cast<uint32_t>(m_Nodes.size() - 1);
+	if (!m_FreeNodeIDs.empty())
+	{
+		// FreeIDの最後を取り出して、削除
+		parentIdx = m_FreeNodeIDs.back();
+		m_FreeNodeIDs.pop_back();
+		
+		// ノードを代入
+		m_Nodes[parentIdx] = parent;
+	}
+	else
+	{
+		// 新しく配列を追加
+		parentIdx = static_cast<uint32_t>(m_Nodes.size());
+		m_Nodes.push_back(parent);
+	}
 
 	// 子に parent をセット
 	m_Nodes[leftIdx].parentIndex = parentIdx;
