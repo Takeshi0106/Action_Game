@@ -75,7 +75,8 @@ bool MoveObjectSystem::Init(BaseDrawManager* _draw)
 		m_Positions.push_back(Vector3(x, y, z));
 
 		Vector3 dir = (center - m_Positions[i]).Normalize();
-		Quaternion rot = LookRotation(dir, Vector3(0, 1, 0));
+		dir.y = 0.0f;
+		Quaternion rot = Quaternion::LookRotation(dir, Vector3(0, 1, 0));
 		rot = Quaternion();
 		m_Rotations.push_back(rot);
 
@@ -128,12 +129,12 @@ void MoveObjectSystem::Update(float deltaTime)
 			// -------------------------
 			// 回転更新（移動方向へ振り向く）
 			// -------------------------
-			//Quaternion targetRot = LookRotation(dir, Vector3(0, 1, 0));
+			Quaternion targetRot = Quaternion::LookRotation(dir, Vector3(0, 1, 0));
 
-			//// Slerpで滑らかに回す
-			//m_Rotations[i] = m_Rotations[i].Slerp(
-			//	targetRot,
-			//	kRotateSpeed * deltaTime);
+			// Slerpで滑らかに回す
+			m_Rotations[i] = m_Rotations[i].Slerp(
+				targetRot,
+				kRotateSpeed * deltaTime);
 		}
 
 		// SRT情報更新

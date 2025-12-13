@@ -43,6 +43,9 @@ struct Quaternion
     // 軸と角度から作成
     static Quaternion CreateQuaternionFromAxisAngle(const Vector3& axis, float angle) noexcept;
 
+    // 指定した方向を向くクォータニオンを作成
+    static Quaternion LookRotation(const Vector3& forward, const Vector3& up = Vector3(0.0f, 1.0f, 0.0f)) noexcept;
+
     // 正規化
     Quaternion Normalize() const noexcept;
     // 共役　正規化している時は逆クォータニオンと同じ物が得られます
@@ -57,9 +60,6 @@ struct Quaternion
     // GPUに送るデータに変換
     Quaternion toGPU() const noexcept;
 };
-
-// 指定した方向を向くクォータニオンを作成
-Quaternion LookRotation(const Vector3& forward, const Vector3& up = Vector3(0.0f, 1.0f, 0.0f)) noexcept;
 
 // クォータニオンの掛け算（回転の合成）
 Quaternion operator*(const Quaternion& q1, const Quaternion& q2) noexcept;

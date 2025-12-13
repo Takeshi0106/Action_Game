@@ -89,6 +89,7 @@ public:
 	void SetTargetPos(const Vector3& targetPos) { m_TargetPos = targetPos; }
 
 	// ゲッター
+	const Vector3& GetTargetPos() const { return m_TargetPos; }
 	std::vector<AABBCollider>& GetAABBColliders() { return m_AABBColliders; }
 	std::vector<FatAABBCollider>& GetFatAABBColliders() { return m_FatAABBColliders; }
 	std::vector<AABBTreeHandle>& GetAABBHandle() { return m_AABBHandle; }

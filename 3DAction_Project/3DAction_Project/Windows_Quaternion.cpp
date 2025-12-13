@@ -131,46 +131,56 @@ Vector3 Quaternion::RotateVector(const Vector3& v) const noexcept
 }
 
 // 指定した方向を向くクォータニオンを作成
-Quaternion LookRotation(const Vector3& forward, const Vector3& up) noexcept
+Quaternion Quaternion::LookRotation(const Vector3& forward, const Vector3& up) noexcept
 {
-	// forward の長さチェック（ゼロベクトルは不可）
-	Vector3 f = forward;
-	if (f.Length() < 0.000001f) {
-		return Quaternion(); // 単位クォータニオン
+	// ゼロかチェック
+	if (forward.Length() < 1e-6f)
+	{
+		return Quaternion();
+	}
+
+	// 念のため正規化
+	Vector3 f = forward.Normalize();
+
+	// 上ベクトル
+	Vector3 u = up.Normalize();
+
+	// 外積
+	Vector3 r = f.Cross(u);
+
+	// チェック
+	if (r.Length() < 1e-6f)
+	{
+		// 前ベクトルと上ベクトルが平行の場合
+		r = Vector3(0.0f, 0.0f, 1.0f).Cross(f);
+
+		// 再チェック
+		if (r.Length() < 1e-6f)
+		{
+			r = Vector3(1.0f, 0.0f, 0.0f);
+		}
 	}
 
 	// 正規化
-	f = f.Normalize();
-	Vector3 u = up.Normalize();
+	r = r.Normalize();
 
-	// 右方向 = up × forward（右手系）
-	Vector3 r = u.Cross(f);
-	if (r.Length() < 0.000001f)
-	{
-		// up と forward がほぼ平行 → 適当な軸を設定
-		r = Vector3(1.0f, 0.0f, 0.0f);
-	}
-	else {
-		r = r.Normalize();
-	}
+	// 正しい Up を再計算
+	u = r.Cross(f);
 
-	// 正しい up を作り直す（forward × right）
-	u = f.Cross(r);
-
-	// DirectXMath の行列を構築（X,Y,Z の順）
-	DirectX::XMMATRIX rotationMatrix(
-		DirectX::XMVectorSet(r.x, r.y, r.z, 0.0f), // X 軸（Right）
-		DirectX::XMVectorSet(u.x, u.y, u.z, 0.0f), // Y 軸（Up）
-		DirectX::XMVectorSet(f.x, f.y, f.z, 0.0f), // Z 軸（Forward）
+	// 行優先（Row-major）回転行列
+	DirectX::XMMATRIX m(
+		DirectX::XMVectorSet(r.x, r.y, r.z, 0.0f), // X軸
+		DirectX::XMVectorSet(u.x, u.y, u.z, 0.0f), // Y軸
+		DirectX::XMVectorSet(f.x, f.y, f.z, 0.0f), // Z軸
 		DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f)
 	);
 
-	// 行列からクォータニオンへ変換
-	DirectX::XMVECTOR q = DirectX::XMQuaternionRotationMatrix(rotationMatrix);
+	DirectX::XMVECTOR q =
+		DirectX::XMQuaternionRotationMatrix(m);
 
-	// あなたの自作 Quaternion に変換
 	return CreateQuaternionFromXMVECTOR(q);
 }
+
 
 // Slerp補間
 Quaternion Quaternion::Slerp(const Quaternion& target, float t) const noexcept

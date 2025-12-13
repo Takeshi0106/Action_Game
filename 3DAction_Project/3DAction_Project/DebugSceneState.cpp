@@ -230,6 +230,11 @@ void DebugSceneState::UpdateCollision()
 // =============================
 void DebugSceneState::UpdateColliderCheck()
 {
+#if defined(DEBUG) || defined(_DEBUG)
+	// １フレームの時間
+	float time = Timer::GetDeltaTime();
+#endif
+
 	std::vector<FatAABBCollider>& fatcol = m_MoveObjectSystem.GetFatAABBColliders();
 	std::vector<AABBTreeHandle>& handles = m_MoveObjectSystem.GetAABBHandle();
 
@@ -242,6 +247,14 @@ void DebugSceneState::UpdateColliderCheck()
 			fatcol[i].isUpdated = false;
 		}
 	}
+
+#if defined(DEBUG) || defined(_DEBUG)
+	// 時間出力
+	float outputTime = Timer::GetDeltaTime() - time;
+	ImGui::Begin("ChaeckCollider");
+	ImGui::Text((std::to_string(outputTime) + "秒 : 更新時間").c_str());
+	ImGui::End();
+#endif
 }
 
 
@@ -261,6 +274,16 @@ void DebugSceneState::DebugInit()
 // =============================
 void DebugSceneState::DebugUpdate()
 {
+	Vector3 targetPos = m_MoveObjectSystem.GetTargetPos();
+	float pos[3] = { targetPos.x, targetPos.y, targetPos.z };
+
+	ImGui::Begin("TargetPos");
+	ImGui::DragFloat3("Position", pos, 0.1f, -100.0f, 100.0f);
+	ImGui::End();
+
+	// 反映
+	m_MoveObjectSystem.SetTargetPos({ pos[0], pos[1], pos[2] });
+
 	//Vector3 pos = m_Knight[0].GetSRT().position;
 	//Quaternion rot = m_Knight[0].GetSRT().rotation;
 
@@ -287,6 +310,22 @@ void DebugSceneState::DebugUpdate()
 // ----------------------------
 void DebugSceneState::DebugDraw()
 {
+	Vector3 targetPos = m_MoveObjectSystem.GetTargetPos();
+
+	SRT srt = {
+		targetPos,
+		Quaternion(),
+		{1.0f,1.0f,1.0f} };
+
+	AABBCollider aabb = CreateAABB(
+		srt,
+		Vector3(0.0f, 0.0f, 0.0f),
+		Vector3(1.0f, 1.0f, 1.0f));
+
+	BOX::DrawAABB(
+		m_Modules->drawManager,
+		aabb,
+		Color(0.0f, 0.5f, 0.0f, 1.0f));
 }
 
 #else
