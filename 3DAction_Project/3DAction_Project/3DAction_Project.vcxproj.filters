@@ -304,6 +304,9 @@
     <Filter Include="4_Game\6_Object\2_ObjectSystem\MoveObjectSystem">
       <UniqueIdentifier>{93cef4cc-d9a8-454f-bf6a-53a0acdefbd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4_Game\8_Core\MouseConvert">
+      <UniqueIdentifier>{0317739f-bc67-4bf3-b736-8b44f828f660}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -521,6 +524,9 @@
     </ClCompile>
     <ClCompile Include="MoveObjectSystem.cpp">
       <Filter>4_Game\6_Object\2_ObjectSystem\MoveObjectSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseConvert.cpp">
+      <Filter>4_Game\8_Core\MouseConvert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -826,6 +832,9 @@
     </ClInclude>
     <ClInclude Include="MoveObjectSystem.h">
       <Filter>4_Game\6_Object\2_ObjectSystem\MoveObjectSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseConvert.h">
+      <Filter>4_Game\8_Core\MouseConvert</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
