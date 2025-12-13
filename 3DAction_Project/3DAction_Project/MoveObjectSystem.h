@@ -27,7 +27,7 @@ private:
 	const float kMoveVelocity = 0.1f;
 	const float kRotateSpeed = 3.0f;
 
-	const uint16_t kObjectCount = 100;
+	const uint16_t kObjectCount = 200;
 
 	// 大きさ
 	const Vector3 kObjectSize = { 1.0f, 1.0f, 1.0f };
