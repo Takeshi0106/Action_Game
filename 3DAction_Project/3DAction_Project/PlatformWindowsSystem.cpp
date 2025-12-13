@@ -391,23 +391,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
         PostQuitMessage(0); // 終了処理
         break;
 
-    case WM_CLOSE:
-    {
-        int res = MessageBoxA(NULL, "終了しますか？", "確認", MB_OKCANCEL);
-        if (res == IDOK) // メッセージボックス
-        {
-            DestroyWindow(hWnd); // ウィンドウ削除
-        }
-        break;
-    }
-
-    case WM_KEYDOWN:
-        if (LOWORD(wp) == VK_ESCAPE)
-        {
-            PostMessage(hWnd, WM_CLOSE, wp, lp);//ウィンドウプロシージャにWM_CLOSEを送る
-        }
-        break;
-
     case WM_INPUT:
         // 入力イベント受け取り時に呼び出す。
         DirectX_Input::HandleRawInput(lp);

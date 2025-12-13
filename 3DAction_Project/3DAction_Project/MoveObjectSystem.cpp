@@ -3,6 +3,7 @@
 // ヘッダー
 // =====================================
 #include "MoveObjectSystem.h"
+#include "ReportMessage.h"
 
 
 
@@ -148,7 +149,7 @@ void MoveObjectSystem::Update(float deltaTime)
 			MoveObject_AABB::CENTER_OFFSET,
 			MoveObject_AABB::HITBOX_SCALE);
 
-		if (IsAABBInside(m_AABBColliders[i], m_FatAABBColliders[i]))
+		if (!IsAABBInside(m_AABBColliders[i], m_FatAABBColliders[i]))
 		{
 			// ファットAABBコライダー更新
 			m_FatAABBColliders[i] = CreateFatAABB(
@@ -242,5 +243,11 @@ void MoveObjectSystem::UpdateCorrection()
 		m_Positions[i] += m_Correction[i];
 		// 補正値リセット
 		m_Correction[i] = Vector3(0.0f, 0.0f, 0.0f);
+
+		// 押し戻し後
+		m_FatAABBColliders[i] = CreateFatAABB(
+			m_AABBColliders[i],
+			Vector3(kMoveVelocity, kMoveVelocity, kMoveVelocity),
+			3.0f);
 	}
 }

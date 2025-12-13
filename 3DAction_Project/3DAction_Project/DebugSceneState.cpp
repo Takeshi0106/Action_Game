@@ -123,7 +123,7 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 		m_SceneEvent = SceneEventID::TITLESCENE;
 	}
 
-	if (m_Modules->input->GetKeyTrigger(KeyCode_Down)) {
+	if (m_Modules->input->GetKeyTrigger(KeyCode_Escape)) {
 		m_SceneEvent = SceneEventID::STOP_GAME;
 	}
 
@@ -186,6 +186,7 @@ void DebugSceneState::UpdateCollision()
 	{
 		// 接触候補配列
 		std::vector<ObjectInfo> results;
+		results.reserve(fatcol.size());
 		// ツリー検索
 		m_AABBTree.Query(fatcol[i].aabb, results);
 
