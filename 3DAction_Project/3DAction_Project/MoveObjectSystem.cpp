@@ -244,11 +244,5 @@ void MoveObjectSystem::UpdateCorrection()
 		m_Positions[i] += m_Correction[i];
 		// 補正値リセット
 		m_Correction[i] = Vector3(0.0f, 0.0f, 0.0f);
-
-		// 押し戻し後
-		m_FatAABBColliders[i] = CreateFatAABB(
-			m_AABBColliders[i],
-			Vector3(kMoveVelocity, kMoveVelocity, kMoveVelocity),
-			3.0f);
 	}
 }

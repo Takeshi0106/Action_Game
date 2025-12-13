@@ -28,8 +28,10 @@
 // ==============================
 bool DebugSceneState::DerivativeInit()
 {
+#if defined(DEBUG) || defined(_DEBUG)
 	Timer::Init();
 	Timer::Start();
+#endif
 
 	// DCCカメラ初期化
 	std::unique_ptr<DCCCamera3D> camera = std::make_unique<DCCCamera3D>();
@@ -142,9 +144,21 @@ void DebugSceneState::Draw()
 	// ライト情報をGPUに送る
 	m_Light->UpdateToGPU();
 
+#if defined(DEBUG) || defined(_DEBUG)
+	// １フレームの時間
+	float time = Timer::GetDeltaTime();
+#endif
 	// オブジェクト描画
 	m_Modules->drawManager->SetDepthStencilSetting(DepthStencilSetting::DepthEnableON_DepthWriteON);
 	m_MoveObjectSystem.Draw();
+
+#if defined(DEBUG) || defined(_DEBUG)
+	// 時間出力
+	float outputTime = Timer::GetDeltaTime() - time;
+	ImGui::Begin("DrawTime");
+	ImGui::Text((std::to_string(outputTime) + "秒 : 描画時間").c_str());
+	ImGui::End();
+#endif
 
 	// デバッグ描画
 	DebugDraw();
@@ -181,12 +195,14 @@ void DebugSceneState::UpdateCollision()
 	std::vector<AABBCollider>& col = m_MoveObjectSystem.GetAABBColliders();
 	std::vector<Vector3>& correction = m_MoveObjectSystem.GetCorrection();
 
+	// 接触候補配列
+	std::vector<ObjectInfo> results;
+	results.reserve(fatcol.size());
+
 	// 当たり判定
 	for (uint32_t i = 0; i < fatcol.size(); i++)
 	{
-		// 接触候補配列
-		std::vector<ObjectInfo> results;
-		results.reserve(fatcol.size());
+		results.clear();
 		// ツリー検索
 		m_AABBTree.Query(fatcol[i].aabb, results);
 
@@ -194,7 +210,7 @@ void DebugSceneState::UpdateCollision()
 		for (const auto& result : results)
 		{
 			// 自分自身は除外
-			if (result.objectID == i) { continue; }
+			if (result.objectID <= i) { continue; }
 
 			// 厳密な当たり判定
 			if (m_CollisionSystem.CheckCollision(
@@ -220,6 +236,13 @@ void DebugSceneState::UpdateCollision()
 	float outputTime = Timer::GetDeltaTime() - time;
 	ImGui::Begin("CollisionTime");
 	ImGui::Text((std::to_string(outputTime) + "秒 : 当たり判定更新時間").c_str());
+	ImGui::End();
+
+	// 深度情報取得
+	TreeBalance balance = m_AABBTree.CalculateBalance();
+	ImGui::Begin("AABBTreeBalance");
+	ImGui::Text((std::to_string(balance.averageDepth) + " : 平均深度").c_str());
+	ImGui::Text((std::to_string(balance.maxDepth) + " : 最大深度").c_str());
 	ImGui::End();
 #endif
 }
