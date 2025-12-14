@@ -16,10 +16,23 @@
 // ========================================
 // 抽象化描画マネージャー(基底クラス)
 #include "BaseDrawManager.h"
-// std::unique_ptrを使用するため
-#include <memory>
 // 色設定
 #include "Color.h"
+// 標準ライブラリ
+#include <cstdint>
+
+// マネージャーヘッダー
+#include "ShaderManager.h" // シェーダーマネージャー
+#include "ConstantBufferManager.h" // 定数バッファマネージャー
+#include "VertexBufferManager.h"   // 頂点バッファマネージャー
+#include "TextureManager.h" // テクスチャマネージャー
+#include "ResourceViewManager.h" // ビューマネージャー
+#include "SamplerManager.h" // サンプラーマネージャー
+#include "IndexBufferManager.h" // インデックスバッファマネージャー
+#include "ModelManager.h" // モデルマネージャー
+// モジュール
+#include "TextureLoader.h"
+#include "ModelConversionModule.h"
 
 
 // ========================================
@@ -28,18 +41,6 @@
 // ウィンドウハンドルの前方宣言
 struct HWND__;
 using HWND = HWND__*;
-// マネージャーの前方宣言
-class ShaderManager;
-class ConstantBufferManager;
-class VertexBufferManager;
-class TextureManager;
-class ResourceViewManager;	
-class SamplerManager;
-class IndexBufferManager;
-class ModelManager;
-// モジュールの前方宣言
-class TextureLoader;
-class ModelConversionModule;
 // DirectXの前方宣言
 struct ID3D11Device;
 struct ID3D11DeviceContext;
@@ -48,32 +49,69 @@ struct ID3D11DeviceContext;
 // ========================================
 // DirectXの描画マネージャー
 // ========================================
-class DirectX_DrawManager : public BaseDrawManager
+class DirectX_DrawManager final : public BaseDrawManager
 {
 private:
+	// --------------------------------
+	// メンバー変数
+	// --------------------------------
+	// 画面の幅・高さ
+	uint16_t m_Width = 0;
+	uint16_t m_Height = 0;
+
 	// 最終描画に使用するRTの名前
 	const char* kFinalRTName = "FinalRT";
 	const char* kFInalDSName = "FinalDS";
-	const Color kClearColor = Color(0.1f, 0.3f, 0.7f, 1.0f); // クリアカラー
+	// クリアカラー
+	const Color kClearColor = Color(0.1f, 0.3f, 0.7f, 1.0f);
 
+
+	// --------------------------------
 	// リソースマネージャー
-	std::unique_ptr<ShaderManager> m_ShaderManager;     // シェーダーマネージャー
-	std::unique_ptr<ConstantBufferManager> m_CBManager; // 定数バッファマネージャー
-	std::unique_ptr<VertexBufferManager> m_VBManager; // 頂点バッファマネージャー
-	std::unique_ptr<TextureManager> m_TextureManager; // テクスチャマネージャー
-	std::unique_ptr<ResourceViewManager> m_ViewManager; // ビューマネージャー
-	std::unique_ptr<SamplerManager> m_SamplerManager; // サンプラーマネージャー
-	std::unique_ptr<IndexBufferManager> m_IndexBufferManager; // インデックスバッファ
-	std::unique_ptr<ModelManager> m_ModelManager; // モデルマネージャー
+	// --------------------------------
+	// シェーダーマネージャー
+	ShaderManager m_ShaderManager;
+	// 定数バッファマネージャー
+	ConstantBufferManager m_CBManager;
+	// 頂点バッファマネージャー
+	VertexBufferManager m_VBManager;
+	// テクスチャマネージャー
+	TextureManager m_TextureManager;
+	// ビューマネージャー
+	ResourceViewManager m_ViewManager;
+	// サンプラーマネージャー
+	SamplerManager m_SamplerManager;
+	// インデックスバッファ
+	IndexBufferManager m_IndexBufferManager;
+	// モデルマネージャー
+	ModelManager m_ModelManager;
 
+
+	// --------------------------------
 	// モジュール
-	std::unique_ptr<TextureLoader> m_TextureLoader; // テクスチャをロードするモジュール
-	std::unique_ptr<ModelConversionModule> m_ModelConversionModule; // モデル変換モジュール
+	// --------------------------------
+	// テクスチャをロードするモジュール
+	TextureLoader m_TextureLoader;
+	// モデル変換モジュール
+	ModelConversionModule m_ModelConversionModule;
 
+
+	// --------------------------------
+	// 描画コマンド
+	// --------------------------------
 	// 描画
 	bool DrawModelObject(const char* _vsShaderName,
 		const char* _psShaderName,
 		const char* _modelName);
+
+	// インデックスバッファを使用したメッシュ描画
+	bool DrawIndexObject(
+		const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vbName,
+		const char* _ibName,
+		const char* _textureName,
+		const SamplerDesc _sampler);
 
 	bool DrawPrimitiveObject(const char* _vsShaderName,
 		const char* _psShaderName,
@@ -83,11 +121,11 @@ private:
 
 public:
 	// コンストラクタ
-	DirectX_DrawManager();
+	DirectX_DrawManager(const DrawPathConfig& _config);
 	~DirectX_DrawManager();
 
 	// 初期化
-	bool Init(unsigned int Width, unsigned int Height, HWND windowHandle);
+	bool Init(uint16_t Width, uint16_t Height, HWND windowHandle);
 	// 後処理
 	void Uninit();
 
@@ -95,11 +133,21 @@ public:
 	void BegingDraw();
 	void EndDraw();
 
-	// 今は使用できません注意してください
+	// モデル描画
 	void ModelDraw(const char* _vsShaderName, 
 		const char* _psShaderName, 
 		const char* _modelName) override final;
 
+	// インデックスバッファを使用したメッシュ描画
+	void IndexedDraw(
+		const char* _vsShaderName,
+		const char* _psShaderName,
+		const char* _vbName,
+		const char* _ibName,
+		const char* _textureName = nullptr,
+		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override final;
+	
+	// プリミティブ描画
 	void PrimitiveDraw(const char* _vsShaderName,
 		const char* _psShaderName,
 		const char* _vsBufferName,
@@ -134,8 +182,8 @@ public:
 	// テクスチャ作成
 	bool CreateTexture(
 		const char* name,
-		unsigned int width,
-		unsigned int height,
+		uint32_t width,
+		uint32_t height,
 		Format format,
 		BindFlag bindFlag,
 		BufferUsage usage = BufferUsage::Default,

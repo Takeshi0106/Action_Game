@@ -27,12 +27,12 @@
 // スマートポインターのヘッダー
 #include <memory>               // スマートポインター
 // 配列のヘッダー
-#include <unordered_map>        // ハッシュ値配列
-#include <vector>               // 情報を渡す配列
+#include <unordered_map> // ハッシュ値配列
+#include <vector> // 情報を渡す配列
 // 基底ヘッダー
 #include <string>
-// アッセット名ログ出力
-#include "AssetLogger.h"
+// テンプレートマネージャーヘッダー
+#include "TemplateManager.h"
 
 
 // ==============================================
@@ -46,6 +46,11 @@ struct ID3D11DeviceContext;  // DirectXのコンテキスト
 // シェーダに渡す定数バッファや入力レイアウトの情報構造体
 class ConstantBufferInfo; // 定数バッファの情報構造体
 class InputLayoutInfo;    // 入力レイアウト構造体
+
+
+// ===============================================
+// 構造体
+// ===============================================
 
 
 // ===================================================================================================
@@ -65,12 +70,15 @@ private:
     const char* kShaderInfoPath; // シェーダーや定数バッファの情報が入っている
 
     // シェーダー保存配列
+
+	// 頂点シェーダーテンプレートマネージャー
+    TemplateManager<VertexShaderData> m_Vertex;
+    TemplateManager<PixelShaderData> m_Pixel;
+    TemplateManager<ComputeShaderData> m_Compute;
+
     std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
     std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
     std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
-
-    // ログ出力
-    AssetLogger m_Logger = { "Shader.txt" };
 
     // 関数
 #if defined(DEBUG) || defined(_DEBUG)
@@ -95,7 +103,7 @@ public:
         :kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
     }
     // デストラクタ
-    ~ShaderManager() { m_Logger.WriteLog(); }
+	~ShaderManager() = default;
 
     // 初期化・後処理
     bool Init(ID3D11Device* device);

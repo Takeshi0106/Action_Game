@@ -12,6 +12,8 @@
 #include "ReportMessage.h"
 // 文字列参照
 #include <string_view>
+// 
+#include <charconv>
 
 
 // =========================================
@@ -52,25 +54,32 @@ bool InputLayoutInfo::Deserialize(const std::string_view& data)
     std::unordered_map<std::string_view, std::string_view> stringData = LoadUtils::AllExtractTypeInfo(data);
 
     // データをキャストして内容を取得する
+    
     // セマンティック名
     auto it = stringData.find(kInputLayoutSemanticName);
-    if (it != stringData.end()) {
+    if (it != stringData.end()) 
+    {
         m_SemanticName = it->second;
     }
-    else {
+    else 
+    {
         ErrorLog::OutputToConsole("入力レイアウト：SemanticName が存在しません");
         return false;
     }
 
     // セマンティックナンバー
     it = stringData.find(kInputLayoutSemanticIndex);
-    if (it != stringData.end()) {
-        try {
-            m_SemanticIndex = std::stoul(std::string(it->second));
+    if (it != stringData.end()) 
+    {
+        // 変換
+        std::string str = (std::string)it->second;
+        auto [ptr, ec] = std::from_chars(str.data(), str.data() + str.size(), m_SemanticIndex);
+
+        if (ec == std::errc::invalid_argument) {
+            ErrorLog::OutputToConsole("数字ではない文字が含まれています");
         }
-        catch (const std::invalid_argument&) {
-            ErrorLog::OutputToConsole("入力レイアウト：SemanticIndex のキャストに失敗しました");
-            return false;
+        else if (ec == std::errc::result_out_of_range) {
+            ErrorLog::OutputToConsole("値が型以上の範囲です。");
         }
     }
     else {
@@ -81,12 +90,15 @@ bool InputLayoutInfo::Deserialize(const std::string_view& data)
     // 入力スロット
     it = stringData.find(kInputLayoutInputSlot);
     if (it != stringData.end()) {
-        try {
-            m_InputSlot = std::stoul(std::string(it->second));
+        // 変換
+        std::string str = (std::string)it->second;
+        auto [ptr, ec] = std::from_chars(str.data(), str.data() + str.size(), m_InputSlot);
+
+        if (ec == std::errc::invalid_argument) {
+            ErrorLog::OutputToConsole("数字ではない文字が含まれています");
         }
-        catch (const std::invalid_argument&) {
-            ErrorLog::OutputToConsole("入力レイアウト：InputSlot のキャストに失敗しました");
-            return false;
+        else if (ec == std::errc::result_out_of_range) {
+            ErrorLog::OutputToConsole("値が型以上の範囲です。");
         }
     }
     else {
@@ -97,12 +109,15 @@ bool InputLayoutInfo::Deserialize(const std::string_view& data)
     // フォーマット
     it = stringData.find(kInputLayoutFormat);
     if (it != stringData.end()) {
-        try {
-            m_Format = std::stoul(std::string(it->second));
+        // 変換
+        std::string str = (std::string)it->second;
+        auto [ptr, ec] = std::from_chars(str.data(), str.data() + str.size(), m_Format);
+
+        if (ec == std::errc::invalid_argument) {
+            ErrorLog::OutputToConsole("数字ではない文字が含まれています");
         }
-        catch (const std::invalid_argument&) {
-            ErrorLog::OutputToConsole("入力レイアウト：Format のキャストに失敗しました");
-            return false;
+        else if (ec == std::errc::result_out_of_range) {
+            ErrorLog::OutputToConsole("値が型以上の範囲です。");
         }
     }
     else {

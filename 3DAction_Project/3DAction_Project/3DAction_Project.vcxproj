@@ -149,23 +149,28 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABBTree.cpp" />
     <ClCompile Include="AssetLogger.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BOX.cpp" />
+    <ClCompile Include="CollisionSystemModule.cpp" />
     <ClCompile Include="ConstantBufferData.cpp" />
     <ClCompile Include="ConstantBufferInfo.cpp" />
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="DCCCamera3D_Controller.cpp" />
     <ClCompile Include="DCCCamera3D.cpp" />
-    <ClCompile Include="DebugScene.cpp" />
+    <ClCompile Include="DebugSceneState.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="DirectX_CursorController.cpp" />
     <ClCompile Include="DirectX_FormatConverter.cpp" />
     <ClCompile Include="DirectX_Input.cpp" />
+    <ClCompile Include="DrawComand.cpp" />
     <ClCompile Include="FadeManager.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="ActionGame.cpp" />
-    <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="GameMainState.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -180,8 +185,12 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModelConversionModule.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="MouseConvert.cpp" />
+    <ClCompile Include="MoveObjectSystem.cpp" />
+    <ClCompile Include="ObjectSystem.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
-    <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="ResultSceneState.cpp" />
     <ClCompile Include="SamplerData.cpp" />
     <ClCompile Include="SamplerManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -196,9 +205,10 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="2DTriangle.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="TitleSceneState.cpp" />
     <ClCompile Include="VertexBufferIData.cpp" />
     <ClCompile Include="VertexBufferManager.cpp" />
+    <ClCompile Include="Windows_Matrix3x3.cpp" />
     <ClCompile Include="Windows_Quaternion.cpp" />
     <ClCompile Include="Windows_Color.cpp" />
     <ClCompile Include="Windows_Matrix4x4.cpp" />
@@ -223,6 +233,11 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Windows_Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABBCollider.h" />
+    <ClInclude Include="AABBNode.h" />
+    <ClInclude Include="AABBTree.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="ColliderConfig.h" />
     <ClInclude Include="AlphaDizaSetting.h" />
     <ClInclude Include="AssetLogger.h" />
     <ClInclude Include="BaseCamera.h" />
@@ -230,6 +245,19 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="BaseFadeState.h" />
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseLight.h" />
+    <ClInclude Include="BOX.h" />
+    <ClInclude Include="ColliderObject.h" />
+    <ClInclude Include="CollisionSystemModule.h" />
+    <ClInclude Include="DrawComand.h" />
+    <ClInclude Include="DrawPathConfig.h" />
+    <ClInclude Include="Handle.h" />
+    <ClInclude Include="Matrix3x3.h" />
+    <ClInclude Include="MouseConvert.h" />
+    <ClInclude Include="MoveObjectSystem.h" />
+    <ClInclude Include="ObjectSystem.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SRT.h" />
+    <ClInclude Include="TemplateManager.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseSaveLoadObject.h" />
     <ClInclude Include="BaseSceneState.h" />
@@ -237,7 +265,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="CursorController.h" />
     <ClInclude Include="DCCCamera3D_Controller.h" />
     <ClInclude Include="DCCCamera3D.h" />
-    <ClInclude Include="DebugScene.h" />
+    <ClInclude Include="DebugSceneState.h" />
     <ClInclude Include="DepthStencilSetting.h" />
     <ClInclude Include="DirectX_CursorController.h" />
     <ClInclude Include="DirectX_FormatConverter.h" />
@@ -246,7 +274,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="FadeManager.h" />
     <ClInclude Include="FadeIDSetting.h" />
     <ClInclude Include="FillModeSetting.h" />
-    <ClInclude Include="GameMain.h" />
+    <ClInclude Include="GameMainState.h" />
     <ClInclude Include="GameModule.h" />
     <ClInclude Include="GraphicsEnums.h" />
     <ClInclude Include="Color.h" />
@@ -276,7 +304,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="MaterialData.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Quaternionh.h" />
-    <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="ResultSceneState.h" />
     <ClInclude Include="SamplerSetting.h" />
     <ClInclude Include="SamplerData.h" />
     <ClInclude Include="SamplerManager.h" />
@@ -293,7 +321,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="2DTriangle.h" />
-    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="TitleSceneState.h" />
     <ClInclude Include="UseShaderType.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />

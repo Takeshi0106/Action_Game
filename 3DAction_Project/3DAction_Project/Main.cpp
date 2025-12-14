@@ -3,14 +3,14 @@
 // =========================================================
 // ヘッダー
 // =========================================================
-// プラットフォームのヘッダー
-#include "PlatformWindowsSystem.h"
 // エラーメッセージ出力用
 #include "ReportMessage.h"
 // アクションゲームを作成
 #include "ActionGame.h"
 // スマートポインタ
 #include<memory>
+// パスの設定コンフィグ
+#include "DrawPathConfig.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 // メモリーリーク検出用
@@ -21,13 +21,39 @@
 
 
 // =========================================================
+// Windows プラットフォームの場合の本編
+// DirectX11を使用します
+// =========================================================
+#if defined(_WIN32)
+
+
+// =========================================================
+// Windowsプラットフォーム用ヘッダー
+// =========================================================
+// プラットフォームのヘッダー
+#include "PlatformWindowsSystem.h"
+// 固定長整数
+#include <cstdint>
+
+
+// =========================================================
 // ウィンドウの初期化用変数
 // =========================================================
 namespace {
-	constexpr unsigned int   SCREEN_WIDTH        = 1280;
-	constexpr unsigned int   SCREEN_HEIGHT       = 720;
+	constexpr uint16_t   SCREEN_WIDTH        = 1280;
+	constexpr uint16_t   SCREEN_HEIGHT       = 720;
 	constexpr wchar_t        WINDOW_NAME[]       = L"GameWindow";
 	constexpr wchar_t        WINDOW_CLASS_NAME[] = L"ゲーム";
+
+	const DrawPathConfig PATH_CONFIG= {
+		"Asset/Shader/Compile",
+		"Asset/Shader/Hlsl",
+
+		"Asset/Info/ShaderReflection.txt",
+
+		"Asset/Texture",
+		"Asset/ObjModel"
+	};
 }
 
 
@@ -46,10 +72,35 @@ int main(void)
 	actionGame = std::make_unique<ActionGame>();
 
 	// ウィンドウズプラットフォームを作成
-	PlatformWindowsSystem system(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_NAME, WINDOW_CLASS_NAME);
+	PlatformWindowsSystem system(SCREEN_WIDTH, SCREEN_HEIGHT,
+		WINDOW_NAME, WINDOW_CLASS_NAME,
+		PATH_CONFIG);
+
 	system.Execute(actionGame.get()); // 起動
 
 	DebugLog::OutputToConsole("正常に終了しました");
 
+
 	return 0;
 }
+
+
+// =========================================================
+// Android プラットフォームの場合の本編
+// =========================================================
+#elif defined(__ANDROID__)
+
+
+// =========================================================
+// Androidプラットフォーム用ヘッダー
+// =========================================================
+#include <android/log.h>	
+
+void android_main(struct android_app* state)
+{
+	__android_log_print(ANDROID_LOG_INFO, "MyGame", "Game started");
+}
+
+
+#endif
+

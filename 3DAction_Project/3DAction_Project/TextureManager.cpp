@@ -50,9 +50,6 @@ bool TextureManager::CreateTextureFromSwapChain(
 	// 配列に代入
 	m_Textures[name] = std::move(textureData);
 
-	// 名前を保存しておく
-	m_Logger.Log(name.c_str());
-
 #if defined(DEBUG) || defined(_DEBUG)
     DebugLog::OutputToConsole(("テクスチャバッファ " + name + " を作成しました").c_str());
 
@@ -135,10 +132,6 @@ bool TextureManager::CreateTexture(
 	// 配列に代入
 	m_Textures[name] = std::move(textureData);
 
-	// 名前を保存しておく
-	m_Logger.Log(name.c_str());
-
-
 #if defined(DEBUG) || defined(_DEBUG)
     DebugLog::OutputToConsole(("テクスチャバッファ " + name + " を作成しました").c_str());
 
@@ -206,31 +199,31 @@ UINT ToDXBindFlag(BindFlag flags)
 {
     UINT result = 0;
 
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::VertexBuffer))
+    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_VertexBuffer))
     {
         result |= D3D11_BIND_VERTEX_BUFFER;
     }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::IndexBuffer))
+    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_IndexBuffer))
     {
         result |= D3D11_BIND_INDEX_BUFFER;
     }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::ConstantBuffer))
+    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_ConstantBuffer))
     {
         result |= D3D11_BIND_CONSTANT_BUFFER;
     }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::ShaderResource))
+    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_ShaderResource))
     {
         result |= D3D11_BIND_SHADER_RESOURCE;
     }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::RenderTarget))
+    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_RenderTarget))
     {
         result |= D3D11_BIND_RENDER_TARGET;
     }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::DepthStencil))
+    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_DepthStencil))
     {
         result |= D3D11_BIND_DEPTH_STENCIL;
     }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::UnorderedAccess))
+    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_UnorderedAccess))
     {
         result |= D3D11_BIND_UNORDERED_ACCESS;
     }

@@ -13,8 +13,12 @@
 // ==========================================
 // 基底クラスのヘッダー
 #include "PlatformSystem.h"
+// 描画パス設定ヘッダー
+#include "DrawPathConfig.h"
 // 動的確保
 #include <memory>
+// 固定長整数ヘッダー
+#include <cstdint>
 
 
 // =====================================================
@@ -41,10 +45,11 @@ class PlatformWindowsSystem : public PlatformSystem
 private:
 	static APPLICATIONHANDLE m_AppInstance;      // アプリケーションのハンドル
 	static HWND              m_WinInstance;      // ウィンドウハンドル
-	const unsigned int      m_Width;	         // ウィンドウの画面横幅 
-	const unsigned int      m_Height;	         // ウィンドウの画面縦幅
+	const uint16_t      m_Width;	         // ウィンドウの画面横幅 
+	const uint16_t      m_Height;	         // ウィンドウの画面縦幅
 	const wchar_t*          m_WindowName;        // ウィンドウの名前
 	const wchar_t*          m_WindowClassName;   // ウィンドウのクラス名
+	const DrawPathConfig m_PathConfig; // パス設定
 
 	static std::unique_ptr<DirectX_Input> m_Input; // 入力情報
 	static std::unique_ptr<DirectX_DrawManager> m_DrawManager; // 描画マネージャー
@@ -68,10 +73,12 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	PlatformWindowsSystem(unsigned int Width, unsigned int Height, const wchar_t* WindowClassName, const wchar_t* WindowName);
+	PlatformWindowsSystem(uint16_t _width, uint16_t _height, 
+		const wchar_t* _windowClassName, const wchar_t* _windowName, 
+		const DrawPathConfig& _config);
 	~PlatformWindowsSystem();
 
 	// ゲッター
-	unsigned int GetWidthSize() const  { return m_Width; }   // ウィンドウの横幅を戻り値で返す
-	unsigned int GetHeightSize() const { return m_Height; }	 // ウィンドウの縦幅を戻り値で返す
+	uint16_t GetWidthSize() const  { return m_Width; }   // ウィンドウの横幅を戻り値で返す
+	uint16_t GetHeightSize() const { return m_Height; }	 // ウィンドウの縦幅を戻り値で返す
 };

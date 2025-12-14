@@ -16,8 +16,6 @@
 #include "input.h"
 // カーソル
 #include "CursorController.h"
-// メッセージ出力
-#include "ReportMessage.h"
 
 
 // ===============================

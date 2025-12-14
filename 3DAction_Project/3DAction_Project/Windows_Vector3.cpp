@@ -143,6 +143,15 @@ Vector3 operator-(const Vector3& vec1, const Vector3& vec2) noexcept
 }
 
 // 乗算演算子
+Vector3 operator*(const Vector3& vec1, const Vector3& vec2) noexcept
+{
+	// 計算
+	DirectX::XMVECTOR multiplication = DirectX::XMVectorMultiply(
+		DirectXMathUtiles::ToXMVECTOR(vec1.x, vec1.y, vec1.z),
+		DirectXMathUtiles::ToXMVECTOR(vec2.x, vec2.y, vec2.z));
+	return FromXMVECTOR3(multiplication);
+}
+
 Vector3 operator*(const Vector3& vec1, float scalar) noexcept
 {
 	// 計算
@@ -190,6 +199,12 @@ Vector3 Vector3::operator-=(const Vector3& vec) noexcept
 }
 
 // 乗算代入演算子
+Vector3 Vector3::operator*=(const Vector3& vec) noexcept
+{
+	*this = *this * vec;
+	return *this;
+}
+
 Vector3 Vector3::operator*=(float scalar) noexcept
 {
 	*this = *this * scalar;

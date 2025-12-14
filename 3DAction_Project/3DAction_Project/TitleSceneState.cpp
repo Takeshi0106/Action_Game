@@ -3,14 +3,14 @@
 // ヘッダー
 // =============================
 // 必須ヘッダー
-#include "TitleScene.h"
+#include "TitleSceneState.h"
 
 
 
 // ============================	
 // シーンの初期化
 // ============================
-bool TitleScene::DerivativeInit()
+bool TitleSceneState::DerivativeInit()
 {
 
 	return true;
@@ -20,9 +20,11 @@ bool TitleScene::DerivativeInit()
 // ============================
 // シーンの更新
 // ============================
-void TitleScene::DerivatIveUpdate(float _delta)
+void TitleSceneState::DerivatIveUpdate(float _delta)
 {
-	if (m_Modules->input->GetKeyPress(KeyCode_Enter)) {
+
+	// シーン遷移
+	if (m_Modules->input->GetKeyTrigger(KeyCode_Enter)) {
 		m_SceneEvent = SceneEventID::DEBUGSCENE;
 	}
 }
@@ -31,7 +33,7 @@ void TitleScene::DerivatIveUpdate(float _delta)
 // ============================
 // シーンの描画
 // ============================
-void TitleScene::Draw()
+void TitleSceneState::Draw()
 {
 
 }
@@ -40,7 +42,7 @@ void TitleScene::Draw()
 // ============================
 // シーンの終了処理
 // ============================
-void TitleScene::Uninit()
+void TitleSceneState::Uninit()
 {
 
 }

@@ -31,3 +31,14 @@ bool SamplerData::CreateSmplerData(ID3D11Device* device,
 
     return true;
 }
+
+
+// ==================================
+// サンプラーバインド
+// ==================================
+void SamplerData::BindSampler(ID3D11DeviceContext* context,
+    UINT slot)
+{
+    // サンプラーをバインド
+    context->PSSetSamplers(slot, 1, m_Sampler.GetAddressOf());
+}

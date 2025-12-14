@@ -38,14 +38,28 @@ public:
     IndexBufferData() {}
     ~IndexBufferData() = default;
 
+	// --------------------------------
     // バッファ作成
+	// --------------------------------
     bool CreateIndexBuffer(
         ID3D11Device* device,
         const uint32_t* indexData,
         uint32_t indexCount);
+	// --------------------------------
+	// バッファバインド
+	// --------------------------------
+	void BindIndexBuffer(ID3D11DeviceContext* context) const;
+	
+	// --------------------------------
+	//  デバッグ時用に名前を付ける関数
+	// --------------------------------
+	void SetDebugName(const char* name) {
+		if (m_Buffer) {
+			m_Buffer->SetPrivateData(WKPDID_D3DDebugObjectName, static_cast<UINT>(strlen(name)), name);
+		}
+	}
 
-	// バッファゲッター
-	ID3D11Buffer* GetBuffer() const { return m_Buffer.Get(); }
+
 	// インデックス数ゲッター
 	uint32_t GetIndexCount() const { return m_IndexCount; }
 };

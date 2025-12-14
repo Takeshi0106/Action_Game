@@ -84,7 +84,7 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
         (unsigned int)(meta.width),
         (unsigned int)(meta.height),
         DirectX_FormatConverter::ToSelfFormat(meta.format),
-        BindFlag::ShaderResource,
+        BindFlag::Bind_ShaderResource,
         BufferUsage::Default,
         CPUAccess::None,
         &initData))

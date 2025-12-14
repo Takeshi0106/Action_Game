@@ -5,8 +5,8 @@
 // 必須ヘッダー
 #include "SceneManager.h"
 // シーンヘッダー
-#include "DebugScene.h"
-#include "TitleScene.h"
+#include "DebugSceneState.h"
+#include "TitleSceneState.h"
 // ログ出力ヘッダー
 #include "ReportMessage.h"
 
@@ -20,7 +20,7 @@ bool SceneManager::Init(GameModules* modules)
 	m_Modules = modules;
 
 	// 最初のシーンを設定する
-	m_CurrentSceneState = std::make_unique<DebugScene>();
+	m_CurrentSceneState = std::make_unique<DebugSceneState>();
 	// シーン初期化
 	if (!m_CurrentSceneState->Init(m_Modules)) {
 		ErrorLog::OutputToConsole("シーンの初期化に失敗");
@@ -42,8 +42,15 @@ bool SceneManager::Update(float time)
 	// シーンイベント取得
 	SceneEventID event = m_CurrentSceneState->GetSceneEvent();
 
+	// シーン切り替え
 	if (event != SceneEventID::NONE)
 	{
+		// ゲーム終了イベントならfalseを返す
+		if (event == SceneEventID::STOP_GAME)
+		{
+			return false;
+		}
+
 		return ChangeScene(event);
 	}
 
@@ -86,11 +93,11 @@ bool SceneManager::ChangeScene(SceneEventID event)
 	{
 		// デバッグシーン
 	case SceneEventID::DEBUGSCENE:
-		m_CurrentSceneState = std::make_unique<DebugScene>();
+		m_CurrentSceneState = std::make_unique<DebugSceneState>();
 		break;
 		// タイトルシーン
 	case SceneEventID::TITLESCENE:
-		m_CurrentSceneState = std::make_unique<TitleScene>();
+		m_CurrentSceneState = std::make_unique<TitleSceneState>();
 		break;
 	}
 

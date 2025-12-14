@@ -9,9 +9,14 @@
 // =======================================
 // ヘッダー
 // =======================================
-#include <string> // 文字列を扱うためのヘッダー
-#include <string_view> /// 文字列参照
-#include "BaseSaveLoadObject.h" // セーブロードを行うオブジェクトの基底クラス
+// 文字列を扱うためのヘッダー
+#include <string>
+/// 文字列参照
+#include <string_view>
+// セーブロードを行うオブジェクトの基底クラス
+#include "BaseSaveLoadObject.h"
+// 固定整数型
+#include <cstdint>
 
 
 // =========================================
@@ -20,10 +25,14 @@
 class InputLayoutInfo : public BaseSaveLoadObject
 {
 private:
-	std::string m_SemanticName = ""; // セマンティックの名前
-	int m_SemanticIndex = 0;         // セマンティックの番号
-	int m_InputSlot = 0;             // スロット番号
-	int m_Format = 0;                // データの形式 (DXGI)
+	// セマンティックの名前
+	std::string m_SemanticName = "";
+	// セマンティックの番号
+	uint16_t m_SemanticIndex = 0;
+	// スロット番号
+	uint16_t m_InputSlot = 0;
+	// データの形式 (DXGI)
+	uint16_t m_Format = 0;
 
 public:
 	// コンストラクタ・デストラクタ
@@ -36,14 +45,14 @@ public:
 
 	// セッター
 	void SetSemanticName(const std::string& name) { m_SemanticName = name; }
-	void SetSemanticIndex(int index) { m_SemanticIndex = index; }
-	void SetInputSlot(int slot) { m_InputSlot = slot; }
-	void SetFormat(int format) { m_Format = format; }
+	void SetSemanticIndex(uint16_t index) { m_SemanticIndex = index; }
+	void SetInputSlot(uint16_t slot) { m_InputSlot = slot; }
+	void SetFormat(uint16_t format) { m_Format = format; }
 
 	// ゲッター
 	const std::string& GetSemanticName() const { return m_SemanticName; }
-	int GetSemanticIndex() const { return m_SemanticIndex; }
-	int GetInputSlot() const { return m_InputSlot; }
-	int GetFormat() const { return m_Format; }
+	uint16_t GetSemanticIndex() const { return m_SemanticIndex; }
+	uint16_t GetInputSlot() const { return m_InputSlot; }
+	uint16_t GetFormat() const { return m_Format; }
 };
 

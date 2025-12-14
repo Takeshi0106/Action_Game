@@ -29,7 +29,7 @@ inline void OutputCBname(const std::vector<ConstantBufferInfo> &CBInfo) {}
 // 頂点シェイダー
 // =======================================================================
 // シェーダー作成
-bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
+bool VertexShaderData::CreateVertexShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo)
 {
     if (!device || !binary || size == 0) {
@@ -89,12 +89,21 @@ bool VertexShaderData::CreateShader(ID3D11Device* device, void* binary, size_t s
     return true;
 }
 
+// 頂点シェーダーをバインド
+void VertexShaderData::BindVertexShader(ID3D11DeviceContext* context)
+{
+    // 頂点シェーダーセット
+    context->VSSetShader(m_VertexShader.Get(), nullptr, 0);
+    // 入力レイアウトセット
+    context->IASetInputLayout(m_ILayout.Get());
+}
+
 
 // =======================================================================
 // ピクセルシェイダー
 // =======================================================================
 // シェーダー作成
-bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
+bool PixelShaderData::CreatePixelShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo>& _CBInfo)
 {
     if (!device || !binary || size == 0) {
@@ -122,12 +131,19 @@ bool PixelShaderData::CreateShader(ID3D11Device* device, void* binary, size_t si
     return true;
 }
 
+// ピクセルシェーダーをバインド
+void PixelShaderData::BindPixelShader(ID3D11DeviceContext* context)
+{
+    // ピクセルシェーダーセット
+    context->PSSetShader(m_PixelShader.Get(), nullptr, 0);
+}
+
 
 // =======================================================================
 // コンピュートシェイダー
 // =======================================================================
 // シェーダー作成
-bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t size,
+bool ComputeShaderData::CreateComputeShader(ID3D11Device* device, void* binary, size_t size,
     const std::vector<ConstantBufferInfo> &_CBInfo)
 {
     if (!device || !binary || size == 0) {
@@ -153,6 +169,13 @@ bool ComputeShaderData::CreateShader(ID3D11Device* device, void* binary, size_t 
     CBInfo = _CBInfo;
 
     return  true;
+}
+
+// コンピュートシェーダーをバインド
+void ComputeShaderData::BindComputeShader(ID3D11DeviceContext* context)
+{
+    // コンピュートシェーダーセット
+    context->CSSetShader(m_ComputeShader.Get(), nullptr, 0);
 }
 
 

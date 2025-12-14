@@ -71,15 +71,15 @@ bool SamplerManager::CreateSampler(
 // ==========================================
 // サンプラー取得
 // ==========================================
-bool SamplerManager::BindSampler(const SamplerDesc& _sampler,ID3D11DeviceContext* context)
+bool SamplerManager::BindSampler(const SamplerDesc& _sampler,ID3D11DeviceContext* _context)
 {
     // サンプラーを探す
     auto it = m_Samplers.find(_sampler);
 
     if (it != m_Samplers.end())
     {
-        ID3D11SamplerState* sampler = it->second.get()->GetSampler();
-        context->PSSetSamplers(0, 1, &sampler);
+        // バインド
+        it->second.get()->BindSampler(_context);
 
         return true;
     }

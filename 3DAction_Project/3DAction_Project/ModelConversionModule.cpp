@@ -49,6 +49,11 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 	BaseDrawManager& drawManager,ModelManager& modelManager,
 	const std::string& modelFile)
 {
+	// 登録済みチェック
+	if (modelManager.CheckModelData(modelName)) {
+		return true;
+	}
+
 	// モデルデータ
 	ModelData modelData;
 

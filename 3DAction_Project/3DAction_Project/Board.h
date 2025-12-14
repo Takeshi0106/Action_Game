@@ -1,0 +1,63 @@
+﻿#pragma once
+
+// ===================================
+// 【クラス概要】
+// ボードを描画するクラス
+// ===================================
+
+
+// ===================================
+// ヘッダー
+// ===================================
+#include "Vertex.h"
+#include "Color.h"
+#include <string>
+
+
+// ===================================
+// 前方宣言
+// ===================================
+class BaseDrawManager;
+
+
+// ===================================
+// クラス
+// ===================================
+class Board
+{
+private:
+	// -----------------------------
+	// メンバー変数
+	// -----------------------------
+	// 頂点シェーダー
+	const static std::string m_VSName;
+	// ピクセルシェーダー
+	const static std::string m_PSName;
+
+	// 頂点バッファ名
+	const static std::string m_VBName;
+	const static std::string m_IBName;
+
+	// 定数バッファ名
+	const static std::string m_TransformCBName;
+
+	// マテリアル名
+	const static std::string m_MaterialName;
+
+	// 頂点配列
+	const static Vertex m_Vertex[4];
+
+public:
+	// コンストラクタ・デストラクタ
+	Board() = default;
+	~Board() = default;
+
+	// -----------------------------
+	// メンバー関数
+	// -----------------------------
+	// 初期化
+	static bool Init(BaseDrawManager* _drawManager);
+	// 描画
+	static void Draw(BaseDrawManager* _drawManager, const Color& _color);
+};
+

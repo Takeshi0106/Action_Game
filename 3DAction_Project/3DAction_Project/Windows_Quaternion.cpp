@@ -130,6 +130,70 @@ Vector3 Quaternion::RotateVector(const Vector3& v) const noexcept
 	);
 }
 
+// 指定した方向を向くクォータニオンを作成
+Quaternion Quaternion::LookRotation(const Vector3& forward, const Vector3& up) noexcept
+{
+	// ゼロかチェック
+	if (forward.Length() < 1e-6f)
+	{
+		return Quaternion();
+	}
+
+	// 念のため正規化
+	Vector3 f = forward.Normalize();
+
+	// 上ベクトル
+	Vector3 u = up.Normalize();
+
+	// 外積
+	Vector3 r = f.Cross(u);
+
+	// チェック
+	if (r.Length() < 1e-6f)
+	{
+		// 前ベクトルと上ベクトルが平行の場合
+		r = Vector3(0.0f, 0.0f, 1.0f).Cross(f);
+
+		// 再チェック
+		if (r.Length() < 1e-6f)
+		{
+			r = Vector3(1.0f, 0.0f, 0.0f);
+		}
+	}
+
+	// 正規化
+	r = r.Normalize();
+
+	// 正しい Up を再計算
+	u = r.Cross(f);
+
+	// 行優先（Row-major）回転行列
+	DirectX::XMMATRIX m(
+		DirectX::XMVectorSet(r.x, r.y, r.z, 0.0f), // X軸
+		DirectX::XMVectorSet(u.x, u.y, u.z, 0.0f), // Y軸
+		DirectX::XMVectorSet(f.x, f.y, f.z, 0.0f), // Z軸
+		DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f)
+	);
+
+	DirectX::XMVECTOR q =
+		DirectX::XMQuaternionRotationMatrix(m);
+
+	return CreateQuaternionFromXMVECTOR(q);
+}
+
+
+// Slerp補間
+Quaternion Quaternion::Slerp(const Quaternion& target, float t) const noexcept
+{
+	// XMVECTORに変換
+	DirectX::XMVECTOR q1 = DirectX::XMVectorSet(x, y, z, w);
+	DirectX::XMVECTOR q2 = DirectX::XMVectorSet(target.x, target.y, target.z, target.w);
+	// Slerp補間
+	DirectX::XMVECTOR result = DirectX::XMQuaternionSlerp(q1, q2, t);
+	// Quaternion作成
+	return CreateQuaternionFromXMVECTOR(result);
+}
+
 // GPUに送るデータに変換
 Quaternion Quaternion::toGPU() const noexcept
 {

@@ -81,9 +81,10 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 // コンストラクタ・デストラクタ
 // ===================================================== 
 // コンストラクタ
-PlatformWindowsSystem::PlatformWindowsSystem(unsigned int Width, unsigned int Height, 
-    const wchar_t* WindowClassName, const wchar_t* WindowName)
-    :m_Width(Width), m_Height(Height), m_WindowClassName(WindowClassName), m_WindowName(WindowName) 
+PlatformWindowsSystem::PlatformWindowsSystem(uint16_t _width, uint16_t _height, 
+    const wchar_t* WindowClassName, const wchar_t* WindowName,
+    const DrawPathConfig& _config)
+    :m_Width(_width), m_Height(_height), m_WindowClassName(WindowClassName), m_WindowName(WindowName),m_PathConfig(_config)
 {
 
 }
@@ -225,7 +226,7 @@ void PlatformWindowsSystem::Uninit()
 bool PlatformWindowsSystem::GameInit()
 {
     // 描画マネージャー作成
-    m_DrawManager = std::make_unique<DirectX_DrawManager>();
+    m_DrawManager = std::make_unique<DirectX_DrawManager>(m_PathConfig);
     m_DrawManager->Init(m_Width,m_Height,m_WinInstance);
 	m_DrawManager->SetDrawSetting(FillModeSetting::Solid, CullingSetting::Back_Culling);
 
@@ -266,7 +267,7 @@ bool PlatformWindowsSystem::GameMain()
 
     // ゲーム更新処理
     if (!m_Game->Update()) {
-		ErrorLog::OutputToConsole("ゲームの更新に失敗しました");
+        DebugLog::OutputToConsole("ゲームを終了します");
         return false;
     }
 
@@ -389,23 +390,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
     {
     case WM_DESTROY: // ウィンドウ破棄
         PostQuitMessage(0); // 終了処理
-        break;
-
-    case WM_CLOSE:
-    {
-        int res = MessageBoxA(NULL, "終了しますか？", "確認", MB_OKCANCEL);
-        if (res == IDOK) // メッセージボックス
-        {
-            DestroyWindow(hWnd); // ウィンドウ削除
-        }
-        break;
-    }
-
-    case WM_KEYDOWN:
-        if (LOWORD(wp) == VK_ESCAPE)
-        {
-            PostMessage(hWnd, WM_CLOSE, wp, lp);//ウィンドウプロシージャにWM_CLOSEを送る
-        }
         break;
 
     case WM_INPUT:

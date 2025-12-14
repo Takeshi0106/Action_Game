@@ -52,13 +52,17 @@ float4 main(PSInput input) : SV_TARGET
     float3 N = normalize(input.normal);
     float3 L = normalize(-Light_Direction.xyz);
     
-    // ランバート反射
-    float lambert = saturate(dot(N, L));
+    // ハーフランバート反射
+    float lambert = dot(N, L) * 0.5f + 0.5f;
+    lambert = saturate(lambert);
+    
+    // 暗い場所を明るくする
+    lambert = max(lambert, 0.7f);
     
     // 拡散反射
     float3 diffuse = lambert * Light_Diffuse.rgb;
     // 
-    float3 ambient = Material_Ambient.rgb * Light_Ambient.rgb;
+    float3 ambient = Material_Ambient.rgb * Light_Ambient.rgb * 2.0f;
     
     // float4 specular = Light_Specular * Material_Specular;
     

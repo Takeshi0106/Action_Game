@@ -5,7 +5,7 @@
 // アクセス設定
 // ==============================
 // 自作のプリミティブタイプ
-enum class PrimitiveType
+enum PrimitiveType
 {
 	TriangleList,
 	TriangleStrip,
@@ -14,37 +14,37 @@ enum class PrimitiveType
 };
 
 // 自作の使用タイプ
-enum class BufferUsage
+enum BufferUsage
 {
 	Default,
 	Dynamic
 };
 
 // 自作のCPUアクセス
-enum class CPUAccess
+enum CPUAccess
 {
 	None,
 	Write
 };
 
 // 自作のフォーマット
-enum class Format
+enum Format
 {
-	Unknown,
+	Format_Unknown,
 
 	// 8bit
-	R8G8B8A8_UNorm,
-	B8G8R8A8_UNorm_SRGB,
+	Format_R8G8B8A8_UNorm,
+	Format_B8G8R8A8_UNorm_SRGB,
 
 	// 単
-	R32_Float,
+	Format_R32_Float,
 
 	// 高精度
-	R32G32B32_Float,
-	R32G32B32A32_Float,
+	Format_R32G32B32_Float,
+	Format_R32G32B32A32_Float,
 
 	// 深度
-	D24_UNorm_S8_UInt
+	Format_D24_UNorm_S8_UInt
 };
 
 
@@ -52,16 +52,16 @@ enum class Format
 // View 関連
 // ==========================================
 // バインドフラグ(Viewやテクスチャ用)
-enum class BindFlag : unsigned int
+enum  BindFlag : unsigned int
 {
-	None = 0,
-	VertexBuffer = 1 << 0,
-	IndexBuffer = 1 << 1,
-	ConstantBuffer = 1 << 2,
-	ShaderResource = 1 << 3,
-	RenderTarget = 1 << 4,
-	DepthStencil = 1 << 5,
-	UnorderedAccess = 1 << 6,
+	Bind_None = 0,
+	Bind_VertexBuffer = 1 << 0,
+	Bind_IndexBuffer = 1 << 1,
+	Bind_ConstantBuffer = 1 << 2,
+	Bind_ShaderResource = 1 << 3,
+	Bind_RenderTarget = 1 << 4,
+	Bind_DepthStencil = 1 << 5,
+	Bind_UnorderedAccess = 1 << 6,
 };
 
 // OR演算子

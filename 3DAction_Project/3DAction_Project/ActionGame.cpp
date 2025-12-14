@@ -47,7 +47,7 @@ bool ActionGame::Update()
 
 	// シーン更新
 	if (!m_SceneManager.Update(time)) {
-		ErrorLog::OutputToConsole("シーンの更新に失敗");
+		DebugLog::OutputToConsole("ゲームを終了します");
 		return false;
 	}
 

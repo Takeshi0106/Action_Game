@@ -38,11 +38,16 @@ public:
     };
     ~SamplerData() = default;
 
+	// --------------------------------
     // サンプラー作成
+	// --------------------------------
     bool CreateSmplerData(ID3D11Device* device, 
         const D3D11_SAMPLER_DESC& desc);
 
-    // ゲッター
-    ID3D11SamplerState* GetSampler() const { return m_Sampler.Get(); }
+	// --------------------------------
+	// サンプラーバインド
+	// --------------------------------
+    void BindSampler(ID3D11DeviceContext* context,
+        UINT slot = 0);
 };
 
