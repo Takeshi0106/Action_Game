@@ -307,6 +307,12 @@
     <Filter Include="4_Game\8_Core\MouseConvert">
       <UniqueIdentifier>{0317739f-bc67-4bf3-b736-8b44f828f660}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\OpenGL">
+      <UniqueIdentifier>{e7533114-91ac-4827-aaf7-c32c4798d722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\1_DrawComand">
+      <UniqueIdentifier>{42ecb93c-31a1-4368-82cb-283846306f04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -527,6 +533,9 @@
     </ClCompile>
     <ClCompile Include="MouseConvert.cpp">
       <Filter>4_Game\8_Core\MouseConvert</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawComand.cpp">
+      <Filter>2_Core\1_DrawComand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -835,6 +844,12 @@
     </ClInclude>
     <ClInclude Include="MouseConvert.h">
       <Filter>4_Game\8_Core\MouseConvert</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawComand.h">
+      <Filter>2_Core\1_DrawComand</Filter>
+    </ClInclude>
+    <ClInclude Include="Handle.h">
+      <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
