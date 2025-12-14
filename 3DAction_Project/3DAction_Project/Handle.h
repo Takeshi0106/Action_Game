@@ -19,7 +19,7 @@
 struct Handle
 {
 	// 添え字
-	uint32_t index;
+	uint32_t index = UINT32_MAX;
 	// 世代
-	uint32_t generation;
+	uint32_t generation = UINT32_MAX;
 };

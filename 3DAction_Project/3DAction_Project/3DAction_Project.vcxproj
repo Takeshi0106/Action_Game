@@ -163,6 +163,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="DebugSceneState.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX11_ConstantBufferManager.cpp" />
+    <ClCompile Include="DirectX11_DrawCreate.cpp" />
     <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="DirectX11_IndexBufferManager.cpp" />
     <ClCompile Include="DirectX11_SamplerManager.cpp" />
@@ -243,6 +244,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="AABBNode.h" />
     <ClInclude Include="AABBTree.h" />
+    <ClInclude Include="BaseDrawCreate.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="ColliderConfig.h" />
     <ClInclude Include="AlphaDizaSetting.h" />
@@ -256,6 +258,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="ColliderObject.h" />
     <ClInclude Include="CollisionSystemModule.h" />
     <ClInclude Include="DirectX11_ConstantBufferManager.h" />
+    <ClInclude Include="DirectX11_DrawCreate.h" />
     <ClInclude Include="DirectX11_IndexBufferManager.h" />
     <ClInclude Include="DirectX11_SamplerManager.h" />
     <ClInclude Include="DirectX11_ShaderManager.h" />
@@ -266,6 +269,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DrawPathConfig.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="Matrix3x3.h" />
+    <ClInclude Include="ModelHandle.h" />
     <ClInclude Include="MouseConvert.h" />
     <ClInclude Include="MoveObjectSystem.h" />
     <ClInclude Include="ObjectSystem.h" />
@@ -326,6 +330,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Square2D.h" />
     <ClInclude Include="SunLight.h" />
+    <ClInclude Include="TextureHandleh.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="ResourceViewData.h" />
     <ClInclude Include="TextureData.h">

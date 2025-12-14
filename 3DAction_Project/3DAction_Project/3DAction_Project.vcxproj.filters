@@ -178,15 +178,6 @@
     <Filter Include="1_Platform\Windows\0_System\DirectX_Controller">
       <UniqueIdentifier>{bc7d1dbb-d566-491a-825a-61077992d929}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2_Core\Model">
-      <UniqueIdentifier>{2c0bc9be-a51f-49ea-a444-1ed7fe80ebf2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2_Core\Model\1_MeshData">
-      <UniqueIdentifier>{fe995487-afd6-456b-972d-48ef8019a8ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2_Core\Model\0_ModelConversion">
-      <UniqueIdentifier>{9fd92a9e-335e-47f9-ad8c-c47588245f5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\Imgui">
       <UniqueIdentifier>{d7b83e73-9eca-4246-a3da-008cebcd0e8c}</UniqueIdentifier>
     </Filter>
@@ -313,6 +304,12 @@
     <Filter Include="2_Core\1_DrawComand">
       <UniqueIdentifier>{42ecb93c-31a1-4368-82cb-283846306f04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager\0_ModelConversion">
+      <UniqueIdentifier>{9fd92a9e-335e-47f9-ad8c-c47588245f5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager\1_MeshData">
+      <UniqueIdentifier>{fe995487-afd6-456b-972d-48ef8019a8ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -433,7 +430,7 @@
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClCompile>
     <ClCompile Include="ModelConversionModule.cpp">
-      <Filter>2_Core\Model\0_ModelConversion</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\0_ModelConversion</Filter>
     </ClCompile>
     <ClCompile Include="Knight.cpp">
       <Filter>4_Game\6_Object\1_ColliderObject\Knight</Filter>
@@ -557,6 +554,9 @@
     </ClCompile>
     <ClCompile Include="DirectX11_VertexBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_DrawCreate.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -702,16 +702,16 @@
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClInclude>
     <ClInclude Include="ModelData.h">
-      <Filter>2_Core\Model\1_MeshData</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>2_Core\Model\1_MeshData</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="ModelConversionModule.h">
-      <Filter>2_Core\Model\0_ModelConversion</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\0_ModelConversion</Filter>
     </ClInclude>
     <ClInclude Include="MaterialData.h">
-      <Filter>2_Core\Model\1_MeshData</Filter>
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager\1_MeshData</Filter>
     </ClInclude>
     <ClInclude Include="Knight.h">
       <Filter>4_Game\6_Object\1_ColliderObject\Knight</Filter>
@@ -895,6 +895,18 @@
     </ClInclude>
     <ClInclude Include="BaseDrawManager.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_DrawCreate.h">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDrawCreate.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureHandleh.h">
+      <Filter>2_Core\0_TemplateManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelHandle.h">
+      <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,8 @@
 #include "ModelManager.h"
 // モデルデータ
 #include "ModelData.h"
+// 文字列ヘッダー
+#include <string>
 // ログ出力
 #include "ReportMessage.h"
 
