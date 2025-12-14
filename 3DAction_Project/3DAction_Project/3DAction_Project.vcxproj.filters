@@ -872,9 +872,6 @@
     <ClInclude Include="DrawPathConfig.h">
       <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
-    <ClInclude Include="BaseDrawManager.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX11_IndexBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
     </ClInclude>
@@ -895,6 +892,9 @@
     </ClInclude>
     <ClInclude Include="DirectX11_VertexBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDrawManager.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
