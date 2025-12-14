@@ -25,6 +25,8 @@
 #include "CullingSetting.h"   // カリング設定
 #include "FillModeSetting.h"  // 塗り設定
 #include "DepthStencilSetting.h" // 深度ステンシル設定
+// パス設定ヘッダー
+#include "DrawPathConfig.h"
 // 基本ヘッダー
 #include <cstdint>
 

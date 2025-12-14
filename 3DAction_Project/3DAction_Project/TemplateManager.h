@@ -18,20 +18,8 @@
 #include <unordered_map>
 // 文字列ヘッダー
 #include <string>
-// 固定長整数ヘッダー
-#include <cstdint>
-
-
-// ===================================
-// 構造体定義
-// ===================================
-struct Handle 
-{
-	// 添え字
-	uint32_t index;
-	// 世代
-	uint32_t generation;
-};
+// ハンドル構造体
+#include "Handle.h"
 
 
 // ===================================

@@ -50,7 +50,7 @@ std::string ShaderInfo::Serialize(int spaceNumber) const
     std::string ILData;
     for (int i = 0; i < (int)m_ILInfo.size(); i++)
     {
-        ILData += SaveUtils::FormatAnonymousBlock(m_ILInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1); // 内容
+        ILData += SaveUtils::FormatAnonymousBlock(m_ILInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1);
     }
     saveData += SaveUtils::FormatBlock(kInputStart, (int)m_ILInfo.size(), ILData, spaceNumber);
 
@@ -58,7 +58,7 @@ std::string ShaderInfo::Serialize(int spaceNumber) const
     std::string CBData;
     for (int i = 0; i < (int)m_CBInfo.size(); i++)
     {
-        CBData += SaveUtils::FormatAnonymousBlock(m_CBInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1); // 内容
+        CBData += SaveUtils::FormatAnonymousBlock(m_CBInfo[i].Serialize(spaceNumber + 2), spaceNumber + 1);
     }
     saveData += SaveUtils::FormatBlock(kCBufferStart, (int)m_CBInfo.size(), CBData, spaceNumber);
 

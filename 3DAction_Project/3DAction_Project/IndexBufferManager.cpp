@@ -39,19 +39,13 @@ bool IndexBufferManager::CreateIndexBuffer(
     // バッファデータを配列に代入
     m_IndexBuffers[name] = std::move(vbd);
 
-    // バッファの名前を保存
-    m_Logger.Log(name.c_str());
-
 
 #if defined(DEBUG) || defined(_DEBUG)
     // コンソールに出力
     DebugLog::OutputToConsole(("インデックスバッファ " + name + " を作成しました").c_str());
 
     // 名前を設定
-    m_IndexBuffers[name]->GetBuffer()->SetPrivateData(
-        WKPDID_D3DDebugObjectName,
-        UINT(name.size()),
-        name.c_str());
+    m_IndexBuffers[name]->SetDebugName(name.c_str());
 #endif
 
     return true;
@@ -72,10 +66,7 @@ uint32_t IndexBufferManager::BindIndexData(const std::string& name,ID3D11DeviceC
 	}
 
 	// インデックスバッファをセット
-    context->IASetIndexBuffer(
-        it->second->GetBuffer(),
-        DXGI_FORMAT_R32_UINT,
-		0);
+	it->second->BindIndexBuffer(context);
 
     return it->second->GetIndexCount();
 }

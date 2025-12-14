@@ -11,6 +11,8 @@
 // =======================================
 #include <string> // 文字列を扱うためのヘッダー
 #include <string_view> // 文字列参照
+// 固定整数型
+#include <cstddef>
 #include "BaseSaveLoadObject.h" // セーブロードを行うオブジェクトの基底クラス
 
 
@@ -20,27 +22,42 @@
 class ConstantBufferInfo : public BaseSaveLoadObject
 {
 private:
-	std::string m_Name = "";  // 定数バッファの名前
-	int m_RegisterNumber = 0; // レジスタ番号
-	size_t m_Size = 0;        // 大きさ１６の倍数にする
+	// ---------------------------------
+	// メンバー変数
+	// ---------------------------------
+	// 定数バッファの名前
+	std::string m_Name = "";
+	// レジスタ番号
+	uint16_t m_RegisterNumber = 0;
+	// 必ず１６の倍数にする
+	size_t m_Size = 0;
 
 public:
+	// ---------------------------------
 	// コンストラクタ・デストラクタ
+	// ---------------------------------
 	ConstantBufferInfo() = default;
-	~ConstantBufferInfo() override = default;
+	~ConstantBufferInfo() override final = default;
 
+
+	// ---------------------------------
 	// セーブ・ロード
-	std::string Serialize(int space)const override;
-	bool Deserialize(const std::string_view& data) override;
+	// ---------------------------------
+	std::string Serialize(int _space)const override final;
+	bool Deserialize(const std::string_view& _data) override final;
 
+	// ---------------------------------
 	// セッター
-	void SetName(const std::string& name) { m_Name = name; }
-	void SetRegisterNumber(int number) { m_RegisterNumber = number; }
-	void SetSize(size_t size) { m_Size = size; }
+	// ---------------------------------
+	void SetName(const std::string& _name) { m_Name = _name; }
+	void SetRegisterNumber(uint16_t _number) { m_RegisterNumber = _number; }
+	void SetSize(size_t _size) { m_Size = _size; }
 
+	// ---------------------------------
 	// ゲッター
+	// ---------------------------------
 	const std::string& GetName() const { return m_Name; }
-	int GetRegisterNumber() const { return m_RegisterNumber; }
-	size_t GetSize() const { return m_Size; }
+	const uint16_t GetRegisterNumber() const { return m_RegisterNumber; }
+	const size_t GetSize() const { return m_Size; }
 };
 

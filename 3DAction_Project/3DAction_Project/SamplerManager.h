@@ -15,8 +15,6 @@
 #include <memory> // スマートポインター
 // 配列のヘッダー
 #include <unordered_map> // ハッシュ値検索
-// アセットログ出力
-#include "AssetLogger.h"
 // サンプラー
 #include "SamplerSetting.h"
 
@@ -29,13 +27,11 @@ class SamplerManager
 private:
 	// サンプラー配列　(サンプラーデスクのハッシュ値計算関数を渡す)
     std::unordered_map<SamplerDesc, std::shared_ptr<SamplerData>, SamplerDescHash> m_Samplers;
-	// ログ出力
-	AssetLogger m_Logger = { "Samplers.txt" };
 
 public:
     // コンストラクタ・デストラクタ
     SamplerManager() = default;
-    ~SamplerManager() { m_Logger.WriteLog(); }
+    ~SamplerManager() = default;
 
     // サンプラー作成
     bool CreateSampler(

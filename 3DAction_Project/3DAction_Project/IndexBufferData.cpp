@@ -41,3 +41,16 @@ bool IndexBufferData::CreateIndexBuffer(
 
 	return true;
 }
+
+
+// ==================================
+// インデックスバッファバインド
+// ==================================
+void IndexBufferData::BindIndexBuffer(ID3D11DeviceContext* context) const
+{
+	// インデックスバッファをバインド
+	context->IASetIndexBuffer(
+		m_Buffer.Get(),         // バッファ
+		DXGI_FORMAT_R32_UINT,   // インデックスの形式 (uint32_t)
+		0);                     // オフセット
+}

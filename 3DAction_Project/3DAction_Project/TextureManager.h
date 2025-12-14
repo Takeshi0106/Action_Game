@@ -19,8 +19,6 @@
 #include <unordered_map> // ハッシュ値検索
 // バッファ設定
 #include "GraphicsEnums.h"
-// アセットログ出力クラス
-#include "AssetLogger.h"
 
 
 // =================================
@@ -42,12 +40,14 @@ class TextureManager
 private:
 	// テクスチャ配列
 	std::unordered_map<std::string, std::unique_ptr<Texture2DData>> m_Textures;
-    AssetLogger m_Logger{"Texture.txt"};
 
 public:
+	// -------------------------------
     // コンストラクタ・デストラクタ
+	// -------------------------------
     TextureManager() = default;
-    ~TextureManager() { m_Logger.WriteLog(); }
+	~TextureManager() = default;
+
 
 	// スワップチェインからテクスチャを作成
     bool CreateTextureFromSwapChain(

@@ -318,9 +318,6 @@
     <ClCompile Include="ShaderData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>0_Main</Filter>
-    </ClCompile>
     <ClCompile Include="Windows_Timer.cpp">
       <Filter>1_Platform\Windows\4_Timer</Filter>
     </ClCompile>
@@ -537,6 +534,9 @@
     <ClCompile Include="DrawComand.cpp">
       <Filter>2_Core\1_DrawComand</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>0_Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -613,9 +613,6 @@
     </ClInclude>
     <ClInclude Include="Quaternionh.h">
       <Filter>1_Platform\Base\2_PlatformMath\MathStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseDrawManager.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
     </ClInclude>
     <ClInclude Include="VertexBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
@@ -850,6 +847,12 @@
     </ClInclude>
     <ClInclude Include="Handle.h">
       <Filter>2_Core\0_TemplateManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawPathConfig.h">
+      <Filter>2_Core\0_TemplateManager</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDrawManager.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,15 +1,15 @@
-
+ï»¿
 // =======================================
-// ƒwƒbƒ_[
+// ãƒ˜ãƒƒãƒ€ãƒ¼
 // =======================================
-// •W€ƒwƒbƒ_[
+// æ¨™æº–ãƒ˜ãƒƒãƒ€ãƒ¼
 #include "DirectX_FormatConverter.h"
-// o—Í—pƒwƒbƒ_[
+// å‡ºåŠ›ç”¨ãƒ˜ãƒƒãƒ€ãƒ¼
 #include "ReportMessage.h"
 
 
 // ==========================
-// g—p—p“r•ÏŠ·
+// ä½¿ç”¨ç”¨é€”å¤‰æ›
 // ==========================
 D3D11_USAGE DirectX_FormatConverter::ToDXUsage(BufferUsage usage)
 {
@@ -22,7 +22,7 @@ D3D11_USAGE DirectX_FormatConverter::ToDXUsage(BufferUsage usage)
         return D3D11_USAGE_DYNAMIC;
         break;
     default:
-        ErrorLog::OutputToConsole("BufferUsage‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        ErrorLog::OutputToConsole("BufferUsageã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ");
         return D3D11_USAGE_DEFAULT;
         break;
     }
@@ -30,7 +30,7 @@ D3D11_USAGE DirectX_FormatConverter::ToDXUsage(BufferUsage usage)
 
 
 // ============================
-// ƒAƒNƒZƒX§ŒÀ‚É•ÏŠ·
+// ã‚¢ã‚¯ã‚»ã‚¹åˆ¶é™ã«å¤‰æ›
 // ============================
 UINT DirectX_FormatConverter::ToDXCPUAccess(CPUAccess access)
 {
@@ -43,7 +43,7 @@ UINT DirectX_FormatConverter::ToDXCPUAccess(CPUAccess access)
         return D3D11_CPU_ACCESS_WRITE;
         break;
     default:
-        ErrorLog::OutputToConsole("CPUAccess‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        ErrorLog::OutputToConsole("CPUAccessã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ");
         return static_cast<D3D11_CPU_ACCESS_FLAG>(0);
         break;
     }
@@ -51,35 +51,35 @@ UINT DirectX_FormatConverter::ToDXCPUAccess(CPUAccess access)
 
 
 // ===========================
-// ©ìFormat ‚©‚ç DXGI_FORMAT ‚É•ÏŠ·
+// è‡ªä½œFormat ã‹ã‚‰ DXGI_FORMAT ã«å¤‰æ›
 // ===========================
 DXGI_FORMAT DirectX_FormatConverter::ToDXFormat(Format format)
 {
     switch (format)
     {
-    case Format::Unknown:
+    case Format::Format_Unknown:
         return DXGI_FORMAT_UNKNOWN;
         break;
-    case Format::R8G8B8A8_UNorm:
+    case Format::Format_R8G8B8A8_UNorm:
         return DXGI_FORMAT_R8G8B8A8_UNORM;
         break;
-    case Format::B8G8R8A8_UNorm_SRGB:
+    case Format::Format_B8G8R8A8_UNorm_SRGB:
         return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
         break;
-    case Format::R32_Float:
+    case Format::Format_R32_Float:
         return DXGI_FORMAT_R32_FLOAT;
         break;
-    case Format::R32G32B32_Float:
+    case Format::Format_R32G32B32_Float:
         return DXGI_FORMAT_R32G32B32_FLOAT;
         break;
-    case Format::R32G32B32A32_Float:
+    case Format::Format_R32G32B32A32_Float:
         return DXGI_FORMAT_R32G32B32A32_FLOAT;
         break;
-    case Format::D24_UNorm_S8_UInt:
+    case Format::Format_D24_UNorm_S8_UInt:
         return DXGI_FORMAT_D24_UNORM_S8_UINT;
         break;
     default:
-        ErrorLog::OutputToConsole("Format‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        ErrorLog::OutputToConsole("Formatã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ");
         return DXGI_FORMAT_UNKNOWN;
         break;
     }
@@ -87,36 +87,36 @@ DXGI_FORMAT DirectX_FormatConverter::ToDXFormat(Format format)
 
 
 // ===========================
-// DXGI_FORMAT ‚©‚ç ©ìFormat ‚É•ÏŠ·
+// DXGI_FORMAT ã‹ã‚‰ è‡ªä½œFormat ã«å¤‰æ›
 // ===========================
 Format DirectX_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
 {
     switch (format)
     {
     case DXGI_FORMAT_UNKNOWN:
-        return Format::Unknown;
+        return Format::Format_Unknown;
         break;
     case DXGI_FORMAT_R8G8B8A8_UNORM:
-        return Format::R8G8B8A8_UNorm;
+        return Format::Format_R8G8B8A8_UNorm;
         break;
     case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
-        return Format::B8G8R8A8_UNorm_SRGB;
+        return Format::Format_B8G8R8A8_UNorm_SRGB;
         break;
     case DXGI_FORMAT_R32_FLOAT:
-        return Format::R32_Float;
+        return Format::Format_R32_Float;
         break;
     case DXGI_FORMAT_R32G32B32_FLOAT:
-        return Format::R32G32B32_Float;
+        return Format::Format_R32G32B32_Float;
         break;
     case DXGI_FORMAT_R32G32B32A32_FLOAT:
-        return Format::R32G32B32A32_Float;
+        return Format::Format_R32G32B32A32_Float;
         break;
     case DXGI_FORMAT_D24_UNORM_S8_UINT:
-        return Format::D24_UNorm_S8_UInt;
+        return Format::Format_D24_UNorm_S8_UInt;
         break;
     default:
-        ErrorLog::OutputToConsole("Format‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
-        return Format::Unknown;
+        ErrorLog::OutputToConsole("Formatã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ");
+        return Format::Format_Unknown;
         break;
     }
 }
@@ -136,7 +136,7 @@ D3D11_FILTER DirectX_FormatConverter::ConvertFilter(SamplerFilter filter)
         return D3D11_FILTER_ANISOTROPIC;
         break;
     default: 
-        ErrorLog::OutputToConsole("D3D11_FILTER ‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        ErrorLog::OutputToConsole("D3D11_FILTER ã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ");
         return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         break;
     }
@@ -159,7 +159,7 @@ D3D11_TEXTURE_ADDRESS_MODE DirectX_FormatConverter::ConvertAddressMode(SamplerAd
         return D3D11_TEXTURE_ADDRESS_BORDER;
         break;
     default: 
-        ErrorLog::OutputToConsole("D3D11_TEXTURE_ADDRESS_MODE ‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        ErrorLog::OutputToConsole("D3D11_TEXTURE_ADDRESS_MODE ã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ");
         return D3D11_TEXTURE_ADDRESS_WRAP;
         break;
     }
@@ -194,7 +194,7 @@ D3D11_COMPARISON_FUNC DirectX_FormatConverter::ConvertComparisonFunc(SamplerComp
         return D3D11_COMPARISON_ALWAYS;
         break;
     default: 
-        ErrorLog::OutputToConsole("D3D11_COMPARISON_FUNC ‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+        ErrorLog::OutputToConsole("D3D11_COMPARISON_FUNC ã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸ");
         return D3D11_COMPARISON_ALWAYS;
         break;
     }

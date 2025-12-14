@@ -81,9 +81,10 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 // コンストラクタ・デストラクタ
 // ===================================================== 
 // コンストラクタ
-PlatformWindowsSystem::PlatformWindowsSystem(unsigned int Width, unsigned int Height, 
-    const wchar_t* WindowClassName, const wchar_t* WindowName)
-    :m_Width(Width), m_Height(Height), m_WindowClassName(WindowClassName), m_WindowName(WindowName) 
+PlatformWindowsSystem::PlatformWindowsSystem(uint16_t _width, uint16_t _height, 
+    const wchar_t* WindowClassName, const wchar_t* WindowName,
+    const DrawPathConfig& _config)
+    :m_Width(_width), m_Height(_height), m_WindowClassName(WindowClassName), m_WindowName(WindowName),m_PathConfig(_config)
 {
 
 }
@@ -225,7 +226,7 @@ void PlatformWindowsSystem::Uninit()
 bool PlatformWindowsSystem::GameInit()
 {
     // 描画マネージャー作成
-    m_DrawManager = std::make_unique<DirectX_DrawManager>();
+    m_DrawManager = std::make_unique<DirectX_DrawManager>(m_PathConfig);
     m_DrawManager->Init(m_Width,m_Height,m_WinInstance);
 	m_DrawManager->SetDrawSetting(FillModeSetting::Solid, CullingSetting::Back_Culling);
 

@@ -30,7 +30,8 @@ namespace {
 // ======================================
 std::string ConstantBufferInfo::Serialize(int spaceNumber) const
 {
-    std::string saveData; // データを入れる
+    // データを入れる
+    std::string saveData;
 
     // セーブする情報を作成
     saveData += SaveUtils::MakeTypeInfo(kCBufferName, m_Name, spaceNumber);

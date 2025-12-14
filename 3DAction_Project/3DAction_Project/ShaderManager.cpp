@@ -66,9 +66,9 @@ bool ShaderManager::Init(ID3D11Device* device)
 void ShaderManager::Uninit()
 {
 	// 各シェーダーを解放
-	m_Vertexs.clear();  // 中身を削除 unique_ptrのためDeleteされる
-	m_Pixels.clear();   // 中身を削除 unique_ptrのためDeleteされる
-	m_Computes.clear(); // 中身を削除 unique_ptrのためDeleteされる
+	m_Vertexs.clear();
+	m_Pixels.clear(); 
+	m_Computes.clear(); 
 }
 
 
@@ -92,7 +92,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		auto vertex = std::make_unique<VertexShaderData>();
 
 		// シェーダー作成
-		if (!vertex->CreateShader(device, binary, size, CBInfo, ILInfo)) {
+		if (!vertex->CreateVertexShader(device, binary, size, CBInfo, ILInfo)) {
 			ErrorLog::OutputToConsole(std::string("頂点シェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -106,7 +106,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		auto pixel = std::make_unique<PixelShaderData>();
 
 		// シェーダー作成
-		if (!pixel->CreateShader(device, binary, size, CBInfo)) {
+		if (!pixel->CreatePixelShader(device, binary, size, CBInfo)) {
 			ErrorLog::OutputToConsole(std::string("ピクセルシェーダ― " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -120,7 +120,7 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		auto compute = std::make_unique< ComputeShaderData>();
 
 		// シェーダー作成
-		if (!compute->CreateShader(device, binary, size, CBInfo)) {
+		if (!compute->CreateComputeShader(device, binary, size, CBInfo)) {
 			ErrorLog::OutputToConsole(std::string("コンピュートシェーダー " + shaderName + " のクラスの初期化に失敗しました").c_str());
 			return false;
 		}
@@ -133,9 +133,6 @@ bool ShaderManager::JudgeBinaryMenber(const std::string shaderName, ID3D11Device
 		ErrorLog::OutputToConsole(std::string(shaderName + " : 先頭にシェーダーの種類が記載されていません").c_str());
 		return false;
 	}
-
-	// 名前を保存しておくデバッグ用
-	m_Logger.Log(shaderName.c_str());
 
 	return true;
 }
@@ -152,10 +149,8 @@ const std::vector<ConstantBufferInfo>* ShaderManager::BindVertexShader(const std
 
 	if (it != m_Vertexs.end()) 
 	{
-		// シェーダーセット
-		context->VSSetShader(it->second.get()->GetVertexShader(), nullptr, 0);
-		// 入力レイアウトセット
-		context->IASetInputLayout(it->second.get()->GetInputLayout());
+		// 頂点シェーダーをバインド
+		it->second.get()->BindVertexShader(context);
 
 		// 定数バッファ情報を返す
 		return it->second.get()->GetCBInfo();
@@ -172,7 +167,7 @@ const std::vector<ConstantBufferInfo>* ShaderManager::BindPixelShader(const std:
 	if (it != m_Pixels.end()) 
 	{
 		// ピクセルシェーダーをバインド
-		contex->PSSetShader(it->second.get()->GetPixelShader(), nullptr, 0);
+		it->second.get()->BindPixelShader(contex);
 		// 定数バッファ情報を返す
 		return it->second.get()->GetCBInfo();
 	}
@@ -188,7 +183,7 @@ const std::vector<ConstantBufferInfo>* ShaderManager::BindComputeShader(const st
 	if (it != m_Computes.end()) 
 	{
 		// コンピュートシェーダーをバインド
-		context->CSSetShader(it->second.get()->GetComputeShader(), nullptr, 0);
+		it->second.get()->BindComputeShader(context);
 		// 定数バッファ情報を返す
 		return it->second.get()->GetCBInfo();
 	}
