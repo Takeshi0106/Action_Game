@@ -537,6 +537,27 @@
     <ClCompile Include="Main.cpp">
       <Filter>0_Main</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX11_IndexBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_SamplerManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_ViewManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_Texture2DBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_ConstantBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_ShaderManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11_VertexBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -853,6 +874,27 @@
     </ClInclude>
     <ClInclude Include="BaseDrawManager.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_IndexBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_SamplerManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_ViewManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_Texture2DBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\1_TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_ConstantBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\3_ConstantBufferManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_ShaderManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11_VertexBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
