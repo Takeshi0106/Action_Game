@@ -28,6 +28,17 @@
 // ===============================================
 class BaseDrawCreate
 {
+public:
+	// --------------------------------
+	// コンストラクタ・デストラクタ
+	// --------------------------------
+	BaseDrawCreate() = default;
+	virtual ~BaseDrawCreate() = default;
+
+
+	// --------------------------------
+	// リソース作成
+	// --------------------------------
 	// 頂点バッファ作成
 	virtual const Handle CreateVertexBuffer(
 		const char* _vbName,
@@ -76,4 +87,3 @@ class BaseDrawCreate
 	// モデルのロード
 	virtual const ModelHandle LoadModel(const char* modelName, const char* modelFolderName = "") = 0;
 };
-

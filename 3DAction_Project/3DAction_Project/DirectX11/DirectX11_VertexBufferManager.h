@@ -2,7 +2,7 @@
 
 // ==============================================
 // 【クラス概要】
-// DirectX11用2Dテクスチャバッファマネージャー
+// DirectX11用頂点バッファマネージャー
 // APIObject を管理するマネージャー
 // ==============================================
 
@@ -15,41 +15,45 @@
 // スマートポインタ
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
-#include "TemplateManager.h"
+#include "../TemplateManager.h"
 
 
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_Texture2DBufferManager
+class DirectX11_VertexBufferManager
 {
 private:
 	// ------------------------------------------
 	// メンバー変数
 	// ------------------------------------------
-	// 2Dテクスチャバッファ管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Texture2D>> m_Texture2DBuffers;
+	// 頂点バッファ管理
+	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_VertexBuffers;
+
 
 public:
 	// ------------------------------------------
 	// コンストラクタ・デストラクタ
 	// ------------------------------------------
-	DirectX11_Texture2DBufferManager() = default;
-	~DirectX11_Texture2DBufferManager() = default;
+	DirectX11_VertexBufferManager() = default;
+	~DirectX11_VertexBufferManager() = default;
 
 
 	// ------------------------------------------
-	// 2Dテクスチャバッファ作成関数
+	// 頂点バッファ作成関数
 	// ------------------------------------------
-	const Handle Texture2DBufferCreate(
+	const Handle VertexBufferCreate(
 		ID3D11Device* _device,
-		const D3D11_TEXTURE2D_DESC* _desc,
-		const char* _name,
-		const D3D11_SUBRESOURCE_DATA* _initialData = nullptr);
+		const void* _vertices,
+		size_t _size,
+		D3D11_USAGE _usage,
+		D3D11_CPU_ACCESS_FLAG _flag,
+		const char* _name);
 
 
 	// ------------------------------------------
-	// 2Dテクスチャバッファ取得関数
+	// 頂点バッファ取得関数
 	// ------------------------------------------
-	ID3D11Texture2D* GetTexture2DBuffer(const Handle& _handle);
+	ID3D11Buffer* GetVertexBuffer(const Handle& _handle);
 };
+

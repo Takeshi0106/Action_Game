@@ -25,6 +25,8 @@ struct ModelHandle
 	// メッシュ頂点バッファハンドル配列
 	std::vector<Handle> meshVertexBufferHandles = {};
 	std::vector<Handle> meshIndexBufferHandles = {};
+	// マテリアルハンドル
+	std::vector<Handle> materialHandle = {};
 	// テクスチャハンドル
-	TextureHandle textureHandle = {};
+	std::vector<TextureHandle> textureHandle = {};
 };

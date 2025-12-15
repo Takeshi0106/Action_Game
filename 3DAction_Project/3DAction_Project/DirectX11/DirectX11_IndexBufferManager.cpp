@@ -5,7 +5,7 @@
 // 必須ヘッダー
 #include "DirectX11_IndexBufferManager.h"
 // ログ出力用ヘッダー
-#include "ReportMessage.h"
+#include "../ReportMessage.h"
 
 
 // ===========================================================================

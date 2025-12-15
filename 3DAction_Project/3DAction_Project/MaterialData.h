@@ -30,3 +30,4 @@ struct MeshMaterialData
 	// テクスチャの名前(テクスチャマネージャーに登録する名前)
 	std::string textureName;
 };
+

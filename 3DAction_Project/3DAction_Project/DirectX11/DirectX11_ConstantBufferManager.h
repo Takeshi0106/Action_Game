@@ -2,7 +2,7 @@
 
 // ==============================================
 // 【クラス概要】
-// DirectX11用頂点バッファマネージャー
+// DirectX11用定数バッファマネージャー
 // APIObject を管理するマネージャー
 // ==============================================
 
@@ -15,45 +15,44 @@
 // スマートポインタ
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
-#include "TemplateManager.h"
+#include "../TemplateManager.h"
 
 
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_VertexBufferManager
+class DirectX11_ConstantBufferManager
 {
 private:
 	// ------------------------------------------
 	// メンバー変数
 	// ------------------------------------------
-	// 頂点バッファ管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_VertexBuffers;
-
+	// 定数バッファ管理
+	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_ConstantBuffers;
 
 public:
 	// ------------------------------------------
 	// コンストラクタ・デストラクタ
 	// ------------------------------------------
-	DirectX11_VertexBufferManager() = default;
-	~DirectX11_VertexBufferManager() = default;
+	DirectX11_ConstantBufferManager() = default;
+	~DirectX11_ConstantBufferManager() = default;
 
 
 	// ------------------------------------------
-	// 頂点バッファ作成関数
+	// 定数バッファ作成関数
 	// ------------------------------------------
-	const Handle VertexBufferCreate(
+	const Handle ConstantBufferCreate(
 		ID3D11Device* _device,
-		const void* _vertices,
 		size_t _size,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
-		const char* _name);
+		const char* _name,
+		const void* _data = nullptr);
 
 
 	// ------------------------------------------
-	// 頂点バッファ取得関数
+	// 定数バッファ取得関数
 	// ------------------------------------------
-	ID3D11Buffer* GetVertexBuffer(const Handle& _handle);
+	ID3D11Buffer* GetConstantBuffer(const Handle& _handle);
 };
 

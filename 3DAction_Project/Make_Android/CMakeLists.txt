@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+
 # --------------------------------------
 # MSVC ランタイム統一
 # --------------------------------------
@@ -15,6 +16,7 @@ if(MSVC)
     # Debug は静的デバッグランタイム /MTd
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
+
 
 # --------------------------------------
 # 開発フォルダーへの相対パス
@@ -24,6 +26,7 @@ set(SRC_DIR "${DEVELOPMENT_DIR}")
 set(INCLUDE_DIR "${DEVELOPMENT_DIR}")
 
 include_directories(${INCLUDE_DIR})
+
 
 # --------------------------------------
 # Windows 用ライブラリのパス
@@ -42,11 +45,23 @@ if(WIN32)
     set(DXTEXTURE_LIB_RELEASE "C:/0_DXLibs/0_DirectXTex_2019/pdb/Relese/DirectXTex.lib")
 endif()
 
+
 # --------------------------------------
 # ソースファイル
 # --------------------------------------
 file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp")
 message(STATUS "SRC_FILES = ${SRC_FILES}")
+
+# Windows専用のDirectXソースを追加
+if (WIN32)
+    file(GLOB_RECURSE DX_SRC "${CMAKE_SOURCE_DIR}/DirectX11/*.cpp" "${CMAKE_SOURCE_DIR}/DirectX11/*.h")
+    list(APPEND SRC_FILES ${DX_SRC})
+    message(STATUS "SRC_FILES (with DirectX) = ${SRC_FILES}")
+endif()
+
+# 実際のターゲットに追加
+add_executable(MyGame ${SRC_FILES})
+
 
 # --------------------------------------
 # 実行ファイル / ライブラリ生成

@@ -2,7 +2,7 @@
 
 // ==============================================
 // 【クラス概要】
-// DirectX11用定数バッファマネージャー
+// DirectX11用2Dテクスチャバッファマネージャー
 // APIObject を管理するマネージャー
 // ==============================================
 
@@ -15,44 +15,41 @@
 // スマートポインタ
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
-#include "TemplateManager.h"
+#include "../TemplateManager.h"
 
 
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_ConstantBufferManager
+class DirectX11_Texture2DBufferManager
 {
 private:
 	// ------------------------------------------
 	// メンバー変数
 	// ------------------------------------------
-	// 定数バッファ管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_ConstantBuffers;
+	// 2Dテクスチャバッファ管理
+	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Texture2D>> m_Texture2DBuffers;
 
 public:
 	// ------------------------------------------
 	// コンストラクタ・デストラクタ
 	// ------------------------------------------
-	DirectX11_ConstantBufferManager() = default;
-	~DirectX11_ConstantBufferManager() = default;
+	DirectX11_Texture2DBufferManager() = default;
+	~DirectX11_Texture2DBufferManager() = default;
 
 
 	// ------------------------------------------
-	// 定数バッファ作成関数
+	// 2Dテクスチャバッファ作成関数
 	// ------------------------------------------
-	const Handle ConstantBufferCreate(
+	const Handle Texture2DBufferCreate(
 		ID3D11Device* _device,
-		size_t _size,
-		D3D11_USAGE _usage,
-		D3D11_CPU_ACCESS_FLAG _flag,
+		const D3D11_TEXTURE2D_DESC* _desc,
 		const char* _name,
-		const void* _data = nullptr);
+		const D3D11_SUBRESOURCE_DATA* _initialData = nullptr);
 
 
 	// ------------------------------------------
-	// 定数バッファ取得関数
+	// 2Dテクスチャバッファ取得関数
 	// ------------------------------------------
-	ID3D11Buffer* GetConstantBuffer(const Handle& _handle);
+	ID3D11Texture2D* GetTexture2DBuffer(const Handle& _handle);
 };
-

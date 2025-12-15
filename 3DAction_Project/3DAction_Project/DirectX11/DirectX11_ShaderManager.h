@@ -15,9 +15,9 @@
 // スマートポインタ
 #include <wrl/client.h>
 // ハンドルヘッダー
-#include "Handle.h"
+#include "../Handle.h"
 // データ管理テンプレートヘッダー
-#include "TemplateManager.h"
+#include "../TemplateManager.h"
 
 
 // ==============================================
