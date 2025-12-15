@@ -114,7 +114,7 @@ bool PlatformWindowsSystem::Init()
     windClass.hCursor = LoadCursor(m_AppInstance.Get(), IDC_ARROW);         // クロスカーソル表示する （デザイン）
     windClass.hbrBackground = GetSysColorBrush(COLOR_BACKGROUND);           // システムのデフォルト背景色でウィンドウの背景を塗る
     windClass.lpszMenuName = nullptr;                                       // ウィンドウのメニューを作成しない
-    windClass.lpszClassName = m_WindowClassName;                            // ウィンドウの名前設定
+    windClass.lpszClassName = (LPCWSTR)m_WindowClassName;                            // ウィンドウの名前設定
     windClass.hIconSm = LoadIcon(m_AppInstance.Get(), IDI_APPLICATION);     // タスクバーに表示されるアイコン (標準アイコンで作成 .icoで変更可能)
 
     // ウィンドウの登録 失敗したらfalseを返す
@@ -136,7 +136,7 @@ bool PlatformWindowsSystem::Init()
     // ウィンドウ作成
     m_WinInstance = CreateWindowEx(
         0,                          // ウィンドウの動作や見た目（デフォルト）
-        m_WindowClassName,          // ウィンドウのクラス名
+        (LPCWSTR)m_WindowClassName,          // ウィンドウのクラス名
         m_WindowName,               // ウィンドウのタイトルバーで表示される名前
         style,                      // ウィンドウのスタイル
         CW_USEDEFAULT,              // ウィンドウの表示位置をOSに決めてもらう
@@ -212,7 +212,7 @@ void PlatformWindowsSystem::Uninit()
     // ウィンドウの登録を解除
     if (m_AppInstance.Get() != nullptr)
     {
-        UnregisterClass(m_WindowClassName, m_AppInstance.Get());
+        UnregisterClass((LPCWSTR)m_WindowClassName, m_AppInstance.Get());
     }
 
     m_AppInstance = nullptr;
