@@ -163,6 +163,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="DebugSceneState.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="DirectX11\DirectX11_ConstantBufferManager.cpp" />
+    <ClCompile Include="DirectX11\DirectX11_FormatConverter.cpp" />
     <ClCompile Include="DirectX11\DirectX11_IndexBufferManager.cpp" />
     <ClCompile Include="DirectX11\DirectX11_SamplerManager.cpp" />
     <ClCompile Include="DirectX11\DirectX11_ShaderManager.cpp" />
@@ -172,7 +173,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="DirectX11_DrawCreate.cpp" />
     <ClCompile Include="DirectX11_DrawManager.cpp" />
     <ClCompile Include="DirectX_CursorController.cpp" />
-    <ClCompile Include="DirectX_FormatConverter.cpp" />
     <ClCompile Include="DirectX_Input.cpp" />
     <ClCompile Include="DrawComand.cpp" />
     <ClCompile Include="FadeManager.cpp" />
@@ -261,6 +261,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="ColliderObject.h" />
     <ClInclude Include="CollisionSystemModule.h" />
     <ClInclude Include="DirectX11\DirectX11_ConstantBufferManager.h" />
+    <ClInclude Include="DirectX11\DirectX11_FormatConverter.h" />
     <ClInclude Include="DirectX11\DirectX11_IndexBufferManager.h" />
     <ClInclude Include="DirectX11\DirectX11_SamplerManager.h" />
     <ClInclude Include="DirectX11\DirectX11_ShaderManager.h" />
@@ -272,6 +273,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DrawPathConfig.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="Matrix3x3.h" />
+    <ClInclude Include="MeshMaterialColor.h" />
     <ClInclude Include="MeshMaterialManager.h" />
     <ClInclude Include="ModelHandle.h" />
     <ClInclude Include="ModelLoadeModule.h" />
@@ -292,7 +294,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DebugSceneState.h" />
     <ClInclude Include="DepthStencilSetting.h" />
     <ClInclude Include="DirectX_CursorController.h" />
-    <ClInclude Include="DirectX_FormatConverter.h" />
     <ClInclude Include="ActionGame.h" />
     <ClInclude Include="DirectX_Input.h" />
     <ClInclude Include="FadeManager.h" />

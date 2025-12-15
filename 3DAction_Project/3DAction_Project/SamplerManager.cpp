@@ -5,7 +5,7 @@
 // 必須ヘッダー
 #include "SamplerManager.h"
 // フォーマット変換
-#include "DirectX_FormatConverter.h"
+#include "DirectX11/DirectX11_FormatConverter.h"
 // ログ出力
 #include "ReportMessage.h"
 // 文字列
@@ -42,11 +42,11 @@ bool SamplerManager::CreateSampler(
 
     // DirectX11用に変換
     D3D11_SAMPLER_DESC directxDesc = {};
-    directxDesc.Filter = DirectX_FormatConverter::ConvertFilter(_desc.filter);
-    directxDesc.AddressU = DirectX_FormatConverter::ConvertAddressMode(_desc.addressU);
-    directxDesc.AddressV = DirectX_FormatConverter::ConvertAddressMode(_desc.addressV);
-    directxDesc.AddressW = DirectX_FormatConverter::ConvertAddressMode(_desc.addressW);
-    directxDesc.ComparisonFunc = DirectX_FormatConverter::ConvertComparisonFunc(_desc.comparisonFunc);
+    directxDesc.Filter = DirectX11_FormatConverter::ConvertFilter(_desc.filter);
+    directxDesc.AddressU = DirectX11_FormatConverter::ConvertAddressMode(_desc.addressU);
+    directxDesc.AddressV = DirectX11_FormatConverter::ConvertAddressMode(_desc.addressV);
+    directxDesc.AddressW = DirectX11_FormatConverter::ConvertAddressMode(_desc.addressW);
+    directxDesc.ComparisonFunc = DirectX11_FormatConverter::ConvertComparisonFunc(_desc.comparisonFunc);
     directxDesc.MinLOD = 0;
     directxDesc.MaxLOD = D3D11_FLOAT32_MAX;
 

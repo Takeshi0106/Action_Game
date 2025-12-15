@@ -44,6 +44,6 @@ public:
 	// メンバー関数
 	// --------------------------------
 	// モデル読み込み内部関数
-	ModelData ModelLoad(const char* modelPath, int flag, const char* modelFile = "");
+	ModelData ModelLoad(const char* modelPath, const char* modelFile = "");
 };
 

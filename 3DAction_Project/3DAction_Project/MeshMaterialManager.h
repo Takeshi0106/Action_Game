@@ -14,7 +14,7 @@
 // テンプレートマネージャーヘッダー
 #include "TemplateManager.h"
 // 色ヘッダー
-#include "Color.h"
+#include "MeshMaterialColor.h"
 // 配列ヘッダー
 #include <array>
 
@@ -29,7 +29,7 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// メッシュマテリアルデータマネージャー
-	TemplateManager<std::array<Color, 3>> m_MeshMaterialManager;
+	TemplateManager<MeshMaterialColor> m_MeshMaterialManager;
 
 
 public:
@@ -43,12 +43,12 @@ public:
 	// -------------------------------
 	// メッシュマテリアルデータを追加
 	// -------------------------------
-	Handle AddMeshMaterialData(const char* _name, const std::array<Color, 3>& _color);
+	Handle AddMeshMaterialData(const char* _name, const MeshMaterialColor& _color);
 
 
 	//-------------------------------
 	// メッシュマテリアルデータを取得
 	// -------------------------------
-	std::array<Color, 3>* GetMeshMaterialData(const Handle& _handle);
+	MeshMaterialColor* GetMeshMaterialData(const Handle& _handle);
 };
 

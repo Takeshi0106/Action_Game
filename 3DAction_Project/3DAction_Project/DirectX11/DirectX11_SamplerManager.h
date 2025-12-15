@@ -52,5 +52,21 @@ public:
 	// サンプラー取得関数
 	// ------------------------------------------
 	ID3D11SamplerState* GetSamplerState(const Handle& _handle);
+
+
+	// ------------------------------------------
+	// サンプラーチェック
+	// ------------------------------------------
+	bool Exists(const char* _name) const {
+		return m_Samplers.Exists(_name);
+	}
+
+
+	// ------------------------------------------
+	// サンプラーハンドル取得
+	// ------------------------------------------
+	Handle GetHandle(const char* _name) const {
+		return m_Samplers.GetHandle(_name);
+	}
 };
 

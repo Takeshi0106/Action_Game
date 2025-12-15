@@ -7,6 +7,7 @@
 // アシンプヘッダー
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 #pragma comment(lib, "assimp-vc143-mtd.lib")
 // ファイルシステム
 #include <filesystem>
@@ -17,7 +18,7 @@
 // ============================================================
 // モデル読み込み内部関数
 // ============================================================
-ModelData ModelLoadeModule::ModelLoad(const char* _modelPath, int _flag, const char* _modelFile)
+ModelData ModelLoadeModule::ModelLoad(const char* _modelPath, const char* _modelFile)
 {
 	// String型に変換
 	std::string modelPathStr = _modelPath;
@@ -43,8 +44,9 @@ ModelData ModelLoadeModule::ModelLoad(const char* _modelPath, int _flag, const c
 	// モデルを読込むための変数
 	Assimp::Importer importer;
 
-	// モデルロード
-	const aiScene* scene = importer.ReadFile(modelPath.string(), _flag);
+		// モデルロード
+		const aiScene* scene = importer.ReadFile(modelPath.string(),
+			aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
 
 	// ロードチェック
 	if (!scene) {

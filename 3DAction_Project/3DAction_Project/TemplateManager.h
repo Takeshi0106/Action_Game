@@ -137,7 +137,25 @@ public:
 
 		return &m_Datas[handle.index];
 	}
-	
+
+
+	// ================================
+	// 名前からハンドルを取得
+	// ================================
+	const Handle GetHandle(const std::string& name) const
+	{
+		// 名前からハンドルを取得
+		auto it = m_NameToHandleMap.find(name);
+
+		// 見つかったらハンドルを返す
+		if (it != m_NameToHandleMap.end())
+		{
+			return it->second;
+		}
+
+		return Handle();
+	}
+
 
 	// ================================
 	// 存在チェック

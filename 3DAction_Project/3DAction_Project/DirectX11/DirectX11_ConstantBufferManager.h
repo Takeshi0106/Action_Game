@@ -54,5 +54,23 @@ public:
 	// 定数バッファ取得関数
 	// ------------------------------------------
 	ID3D11Buffer* GetConstantBuffer(const Handle& _handle);
+
+
+	// ------------------------------------------
+	// 定数バッファチェック
+	// ------------------------------------------
+	bool Exists(const char* _name) const
+	{
+		return m_ConstantBuffers.Exists(_name);
+	}
+
+
+	// ------------------------------------------
+	// 定数バッファハンドル取得
+	// ------------------------------------------
+	const Handle GetConstantBufferHandle(const char* _name) const
+	{
+		return m_ConstantBuffers.GetHandle(_name);
+	}
 };
 

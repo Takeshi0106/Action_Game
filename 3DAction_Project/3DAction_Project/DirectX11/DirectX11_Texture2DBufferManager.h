@@ -52,4 +52,22 @@ public:
 	// 2Dテクスチャバッファ取得関数
 	// ------------------------------------------
 	ID3D11Texture2D* GetTexture2DBuffer(const Handle& _handle);
+
+
+	// ------------------------------------------
+	// 2Dテクスチャバッファチェック
+	// ------------------------------------------
+	bool Exists(const char* _name) const
+	{
+		return m_Texture2DBuffers.Exists(_name);
+	}
+
+
+	// ------------------------------------------
+	// ハンドル取得
+	// ------------------------------------------
+	const Handle GetHandle(const char* _name) const
+	{
+		return m_Texture2DBuffers.GetHandle(_name);
+	}
 };

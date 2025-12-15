@@ -24,3 +24,4 @@ const ModelHandle* ModelLoadManager::GetModelHandle(const Handle& _handle)
 {
 	return m_ModelLoadManager.GetData(_handle);
 }
+

@@ -8,7 +8,7 @@
 // DirectXヘッダー
 #include <d3d11.h>        // DirectXのAPIヘッダー
 // バッファユーリアリティヘッダー
-#include "DirectX_FormatConverter.h"
+#include "DirectX11/DirectX11_FormatConverter.h"
 // ログ出力
 #include "ReportMessage.h"
 
@@ -101,10 +101,10 @@ bool TextureManager::CreateTexture(
             device,
             width,
             height,
-            DirectX_FormatConverter::ToDXFormat(format),
+            DirectX11_FormatConverter::ToDXFormat(format),
             D3D11_BIND_FLAG(ToDXBindFlag(bindFlag)),
-            DirectX_FormatConverter::ToDXUsage(usage),
-            D3D11_CPU_ACCESS_FLAG(DirectX_FormatConverter::ToDXCPUAccess(flag)),
+            DirectX11_FormatConverter::ToDXUsage(usage),
+            D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(flag)),
             &dxInitData))
         {
             DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
@@ -119,10 +119,10 @@ bool TextureManager::CreateTexture(
             device,
             width,
             height,
-            DirectX_FormatConverter::ToDXFormat(format),
+            DirectX11_FormatConverter::ToDXFormat(format),
             D3D11_BIND_FLAG(ToDXBindFlag(bindFlag)),
-            DirectX_FormatConverter::ToDXUsage(usage),
-            D3D11_CPU_ACCESS_FLAG(DirectX_FormatConverter::ToDXCPUAccess(flag))))
+            DirectX11_FormatConverter::ToDXUsage(usage),
+            D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(flag))))
         {
             DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
             return false;

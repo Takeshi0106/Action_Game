@@ -55,5 +55,21 @@ public:
 	// 頂点バッファ取得関数
 	// ------------------------------------------
 	ID3D11Buffer* GetVertexBuffer(const Handle& _handle);
+
+
+	// ------------------------------------------
+	// 頂点バッファチェック
+	// ------------------------------------------
+	bool Exists(const char* _name) const {
+		return m_VertexBuffers.Exists(_name);
+	}
+
+
+	// ------------------------------------------
+	// 頂点バッファハンドル取得関数
+	// ------------------------------------------
+	const Handle GetVertexBufferHandle(const char* _name) const {
+		return m_VertexBuffers.GetHandle(_name);
+	}
 };
 

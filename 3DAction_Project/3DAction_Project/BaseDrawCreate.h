@@ -53,13 +53,15 @@ public:
 	virtual const Handle CreateIndexBuffer(
 		const char* _indexName,
 		const uint32_t* _indexData,
-		const uint32_t _indexNumber) = 0;
+		const uint32_t _indexNumber, 
+		const BufferUsage _usage,
+		const CPUAccess _access) = 0;
 
 	// 定数バッファ作成
 	virtual const Handle CreateConstantBuffer(
 		const char* _constantName,
-		const void* _data,
 		const size_t _size,
+		const void* _data = nullptr,
 		const BufferUsage _usage = BufferUsage::Dynamic,
 		const CPUAccess _access = CPUAccess::Write) = 0;
 
@@ -85,5 +87,5 @@ public:
 	// テクスチャのロード
 	virtual const TextureHandle LoadTexture(const char* textureName, const char* textureFolderName = "") = 0;
 	// モデルのロード
-	virtual const ModelHandle LoadModel(const char* modelName, const char* modelFolderName = "") = 0;
+	virtual const Handle LoadModel(const char* modelName, const char* modelFolderName = "") = 0;
 };

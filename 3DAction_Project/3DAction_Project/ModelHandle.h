@@ -20,13 +20,21 @@
 // ===============================================
 // 構造体定義
 // ===============================================
-struct ModelHandle
+// メッシュハンドル構造体
+struct MeshHandle
 {
 	// メッシュ頂点バッファハンドル配列
-	std::vector<Handle> meshVertexBufferHandles = {};
-	std::vector<Handle> meshIndexBufferHandles = {};
+	Handle meshVertexBufferHandles = {};
+	Handle meshIndexBufferHandles = {};
 	// マテリアルハンドル
-	std::vector<Handle> materialHandle = {};
+	Handle materialHandle = {};
 	// テクスチャハンドル
-	std::vector<TextureHandle> textureHandle = {};
+	TextureHandle textureHandle = {};
+};
+
+// モデルハンドル構造体
+struct ModelHandle
+{
+	// メッシュハンドル配列
+	std::vector<MeshHandle> meshHandles = {};
 };

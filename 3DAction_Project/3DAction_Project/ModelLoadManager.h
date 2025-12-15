@@ -51,9 +51,17 @@ public:
 	// -------------------------------
 	// モデルが存在するか確認
 	// -------------------------------
-	bool CheckModelHandle(const char* _name)
-	{
+	bool CheckModelHandle(const char* _name) {
 		return m_ModelLoadManager.Exists(_name);
+	}
+
+
+	// -------------------------------
+	// モデルハンドルを取得
+	// -------------------------------
+	const Handle GetModelHandle(const char* _name) {
+		const Handle handle = m_ModelLoadManager.GetHandle(_name);
+		return handle;
 	}
 };
 

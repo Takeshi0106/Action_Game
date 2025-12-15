@@ -3,15 +3,15 @@
 // ヘッダー
 // =======================================
 // 標準ヘッダー
-#include "DirectX_FormatConverter.h"
+#include "DirectX11_FormatConverter.h"
 // 出力用ヘッダー
-#include "ReportMessage.h"
+#include "../ReportMessage.h"
 
 
 // ==========================
 // 使用用途変換
 // ==========================
-D3D11_USAGE DirectX_FormatConverter::ToDXUsage(BufferUsage usage)
+D3D11_USAGE DirectX11_FormatConverter::ToDXUsage(BufferUsage usage)
 {
     switch (usage)
     {
@@ -32,7 +32,7 @@ D3D11_USAGE DirectX_FormatConverter::ToDXUsage(BufferUsage usage)
 // ============================
 // アクセス制限に変換
 // ============================
-UINT DirectX_FormatConverter::ToDXCPUAccess(CPUAccess access)
+UINT DirectX11_FormatConverter::ToDXCPUAccess(CPUAccess access)
 {
     switch (access)
     {
@@ -53,7 +53,7 @@ UINT DirectX_FormatConverter::ToDXCPUAccess(CPUAccess access)
 // ===========================
 // 自作Format から DXGI_FORMAT に変換
 // ===========================
-DXGI_FORMAT DirectX_FormatConverter::ToDXFormat(Format format)
+DXGI_FORMAT DirectX11_FormatConverter::ToDXFormat(Format format)
 {
     switch (format)
     {
@@ -89,7 +89,7 @@ DXGI_FORMAT DirectX_FormatConverter::ToDXFormat(Format format)
 // ===========================
 // DXGI_FORMAT から 自作Format に変換
 // ===========================
-Format DirectX_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
+Format DirectX11_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
 {
     switch (format)
     {
@@ -122,7 +122,7 @@ Format DirectX_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
 }
 
 
-D3D11_FILTER DirectX_FormatConverter::ConvertFilter(SamplerFilter filter)
+D3D11_FILTER DirectX11_FormatConverter::ConvertFilter(SamplerFilter filter)
 {
     switch (filter)
     {
@@ -142,7 +142,7 @@ D3D11_FILTER DirectX_FormatConverter::ConvertFilter(SamplerFilter filter)
     }
 }
 
-D3D11_TEXTURE_ADDRESS_MODE DirectX_FormatConverter::ConvertAddressMode(SamplerAddressMode mode)
+D3D11_TEXTURE_ADDRESS_MODE DirectX11_FormatConverter::ConvertAddressMode(SamplerAddressMode mode)
 {
     switch (mode)
     {
@@ -165,7 +165,7 @@ D3D11_TEXTURE_ADDRESS_MODE DirectX_FormatConverter::ConvertAddressMode(SamplerAd
     }
 }
 
-D3D11_COMPARISON_FUNC DirectX_FormatConverter::ConvertComparisonFunc(SamplerComparisonFunc func)
+D3D11_COMPARISON_FUNC DirectX11_FormatConverter::ConvertComparisonFunc(SamplerComparisonFunc func)
 {
     switch (func)
     {

@@ -5,7 +5,7 @@
 // 必須ヘッダー
 #include "ConstantBufferManager.h" // 自分のヘッダー
 // 自作列挙型をDirectX用に変換
-#include "DirectX_FormatConverter.h"
+#include "DirectX11/DirectX11_FormatConverter.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
 
@@ -53,8 +53,8 @@ bool ConstantBufferManager::CreateConstantBuffer(
 		device,
 		data,
 		size,
-		DirectX_FormatConverter::ToDXUsage(usage),
-		D3D11_CPU_ACCESS_FLAG(DirectX_FormatConverter::ToDXCPUAccess(access))))
+		DirectX11_FormatConverter::ToDXUsage(usage),
+		D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(access))))
 	{
 		ErrorLog::OutputToConsole(std::string(("定数バッファの作成失敗: " + constantName)).c_str());
 		return false;

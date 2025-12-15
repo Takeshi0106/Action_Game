@@ -75,5 +75,33 @@ public:
 	ID3D11RenderTargetView* GetRenderTargetView(const Handle& _handle);
 	ID3D11ShaderResourceView* GetShaderResourceView(const Handle& _handle);
 	ID3D11DepthStencilView* GetDepthStencilView(const Handle& _handle);
+
+
+	// ------------------------------------------
+	// ビューチェック関数
+	// ------------------------------------------
+	bool ExistsRTV(const char* _name) const {
+		return m_RenderTargetViews.Exists(_name);
+	}
+	bool ExistsSRV(const char* _name) const {
+		return m_ShaderResourceViews.Exists(_name);
+	}
+	bool ExistsDSV(const char* _name) const {
+		return m_DepthStencilViews.Exists(_name);
+	}
+
+
+	// ------------------------------------------
+	// ビューハンドル取得関数
+	// ------------------------------------------
+	const Handle GetRTVHandle(const char* _name) const {
+		return m_RenderTargetViews.GetHandle(_name);
+	}
+	const Handle GetSRVHandle(const char* _name) const {
+		return m_ShaderResourceViews.GetHandle(_name);
+	}
+	const Handle GetDSVHandle(const char* _name) const {
+		return m_DepthStencilViews.GetHandle(_name);
+	}
 };
 

@@ -55,5 +55,21 @@ public:
 	// インデックスバッファ取得関数
 	// ------------------------------------------
 	ID3D11Buffer* GetIndexBuffer(const Handle& _handle);
+
+
+	// ------------------------------------------
+	// インデックスバッファチェック
+	// ------------------------------------------
+	bool Exists(const char* _name) const {
+		return m_IndexBuffers.Exists(_name);
+	}
+
+
+	// ------------------------------------------
+	// インデックスバッファハンドル取得
+	// ------------------------------------------
+	const Handle GetIndexBufferHandle(const char* _name) const {
+		return m_IndexBuffers.GetHandle(_name);
+	}
 };
 
