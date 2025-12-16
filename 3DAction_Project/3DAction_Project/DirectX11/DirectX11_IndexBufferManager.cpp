@@ -14,7 +14,8 @@
 const Handle DirectX11_IndexBufferManager::IndexBufferCreate(
 	ID3D11Device* _device,
 	const void* _indices,
-	size_t _size,
+	const size_t _size,
+	const uint32_t _indexCount,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
 	const char* _name)
@@ -44,16 +45,21 @@ const Handle DirectX11_IndexBufferManager::IndexBufferCreate(
 	if (FAILED(hr)) {
 		return Handle();
 	}
+	
+	// インデックスバッファデータ作成
+	IndexBufferData bufferData{};
+	bufferData.indexBuffer = std::move(buffer);
+	bufferData.indexCount = _indexCount;
 
 	// 管理配列に追加してハンドルを返す
-	return m_IndexBuffers.AddData(_name, buffer);
+	return m_IndexBuffers.AddData(_name, bufferData);
 }
 
 
 // ===========================================================================
 // インデックスバッファ取得
 // ===========================================================================
-ID3D11Buffer* DirectX11_IndexBufferManager::GetIndexBuffer(const Handle& _handle)
+IndexBufferData* DirectX11_IndexBufferManager::GetIndexBuffer(const Handle& _handle)
 {
-	return m_IndexBuffers.GetData(_handle)->Get();
+	return m_IndexBuffers.GetData(_handle);
 }

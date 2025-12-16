@@ -14,7 +14,8 @@
 const Handle DirectX11_VertexBufferManager::VertexBufferCreate(
 	ID3D11Device* _device,
 	const void* _vertices,
-	size_t _size,
+	const size_t _size,
+	const uint32_t _vertexCount,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
 	const char* _name)
@@ -44,15 +45,20 @@ const Handle DirectX11_VertexBufferManager::VertexBufferCreate(
 		return Handle();
 	}
 
+	// 頂点バッファデータ作成
+	VertexBufferData bufferData{};
+	bufferData.vertexBuffer = std::move(buffer);
+	bufferData.vertexCount = _vertexCount;
+
 	// 管理配列に追加してハンドルを返す
-	return m_VertexBuffers.AddData(_name, buffer);
+	return m_VertexBuffers.AddData(_name, bufferData);
 }
 
 
 // ===========================================
 // 頂点バッファ取得
 // ===========================================
-ID3D11Buffer* DirectX11_VertexBufferManager::GetVertexBuffer(const Handle& _handle)
+VertexBufferData* DirectX11_VertexBufferManager::GetVertexBuffer(const Handle& _handle)
 {
-	return m_VertexBuffers.GetData(_handle)->Get();
+	return m_VertexBuffers.GetData(_handle);
 }

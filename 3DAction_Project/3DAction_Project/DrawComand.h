@@ -29,11 +29,28 @@ struct UpdateBufferComand
 };
 
 
+// RT切り替え
+struct RTChangeComand
+{
+	// レンダーターゲットビューハンドル配列
+	std::vector<Handle> rtvHandles;
+	// 深度ステンシルビューのハンドル
+	Handle dsvHandle;
+};
+
+// 描画モード
+enum class DrawMode : uint8_t
+{
+	Draw,
+	DrawIndexed,
+	DrawInstanced
+};
+
 // 描画コマンド
 struct DrawComand
 {
 	// 描画モード
-	uint32_t drawMode;
+	DrawMode drawMode;
 
 	// シェーダーハンドル
 	Handle vsHandle;

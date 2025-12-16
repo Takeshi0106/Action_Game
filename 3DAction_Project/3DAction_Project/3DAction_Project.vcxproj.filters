@@ -552,9 +552,6 @@
     <ClCompile Include="MouseConvert.cpp">
       <Filter>4_Game\8_Core\MouseConvert</Filter>
     </ClCompile>
-    <ClCompile Include="DrawComand.cpp">
-      <Filter>2_Core\1_DrawComand</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>0_Main</Filter>
     </ClCompile>
@@ -595,7 +592,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\7_TextureLoad</Filter>
     </ClCompile>
     <ClCompile Include="DirectX11\DirectX11_DrawCreate.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -960,7 +957,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\7_TextureLoad</Filter>
     </ClInclude>
     <ClInclude Include="DirectX11\DirectX11_DrawCreate.h">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

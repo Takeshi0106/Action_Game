@@ -105,6 +105,7 @@ public:
 	const Handle CreateIndexBuffer(
 		const char* _indexName,
 		const uint32_t* _indexData,
+		const size_t _indexSize,
 		const uint32_t _indexNumber,
 		const BufferUsage _usage,
 		const CPUAccess _access) override;

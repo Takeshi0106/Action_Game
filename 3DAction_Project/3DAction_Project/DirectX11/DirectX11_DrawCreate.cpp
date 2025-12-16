@@ -32,6 +32,7 @@ const Handle DirectX11_DrawCreate::CreateVertexBuffer(
 		m_Device,
 		_data,
 		_size,
+		_vertexNumber,
 		DirectX11_FormatConverter::ToDXUsage(_usage),
 		(D3D11_CPU_ACCESS_FLAG)DirectX11_FormatConverter::ToDXCPUAccess(_access),
 		_vbName);
@@ -44,6 +45,7 @@ const Handle DirectX11_DrawCreate::CreateVertexBuffer(
 const Handle DirectX11_DrawCreate::CreateIndexBuffer(
 	const char* _indexName,
 	const uint32_t* _indexData,
+	const size_t _indexSize,
 	const uint32_t _indexNumber, 
 	const BufferUsage _usage,
 	const CPUAccess _access)
@@ -57,6 +59,7 @@ const Handle DirectX11_DrawCreate::CreateIndexBuffer(
 	return m_IndexBufferManager.IndexBufferCreate(
 		m_Device,
 		_indexData,
+		_indexSize,
 		_indexNumber,
 		DirectX11_FormatConverter::ToDXUsage(_usage),
 		(D3D11_CPU_ACCESS_FLAG)DirectX11_FormatConverter::ToDXCPUAccess(_access),
@@ -333,6 +336,7 @@ const Handle DirectX11_DrawCreate::LoadModel(const char* _modelName, const char*
 		Handle ibHandle = CreateIndexBuffer(
 			meshName.c_str(),
 			mesh.indices.data(),
+			mesh.indices.size() * sizeof(uint32_t),
 			static_cast<uint32_t>(mesh.indices.size()),
 			BufferUsage::Default,
 			CPUAccess::None);

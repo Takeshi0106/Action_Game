@@ -19,6 +19,18 @@
 
 
 // ==============================================
+// 構造体宣言
+// ==============================================
+struct VertexBufferData
+{
+	// 頂点バッファ
+	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+	// 頂点数
+	uint32_t vertexCount = 0;
+};
+
+
+// ==============================================
 // クラス
 // ==============================================
 class DirectX11_VertexBufferManager
@@ -28,7 +40,7 @@ private:
 	// メンバー変数
 	// ------------------------------------------
 	// 頂点バッファ管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_VertexBuffers;
+	TemplateManager<VertexBufferData> m_VertexBuffers;
 
 
 public:
@@ -45,7 +57,8 @@ public:
 	const Handle VertexBufferCreate(
 		ID3D11Device* _device,
 		const void* _vertices,
-		size_t _size,
+		const size_t _size,
+		const uint32_t _vertexCount,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
 		const char* _name);
@@ -54,7 +67,7 @@ public:
 	// ------------------------------------------
 	// 頂点バッファ取得関数
 	// ------------------------------------------
-	ID3D11Buffer* GetVertexBuffer(const Handle& _handle);
+	VertexBufferData* GetVertexBuffer(const Handle& _handle);
 
 
 	// ------------------------------------------

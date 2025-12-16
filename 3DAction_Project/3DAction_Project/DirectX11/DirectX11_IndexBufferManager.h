@@ -19,6 +19,18 @@
 
 
 // ==============================================
+// 構造体宣言
+// ==============================================
+struct IndexBufferData
+{
+	// インデックスバッファ
+	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
+	// インデックス数
+	uint32_t indexCount = 0;
+};
+
+
+// ==============================================
 // クラス
 // ==============================================
 class DirectX11_IndexBufferManager
@@ -28,7 +40,7 @@ private:
 	// メンバー変数
 	// ------------------------------------------
 	// インデックスバッファ管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_IndexBuffers;
+	TemplateManager<IndexBufferData> m_IndexBuffers;
 
 
 public:
@@ -45,7 +57,8 @@ public:
 	const Handle IndexBufferCreate(
 		ID3D11Device* _device,
 		const void* _indices,
-		size_t _size,
+		const size_t _size,
+		const uint32_t _indexCount,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
 		const char* _name);
@@ -54,7 +67,7 @@ public:
 	// ------------------------------------------
 	// インデックスバッファ取得関数
 	// ------------------------------------------
-	ID3D11Buffer* GetIndexBuffer(const Handle& _handle);
+	IndexBufferData* GetIndexBuffer(const Handle& _handle);
 
 
 	// ------------------------------------------
