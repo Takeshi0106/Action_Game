@@ -7,7 +7,7 @@
 // Dataヘッダー
 #include "ResourceViewData.h"
 // 変換ヘッダー
-#include "DirectX_FormatConverter.h"
+#include "DirectX11/DirectX11_FormatConverter.h"
 // ログ出力
 #include "ReportMessage.h"
 
@@ -37,7 +37,7 @@ bool ResourceViewManager::CreateSRV(const std::string name,
 	if (!srv->CreateSRV(
 		device,
 		resource,
-		DirectX_FormatConverter::ToDXFormat(format),
+		DirectX11_FormatConverter::ToDXFormat(format),
 		mostDetailedMip,
 		mipLevels))
 	{
@@ -164,7 +164,7 @@ bool ResourceViewManager::CreateDSV(const std::string& name,
 	if (!dsv->CreateDSV(
 		device,
 		resource,
-		DirectX_FormatConverter::ToDXFormat(format)))
+		DirectX11_FormatConverter::ToDXFormat(format)))
 	{
 		ErrorLog::OutputToConsole(std::string(("DSV の作成失敗: " + name)).c_str());
 		return false;

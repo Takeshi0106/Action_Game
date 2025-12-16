@@ -11,7 +11,7 @@
 // ログ表示ヘッダー
 #include "ReportMessage.h"
 // 自作列挙型をDirectXように変換する関数
-#include "DirectX_FormatConverter.h"
+#include "DirectX11/DirectX11_FormatConverter.h"
 
 
 // ============================
@@ -83,7 +83,7 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
         device,
         (unsigned int)(meta.width),
         (unsigned int)(meta.height),
-        DirectX_FormatConverter::ToSelfFormat(meta.format),
+        DirectX11_FormatConverter::ToSelfFormat(meta.format),
         BindFlag::Bind_ShaderResource,
         BufferUsage::Default,
         CPUAccess::None,
@@ -101,7 +101,7 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
         keyName,
         device,
         data->GetTexture(),
-        DirectX_FormatConverter::ToSelfFormat(meta.format)))
+        DirectX11_FormatConverter::ToSelfFormat(meta.format)))
     {
         ErrorLog::OutputToConsole((keyName + " のSRVの作成に失敗しました。").c_str());
         return false;

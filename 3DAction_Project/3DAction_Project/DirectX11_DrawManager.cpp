@@ -639,12 +639,6 @@ bool DirectX_DrawManager::DrawModelObject(
 	const char* _psShaderName,
 	const char* _modelName)
 {
-
-#if defined(DEBUG) || defined(_DEBUG)
-	//// 読み込み時間計測開始
-	//float startTime = Timer::GetDeltaTime();
-#endif
-
 	// シェーダーバインド
 	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager.BindVertexShader(_vsShaderName, DirectX11::Get::GetContext());
 	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
@@ -683,7 +677,7 @@ bool DirectX_DrawManager::DrawModelObject(
 		if (!data->materialData[data->meshMaterialIDs[i]].textureName.empty())
 		{
 			// テクスチャ バインド
-			m_ViewManager.BindSRV(data->materialData[data->meshMaterialIDs[i]].textureName.c_str(),
+			m_ViewManager.BindSRV(data->materialData[data->meshMaterialIDs[i]].textureName,
 				DirectX11::Get::GetContext(),
 				PIXSELSHADER);
 			// サンプラー バインド
@@ -693,14 +687,6 @@ bool DirectX_DrawManager::DrawModelObject(
 		// 描画
 		DirectX11::Get::GetContext()->DrawIndexed(count, 0, 0);
 	}
-
-#if defined(DEBUG) || defined(_DEBUG)
-	//// 読み込み時間計測終了
-	//float endTime = Timer::GetDeltaTime();
-
-	//DebugLog::OutputToConsole((std::string("モデル描画完了 : ") + _modelName + "\n"
-	//	" 読み込み時間 : " + std::to_string(endTime - startTime) + " 秒").c_str());
-#endif
 
 	return true;
 }
