@@ -19,6 +19,7 @@
 const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	ID3D11Device* _device,
 	const char* _textureName,
+	uint32_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
@@ -74,30 +75,30 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	const DirectX::Image* img = image.GetImage(0, 0, 0);
 
 	// 初期化データを作成
-	D3D11_SUBRESOURCE_DATA* initData = {};
-	initData->pSysMem = img->pixels;
-	initData->SysMemPitch = static_cast<UINT>(img->rowPitch);
-	initData->SysMemSlicePitch = 0;
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = img->pixels;
+	initData.SysMemPitch = static_cast<UINT>(img->rowPitch);
+	initData.SysMemSlicePitch = 0;
 
 	// テクスチャデスク作成
-	D3D11_TEXTURE2D_DESC* desc = {};
-	desc->Width = static_cast<UINT>(meta.width);
-	desc->Height = static_cast<UINT>(meta.height);
-	desc->MipLevels = static_cast<UINT>(meta.mipLevels);
-	desc->ArraySize = static_cast<UINT>(meta.arraySize);
-	desc->Format = meta.format;
-	desc->SampleDesc.Count = 1;
-	desc->Usage = D3D11_USAGE_DEFAULT;
-	desc->BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	desc->CPUAccessFlags = 0;
-	desc->MiscFlags = 0;
+	D3D11_TEXTURE2D_DESC desc = {};
+	desc.Width = static_cast<UINT>(meta.width);
+	desc.Height = static_cast<UINT>(meta.height);
+	desc.MipLevels = static_cast<UINT>(_mipLevels);
+	desc.ArraySize = static_cast<UINT>(meta.arraySize);
+	desc.Format = meta.format;
+	desc.SampleDesc.Count = 1;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
 
 	// TextureManagerに登録
 	Handle texHandle = _textureManager.Texture2DBufferCreate(
 		_device,
-		desc,
+		&desc,
 		keyName.c_str(),
-		initData);
+		&initData);
 
 	// テクスチャを取得
 	ID3D11Texture2D* data = _textureManager.GetTexture2DBuffer(texHandle);
@@ -107,7 +108,7 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 		_device,
 		data,
 		0,
-		meta.mipLevels,
+		static_cast<UINT>(meta.mipLevels),
 		keyName.c_str());
 
 	TextureHandle handle;

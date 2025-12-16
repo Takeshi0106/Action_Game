@@ -42,6 +42,7 @@ public:
 	const TextureHandle LoadFaileTexture(
 		ID3D11Device* _device,
 		const char* _textureName,
+		uint32_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,
 		DirectX11_ViewManager& _viewManager);
 };
