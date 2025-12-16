@@ -334,6 +334,9 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\Converter">
       <UniqueIdentifier>{3430c407-4485-4532-a4c7-b8cf9c377f8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\7_TextureLoad">
+      <UniqueIdentifier>{a24ae7e6-1d9d-462b-b51e-b7a698e6e38a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -555,9 +558,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>0_Main</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX11_DrawCreate.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
-    </ClCompile>
     <ClCompile Include="MeshMaterialManager.cpp">
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
     </ClCompile>
@@ -590,6 +590,12 @@
     </ClCompile>
     <ClCompile Include="DirectX11\DirectX11_FormatConverter.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\Converter</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11\DirectX11_TextureLoadModule.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\7_TextureLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11\DirectX11_DrawCreate.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -902,9 +908,6 @@
     <ClInclude Include="DrawPathConfig.h">
       <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX11_DrawCreate.h">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
-    </ClInclude>
     <ClInclude Include="BaseDrawCreate.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
     </ClInclude>
@@ -952,6 +955,12 @@
     </ClInclude>
     <ClInclude Include="MeshMaterialColor.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11\DirectX11_TextureLoadModule.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\7_TextureLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11\DirectX11_DrawCreate.h">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

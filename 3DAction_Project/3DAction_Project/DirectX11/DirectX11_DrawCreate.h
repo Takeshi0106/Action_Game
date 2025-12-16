@@ -10,19 +10,19 @@
 // ヘッダー
 // ===============================================
 // リソース管理ヘッダー
-#include "DirectX11/DirectX11_ShaderManager.h"
-#include "DirectX11/DirectX11_VertexBufferManager.h"
-#include "DirectX11/DirectX11_IndexBufferManager.h"
-#include "DirectX11/DirectX11_ConstantBufferManager.h"
-#include "DirectX11/DirectX11_Texture2DBufferManager.h"
-#include "DirectX11/DirectX11_SamplerManager.h"
-#include "DirectX11/DirectX11_ViewManager.h"
-#include "ModelLoadManager.h"
-#include "MeshMaterialManager.h"
+#include "DirectX11_ShaderManager.h"
+#include "DirectX11_VertexBufferManager.h"
+#include "DirectX11_IndexBufferManager.h"
+#include "DirectX11_ConstantBufferManager.h"
+#include "DirectX11_Texture2DBufferManager.h"
+#include "DirectX11_SamplerManager.h"
+#include "DirectX11_ViewManager.h"
+#include "../ModelLoadManager.h"
+#include "../MeshMaterialManager.h"
 // モジュール
-#include "ModelLoadeModule.h"
+#include "../ModelLoadeModule.h"
 // 基底ヘッダー
-#include "BaseDrawCreate.h"
+#include "../BaseDrawCreate.h"
 
 
 // ===============================================
