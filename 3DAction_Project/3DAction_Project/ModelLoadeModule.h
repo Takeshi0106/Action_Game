@@ -45,5 +45,8 @@ public:
 	// --------------------------------
 	// モデル読み込み内部関数
 	ModelData ModelLoad(const char* modelPath, const char* modelFile = "");
+
+	// モデル読込パスを返す
+	const char* GetModelLoadPath() const { return kModelPath; }
 };
 

@@ -15,11 +15,13 @@
 
 // =======================================
 // 画像ファイルをロードする
+// テクスチャフォルダーからロードする
 // =======================================
-const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
+const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	ID3D11Device* _device,
 	const char* _textureName,
-	uint32_t _mipLevels,
+	const char* _textureFolderName,
+	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
@@ -27,20 +29,65 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	std::filesystem::path filePath;
 
 	// パス確認
-	if (std::filesystem::path(_textureName).parent_path().empty())
+	if (!std::filesystem::path(_textureFolderName).empty())
 	{
 		// 相対パスを追加
-		filePath = m_Path;
+		filePath = kPath;
+		filePath /= _textureFolderName;
 		filePath /= _textureName;
 	}
 	else
 	{
 		// そのまま使用
-		filePath = _textureName;
+		filePath = kPath;
+		filePath /= _textureName;
 	}
 
 	// 区切り文字を統一する
 	filePath.make_preferred();
+
+	// 画像のロード
+	return LoadTextureFromFile(
+		_device,
+		filePath.string().c_str(),
+		_mipLevels,
+		_textureManager,
+		_viewManager);
+}
+
+
+// =======================================
+// 画像ファイルをロードする
+// =======================================
+const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
+	ID3D11Device* _device,
+	const char* _texturePath,
+	uint16_t _mipLevels,
+	DirectX11_Texture2DBufferManager& _textureManager,
+	DirectX11_ViewManager& _viewManager)
+{
+	// 画像のロード
+	return LoadTextureFromFile(
+		_device,
+		_texturePath,
+		_mipLevels,
+		_textureManager,
+		_viewManager);
+}
+
+
+// =======================================
+// 画像ファイルをロードする
+// =======================================
+const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
+	ID3D11Device* _device,
+	const char* _texturePath,
+	uint16_t _mipLevels,
+	DirectX11_Texture2DBufferManager& _textureManager,
+	DirectX11_ViewManager& _viewManager)
+{
+	// ファイルパス作成
+	std::filesystem::path filePath(_texturePath);
 
 	// 登録名
 	std::string keyName = filePath.filename().string();
@@ -117,4 +164,3 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 
 	return handle;
 }
-

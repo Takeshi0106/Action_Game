@@ -6,6 +6,8 @@
 #include "DirectX11_DrawCreate.h"
 // 変換ヘッダー
 #include "DirectX11_FormatConverter.h"
+// ファイルシステムヘッダー
+#include <filesystem>
 
 
 // =======================================
@@ -93,8 +95,8 @@ const Handle DirectX11_DrawCreate::CreateConstantBuffer(
 // =======================================
 const Handle DirectX11_DrawCreate::CreateTexture(
 	const char* _name,
-	const uint32_t _width,
-	const uint32_t _height,
+	const uint16_t _width,
+	const uint16_t _height,
 	const Format _format,
 	const BindFlag _bindFlag,
 	const BufferUsage _usage,
@@ -159,7 +161,7 @@ const Handle DirectX11_DrawCreate::CreateSampler(const char* _samplerName, const
 // =======================================
 // SRV作成
 const Handle DirectX11_DrawCreate::CreateSRV(const Handle& _textureHandle, const char* _name,
-	const Format _format, const uint32_t _mostDetailedMip, const int32_t _mipLevels)
+	const Format _format, const uint16_t _mostDetailedMip, const int16_t _mipLevels)
 {
 	// すでに存在する場合はハンドルを返す
 	if (m_ViewManager.ExistsSRV(_name))
@@ -180,7 +182,7 @@ const Handle DirectX11_DrawCreate::CreateSRV(const Handle& _textureHandle, const
 }
 
 // RTV作成
-const Handle DirectX11_DrawCreate::CreateRTV(const Handle& _textureHandle, const char* name, const uint32_t mipSlice)
+const Handle DirectX11_DrawCreate::CreateRTV(const Handle& _textureHandle, const char* name, const uint16_t mipSlice)
 {
 	// すでに存在する場合はハンドルを返す
 	if (m_ViewManager.ExistsRTV(name))
@@ -222,25 +224,37 @@ const Handle DirectX11_DrawCreate::CreateDSV(const Handle& _textureHandle, const
 // =======================================
 // テクスチャのロード
 // =======================================
-const TextureHandle DirectX11_DrawCreate::LoadTexture(const char* textureName, const char* textureFolderName)
+const TextureHandle DirectX11_DrawCreate::LoadTexture(const char* _textureName, const int16_t _mipLevel, const char* _textureFolderName)
 {
-
-	return TextureHandle{};
+	return m_TextureLoad.LoadFaileTexture_TextureFolder(
+		m_Device,
+		_textureName,
+		_textureFolderName,
+		(uint32_t)_mipLevel,
+		m_Texture2DBufferManager,
+		m_ViewManager);
 }
 
 
 // =======================================
 // モデルのロード
 // =======================================
-const Handle DirectX11_DrawCreate::LoadModel(const char* modelName, const char* modelFolderName)
+const Handle DirectX11_DrawCreate::LoadModel(const char* _modelName, const char* _modelFolderName)
 {
 	// すでにモデルが存在する場合はハンドルを返す
-	if (m_ModelManager.CheckModelHandle(modelName)) {
-		return m_ModelManager.GetModelHandle(modelName);
+	if (m_ModelManager.CheckModelHandle(_modelName)) {
+		return m_ModelManager.GetModelHandle(_modelName);
 	}
 
 	// モデルデータを取得
-	ModelData modelData = m_ModelLoad.ModelLoad(modelName, modelFolderName);
+	ModelData modelData = m_ModelLoad.ModelLoad(_modelName, _modelFolderName);
+
+	// テクスチャパス取得
+	std::filesystem::path modelPath = m_ModelLoad.GetModelLoadPath();
+
+	if (!std::string(_modelFolderName).empty()){
+		modelPath /= _modelFolderName;
+	}
 
 	// モデルハンドル
 	ModelHandle modelHandle{};
@@ -260,17 +274,23 @@ const Handle DirectX11_DrawCreate::LoadModel(const char* modelName, const char* 
 	for (int i = 0; i < modelData.materialDataArray.size(); i++)
 	{
 		// マテリアル名作成
-		std::string name = std::string(modelName) + "_Material_" + std::to_string(i);
+		std::string name = std::string(_modelName) + "_Material_" + std::to_string(i);
 
 		// メッシュマテリアル情報取得
 		MeshMaterialData& materialData = modelData.materialDataArray[i];
 
 		TextureHandle textureHandle = {};
+		std::filesystem::path texturePath = modelPath / materialData.textureName;
 
 		if (!materialData.textureName.empty())
 		{
 			// テクスチャロード
-			textureHandle = LoadTexture(materialData.textureName.c_str(), modelFolderName);
+			textureHandle = m_TextureLoad.LoadFaileTexture(
+				m_Device,
+				texturePath.string().c_str(),
+				1,
+				m_Texture2DBufferManager,
+				m_ViewManager);
 		}
 
 		// マテリアル取得
@@ -297,7 +317,7 @@ const Handle DirectX11_DrawCreate::LoadModel(const char* modelName, const char* 
 		MeshData& mesh = modelData.meshDataArray[i];
 
 		// 登録名作成
-		std::string meshName = std::string(modelName) + std::to_string(i);
+		std::string meshName = std::string(_modelName) + std::to_string(i);
 
 		// 頂点バッファ作成
 		Handle vbHandle = CreateVertexBuffer(
@@ -326,5 +346,5 @@ const Handle DirectX11_DrawCreate::LoadModel(const char* modelName, const char* 
 	}
 
 	// モデルハンドルを返す
-	return m_ModelManager.AddModelHandle(modelName, modelHandle);
+	return m_ModelManager.AddModelHandle(_modelName, modelHandle);
 }
