@@ -10,7 +10,7 @@
 // ヘッダー
 // =============================
 // 基底クラスヘッダー
-#include "BaseSaveLoadObject.h" // セーブロードヘッダー
+#include "BaseSaveLoadObject.h" 
 // 定数バッファクラス
 #include "ConstantBufferInfo.h"
 // 入力レイアウトクラス

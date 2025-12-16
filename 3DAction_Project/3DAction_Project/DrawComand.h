@@ -12,6 +12,8 @@
 #include "Handle.h"
 // 配列ヘッダー
 #include <vector>
+// 固定長整数ヘッダー
+#include <cstdint>
 
 
 // =====================================

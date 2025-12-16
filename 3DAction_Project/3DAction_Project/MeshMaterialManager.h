@@ -15,8 +15,6 @@
 #include "TemplateManager.h"
 // 色ヘッダー
 #include "MeshMaterialColor.h"
-// 配列ヘッダー
-#include <array>
 
 
 // ===============================================

@@ -337,6 +337,18 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\7_TextureLoad">
       <UniqueIdentifier>{a24ae7e6-1d9d-462b-b51e-b7a698e6e38a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2_Core\0_TemplateManager\Handle">
+      <UniqueIdentifier>{474c1c22-d3b0-49be-91b3-a5eb4e742ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\2_DrawPath">
+      <UniqueIdentifier>{d115a5e1-1b1d-4c0a-9dde-1eb1d0665bf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil">
+      <UniqueIdentifier>{13a23049-d97e-4dd1-8617-054b2ab6bf5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References">
+      <UniqueIdentifier>{aadbda8c-4698-458f-970f-2c563d2e8245}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -593,6 +605,15 @@
     </ClCompile>
     <ClCompile Include="DirectX11\DirectX11_DrawCreate.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11\DirectX11_ResourceManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11\DirectX11_References.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11\DirectX11_ShaderCompileModule.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -899,20 +920,8 @@
     <ClInclude Include="DrawComand.h">
       <Filter>2_Core\1_DrawComand</Filter>
     </ClInclude>
-    <ClInclude Include="Handle.h">
-      <Filter>2_Core\0_TemplateManager</Filter>
-    </ClInclude>
-    <ClInclude Include="DrawPathConfig.h">
-      <Filter>2_Core\0_TemplateManager</Filter>
-    </ClInclude>
     <ClInclude Include="BaseDrawCreate.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureHandleh.h">
-      <Filter>2_Core\0_TemplateManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelHandle.h">
-      <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
     <ClInclude Include="MeshMaterialManager.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_ModelManager</Filter>
@@ -958,6 +967,27 @@
     </ClInclude>
     <ClInclude Include="DirectX11\DirectX11_DrawCreate.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelHandle.h">
+      <Filter>2_Core\0_TemplateManager\Handle</Filter>
+    </ClInclude>
+    <ClInclude Include="Handle.h">
+      <Filter>2_Core\0_TemplateManager\Handle</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawPathConfig.h">
+      <Filter>2_Core\2_DrawPath</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureHandleh.h">
+      <Filter>2_Core\0_TemplateManager\Handle</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11\DirectX11_ResourceManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11\DirectX11_References.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11\DirectX11_ShaderCompileModule.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

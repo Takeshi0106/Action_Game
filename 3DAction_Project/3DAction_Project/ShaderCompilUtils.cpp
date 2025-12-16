@@ -40,15 +40,15 @@ namespace ShaderCompilerUtils
 
 		// コンパイル
 		HRESULT hr = D3DCompileFromFile(
-			path.wstring().c_str(),                 // シェーダーのパス
-			nullptr,                                // GPUで使用するマクロ定義（ない場合nullptr）
-			D3D_COMPILE_STANDARD_FILE_INCLUDE,      // HLSLで他のHLSLを読み込むフラグ
-			entryPoint.c_str(),                     // シェーダーないで最初に実行される関数の名前
-			shaderTypeModel.c_str(),                // シェーダーの種類とバージョン
-			dwShaderFlags,                          // コンパイルのフラグ
-			0,                                      // 今は何もないフラグ
-			compileBlob.GetAddressOf(),             // コンパイルしたシェーダーを取得する
-			errorBlob.GetAddressOf()                // エラーメッセージを取得する
+			path.wstring().c_str(),            // シェーダーのパス
+			nullptr,                           // GPUで使用するマクロ定義（ない場合nullptr）
+			D3D_COMPILE_STANDARD_FILE_INCLUDE, // HLSLで他のHLSLを読み込むフラグ
+			entryPoint.c_str(),                // シェーダーないで最初に実行される関数の名前
+			shaderTypeModel.c_str(),           // シェーダーの種類とバージョン
+			dwShaderFlags,                     // コンパイルのフラグ
+			0,                                 // 今は何もないフラグ
+			compileBlob.GetAddressOf(),        // コンパイルしたシェーダーを取得する
+			errorBlob.GetAddressOf()           // エラーメッセージを取得する
 		);
 		if (FAILED(hr)) {
 			ErrorLog::OutputToConsole((path.string() + "のコンパイルに失敗" + std::string(static_cast<const char*>(errorBlob->GetBufferPointer()))).c_str());
