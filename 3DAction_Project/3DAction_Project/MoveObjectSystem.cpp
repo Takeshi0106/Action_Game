@@ -45,8 +45,8 @@ bool MoveObjectSystem::Init(BaseDrawManager* _draw)
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
 		m_TransformCBName.c_str(),
-		&srt,
-		sizeof(srt),
+		&srt.world,
+		sizeof(srt.world),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
