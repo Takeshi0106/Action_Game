@@ -25,8 +25,6 @@
 #include "CullingSetting.h"   // カリング設定
 #include "FillModeSetting.h"  // 塗り設定
 #include "DepthStencilSetting.h" // 深度ステンシル設定
-// パス設定ヘッダー
-#include "DrawPathConfig.h"
 // 基本ヘッダー
 #include <cstdint>
 
@@ -37,6 +35,9 @@
 class BaseDrawManager
 {
 protected:
+	uint32_t m_ScreenWidth = 0;
+	uint32_t m_ScreenHeight = 0;
+
 
 public:
 	// コンストラクタ・デストラクタ
@@ -140,5 +141,12 @@ public:
 	// アルファディザ設定
 	virtual void SetAlphaDizaSetting(AlphaDizaSetting alphaDiza 
 		= AlphaDizaSetting::Blend_Alpha) = 0;
+
+
+	// ---------------------------------------
+	// ゲッター
+	// ---------------------------------------
+	const uint32_t GetScreenWidth() { return m_ScreenWidth; }
+	const uint32_t GetScreenHeight() { return m_ScreenHeight; }
 };
 

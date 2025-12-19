@@ -132,6 +132,16 @@ Matrix4x4 Matrix4x4::CreateViewMatrix_LH(const Vector3& cameraPos, const Vector3
 	return CreateMatrix4x4FromXMMATRIX(DirectX::XMMatrixTranspose(viewMat));
 }
 
+// 正射影行列を作成
+Matrix4x4 Matrix4x4::CreateUIOrthoMatrix_LH(float viewWidth, float viewHeight, float zn, float zf) noexcept
+{
+	// 正射影行列を作成
+	DirectX::XMMATRIX orthoMat = DirectX::XMMatrixOrthographicOffCenterLH(0.0f, viewWidth, viewHeight, 0.0f, zn, zf);
+
+	// 列優先行列のため転地を行い,Matrix4x4作成
+	return CreateMatrix4x4FromXMMATRIX(DirectX::XMMatrixTranspose(orthoMat));
+}
+
 
 // ================================================
 // 計算関数

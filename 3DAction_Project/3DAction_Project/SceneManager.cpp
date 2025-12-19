@@ -19,8 +19,14 @@ bool SceneManager::Init(GameModules* modules)
 	// マネージャー保存
 	m_Modules = modules;
 
+#if defined(DEBUG) || defined(_DEBUG)
 	// 最初のシーンを設定する
 	m_CurrentSceneState = std::make_unique<DebugSceneState>();
+#else
+	// 最初のシーンを設定する
+	m_CurrentSceneState = std::make_unique<TitleSceneState>();
+#endif
+
 	// シーン初期化
 	if (!m_CurrentSceneState->Init(m_Modules)) {
 		ErrorLog::OutputToConsole("シーンの初期化に失敗");

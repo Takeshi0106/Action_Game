@@ -47,8 +47,8 @@ DirectX_DrawManager::~DirectX_DrawManager()
 bool DirectX_DrawManager::Init(uint16_t width, uint16_t height, HWND windowHandle)
 {
 	// 画面サイズ保存
-	m_Width = width;
-	m_Height = height;
+	m_ScreenWidth = width;
+	m_ScreenHeight = height;
 
 	// DirectXの初期化
 	if (!DirectX11::Init(width, height, windowHandle)) {

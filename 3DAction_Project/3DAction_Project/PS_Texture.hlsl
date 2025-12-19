@@ -26,5 +26,6 @@ float4 main(PSInput input) : SV_TARGET
     // テクスチャカラーを取得
     float4 texColor = tex.Sample(samp, input.uv);
     
+    texColor = float4(1.0, 0.0, 0.0, 1.0);
     return texColor;
 }
