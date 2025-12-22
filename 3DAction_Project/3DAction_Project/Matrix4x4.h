@@ -72,6 +72,12 @@ struct Matrix4x4
     static Matrix4x4 CreateProjectionMatrix_LH(float fovY, float aspect, float zn, float zf) noexcept;
     // ビュー変換行列
     static Matrix4x4 CreateViewMatrix_LH(const Vector3& cameraPos, const Vector3& lookPoint, const Vector3& upDir) noexcept;
+	// 正射影行列を作成
+    static Matrix4x4 CreateUIOrthoMatrix_LH(
+        float screenWidth,
+        float screenHeight,
+        float zn,
+        float zf) noexcept;
 
     // 計算関数
     Matrix4x4 Transpose() const noexcept;   // 転置

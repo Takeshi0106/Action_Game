@@ -163,9 +163,6 @@
     <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_ModelManager">
       <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game">
-      <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\5_IndexBufferManager\IndexBufferInfo">
       <UniqueIdentifier>{36519faf-bfd6-4da8-8579-f19fcd2bff4f}</UniqueIdentifier>
     </Filter>
@@ -178,122 +175,8 @@
     <Filter Include="2_Core\Imgui">
       <UniqueIdentifier>{d7b83e73-9eca-4246-a3da-008cebcd0e8c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="4_Game\0_Game">
-      <UniqueIdentifier>{2520de8b-a8a8-4330-b75a-a8b7b4d50a46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\0_Game\BaseGame">
-      <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\1_SceneManager">
-      <UniqueIdentifier>{446616d3-ff4a-4e18-801c-ad9a5ffcdc85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\3_Fade">
-      <UniqueIdentifier>{577a3665-d054-4068-a864-454642dc738e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\3_Fade\FadeState">
-      <UniqueIdentifier>{b55bdf52-4512-48da-8726-aadae7c48133}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\3_Fade\FadeState\Base">
-      <UniqueIdentifier>{c3225e31-f847-421f-9042-607236affdeb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Camera">
-      <UniqueIdentifier>{5cc3908a-7cbf-4568-90a0-8b1306a200f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Camera\0_BaseCamera">
-      <UniqueIdentifier>{a38b1d75-ed52-4742-b7a1-7d6f8e969305}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\4_Camera\DCCCamera3D">
-      <UniqueIdentifier>{b5a178c6-50c2-4cc1-9e7c-58c10e88aeaa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object">
-      <UniqueIdentifier>{969080dd-a2f8-4562-bb06-4298bfdaf32a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\2_SceneState">
-      <UniqueIdentifier>{394f532b-6a18-4ea4-b2ca-8a4aef866a63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\2_SceneState\GameMain">
-      <UniqueIdentifier>{507c4456-fbdd-4ebb-89f4-ead9a6b46826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\2_SceneState\Result">
-      <UniqueIdentifier>{db186405-445f-4161-af59-cb23edf9615f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\2_SceneState\Debug">
-      <UniqueIdentifier>{9e259aa6-d3e4-45b4-ab77-52021393bd82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\2_SceneState\Title">
-      <UniqueIdentifier>{9a139805-67f0-429f-8621-3fe6fb63047f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\2_SceneState\0_Base">
-      <UniqueIdentifier>{2a76e1de-d426-4bb1-83e7-300f23b33974}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\5_Light">
-      <UniqueIdentifier>{0018c568-8fda-458b-936f-7df5197514d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\5_Light\Base">
-      <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\0_TemplateManager">
       <UniqueIdentifier>{7537375e-20b5-49e1-bcb6-ffb072bca813}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\7_Draw">
-      <UniqueIdentifier>{cd92cbe2-9106-44b5-8c9c-57f27d52d099}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\7_Draw\BOX">
-      <UniqueIdentifier>{376a9165-02aa-49c7-b6e5-8799c865be0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core">
-      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\Controller">
-      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\Controller\0_DCCCamera3D_Controller">
-      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\Module">
-      <UniqueIdentifier>{4bd76209-b744-4666-80e7-233002cd6dc2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\Collider">
-      <UniqueIdentifier>{07b7bbac-99f6-46dc-ac8d-c59d98def23a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\Collider\AABB">
-      <UniqueIdentifier>{8ea06ef6-69fd-42e2-9e85-a4fe9e3dc4e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\1_ColliderObject">
-      <UniqueIdentifier>{4abf6e12-acaa-49dc-bb8a-b8c83f2d0148}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\0_Object">
-      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\0_Object\Square">
-      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\0_Object\Traiangle">
-      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\1_ColliderObject\Knight">
-      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\1_ColliderObject\Player">
-      <UniqueIdentifier>{e733579f-b903-4629-beb0-cca8953977b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\Collider\AABBTree">
-      <UniqueIdentifier>{b8d80341-289c-4b8b-a05c-89bea238ac02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\Collider\AABBTree\Node">
-      <UniqueIdentifier>{4c105de7-b4ef-499d-8196-19c74398b6df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\7_Draw\Board">
-      <UniqueIdentifier>{7f8bf257-8280-4f40-82f3-fc8eaa804e34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\2_ObjectSystem">
-      <UniqueIdentifier>{adbf4c5b-1237-4dd3-9ddc-383f60a9d184}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\6_Object\2_ObjectSystem\MoveObjectSystem">
-      <UniqueIdentifier>{93cef4cc-d9a8-454f-bf6a-53a0acdefbd5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4_Game\8_Core\MouseConvert">
-      <UniqueIdentifier>{0317739f-bc67-4bf3-b736-8b44f828f660}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\OpenGL">
       <UniqueIdentifier>{e7533114-91ac-4827-aaf7-c32c4798d722}</UniqueIdentifier>
@@ -348,6 +231,138 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References">
       <UniqueIdentifier>{aadbda8c-4698-458f-970f-2c563d2e8245}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3_Hlsl\3D">
+      <UniqueIdentifier>{bbd299b2-6a20-4720-a41f-6305df35103b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3_Hlsl\UI">
+      <UniqueIdentifier>{5043e37c-db96-4aea-aaa7-d9231b45957a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game">
+      <UniqueIdentifier>{bbd536f1-b04c-455b-a8bf-018bf2951fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\0_Game">
+      <UniqueIdentifier>{2520de8b-a8a8-4330-b75a-a8b7b4d50a46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\0_Game\BaseGame">
+      <UniqueIdentifier>{d57e8b34-7fc4-436e-aa9f-3ed6c376f43e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\1_SceneManager">
+      <UniqueIdentifier>{446616d3-ff4a-4e18-801c-ad9a5ffcdc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Fade">
+      <UniqueIdentifier>{577a3665-d054-4068-a864-454642dc738e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Fade\FadeState">
+      <UniqueIdentifier>{b55bdf52-4512-48da-8726-aadae7c48133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\3_Fade\FadeState\Base">
+      <UniqueIdentifier>{c3225e31-f847-421f-9042-607236affdeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Camera">
+      <UniqueIdentifier>{5cc3908a-7cbf-4568-90a0-8b1306a200f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Camera\0_BaseCamera">
+      <UniqueIdentifier>{a38b1d75-ed52-4742-b7a1-7d6f8e969305}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\4_Camera\DCCCamera3D">
+      <UniqueIdentifier>{b5a178c6-50c2-4cc1-9e7c-58c10e88aeaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object">
+      <UniqueIdentifier>{969080dd-a2f8-4562-bb06-4298bfdaf32a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\1_ColliderObject">
+      <UniqueIdentifier>{4abf6e12-acaa-49dc-bb8a-b8c83f2d0148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\1_ColliderObject\Knight">
+      <UniqueIdentifier>{639ba6d4-efb4-415d-93ac-e317fcea3960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\1_ColliderObject\Player">
+      <UniqueIdentifier>{e733579f-b903-4629-beb0-cca8953977b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\0_Object">
+      <UniqueIdentifier>{9ddc3bf8-1bda-4e5f-856b-215a33eea7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\0_Object\Square">
+      <UniqueIdentifier>{a91c1d43-a461-4493-be7b-f105c91c0edf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\0_Object\Traiangle">
+      <UniqueIdentifier>{6ab00672-e658-461e-bc60-e9e0bca6e5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\2_ObjectSystem">
+      <UniqueIdentifier>{adbf4c5b-1237-4dd3-9ddc-383f60a9d184}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\2_ObjectSystem\MoveObjectSystem">
+      <UniqueIdentifier>{93cef4cc-d9a8-454f-bf6a-53a0acdefbd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState">
+      <UniqueIdentifier>{394f532b-6a18-4ea4-b2ca-8a4aef866a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\GameMain">
+      <UniqueIdentifier>{507c4456-fbdd-4ebb-89f4-ead9a6b46826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\Result">
+      <UniqueIdentifier>{db186405-445f-4161-af59-cb23edf9615f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\Debug">
+      <UniqueIdentifier>{9e259aa6-d3e4-45b4-ab77-52021393bd82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\Title">
+      <UniqueIdentifier>{9a139805-67f0-429f-8621-3fe6fb63047f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\2_SceneState\0_Base">
+      <UniqueIdentifier>{2a76e1de-d426-4bb1-83e7-300f23b33974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Light">
+      <UniqueIdentifier>{0018c568-8fda-458b-936f-7df5197514d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\5_Light\Base">
+      <UniqueIdentifier>{937181ef-d96f-4fa9-9c7b-3be5fbbb5643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Draw">
+      <UniqueIdentifier>{cd92cbe2-9106-44b5-8c9c-57f27d52d099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Draw\BOX">
+      <UniqueIdentifier>{376a9165-02aa-49c7-b6e5-8799c865be0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Draw\Board">
+      <UniqueIdentifier>{7f8bf257-8280-4f40-82f3-fc8eaa804e34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Draw\ModelDraw">
+      <UniqueIdentifier>{56d07f7f-50ed-403e-8b01-cac1f63eff29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\7_Draw\UI">
+      <UniqueIdentifier>{894419aa-d369-4d05-9de2-b76b24208545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core">
+      <UniqueIdentifier>{c2729abf-6c8f-49ff-9190-430546c2895e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Controller">
+      <UniqueIdentifier>{c6848a60-8154-4ea8-9230-4992e2cc9431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Controller\0_DCCCamera3D_Controller">
+      <UniqueIdentifier>{8075e302-b5ae-428c-9437-29cf76cae215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Module">
+      <UniqueIdentifier>{4bd76209-b744-4666-80e7-233002cd6dc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Collider">
+      <UniqueIdentifier>{07b7bbac-99f6-46dc-ac8d-c59d98def23a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Collider\AABB">
+      <UniqueIdentifier>{8ea06ef6-69fd-42e2-9e85-a4fe9e3dc4e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Collider\AABBTree">
+      <UniqueIdentifier>{b8d80341-289c-4b8b-a05c-89bea238ac02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\Collider\AABBTree\Node">
+      <UniqueIdentifier>{4c105de7-b4ef-499d-8196-19c74398b6df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\8_Core\MouseConvert">
+      <UniqueIdentifier>{0317739f-bc67-4bf3-b736-8b44f828f660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4_Game\6_Object\0_Object\Planet">
+      <UniqueIdentifier>{9386a3ed-98b4-4164-ad96-1a13366eafe7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -615,6 +630,15 @@
     <ClCompile Include="DirectX11\DirectX11_ShaderCompileModule.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
     </ClCompile>
+    <ClCompile Include="ModelDrawModule.cpp">
+      <Filter>4_Game\7_Draw\ModelDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="UIDrawModule.cpp">
+      <Filter>4_Game\7_Draw\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MovePlanet.cpp">
+      <Filter>4_Game\6_Object\0_Object\Planet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -854,9 +878,6 @@
     <ClInclude Include="ResultSceneState.h">
       <Filter>4_Game\2_SceneState\Result</Filter>
     </ClInclude>
-    <ClInclude Include="TitleSceneState.h">
-      <Filter>4_Game\2_SceneState\Title</Filter>
-    </ClInclude>
     <ClInclude Include="FadeManager.h">
       <Filter>4_Game\3_Fade</Filter>
     </ClInclude>
@@ -989,25 +1010,40 @@
     <ClInclude Include="DirectX11\DirectX11_ShaderCompileModule.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
     </ClInclude>
+    <ClInclude Include="ModelDrawModule.h">
+      <Filter>4_Game\7_Draw\ModelDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="UIDrawModule.h">
+      <Filter>4_Game\7_Draw\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleSceneState.h">
+      <Filter>4_Game\2_SceneState\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="MovePlanet.h">
+      <Filter>4_Game\6_Object\0_Object\Planet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VS_Object.hlsl">
-      <Filter>3_Hlsl</Filter>
-    </FxCompile>
     <FxCompile Include="VS_TriangleDebug.hlsl">
       <Filter>3_Hlsl\Triangle</Filter>
     </FxCompile>
     <FxCompile Include="PS_TriangleDebug.hlsl">
       <Filter>3_Hlsl\Triangle</Filter>
     </FxCompile>
-    <FxCompile Include="PS_Texture.hlsl">
-      <Filter>3_Hlsl</Filter>
-    </FxCompile>
     <FxCompile Include="PS_NoTexture.hlsl">
-      <Filter>3_Hlsl</Filter>
+      <Filter>3_Hlsl\3D</Filter>
     </FxCompile>
     <FxCompile Include="PS_TextureModel.hlsl">
-      <Filter>3_Hlsl</Filter>
+      <Filter>3_Hlsl\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Texture.hlsl">
+      <Filter>3_Hlsl\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Object.hlsl">
+      <Filter>3_Hlsl\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_UI.hlsl">
+      <Filter>3_Hlsl\UI</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,7 @@ bool MoveObjectSystem::Init(BaseDrawManager* _draw)
 	m_Draw = _draw;
 
 	// モデルのロード
-	m_Draw->LoadModel(m_ModelName.c_str(), "Character");
+	m_Draw->LoadModel(m_ModelName.c_str(), "Character/Player");
 
 	// SRT初期化
 	SRT srt = {
@@ -45,8 +45,8 @@ bool MoveObjectSystem::Init(BaseDrawManager* _draw)
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
 		m_TransformCBName.c_str(),
-		&srt,
-		sizeof(srt),
+		&srt.world,
+		sizeof(srt.world),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
@@ -81,7 +81,7 @@ bool MoveObjectSystem::Init(BaseDrawManager* _draw)
 		m_Rotations.push_back(rot);
 
 		srt.position = m_Positions[i];
-		srt.rotation = m_Rotations[i];
+		// srt.rotation = m_Rotations[i];
 
 		srt.UpdateWorldMatrix();
 
@@ -140,7 +140,7 @@ void MoveObjectSystem::Update(float deltaTime)
 		// SRT情報更新
 		SRT srt = {
 			m_Positions[i],
-			m_Rotations[i],
+			Quaternion(),
 			kObjectSize };
 		srt.UpdateWorldMatrix();
 

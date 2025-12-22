@@ -33,6 +33,8 @@
 // モジュール
 #include "TextureLoader.h"
 #include "ModelConversionModule.h"
+// コンフィグ
+#include "DrawPathConfig.h"
 
 
 // ========================================
@@ -55,9 +57,6 @@ private:
 	// --------------------------------
 	// メンバー変数
 	// --------------------------------
-	// 画面の幅・高さ
-	uint16_t m_Width = 0;
-	uint16_t m_Height = 0;
 
 	// 最終描画に使用するRTの名前
 	const char* kFinalRTName = "FinalRT";

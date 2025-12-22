@@ -106,6 +106,9 @@ bool DebugSceneState::DerivativeInit()
 // =============================
 void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 {
+#if defined(DEBUG) || defined(_DEBUG)
+	float time = Timer::GetDeltaTime();
+#endif
 	// カメラ更新
 	m_Camera->Update();
 	// ライト更新
@@ -131,6 +134,12 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 
 	// デバッグ更新
 	DebugUpdate();
+
+#if defined(DEBUG) || defined(_DEBUG)
+	ImGui::Begin("UpdateTime");
+	ImGui::Text(("更新時間 : " + std::to_string(Timer::GetDeltaTime() - time)).c_str());
+	ImGui::End();
+#endif
 }
 
 
@@ -203,8 +212,23 @@ void DebugSceneState::UpdateCollision()
 	for (uint32_t i = 0; i < fatcol.size(); i++)
 	{
 		results.clear();
+
+#if defined(DEBUG) || defined(_DEBUG)
+		// １フレームの時間
+		float colTime = Timer::GetDeltaTime();
+#endif
+
 		// ツリー検索
 		m_AABBTree.Query(fatcol[i].aabb, results);
+
+#if defined(DEBUG) || defined(_DEBUG)
+		// 時間出力
+		float outputTime = Timer::GetDeltaTime() - colTime;
+		ImGui::Begin("CollisionOneTime");
+		ImGui::Text((std::to_string(outputTime) + "秒 : 当たり判定更新時間").c_str());
+		ImGui::Text((std::to_string(results.size()) + "件 : 接触候補数").c_str());
+		ImGui::End();
+#endif
 
 		// 接触候補と当たり判定
 		for (const auto& result : results)
@@ -256,6 +280,8 @@ void DebugSceneState::UpdateColliderCheck()
 #if defined(DEBUG) || defined(_DEBUG)
 	// １フレームの時間
 	float time = Timer::GetDeltaTime();
+	// 更新数チェック
+	uint16_t updateCount = 0;
 #endif
 
 	std::vector<FatAABBCollider>& fatcol = m_MoveObjectSystem.GetFatAABBColliders();
@@ -268,6 +294,10 @@ void DebugSceneState::UpdateColliderCheck()
 			m_AABBTree.Remove(handles[i]);
 			handles[i] = m_AABBTree.AddNode(fatcol[i].aabb, ObjectInfo(i, ObjectTag::NOTAG));
 			fatcol[i].isUpdated = false;
+
+#if defined(DEBUG) || defined(_DEBUG)
+			updateCount++;
+#endif
 		}
 	}
 
@@ -276,6 +306,7 @@ void DebugSceneState::UpdateColliderCheck()
 	float outputTime = Timer::GetDeltaTime() - time;
 	ImGui::Begin("ChaeckCollider");
 	ImGui::Text((std::to_string(outputTime) + "秒 : 更新時間").c_str());
+	ImGui::Text((std::to_string(updateCount) + "件 : 更新数").c_str());
 	ImGui::End();
 #endif
 }

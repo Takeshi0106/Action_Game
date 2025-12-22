@@ -25,7 +25,7 @@
 // 前方宣言　Windows.hを.cpp内だけでインクルードする
 // =====================================================
 // アプリケーションハンドルの前方宣言
-struct APPLICATIONHANDLE;              // HINSTANCEのラップ構造体
+struct APPLICATIONHANDLE; // HINSTANCEのラップ構造体
 // ウィンドウハンドルの前方宣言
 struct HWND__;
 using HWND = HWND__*;
