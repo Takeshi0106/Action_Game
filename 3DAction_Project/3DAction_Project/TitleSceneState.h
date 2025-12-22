@@ -67,8 +67,8 @@ private:
 	// ---------------------------------------
 	const std::string m_TitleLogoTextureName = "pipo-halloweenchara2016_02.png";
 	const Matrix4x4 m_TitleLogoMat =
-		Matrix4x4::CreateScalingMatrix_LH(Vector3(1920.0f, 1080.0f, 1.0f)) *
-		Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, 0.0f, 0.0f));
+		Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.5f, 0.5f, 0.0f)) *
+		Matrix4x4::CreateScalingMatrix_LH(Vector3(100.0f, 100.0f, 1.0f));
 
 
 	// ---------------------------------------

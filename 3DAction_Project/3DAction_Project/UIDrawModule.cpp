@@ -11,13 +11,13 @@
 // ==================================
 Vertex UIDrawModule::m_Vertices[4] = {
 	// 左上
-	{ { 0.0f, 0.0f, 0.0f }, {0,0,-1}, {0,0}, {1,1,1,1} },
+	{ { 0.0f, 0.0f, 0.1f }, {0,0,-1}, {0,0}, {1,1,1,1} },
 	// 右上
-	{ { 1.0f, 0.0f, 0.0f }, {0,0,-1}, {1,0}, {1,1,1,1} },
+	{ { 1.0f, 0.0f, 0.1f }, {0,0,-1}, {1,0}, {1,1,1,1} },
 	// 左下
-	{ { 0.0f, 1.0f, 0.0f }, {0,0,-1}, {0,1}, {1,1,1,1} },
+	{ { 0.0f, 1.0f, 0.1f }, {0,0,-1}, {0,1}, {1,1,1,1} },
 	// 右下
-	{ { 1.0f, 1.0f, 0.0f }, {0,0,-1}, {1,1}, {1,1,1,1} },
+	{ { 1.0f, 1.0f, 0.1f }, {0,0,-1}, {1,1}, {1,1,1,1} },
 };
 
 
@@ -47,7 +47,7 @@ void UIDrawModule::Init(BaseDrawManager& _draw, const char* _textureName)
 		CPUAccess::Write);
 
 	// 正射影行列作成
-	Matrix4x4 orthoMatrix;
+	Matrix4x4 orthoMatrix;	
 	orthoMatrix = Matrix4x4::CreateUIOrthoMatrix_LH(
 		(float)m_Draw->GetScreenWidth(),
 		(float)m_Draw->GetScreenHeight(),
