@@ -51,7 +51,7 @@ const Handle DirectX11_DrawCreate::CreateIndexBuffer(
 	const CPUAccess _access)
 {
 	// すでに存在する場合はハンドルを返す
-	if (m_ConstantBufferManager.Exists(_indexName)) {
+	if (m_IndexBufferManager.Exists(_indexName)) {
 		return m_IndexBufferManager.GetIndexBufferHandle(_indexName);
 	}
 

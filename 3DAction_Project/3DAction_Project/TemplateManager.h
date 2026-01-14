@@ -185,7 +185,7 @@ public:
 		// 参照カウントをデクリメント
 		m_RefHandleCounts[handle.index]--;
 
-		// 参照カウントが0未満なら削除
+		// 参照カウントが0なら削除
 		if (m_RefHandleCounts[handle.index] == 0)
 		{
 			// 世代を更新

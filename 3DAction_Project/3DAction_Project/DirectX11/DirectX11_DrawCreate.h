@@ -3,13 +3,16 @@
 // ===============================================
 // クラス概要
 // DirectX11用リソース作成クラス
+// リソースの管理を行わず、作成のみを行う
+// 
+// 各リソースマネージャーとの作成を仲介するインターフェイスクラス
 // ===============================================
 
 
 // ===============================================
 // ヘッダー
 // ===============================================
-// リソース管理ヘッダー
+// DirectX11リソース管理ヘッダー
 #include "DirectX11_ShaderManager.h"
 #include "DirectX11_VertexBufferManager.h"
 #include "DirectX11_IndexBufferManager.h"
@@ -17,6 +20,7 @@
 #include "DirectX11_Texture2DBufferManager.h"
 #include "DirectX11_SamplerManager.h"
 #include "DirectX11_ViewManager.h"
+// 共通リソース管理ヘッダー
 #include "../ModelLoadManager.h"
 #include "../MeshMaterialManager.h"
 // モジュール
@@ -24,6 +28,32 @@
 #include "../ModelLoadeModule.h"
 // 基底ヘッダー
 #include "../BaseDrawCreate.h"
+
+
+// ===============================================
+// リソースマネージャー構造体
+// ===============================================
+struct DirectX11_ResourceReference
+{
+	// シェーダー
+	DirectX11_ShaderManager& shaderManager;
+	// 頂点バッファ
+	DirectX11_VertexBufferManager& vertexBufferManager;
+	// インデックスバッファ
+	DirectX11_IndexBufferManager& indexBufferManager;
+	// 定数バッファ
+	DirectX11_ConstantBufferManager& constantBufferManager;
+	// テクスチャ2Dバッファ
+	DirectX11_Texture2DBufferManager& texture2DBufferManager;
+	// サンプラー
+	DirectX11_SamplerManager& samplerManager;
+	// ビュー
+	DirectX11_ViewManager& viewManager;
+	// モデル
+	ModelLoadManager& modelLoadManager;
+	// マテリアル
+	MeshMaterialManager& meshMaterialManager;
+};
 
 
 // ===============================================
@@ -38,7 +68,7 @@ private:
 	// コンテキスト
 	ID3D11Device* m_Device;
 
-	// リソース管理クラス
+	// リソースマネージャーの参照
 	DirectX11_ShaderManager& m_ShaderManager;
 	DirectX11_VertexBufferManager& m_VertexBufferManager;
 	DirectX11_IndexBufferManager& m_IndexBufferManager;
@@ -60,27 +90,22 @@ public:
 	// --------------------------------
 	DirectX11_DrawCreate(
 		ID3D11Device* _device,
-		DirectX11_ShaderManager& _shader,
-		DirectX11_VertexBufferManager& _vertex,
-		DirectX11_IndexBufferManager& _index,
-		DirectX11_ConstantBufferManager& _constant,
-		DirectX11_Texture2DBufferManager& _texture,
-		DirectX11_SamplerManager& _sampler,
-		DirectX11_ViewManager& _view,
-		ModelLoadManager& _model,
-		MeshMaterialManager& _material,
+		DirectX11_ResourceReference& _managers,
 		const char* _texturePath,
 		const char* _modelPath) :
+		// デバイス
 		m_Device(_device),
-		m_ShaderManager(_shader),
-		m_VertexBufferManager(_vertex),
-		m_IndexBufferManager(_index),
-		m_ConstantBufferManager(_constant),
-		m_Texture2DBufferManager(_texture),
-		m_SamplerManager(_sampler),
-		m_ViewManager(_view),
-		m_ModelManager(_model),
-		m_MaterialManager(_material),
+		// マネージャー参照
+		m_ShaderManager(_managers.shaderManager),
+		m_VertexBufferManager(_managers.vertexBufferManager),
+		m_IndexBufferManager(_managers.indexBufferManager),
+		m_ConstantBufferManager(_managers.constantBufferManager),
+		m_Texture2DBufferManager(_managers.texture2DBufferManager),
+		m_SamplerManager(_managers.samplerManager),
+		m_ViewManager(_managers.viewManager),
+		m_ModelManager(_managers.modelLoadManager),
+		m_MaterialManager(_managers.meshMaterialManager),
+		// パス
 		m_TextureLoad(_texturePath),
 		m_ModelLoad(_modelPath)
 	{}
