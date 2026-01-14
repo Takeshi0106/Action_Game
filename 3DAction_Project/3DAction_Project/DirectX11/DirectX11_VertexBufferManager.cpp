@@ -62,3 +62,21 @@ VertexBufferData* DirectX11_VertexBufferManager::GetVertexBuffer(const Handle& _
 {
 	return m_VertexBuffers.GetData(_handle);
 }
+
+
+// ------------------------------------------
+// 頂点バッファ削除
+// ------------------------------------------
+void DirectX11_VertexBufferManager::ReleaseVertexBuffer(const Handle& _handle)
+{
+	m_VertexBuffers.Remove(_handle);
+}
+
+
+// ------------------------------------------
+// 全頂点バッファ削除
+// ------------------------------------------
+void DirectX11_VertexBufferManager::ReleaseAllVertexBuffers()
+{
+	m_VertexBuffers.ALLClear();
+}
