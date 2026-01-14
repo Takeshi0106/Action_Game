@@ -10,9 +10,8 @@
 // =========================================
 bool DirectX11_ResourceManager::Init(ID3D11Device* _device,DrawPathConfig& _config)
 {
-	// リソース作成クラス作成
-	m_DrawCreate = std::make_unique<DirectX11_DrawCreate>(
-		_device,
+	// インターフェイスに渡す構造体作成
+	DirectX11_ResourceReference resourceReference = {
 		m_ShaderManager,
 		m_VertexBufferManager,
 		m_IndexBufferManager,
@@ -21,7 +20,12 @@ bool DirectX11_ResourceManager::Init(ID3D11Device* _device,DrawPathConfig& _conf
 		m_SamplerManager,
 		m_ViewManager,
 		m_ModelLoadManager,
-		m_MeshMaterialManager,
+		m_MeshMaterialManager};
+
+	// リソース作成クラス作成
+	m_DrawCreate = std::make_unique<DirectX11_DrawCreate>(
+		_device,
+		resourceReference,
 		_config.texturePath,
 		_config.objModelPath
 	);
