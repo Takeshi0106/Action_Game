@@ -9,12 +9,14 @@
 // =======================================
 // ヘッダー
 // =======================================
+// 文字列ヘッダー
+#include <string>
 
 
 // =======================================
 // クラス
 // =======================================
-class DirectX11_References
+class DirectX11_References final
 {
 private:
 
@@ -28,7 +30,7 @@ public:
 
 
 	// --------------------------------
-	// シェーダーリファレンス出力
+	// シェーダーを解析して情報出力
 	// --------------------------------
-	void OutputShaderReferences();
+	void OutputShaderReferences(const std::string _shaderPath, const void* blob, const size_t _size);
 };
