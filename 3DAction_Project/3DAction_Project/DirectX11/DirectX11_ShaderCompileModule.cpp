@@ -87,7 +87,7 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 			continue; 
 		}
 
-		// シェーダーコンパイル
+		// シェーダーコンパイル　解析(リファレンス)を行うため、Blobを用意
 		Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
 
 		// シェーダーの種類を判定してコンパイル依頼
