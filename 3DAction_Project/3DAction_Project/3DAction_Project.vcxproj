@@ -281,6 +281,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DirectX11\DirectX11_References.h" />
     <ClInclude Include="DrawComand.h" />
     <ClInclude Include="DrawPathConfig.h" />
+    <ClInclude Include="GameString.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="MeshMaterialColor.h" />

@@ -199,9 +199,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer">
       <UniqueIdentifier>{5b1ade10-673c-454f-94d1-9f6dfec0d9d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer">
-      <UniqueIdentifier>{a597fc41-79b6-4568-b7dd-a8fa1de8478c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer">
       <UniqueIdentifier>{9245f6ff-6b1b-4136-8100-7a6f705bf766}</UniqueIdentifier>
     </Filter>
@@ -363,6 +360,12 @@
     </Filter>
     <Filter Include="4_Game\6_Object\0_Object\Planet">
       <UniqueIdentifier>{9386a3ed-98b4-4164-ad96-1a13366eafe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer">
+      <UniqueIdentifier>{a597fc41-79b6-4568-b7dd-a8fa1de8478c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\3_Game">
+      <UniqueIdentifier>{f0727845-4505-4a86-8d0e-a4058f69c002}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1021,6 +1024,9 @@
     </ClInclude>
     <ClInclude Include="MovePlanet.h">
       <Filter>4_Game\6_Object\0_Object\Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameString.h">
+      <Filter>2_Core\3_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
