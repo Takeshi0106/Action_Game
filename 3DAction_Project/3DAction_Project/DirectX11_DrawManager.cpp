@@ -34,7 +34,6 @@ DirectX_DrawManager::DirectX_DrawManager(const DrawPathConfig& _config) :
 {
 }
 
-
 DirectX_DrawManager::~DirectX_DrawManager()
 {
 
@@ -120,6 +119,24 @@ bool DirectX_DrawManager::Init(uint16_t width, uint16_t height, HWND windowHandl
 // ============================================
 void DirectX_DrawManager::Uninit()
 {
+	// -----------------------------------
+	// 各マネージャy－後処理
+	// -----------------------------------
+	// シェーダーマネージャー
+	m_ShaderManager.Uninit();
+	// 定数バッファマネージャー
+	m_CBManager.ReleaseAllConstantBuffers();
+	// 頂点バッファマネージャー
+	m_VBManager.ReleaseAllVertexBuffers();
+	// インデックスバッファ
+	m_IndexBufferManager.ReleaseAllIndexBuffers();
+	// テクスチャマネージャー
+	m_TextureManager.ReleaseAllTexture();
+	// ビューマネージャー
+	m_ViewManager.ReleaseAllView();
+	// サンプラーマネージャー
+	m_SamplerManager.ReleaseAllSamplers();
+
 	// DirectX11 の初期化
 	DirectX11::Uninit();
 }
