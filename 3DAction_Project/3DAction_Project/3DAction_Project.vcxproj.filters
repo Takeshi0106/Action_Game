@@ -1025,8 +1025,11 @@
     <ClInclude Include="MovePlanet.h">
       <Filter>4_Game\6_Object\0_Object\Planet</Filter>
     </ClInclude>
-    <ClInclude Include="GameString.h">
+    <ClInclude Include="UTF8_String.h">
       <Filter>2_Core\3_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>0_Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
