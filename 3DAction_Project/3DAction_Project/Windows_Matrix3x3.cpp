@@ -190,44 +190,53 @@ Matrix3x3 operator*(const Matrix3x3& mat, const Quaternion& q) noexcept
 
 Vector3   operator*(const Matrix3x3& mat1, Vector3 vec1) noexcept
 {
-    DirectX::XMVECTOR v = DirectX::XMVectorSet(vec1.x, vec1.y, vec1.z, 1.0f);
-    DirectX::XMMATRIX m = CreateXMMATRIXFromMatrix3x3(mat1);
-    DirectX::XMVECTOR result = DirectX::XMVector3TransformNormal(v, m);
-
     return Vector3(
-        DirectX::XMVectorGetX(result),
-        DirectX::XMVectorGetY(result),
-        DirectX::XMVectorGetZ(result)
-    );
+        mat1.Matrix[0][0] * vec1.x + mat1.Matrix[1][0] * vec1.y + mat1.Matrix[2][0] * vec1.z,
+        mat1.Matrix[0][1] * vec1.x + mat1.Matrix[1][1] * vec1.y + mat1.Matrix[2][1] * vec1.z,
+        mat1.Matrix[0][2] * vec1.x + mat1.Matrix[1][2] * vec1.y + mat1.Matrix[2][2] * vec1.z);
 }
 
 Matrix3x3 operator*(const Matrix3x3& mat1, float scalar) noexcept
 {
+    // XMMATRIX に変換
     DirectX::XMMATRIX m = CreateXMMATRIXFromMatrix3x3(mat1);
     DirectX::XMMATRIX result = {};
+
+    // 行ごとに掛け算
     for (int i = 0; i < 3; ++i)
     {
         result.r[i] = DirectX::XMVectorScale(m.r[i], scalar);
     }
+
+    // 自作行列に変換
     return CreateMatrix3x3FromXMMATRIX(result);
 }
 
 Matrix3x3 operator/(const Matrix3x3& mat1, float scalar) noexcept
 {
     float inv = 1.0f / scalar;
+
+    // XMMATRIX に変換
     DirectX::XMMATRIX m = CreateXMMATRIXFromMatrix3x3(mat1);
     DirectX::XMMATRIX result = {};
+
+    // 行ごとに割り算
     for (int i = 0; i < 3; ++i)
     {
         result.r[i] = DirectX::XMVectorScale(m.r[i], inv);
     }
+
+    // 変換
     return CreateMatrix3x3FromXMMATRIX(result);
 }
 
 bool operator==(const Matrix3x3& mat1, const Matrix3x3& mat) noexcept
 {
+    // XMMATRIXに変換
     DirectX::XMMATRIX m1 = CreateXMMATRIXFromMatrix3x3(mat1);
     DirectX::XMMATRIX m2 = CreateXMMATRIXFromMatrix3x3(mat);
+
+    // チェック
     for (int i = 0; i < 3; ++i)
     {
         DirectX::XMVECTOR cmp = DirectX::XMVectorEqual(m1.r[i], m2.r[i]);
@@ -256,9 +265,9 @@ inline Matrix3x3 CreateMatrix3x3FromXMMATRIX(const DirectX::XMMATRIX& xmMat) noe
     for (int i = 0; i < 3; i++)
     {
         const DirectX::XMVECTOR& row = xmMat.r[i];
-        mat.Matrix[i][0] = DirectX::XMVectorGetX(row);
-        mat.Matrix[i][1] = DirectX::XMVectorGetY(row);
-        mat.Matrix[i][2] = DirectX::XMVectorGetZ(row);
+        mat.Matrix[0][i] = DirectX::XMVectorGetX(row);
+        mat.Matrix[1][i] = DirectX::XMVectorGetY(row);
+        mat.Matrix[2][i] = DirectX::XMVectorGetZ(row);
     }
 
     return mat;
@@ -269,9 +278,9 @@ inline DirectX::XMMATRIX CreateXMMATRIXFromMatrix3x3(const Matrix3x3& mat3x3) no
 {
     // XMMATRI作成
     DirectX::XMMATRIX xmMat = DirectX::XMMatrixSet(
-        mat3x3.Matrix[0][0], mat3x3.Matrix[0][1], mat3x3.Matrix[0][2], 0.0f,
-        mat3x3.Matrix[1][0], mat3x3.Matrix[1][1], mat3x3.Matrix[1][2], 0.0f,
-        mat3x3.Matrix[2][0], mat3x3.Matrix[2][1], mat3x3.Matrix[2][2], 0.0f,
+        mat3x3.Matrix[0][0], mat3x3.Matrix[1][0], mat3x3.Matrix[2][0], 0.0f,
+        mat3x3.Matrix[0][1], mat3x3.Matrix[1][1], mat3x3.Matrix[2][1], 0.0f,
+        mat3x3.Matrix[0][2], mat3x3.Matrix[1][2], mat3x3.Matrix[2][2], 0.0f,
         0.0f,                0.0f,                0.0f,                1.0f);
 
     return xmMat;
