@@ -41,7 +41,7 @@ namespace DirectX11
 	void Uninit();
 
 	// ビューポート設定
-	void SetViewPort(uint16_t width, uint16_t height);
+	void SetViewPort(uint32_t width, uint32_t height);
 
 	// 描画設定
 	void SetDrawSetting(CullingSetting culling = CullingSetting::Back_Culling,

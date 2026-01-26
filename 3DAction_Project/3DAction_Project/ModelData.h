@@ -21,7 +21,7 @@
 
 
 // ===============================
-// クラス
+// 構造体
 // ===============================
 // メッシュ情報(リサイズして使用してください)
 struct MeshData
@@ -31,7 +31,7 @@ struct MeshData
 	// インデックス
 	std::vector<uint32_t> indices;
 	// マテリアルインデックス
-	uint16_t materialID = UINT16_MAX;
+	uint32_t materialID = UINT32_MAX;
 };
 
 // モデルデータ(1モデルが持つ情報)

@@ -39,7 +39,7 @@ namespace DirectX11 {
 		// 描画設定
 		namespace DrawSetting {
 			// 描画設定配列
-			Microsoft::WRL::ComPtr<ID3D11RasterizerState> drawSetting[CullingSetting::Culling_Setting_Max * FillModeSetting::FillMode_Max];
+			Microsoft::WRL::ComPtr<ID3D11RasterizerState> drawSetting[(size_t)CullingSetting::Culling_Setting_Max * (size_t)FillModeSetting::FillMode_Max];
 		}
 
 		// 深度ステンシルバッファ
@@ -149,11 +149,11 @@ namespace DirectX11 {
 	// =====================================================
 	// ビューポート設定
 	// =====================================================
-	void SetViewPort(uint16_t width, uint16_t height)
+	void SetViewPort(uint32_t width, uint32_t height)
 	{
 		D3D11_VIEWPORT viewPort = {};
-		viewPort.Width = (float)width;   // ビューポートの横幅
-		viewPort.Height = (float)height; // ビューポートの縦幅
+		viewPort.Width = (FLOAT)width;   // ビューポートの横幅
+		viewPort.Height = (FLOAT)height; // ビューポートの縦幅
 		viewPort.MinDepth = 0.0f;       // 最も近い位置 
 		viewPort.MaxDepth = 1.0f;       // 最も遠い位置 0~1で正規化する
 		viewPort.TopLeftX = 0;          // 描画を始める位置
@@ -168,7 +168,7 @@ namespace DirectX11 {
 	// =====================================================
 	void SetDrawSetting(CullingSetting culling, FillModeSetting fillMode)
 	{
-		d3dDeviceContext->RSSetState(DrawSetting::drawSetting[culling * FillModeSetting::FillMode_Max + fillMode].Get());
+		d3dDeviceContext->RSSetState(DrawSetting::drawSetting[(size_t)culling * (size_t)FillModeSetting::FillMode_Max + fillMode].Get());
 	}
 
 
@@ -300,6 +300,10 @@ namespace DirectX11 {
 			// -----------------------------------------------------
 			void Uninit()
 			{
+
+				d3dDeviceContext.Reset(); // デバイスコンテキストの解放
+				d3dSwapChain.Reset();     // スワップチェインの解放
+
 #if defined(DEBUG) || defined(_DEBUG)
 				// デバッグ表示用
 				Microsoft::WRL::ComPtr<ID3D11Debug> debug;
@@ -307,10 +311,9 @@ namespace DirectX11 {
 				{
 					debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL | D3D11_RLDO_IGNORE_INTERNAL);
 				}
+				debug.Reset();
 #endif
 
-				d3dDeviceContext.Reset(); // デバイスコンテキストの解放
-				d3dSwapChain.Reset();     // スワップチェインの解放
 				d3dDevice.Reset();        // デバイスの解放
 			}
 
@@ -348,11 +351,11 @@ namespace DirectX11 {
 				};
 
 				// カリング設定の作成
-				for (int i = 0; i < CullingSetting::Culling_Setting_Max * FillModeSetting::FillMode_Max; i++)
+				for (size_t i = 0; i < (size_t)CullingSetting::Culling_Setting_Max * (size_t)FillModeSetting::FillMode_Max; i++)
 				{
 					// カリング設定を作成
-					rasterDesc.CullMode = cullModePattern[i / FillModeSetting::FillMode_Max];
-					rasterDesc.FillMode = fillModePattern[i % FillModeSetting::FillMode_Max];
+					rasterDesc.CullMode = cullModePattern[i / (size_t)FillModeSetting::FillMode_Max];
+					rasterDesc.FillMode = fillModePattern[i % (size_t)FillModeSetting::FillMode_Max];
 
 					HRESULT hr = d3dDevice->CreateRasterizerState(&rasterDesc, drawSetting[i].GetAddressOf());
 
@@ -373,7 +376,7 @@ namespace DirectX11 {
 			// -----------------------------------------------------
 			void Uninit()
 			{
-				for (int i = 0; i < CullingSetting::Culling_Setting_Max * FillModeSetting::FillMode_Max; i++)
+				for (size_t i = 0; i < (size_t)CullingSetting::Culling_Setting_Max * (size_t)FillModeSetting::FillMode_Max; i++)
 				{
 					drawSetting[i].Reset();
 				}

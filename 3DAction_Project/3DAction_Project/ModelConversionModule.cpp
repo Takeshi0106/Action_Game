@@ -207,7 +207,7 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag,
 		// インデックスの作成
 		std::vector<uint32_t> idx;
 		// 領域確保
-		idx.resize(scene->mMeshes[i]->mNumFaces * 3);
+		idx.resize(static_cast<size_t>(scene->mMeshes[i]->mNumFaces * 3));
 
 		// インデックス情報の作成
 		for (uint32_t j = 0; j < scene->mMeshes[i]->mNumFaces; j++)

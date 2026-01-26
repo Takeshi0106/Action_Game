@@ -144,7 +144,7 @@ namespace ShaderReflectionUtils
 			// --------------------------------------------------------------------------------------------
 			// レジスタ番号と、サイズは一緒に取得できないため、同じ名前のバインド情報を探して、取得する
 			// --------------------------------------------------------------------------------------------
-			int registerNumber = -1;
+			uint16_t registerNumber = UINT16_MAX;
 
 			// シェーダー内のバインド可能なリーソース分ループさせる（テクスチャやサンプラーなど）
 			for (int b = 0; b < int(shaderDesc.BoundResources); b++)
@@ -173,7 +173,8 @@ namespace ShaderReflectionUtils
 			}
 
 			// 配列に情報を代入する
-			if (registerNumber != -1) {
+			if (registerNumber != UINT16_MAX) 
+			{
 				CBInfo[i].SetName(bufferName);
 				CBInfo[i].SetRegisterNumber(registerNumber);
 				CBInfo[i].SetSize(bufferDesc.Size);
