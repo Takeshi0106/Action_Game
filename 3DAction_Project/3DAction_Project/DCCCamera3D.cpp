@@ -55,7 +55,7 @@ void DCCCamera3D::Update()
 void DCCCamera3D::MoveCamera()
 {
 	// 時間取得
-	float deltaTime = Timer::GetDeltaTime();
+	// float deltaTime = Timer::GetDeltaTime();
 	// 位置移動ベクトル取得
 	Vector2 movePosition = m_Controller.GetPositionVector();
 	// 視点移動ベクトル取得
