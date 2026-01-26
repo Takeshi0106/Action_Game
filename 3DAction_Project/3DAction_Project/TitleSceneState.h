@@ -88,16 +88,16 @@ private:
 
 	// 宙に浮いている惑星
 	const std::string m_PlanetModel = "Planet_10";
-	const Matrix4x4 m_PlanetMat = 
-		Matrix4x4::CreateScalingMatrix_LH(Vector3(2.0f, 2.0f, 2.0f)) *
-		Matrix4x4::CreateTranslationMatrix_LH(Vector3(-10.0f, 5.0f, 20.0f)).toGPU();
+	const Matrix4x4 m_PlanetMat =
+		(Matrix4x4::CreateTranslationMatrix_LH(Vector3(-10.0f, 5.0f, 5.0f)) *
+			Matrix4x4::CreateScalingMatrix_LH(Vector3(2.0f, 2.0f, 2.0f))).toGPU();
 
 	// 地面惑星
 	const std::string m_PlanetGroundModel = "Planet_6";
 	const Matrix4x4 m_PlanetGroundMat =
-		Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, -37.5f, 7.0f)).toGPU() *
-		Matrix4x4::CreateRotationYawPitchRollMatrix_LH(0.0f, 5.0f, 0.0f) *
-		Matrix4x4::CreateScalingMatrix_LH(Vector3(20.0f, 20.0f, 20.0f));
+		(Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, -17.5f, 5.0f)) *
+			Matrix4x4::CreateRotationYawPitchRollMatrix_LH(0.0f, 5.0f, 0.0f) *
+			Matrix4x4::CreateScalingMatrix_LH(Vector3(20.0f, 20.0f, 20.0f))).toGPU();
 
 
 	// ----------------------------------------

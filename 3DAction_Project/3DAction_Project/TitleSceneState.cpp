@@ -156,7 +156,7 @@ void TitleSceneState::Draw()
 	m_ModelModule.Draw(m_FrogModelName.c_str(), 
 		m_VSName.c_str(), 
 		m_PSTextureModelName.c_str());
-
+	
 	// 定数バッファ更新
 	m_Modules->drawManager->UpdateShaderConstants(
 		m_TransformCBName.c_str(),

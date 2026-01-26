@@ -35,10 +35,10 @@ Matrix4x4 Matrix4x4::CreateTranslationMatrix_LH(const Vector3& pos) noexcept
 	// 単位行列を作成
 	Matrix4x4 mat = Matrix4x4::CreateIdentityMatrix();
 	
-	// 行優先で代入
-	mat.Matrix[0][3] = pos.x;
-	mat.Matrix[1][3] = pos.y;
-	mat.Matrix[2][3] = pos.z;
+	// 列優先で代入
+	mat.Matrix[3][0] = pos.x;
+	mat.Matrix[3][1] = pos.y;
+	mat.Matrix[3][2] = pos.z;
 
 	return mat;
 }
@@ -194,9 +194,9 @@ Matrix4x4 Matrix4x4::toGPU() const noexcept
 Vector3 Matrix4x4::ExtractTranslation() const noexcept
 {
 	return Vector3(
-		Matrix[0][3],
-		Matrix[1][3],
-		Matrix[2][3]
+		Matrix[3][0],
+		Matrix[3][1],
+		Matrix[3][2]
 	);
 }
 
@@ -304,17 +304,10 @@ Matrix4x4 operator*(const Matrix4x4& mat, const Quaternion& q) noexcept
 
 Vector3   operator*(const Matrix4x4& mat1, Vector3 vec1) noexcept
 {
-	// XMMATRIX作成
-	DirectX::XMMATRIX m1 = CreateXMMATRIXFromMatrix4x4(mat1);
-	DirectX::XMVECTOR vec = DirectX::XMVectorSet(vec1.x, vec1.y, vec1.z, 1.0f);
-
-	// 乗算
-	DirectX::XMVECTOR result = XMVector3Transform(vec, m1);
-
 	return Vector3(
-		DirectX::XMVectorGetX(result),
-		DirectX::XMVectorGetY(result),
-		DirectX::XMVectorGetZ(result)
+		mat1.Matrix[0][0] * vec1.x + mat1.Matrix[1][0] * vec1.y + mat1.Matrix[2][0] * vec1.z + mat1.Matrix[3][0],
+		mat1.Matrix[0][1] * vec1.x + mat1.Matrix[1][1] * vec1.y + mat1.Matrix[2][1] * vec1.z + mat1.Matrix[3][1],
+		mat1.Matrix[0][2] * vec1.x + mat1.Matrix[1][2] * vec1.y + mat1.Matrix[2][2] * vec1.z + mat1.Matrix[3][2]
 	);
 }
 
@@ -391,10 +384,10 @@ inline Matrix4x4 CreateMatrix4x4FromXMMATRIX(const DirectX::XMMATRIX& xmMat) noe
 	for (int i = 0; i < 4; i++)
 	{
 		const DirectX::XMVECTOR& row = xmMat.r[i];
-		mat.Matrix[i][0] = DirectX::XMVectorGetX(row);
-		mat.Matrix[i][1] = DirectX::XMVectorGetY(row);
-		mat.Matrix[i][2] = DirectX::XMVectorGetZ(row);
-		mat.Matrix[i][3] = DirectX::XMVectorGetW(row);
+		mat.Matrix[0][i] = DirectX::XMVectorGetX(row);
+		mat.Matrix[1][i] = DirectX::XMVectorGetY(row);
+		mat.Matrix[2][i] = DirectX::XMVectorGetZ(row);
+		mat.Matrix[3][i] = DirectX::XMVectorGetW(row);
 	}
 
 	return mat;
@@ -405,11 +398,10 @@ inline DirectX::XMMATRIX CreateXMMATRIXFromMatrix4x4(const Matrix4x4& mat4x4) no
 {
 	// XMMATRI作成
 	DirectX::XMMATRIX xmMat = DirectX::XMMatrixSet(
-		mat4x4.Matrix[0][0], mat4x4.Matrix[0][1], mat4x4.Matrix[0][2], mat4x4.Matrix[0][3],
-		mat4x4.Matrix[1][0], mat4x4.Matrix[1][1], mat4x4.Matrix[1][2], mat4x4.Matrix[1][3],
-		mat4x4.Matrix[2][0], mat4x4.Matrix[2][1], mat4x4.Matrix[2][2], mat4x4.Matrix[2][3],
-		mat4x4.Matrix[3][0], mat4x4.Matrix[3][1], mat4x4.Matrix[3][2], mat4x4.Matrix[3][3]
-	);
+		mat4x4.Matrix[0][0], mat4x4.Matrix[1][0], mat4x4.Matrix[2][0], mat4x4.Matrix[3][0],
+		mat4x4.Matrix[0][1], mat4x4.Matrix[1][1], mat4x4.Matrix[2][1], mat4x4.Matrix[3][1],
+		mat4x4.Matrix[0][2], mat4x4.Matrix[1][2], mat4x4.Matrix[2][2], mat4x4.Matrix[3][2],
+		mat4x4.Matrix[0][3], mat4x4.Matrix[1][3], mat4x4.Matrix[2][3], mat4x4.Matrix[3][3]);
 
 	return xmMat;
 }

@@ -45,12 +45,12 @@ VS_OUT main(VS_IN vin)
 
     // スクリーン座標を作成
     vout.pos = float4(vin.pos, 1.0f); // ローカル座標
-    vout.pos = mul(vout.pos, world); // ワールド座標
-    vout.pos = mul(vout.pos, view); // ビュー座標
-    vout.pos = mul(vout.pos, proj); // プロジェクション座標
+    vout.pos = mul(world,vout.pos); // ワールド座標
+    vout.pos = mul(view, vout.pos); // ビュー座標
+    vout.pos = mul(proj, vout.pos); // プロジェクション座標
     
     // 法線をワールド変換する
-    vout.normal = mul(vin.normal, (float3x3) world);
+    vout.normal = mul((float3x3) world, vin.normal);
     
     // そのまま返す
     vout.color = vin.color;
