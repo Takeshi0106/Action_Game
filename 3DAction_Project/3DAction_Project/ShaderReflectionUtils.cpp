@@ -98,7 +98,7 @@ namespace ShaderReflectionUtils
 			reflector->GetInputParameterDesc(k, &paramDesc);
 
 			ILinfo[k].SetSemanticName(paramDesc.SemanticName);
-			ILinfo[k].SetSemanticIndex(int(paramDesc.SemanticIndex));
+			ILinfo[k].SetSemanticIndex(uint16_t(paramDesc.SemanticIndex));
 			ILinfo[k].SetInputSlot(0); // 通常は0
 
 			// ComponentMask から DXGI_FORMAT を推定
@@ -167,7 +167,7 @@ namespace ShaderReflectionUtils
 
 				// 同じ名前かをチェック
 				if (bindName == bufferName) {
-					registerNumber = bindDesc.BindPoint; // レジスタ番号を代入
+					registerNumber = (uint16_t)bindDesc.BindPoint; // レジスタ番号を代入
 					break;
 				}
 			}
