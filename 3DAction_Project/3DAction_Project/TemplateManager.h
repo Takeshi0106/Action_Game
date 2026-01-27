@@ -7,6 +7,10 @@
 // vectorで実際のデータを保存し、
 // unordered_mapで名前からハンドルを返す
 // resizeで配列を確保すると効率が良くなる
+// 
+// 【注意点】
+// 動的確保を行う場合はかならずスマートポインターを使用してください。
+// RAIIがないと必ずメモリーリークになります。
 // ===================================
 
 
@@ -20,6 +24,9 @@
 #include "Hashed_String.h"
 // ハンドル構造体
 #include "Handle.h"
+
+// ログ出力
+#include "ReportMessage.h"
 
 
 // ===================================
@@ -198,6 +205,20 @@ public:
 			m_NameToHandleMap.erase(name);
 			// ハンドルから名前を削除
 			m_IndexToNames[handle.index].Clear();
+
+			// データの初期化
+			// コンパイル時にどちらかか確定させる
+			if constexpr (requires(T a) { a.reset(); }) 
+			{
+				// .reset 関数がある場合
+				m_Datas[handle.index].reset();
+				DebugLog::OutputToConsole(".restを実行");
+			}
+			else {
+				// デフォルト初期化
+				m_Datas[handle.index] = T{};
+				DebugLog::OutputToConsole("デフォルトコンストラクタを実行");
+			}
 		}
 	}
 

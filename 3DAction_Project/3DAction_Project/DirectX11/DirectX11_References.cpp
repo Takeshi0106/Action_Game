@@ -28,7 +28,7 @@ struct DX11_CBInfo
 	// 定数バッファの名前
 	String m_Name = u8"";
 	// レジスタ番号
-	uint16_t m_RegisterNumber = 0;
+	uint32_t m_RegisterNumber = 0;
 	// 必ず１６の倍数にする
 	size_t m_Size = 0;
 };
@@ -167,7 +167,7 @@ bool ShaderInfoAcquisition(
 		// --------------------------------------------------------------------------------------------
 		// レジスタ番号と、サイズは一緒に取得できないため、同じ名前のバインド情報を探して、取得する
 		// --------------------------------------------------------------------------------------------
-		int registerNumber = -1;
+		uint32_t registerNumber = UINT32_MAX;
 
 		// シェーダー内のバインド可能なリーソース分ループさせる（テクスチャやサンプラーなど）
 		for (int b = 0; b < int(shaderDesc.BoundResources); b++)
@@ -196,7 +196,7 @@ bool ShaderInfoAcquisition(
 		}
 
 		// 配列に情報を代入する
-		if (registerNumber != -1) {
+		if (registerNumber != UINT32_MAX) {
 			_cbInfo[i].m_Name = bufferName;
 			_cbInfo[i].m_RegisterNumber = registerNumber;
 			_cbInfo[i].m_Size = bufferDesc.Size;
