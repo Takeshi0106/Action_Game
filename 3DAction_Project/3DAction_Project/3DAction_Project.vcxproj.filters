@@ -908,9 +908,6 @@
     <ClInclude Include="Player.h">
       <Filter>4_Game\6_Object\1_ColliderObject\Player</Filter>
     </ClInclude>
-    <ClInclude Include="SRT.h">
-      <Filter>4_Game\6_Object\0_Object</Filter>
-    </ClInclude>
     <ClInclude Include="ColliderConfig.h">
       <Filter>4_Game\8_Core\Collider</Filter>
     </ClInclude>
@@ -1030,6 +1027,12 @@
     </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>0_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Hashed_String.h">
+      <Filter>2_Core\3_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SRT.h">
+      <Filter>2_Core\3_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

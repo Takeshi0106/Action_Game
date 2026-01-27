@@ -20,7 +20,7 @@ struct SRT {
 	// --------------------------------
 	// SRT情報
 	// --------------------------------
-	Vector3 position = { };
+	Vector3 position = {};
 	Quaternion rotation = {};
 	Vector3 scale = { 1.0f,1.0f,1.0f };
 
