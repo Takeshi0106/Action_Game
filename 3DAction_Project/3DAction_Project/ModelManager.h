@@ -36,7 +36,7 @@ struct ModelData;
 struct ModelManagerData
 {
 	// メッシュのマテリアル番号
-	std::vector<uint32_t> meshMaterialIDs;
+	std::vector<uint16_t> meshMaterialIDs;
 	// マテリアル配列
 	std::vector<MeshMaterialData> materialData;
 };
@@ -61,11 +61,11 @@ public:
 	bool Init(BaseDrawManager& drawManager);
 
 	// モデルマネージャーに登録
-	void RegisterModel(const std::string modelName, const ModelData& modelData);
+	void RegisterModel(const std::string& modelName, const ModelData& modelData);
 	// モデルデータ取得
-	const ModelManagerData* GetModelData(const std::string modelName);
+	const ModelManagerData* GetModelData(const std::string& modelName);
 	// マテリアル定数バッファ名ゲッター
-	const std::string& GetMaterialCBName() const { return m_MaterialCBName; }
+	const std::string GetMaterialCBName() const { return m_MaterialCBName; }
 	// モデルデータがあるかチェック
-	bool CheckModelData(const std::string modelName);
+	bool CheckModelData(const std::string& modelName);
 };

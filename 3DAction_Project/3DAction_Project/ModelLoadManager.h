@@ -13,6 +13,8 @@
 #include "ModelHandle.h"
 // テンプレートマネージャーヘッダー
 #include "TemplateManager.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ===============================================
@@ -39,7 +41,7 @@ public:
 	// -------------------------------
 	// モデルハンドルを追加
 	// -------------------------------
-	Handle AddModelHandle(const char* _name, const ModelHandle& _modelHandle);
+	Handle AddModelHandle(const String& _name, const ModelHandle& _modelHandle);
 
 
 	// -------------------------------
@@ -51,16 +53,16 @@ public:
 	// -------------------------------
 	// モデルが存在するか確認
 	// -------------------------------
-	bool CheckModelHandle(const char* _name) {
-		return m_ModelLoadManager.Exists(_name);
+	bool CheckModelHandle(const String& _name) {
+		return m_ModelLoadManager.Exists((Hashed_String)_name);
 	}
 
 
 	// -------------------------------
 	// モデルハンドルを取得
 	// -------------------------------
-	const Handle GetModelHandle(const char* _name) {
-		const Handle handle = m_ModelLoadManager.GetHandle(_name);
+	const Handle GetModelHandle(const String& _name) {
+		const Handle handle = m_ModelLoadManager.GetHandle((Hashed_String)_name);
 		return handle;
 	}
 };

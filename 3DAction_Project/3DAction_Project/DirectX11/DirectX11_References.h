@@ -10,7 +10,7 @@
 // ヘッダー
 // =======================================
 // 文字列ヘッダー
-#include <string>
+#include "../UTF8_String.h"
 
 
 // =======================================
@@ -32,5 +32,5 @@ public:
 	// --------------------------------
 	// シェーダーを解析して情報出力
 	// --------------------------------
-	void OutputShaderReferences(const std::string _shaderPath, const void* blob, const size_t _size);
+	void OutputShaderReferences(const String& _shaderPath, const void* blob, const size_t _size);
 };

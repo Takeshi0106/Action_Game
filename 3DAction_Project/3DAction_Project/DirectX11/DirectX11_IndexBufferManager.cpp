@@ -18,7 +18,7 @@ const Handle DirectX11_IndexBufferManager::IndexBufferCreate(
 	const uint32_t _indexCount,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
-	const char* _name)
+	const String& _name)
 {
 
 	if (!_device || !_indices || _size == 0) {
@@ -52,7 +52,7 @@ const Handle DirectX11_IndexBufferManager::IndexBufferCreate(
 	bufferData.indexCount = _indexCount;
 
 	// 管理配列に追加してハンドルを返す
-	return m_IndexBuffers.AddData(_name, bufferData);
+	return m_IndexBuffers.AddData((Hashed_String)_name, bufferData);
 }
 
 

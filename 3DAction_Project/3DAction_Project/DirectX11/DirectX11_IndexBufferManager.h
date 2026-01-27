@@ -16,6 +16,8 @@
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
 #include "../TemplateManager.h"
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // ==============================================
@@ -61,7 +63,7 @@ public:
 		const uint32_t _indexCount,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
-		const char* _name);
+		const String& _name);
 
 
 	// ------------------------------------------
@@ -73,16 +75,16 @@ public:
 	// ------------------------------------------
 	// インデックスバッファチェック
 	// ------------------------------------------
-	bool Exists(const char* _name) const {
-		return m_IndexBuffers.Exists(_name);
+	bool Exists(const String& _name) const {
+		return m_IndexBuffers.Exists((Hashed_String)_name);
 	}
 
 
 	// ------------------------------------------
 	// インデックスバッファハンドル取得
 	// ------------------------------------------
-	const Handle GetIndexBufferHandle(const char* _name) const {
-		return m_IndexBuffers.GetHandle(_name);
+	const Handle GetIndexBufferHandle(const String& _name) const {
+		return m_IndexBuffers.GetHandle((Hashed_String)_name);
 	}
 };
 

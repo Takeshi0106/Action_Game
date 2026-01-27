@@ -18,7 +18,7 @@ const Handle DirectX11_VertexBufferManager::VertexBufferCreate(
 	const uint32_t _vertexCount,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
-	const char* _name)
+	const String& _name)
 {
 	if (!_device || !_vertices || _size == 0) {
 		ErrorLog::OutputToConsole("無効な頂点バッファが作成されそうになりました");
@@ -51,14 +51,15 @@ const Handle DirectX11_VertexBufferManager::VertexBufferCreate(
 	bufferData.vertexCount = _vertexCount;
 
 	// 管理配列に追加してハンドルを返す
-	return m_VertexBuffers.AddData(_name, bufferData);
+	return m_VertexBuffers.AddData((Hashed_String)_name, bufferData);
 }
 
 
 // ===========================================
 // 頂点バッファ取得
 // ===========================================
-VertexBufferData* DirectX11_VertexBufferManager::GetVertexBuffer(const Handle& _handle)
+VertexBufferData* DirectX11_VertexBufferManager::GetVertexBuffer(
+	const Handle& _handle)
 {
 	return m_VertexBuffers.GetData(_handle);
 }
@@ -67,7 +68,8 @@ VertexBufferData* DirectX11_VertexBufferManager::GetVertexBuffer(const Handle& _
 // ------------------------------------------
 // 頂点バッファ削除
 // ------------------------------------------
-void DirectX11_VertexBufferManager::ReleaseVertexBuffer(const Handle& _handle)
+void DirectX11_VertexBufferManager::ReleaseVertexBuffer(
+	const Handle& _handle)
 {
 	m_VertexBuffers.Remove(_handle);
 }

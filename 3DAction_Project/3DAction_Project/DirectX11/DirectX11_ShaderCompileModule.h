@@ -11,6 +11,8 @@
 // =============================
 // ヘッダー
 // =============================
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // ============================
@@ -23,12 +25,12 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// シェーダーフォルダパス
-	const char* khlslPath;
+	const String& khlslPath;
 	// シェーダーコンパイル設定
-	const char* kCompilPath;
+	const String& kCompilPath;
 	// 拡張子
-	const char* kHlslExtension = ".hlsl";
-	const char* kCompilExtension = ".cso";
+	const String kHlslExtension = u8".hlsl";
+	const String kCompilExtension = u8".cso";
 
 
 public:
@@ -36,8 +38,8 @@ public:
 	// コンストラクタ・デストラクタ
 	// --------------------------------
 	DirectX11_ShaderCompileModule(
-		const char* _hlslPath,
-		const char* _compilPath) :
+		const String& _hlslPath,
+		const String& _compilPath) :
 		khlslPath(_hlslPath),
 		kCompilPath(_compilPath)
 	{

@@ -15,12 +15,14 @@
 #include "TemplateManager.h"
 // 色ヘッダー
 #include "MeshMaterialColor.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ===============================================
 // クラス
 // ===============================================
-class MeshMaterialManager
+class MeshMaterialManager final
 {
 private:
 	// --------------------------------
@@ -41,7 +43,7 @@ public:
 	// -------------------------------
 	// メッシュマテリアルデータを追加
 	// -------------------------------
-	Handle AddMeshMaterialData(const char* _name, const MeshMaterialColor& _color);
+	Handle AddMeshMaterialData(const String& _name, const MeshMaterialColor& _color);
 
 
 	//-------------------------------

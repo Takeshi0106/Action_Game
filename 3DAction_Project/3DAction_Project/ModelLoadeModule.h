@@ -13,6 +13,8 @@
 // ===============================================
 // モデルデータヘッダー
 #include "ModelData.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ===============================================
@@ -25,16 +27,16 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// モデル読み込みパス
-	const char* kModelPath;
+	const String& kModelPath;
 	// 対応拡張子
-	const char* kObjExtension = ".obj";
+	const String kObjExtension = u8".obj";
 
 
 public:
 	// --------------------------------
 	// コンストラクタ・デストラクタ
 	// --------------------------------
-	ModelLoadeModule(const char* _config) :
+	ModelLoadeModule(const String& _config) :
 		kModelPath(_config)
 	{}
 	~ModelLoadeModule() = default;
@@ -44,9 +46,9 @@ public:
 	// メンバー関数
 	// --------------------------------
 	// モデル読み込み内部関数
-	ModelData ModelLoad(const char* modelPath, const char* modelFile = "");
+	ModelData ModelLoad(const String& modelPath, const String& modelFile = u8"");
 
 	// モデル読込パスを返す
-	const char* GetModelLoadPath() const { return kModelPath; }
+	const String& GetModelLoadPath() const { return kModelPath; }
 };
 

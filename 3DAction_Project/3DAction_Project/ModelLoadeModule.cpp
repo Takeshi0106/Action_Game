@@ -18,24 +18,30 @@
 // ============================================================
 // モデル読み込み内部関数
 // ============================================================
-ModelData ModelLoadeModule::ModelLoad(const char* _modelPath, const char* _modelFile)
+ModelData ModelLoadeModule::ModelLoad(
+	const String& _modelPath, 
+	const String& _modelFile)
 {
 	// String型に変換
-	std::string modelPathStr = _modelPath;
+	String modelPathStr = _modelPath;
 	// モデルが入っているパスを作成
 	std::filesystem::path modelPath;
 
 	ModelData modelData = {};
 
 	// パスを作成
-	if (!modelPathStr.empty())
+	if (!_modelPath.GetU8String().empty())
 	{
-		modelPath = std::filesystem::path(kModelPath) / modelPathStr
-			/ ((_modelPath + std::string(kObjExtension)));
+		modelPath = std::filesystem::path(kModelPath.GetU8String()) / 
+			modelPathStr.GetU8String()/ 
+			((_modelPath.GetU8String() 
+				+ kObjExtension.GetU8String()));
 	}
 	else
 	{
-		modelPath = std::filesystem::path(kModelPath) / (_modelPath + std::string(kObjExtension));
+		modelPath = std::filesystem::path(kModelPath.GetU8String()) / 
+			(_modelPath.GetU8String() + 
+				kObjExtension.GetU8String());
 	}
 
 	// 区切り文字統一
@@ -160,7 +166,7 @@ ModelData ModelLoadeModule::ModelLoad(const char* _modelPath, const char* _model
 		materialData.specular = Color(aiSpecular.r, aiSpecular.g, aiSpecular.b, aiSpecular.a);
 
 		// テクスチャ名をセット
-		materialData.textureName = fullPath.string();
+		materialData.textureName = fullPath.u8string();
 
 		// マテリアルデータをモデルデータに設定
 		modelData.materialDataArray[i] = materialData;

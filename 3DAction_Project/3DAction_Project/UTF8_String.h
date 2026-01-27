@@ -10,8 +10,10 @@
 // ===============================================
 // ヘッダー
 // ===============================================
+// 文字列
 #include <string>
-
+// アラサート
+#include <cassert>
 
 // ===============================================
 // 名前空間
@@ -53,5 +55,24 @@ public:
 	const std::u8string& GetU8String() const noexcept
 	{
 		return m_String;
+	}
+
+	// --------------------------------
+	// ASCII を UTF-8 に変換する関数
+	// --------------------------------
+	static String FromASCII(const char* ascii)
+	{
+#if defined(_DEBUG) || defined(DEBUG)
+		// 念のため、文字が 0x7F を超えていないかチェック
+		for (const unsigned char* p =
+			reinterpret_cast<const unsigned char*>(ascii);
+			*p; p++)
+		{
+			assert(*p <= 0x7F && "String::FromASCII : non-ASCII character");
+		}
+#endif
+
+		// 同じなのでそのまま変換
+		return String(reinterpret_cast<const char8_t*>(ascii));
 	}
 };

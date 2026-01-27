@@ -51,8 +51,8 @@ public:
 	// コピー・ムーブ
 	// --------------------------------
 	// コピー・ムーブ代入禁止
-	Hashed_String& operator=(const Hashed_String& str) = delete;
-	Hashed_String& operator=(Hashed_String&&) =delete;
+	Hashed_String& operator=(const Hashed_String& str) = default;
+	Hashed_String& operator=(Hashed_String&&) = default;
 
 	// --------------------------------
 	// 比較演算子
@@ -60,6 +60,14 @@ public:
 	bool operator==(const Hashed_String& rhs) const noexcept
 	{
 		return m_Hash == rhs.GetHash() && m_String == rhs.GetString();
+	}
+
+	// --------------------------------
+	// 初期化
+	// --------------------------------
+	void Clear() noexcept {
+		m_String = String();
+		m_Hash = 0;
 	}
 
 	// --------------------------------

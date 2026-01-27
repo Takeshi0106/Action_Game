@@ -5,6 +5,11 @@
 // 描画情報があるパスを定義するヘッダーファイル
 // ===================================
 
+// ===================================
+// ヘッダー
+// ===================================
+#include "UTF8_String.h"
+
 
 // ===================================
 // 定義
@@ -12,15 +17,15 @@
 struct DrawPathConfig
 {
 	// シェーダーバイナリパス (.cso)
-    const char* shaderBinaryPath;
+    const String& shaderBinaryPath;
 	// シェーダーソースパス (.hlsl)
-    const char* shaderSourcePath;
+    const String& shaderSourcePath;
 
     // シェーダーリフレクションパス
-    const char* shaderReflectionPath;
+    const String& shaderReflectionPath;
 
 	// テクスチャパス
-    const char* texturePath;
+    const String& texturePath;
 	// モデルパス
-    const char* objModelPath;
+    const String& objModelPath;
 };

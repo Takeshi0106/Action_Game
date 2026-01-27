@@ -46,13 +46,13 @@ namespace {
 	constexpr wchar_t        WINDOW_CLASS_NAME[] = L"ゲーム";
 
 	const DrawPathConfig PATH_CONFIG= {
-		"Asset/Shader/Compile",
-		"Asset/Shader/Hlsl",
+		u8"Asset/Shader/Compile",
+		u8"Asset/Shader/Hlsl",
 
-		"Asset/Info/ShaderReflection.txt",
+		u8"Asset/Info/ShaderReflection.txt",
 
-		"Asset/Texture",
-		"Asset/ObjModel"
+		u8"Asset/Texture",
+		u8"Asset/ObjModel"
 	};
 }
 

@@ -38,7 +38,7 @@ bool ModelManager::Init(BaseDrawManager& drawManager)
 // ===============================
 // モデルマネージャーに登録
 // ===============================
-void ModelManager::RegisterModel(const std::string modelName, const ModelData& modelData)
+void ModelManager::RegisterModel(const std::string& modelName, const ModelData& modelData)
 {
     // データを作成
 	ModelManagerData modelManagerData;
@@ -61,7 +61,7 @@ void ModelManager::RegisterModel(const std::string modelName, const ModelData& m
 // ===============================
 // モデルデータゲッター
 // ===============================
-const ModelManagerData* ModelManager::GetModelData(const std::string modelName)
+const ModelManagerData* ModelManager::GetModelData(const std::string& modelName)
 {
     // 探す
     auto it = m_Models.find(modelName);
@@ -71,7 +71,8 @@ const ModelManagerData* ModelManager::GetModelData(const std::string modelName)
         return &(it->second);
     }
 
-    ErrorLog::OutputToConsole(std::string(modelName+" が見つかりませんでした").c_str());
+    ErrorLog::OutputToConsole(
+        (modelName + "が見つかりませんでした").c_str());
     return nullptr;
 }
 
@@ -79,7 +80,7 @@ const ModelManagerData* ModelManager::GetModelData(const std::string modelName)
 // ================================
 // モデルデータがあるかのチェック
 // ================================
-bool ModelManager::CheckModelData(const std::string modelName)
+bool ModelManager::CheckModelData(const std::string& modelName)
 {
     return m_Models.find(modelName) != m_Models.end();
 }

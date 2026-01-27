@@ -15,8 +15,6 @@
 // ==============================
 // ヘッダー
 // ==============================
-// 文字列
-#include <string>
 // 描画マネージャー
 #include "BaseDrawManager.h"
 #include "ModelManager.h"
@@ -31,18 +29,19 @@ class ModelConversionModule
 {
 private:
 	// モデルパス
-	const std::string m_ModelPath;
-	const std::string m_SelfModelPath;
+	const char* m_ModelPath;
+	const char* m_SelfModelPath;
 
 	// .Objだけをロードする
-	const std::string kObjExtension = ".obj";
+	const char* kObjExtension = ".obj";
 
 	// モデルをロードする (モデルファイルはm_ModelPathの下にフォルダーを入れていたらフォルダー名を入れる)
-	bool ModelLoad(const std::string& modelPath, int flag, ModelData& modelData, const std::string& modelFile = "");
+	bool ModelLoad(const char* modelPath, int flag, ModelData& modelData, const char* modelFile = "");
 
 public:
 	// コンストラクタ・デストラクタ
-	ModelConversionModule(const char* modelPath,
+	ModelConversionModule(
+		const char* modelPath,
 		const char* SelfModelPath)
 		: m_ModelPath(modelPath),m_SelfModelPath(SelfModelPath)
 	{}
@@ -53,8 +52,9 @@ public:
 
 	// 今はモデルをロードしてモデルマネージャーに入れる関数
 	// modelFile はモデルパスの下にファイルがあった場合、ファイル名を入れる
-	bool LoadAndRegisterModelResources(const std::string& modelName,
+	bool LoadAndRegisterModelResources(
+		const char* modelName,
 		BaseDrawManager& drawManager,
 		ModelManager& modelManager,
-		const std::string& modelFile = "");
+		const char* modelFile = "");
 };

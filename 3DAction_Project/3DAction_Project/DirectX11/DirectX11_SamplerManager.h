@@ -16,6 +16,8 @@
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
 #include "../TemplateManager.h"
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // ==============================================
@@ -45,7 +47,7 @@ public:
 	const Handle SamplerStateCreate(
 		ID3D11Device* _device,
 		D3D11_SAMPLER_DESC& desc,
-		const char* _name);
+		const String& _name);
 
 
 	// ------------------------------------------
@@ -57,16 +59,16 @@ public:
 	// ------------------------------------------
 	// サンプラーチェック
 	// ------------------------------------------
-	bool Exists(const char* _name) const {
-		return m_Samplers.Exists(_name);
+	bool Exists(const String& _name) const {
+		return m_Samplers.Exists((Hashed_String)_name);
 	}
 
 
 	// ------------------------------------------
 	// サンプラーハンドル取得
 	// ------------------------------------------
-	Handle GetHandle(const char* _name) const {
-		return m_Samplers.GetHandle(_name);
+	Handle GetHandle(const String& _name) const {
+		return m_Samplers.GetHandle((Hashed_String)_name);
 	}
 };
 

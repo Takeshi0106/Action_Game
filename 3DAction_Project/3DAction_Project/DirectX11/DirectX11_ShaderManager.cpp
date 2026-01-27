@@ -22,8 +22,8 @@
 // ===========================================
 // シェーダーバイナリーデータ読み込み関数
 void LoadShaderBinaryData(
-	const char* _filePath,
-	const char* _shaderName,
+	const String& _filePath,
+	const String& _shaderName,
 	Microsoft::WRL::ComPtr<ID3DBlob>& _outBlob);
 
 
@@ -32,7 +32,8 @@ void LoadShaderBinaryData(
 // ===========================================
 // 頂点シェーダー作成
 const Handle DirectX11_ShaderManager::VertexShaderCreate(
-	ID3D11Device* _device,  const char* _name)
+	ID3D11Device* _device,  
+	const String& _name)
 {
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
@@ -44,20 +45,24 @@ const Handle DirectX11_ShaderManager::VertexShaderCreate(
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> shader;
 
 	// シェーダー作成
-	HRESULT hr = _device->CreateVertexShader(blob.Get()->GetBufferPointer(), 
+	HRESULT hr = _device->CreateVertexShader(
+		blob.Get()->GetBufferPointer(), 
 		blob.Get()->GetBufferSize(), 
 		nullptr, 
 		shader.GetAddressOf());
+
+	// 失敗したら空ハンドルを返す
 	if (FAILED(hr)) {
 		return Handle();
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Vertexs.AddData(_name, shader);
+	return m_Vertexs.AddData((Hashed_String)_name, shader);
 }
 
 // 頂点シェーダー返す
-ID3D11VertexShader* DirectX11_ShaderManager::GetVertexShader(const Handle& _handle)
+ID3D11VertexShader* DirectX11_ShaderManager::GetVertexShader(
+	const Handle& _handle)
 {
 	return m_Vertexs.GetData(_handle)->Get();
 }
@@ -68,7 +73,8 @@ ID3D11VertexShader* DirectX11_ShaderManager::GetVertexShader(const Handle& _hand
 // ===========================================
 // ピクセルシェーダー作成
 const Handle DirectX11_ShaderManager::PixelShaderCreate(
-	ID3D11Device* _device, const char* _name)
+	ID3D11Device* _device, 
+	const String& _name)
 {
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
@@ -80,20 +86,24 @@ const Handle DirectX11_ShaderManager::PixelShaderCreate(
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> shader;
 
 	// シェーダー作成
-	HRESULT hr = _device->CreatePixelShader(blob.Get()->GetBufferPointer(), 
+	HRESULT hr = _device->CreatePixelShader(
+		blob.Get()->GetBufferPointer(), 
 		blob.Get()->GetBufferSize(), 
 		nullptr, 
 		shader.GetAddressOf());
+
+	// 失敗したら空ハンドルを返す
 	if (FAILED(hr)) {
 		return Handle();
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Pixels.AddData(_name, shader);
+	return m_Pixels.AddData((Hashed_String)_name, shader);
 }
 
 // ピクセルシェーダー返す
-ID3D11PixelShader* DirectX11_ShaderManager::GetPixelShader(const Handle& _handle)
+ID3D11PixelShader* DirectX11_ShaderManager::GetPixelShader(
+	const Handle& _handle)
 {
 	return m_Pixels.GetData(_handle)->Get();
 }
@@ -104,7 +114,7 @@ ID3D11PixelShader* DirectX11_ShaderManager::GetPixelShader(const Handle& _handle
 // ===========================================
 // コンピュートシェーダー作成
 const Handle DirectX11_ShaderManager::ComputeShaderCreate(
-	ID3D11Device* _device,  const char* _name)
+	ID3D11Device* _device,  const String& _name)
 {
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
@@ -120,12 +130,14 @@ const Handle DirectX11_ShaderManager::ComputeShaderCreate(
 		blob.Get()->GetBufferSize(), 
 		nullptr, 
 		shader.GetAddressOf());
+
+	// 失敗したら空ハンドルを返す
 	if (FAILED(hr)) {
 		return Handle();
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Computes.AddData(_name, shader);
+	return m_Computes.AddData((Hashed_String)_name, shader);
 }
 
 
@@ -140,13 +152,13 @@ ID3D11ComputeShader* DirectX11_ShaderManager::GetComputeShader(const Handle& _ha
 // シェーダーバイナリーデータ読み込み関数
 // ===========================================
 void LoadShaderBinaryData(
-	const char* _filePath,
-	const char* _shaderName,
+	const String& _filePath,
+	const String& _shaderName,
 	Microsoft::WRL::ComPtr<ID3DBlob>& _outBlob)
 {
 	// フルパス作成
-	std::filesystem::path fullPath = _filePath;
-	fullPath /= _shaderName;
+	std::filesystem::path fullPath = _filePath.GetU8String();
+	fullPath /= _shaderName.GetU8String();
 	fullPath += ".cso";
 
 	// 区切り文字を統一する

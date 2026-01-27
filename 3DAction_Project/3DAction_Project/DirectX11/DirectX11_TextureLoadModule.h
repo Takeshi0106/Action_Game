@@ -17,6 +17,8 @@
 #include "DirectX11_ViewManager.h"
 // テクスチャ作成ヘッダー
 #include "DirectX11_Texture2DBufferManager.h"
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // =========================================
@@ -29,7 +31,7 @@ private:
 	// メンバー変数
 	// ----------------------------------
 	// テクスチャフォルダパス
-	const char* kPath;
+	const String& kPath;
 
 
 	// ----------------------------------
@@ -37,7 +39,7 @@ private:
 	// ----------------------------------
 	const TextureHandle LoadTextureFromFile(
 		ID3D11Device* _device,
-		const char* _texturePath,
+		const String& _texturePath,
 		uint16_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,
 		DirectX11_ViewManager& _viewManager);
@@ -47,7 +49,7 @@ public:
 	// ----------------------------------
 	// コンストラクタ・デストラクタ
 	// ----------------------------------
-	DirectX11_TextureLoadModule(const char* _path) : kPath(_path) {}
+	DirectX11_TextureLoadModule(const String& _path) : kPath(_path) {}
 	~DirectX11_TextureLoadModule() = default;
 
 
@@ -57,8 +59,8 @@ public:
 	// ----------------------------------
 	const TextureHandle LoadFaileTexture_TextureFolder(
 		ID3D11Device* _device,
-		const char* _textureName,
-		const char* _textureFolderName,
+		const String& _textureName,
+		const String& _textureFolderName,
 		uint16_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,
 		DirectX11_ViewManager& _viewManager);
@@ -70,7 +72,7 @@ public:
 	// ----------------------------------
 	const TextureHandle LoadFaileTexture(
 		ID3D11Device* _device,
-		const char* _texturePath,
+		const String& _texturePath,
 		uint16_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,
 		DirectX11_ViewManager& _viewManager);

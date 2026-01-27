@@ -17,7 +17,7 @@
 #include <vector>
 #include <unordered_map>
 // 文字列ヘッダー
-#include <string>
+#include "Hashed_String.h"
 // ハンドル構造体
 #include "Handle.h"
 
@@ -43,9 +43,9 @@ private:
 	std::vector<uint32_t> m_FreeIndexs;
 
 	// 名前からハンドルを取得する配列 (複数制作しない用)
-	std::unordered_map<std::string, Handle> m_NameToHandleMap;
+	std::unordered_map<Hashed_String, Handle> m_NameToHandleMap;
 	// インデックスから名前を取得する配列 (複数制作しない用)
-	std::vector<std::string> m_IndexToNames;
+	std::vector<Hashed_String> m_IndexToNames;
 
 public:
 	TemplateManager() = default;
@@ -70,7 +70,7 @@ public:
 	// ==============================
 	// データ追加
 	// ==============================
-	Handle AddData(const std::string& name, const T& data)
+	Handle AddData(const Hashed_String& name, const T& data)
 	{
 		// 名前が既に存在する場合はハンドルを返す
 		auto it = m_NameToHandleMap.find(name);
@@ -130,7 +130,7 @@ public:
 	T* GetData(const Handle& handle)
 	{
 		// 添え字をチェック
-		if (handle.index >= m_Datas.size()) { return nullptr; }
+		if (handle.index >= (uint32_t)m_Datas.size()) { return nullptr; }
 
 		// 世代をチェック
 		if (handle.generation != m_Generations[handle.index]) { return nullptr; }
@@ -142,7 +142,7 @@ public:
 	// ================================
 	// 名前からハンドルを取得
 	// ================================
-	const Handle GetHandle(const std::string& name) const
+	const Handle GetHandle(const Hashed_String& name) const
 	{
 		// 名前からハンドルを取得
 		auto it = m_NameToHandleMap.find(name);
@@ -160,7 +160,7 @@ public:
 	// ================================
 	// 存在チェック
 	// ================================
-	bool Exists(const std::string& name) const
+	bool Exists(const Hashed_String& name) const
 	{
 		return m_NameToHandleMap.find(name) != m_NameToHandleMap.end();
 	}
@@ -177,10 +177,10 @@ public:
 		if (handle.generation != m_Generations[handle.index]) { return; }
 
 		// ハンドルから名前を取得
-		std::string& name = m_IndexToNames[handle.index];
+		const Hashed_String& name = m_IndexToNames[handle.index];
 
 		// 名前が空かチェック
-		if (name.empty()) { return; }
+		if (name.GetString().GetU8String().empty()) { return; }
 
 		// 参照カウントをデクリメント
 		m_RefHandleCounts[handle.index]--;
@@ -197,7 +197,7 @@ public:
 			// 配列から削除
 			m_NameToHandleMap.erase(name);
 			// ハンドルから名前を削除
-			m_IndexToNames[handle.index].clear();
+			m_IndexToNames[handle.index].Clear();
 		}
 	}
 

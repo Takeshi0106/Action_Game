@@ -16,6 +16,8 @@
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
 #include "../TemplateManager.h"
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // ==============================================
@@ -44,7 +46,7 @@ public:
 	const Handle Texture2DBufferCreate(
 		ID3D11Device* _device,
 		const D3D11_TEXTURE2D_DESC* _desc,
-		const char* _name,
+		const String& _name,
 		const D3D11_SUBRESOURCE_DATA* _initialData = nullptr);
 
 
@@ -57,17 +59,17 @@ public:
 	// ------------------------------------------
 	// 2Dテクスチャバッファチェック
 	// ------------------------------------------
-	bool Exists(const char* _name) const
+	bool Exists(const String& _name) const
 	{
-		return m_Texture2DBuffers.Exists(_name);
+		return m_Texture2DBuffers.Exists((Hashed_String)_name);
 	}
 
 
 	// ------------------------------------------
 	// ハンドル取得
 	// ------------------------------------------
-	const Handle GetHandle(const char* _name) const
+	const Handle GetHandle(const String& _name) const
 	{
-		return m_Texture2DBuffers.GetHandle(_name);
+		return m_Texture2DBuffers.GetHandle((Hashed_String)_name);
 	}
 };

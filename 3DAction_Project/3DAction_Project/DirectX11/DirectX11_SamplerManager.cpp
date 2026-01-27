@@ -14,7 +14,7 @@
 const Handle DirectX11_SamplerManager::SamplerStateCreate(
 	ID3D11Device* _device,
 	D3D11_SAMPLER_DESC& desc,
-	const char* _name)
+	const String& _name)
 {
 
 	if (!_device) {
@@ -32,7 +32,7 @@ const Handle DirectX11_SamplerManager::SamplerStateCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Samplers.AddData(_name, sampler);
+	return m_Samplers.AddData((Hashed_String)_name, sampler);
 }
 
 

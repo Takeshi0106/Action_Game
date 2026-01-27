@@ -16,6 +16,8 @@
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
 #include "../TemplateManager.h"
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // ==============================================
@@ -61,7 +63,7 @@ public:
 		const uint32_t _vertexCount,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
-		const char* _name);
+		const String& _name);
 
 
 	// ------------------------------------------
@@ -85,16 +87,16 @@ public:
 	// ------------------------------------------
 	// 頂点バッファチェック
 	// ------------------------------------------
-	bool Exists(const char* _name) const {
-		return m_VertexBuffers.Exists(_name);
+	bool Exists(const String& _name) const {
+		return m_VertexBuffers.Exists((Hashed_String)_name);
 	}
 
 
 	// ------------------------------------------
 	// 頂点バッファハンドル取得関数
 	// ------------------------------------------
-	const Handle GetVertexBufferHandle(const char* _name) const {
-		return m_VertexBuffers.GetHandle(_name);
+	const Handle GetVertexBufferHandle(const String& _name) const {
+		return m_VertexBuffers.GetHandle((Hashed_String)_name);
 	}
 };
 

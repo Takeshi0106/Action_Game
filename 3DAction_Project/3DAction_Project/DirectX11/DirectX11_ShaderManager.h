@@ -18,6 +18,8 @@
 #include "../Handle.h"
 // データ管理テンプレートヘッダー
 #include "../TemplateManager.h"
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // ==============================================
@@ -71,14 +73,14 @@ private:
 	TemplateManager<Microsoft::WRL::ComPtr<ID3D11ComputeShader>> m_Computes;
 
 	// コンパイルファイルパス
-	const char* kCompileFilePath;
+	const String& kCompileFilePath;
 
 
 public:
 	// ------------------------------------------
 	// コンストラクタ・デストラクタ
 	// ------------------------------------------
-	DirectX11_ShaderManager(const char* _path) :
+	DirectX11_ShaderManager(const String& _path) :
 		kCompileFilePath(_path) {}
 	~DirectX11_ShaderManager() = default;
 
@@ -86,9 +88,9 @@ public:
 	// ------------------------------------------
 	// シェーダー作成関数
 	// ------------------------------------------
-	const Handle VertexShaderCreate(ID3D11Device* _device,  const char* _name);
-	const Handle PixelShaderCreate(ID3D11Device* _device,  const char* _name);
-	const Handle ComputeShaderCreate(ID3D11Device* _device,  const char* _name);
+	const Handle VertexShaderCreate (ID3D11Device* _device, const String& _name);
+	const Handle PixelShaderCreate  (ID3D11Device* _device, const String& _name);
+	const Handle ComputeShaderCreate(ID3D11Device* _device, const String& _name);
 
 
 	// ------------------------------------------

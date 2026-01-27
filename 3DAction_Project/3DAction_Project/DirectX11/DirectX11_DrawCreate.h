@@ -91,8 +91,8 @@ public:
 	DirectX11_DrawCreate(
 		ID3D11Device* _device,
 		DirectX11_ResourceReference& _managers,
-		const char* _texturePath,
-		const char* _modelPath) :
+		const String& _texturePath,
+		const String& _modelPath) :
 		// デバイス
 		m_Device(_device),
 		// マネージャー参照
@@ -118,7 +118,7 @@ public:
 	// --------------------------------
 	// 頂点バッファ作成
 	const Handle CreateVertexBuffer(
-		const char* _vbName,
+		const String& _vbName,
 		const void* _data,
 		const size_t _size,
 		const uint32_t _vertexNumber,
@@ -128,7 +128,7 @@ public:
 
 	// インデックスバッファ作成
 	const Handle CreateIndexBuffer(
-		const char* _indexName,
+		const String& _indexName,
 		const uint32_t* _indexData,
 		const size_t _indexSize,
 		const uint32_t _indexNumber,
@@ -137,7 +137,7 @@ public:
 	
 	// 定数バッファ作成
 	const Handle CreateConstantBuffer(
-		const char* _constantName,
+		const String& _constantName,
 		const size_t _size,
 		const void* _data = nullptr,
 		const BufferUsage _usage = BufferUsage::Dynamic,
@@ -145,7 +145,7 @@ public:
 
 	// テクスチャ作成
 	const Handle CreateTexture(
-		const char* _name,
+		const String& _name,
 		const uint16_t _width,
 		const uint16_t _height,
 		const Format _format,
@@ -154,16 +154,23 @@ public:
 		const CPUAccess _cpu = CPUAccess::None) override;
 
 	// サンプラー作成
-	const Handle CreateSampler(const char* _samplerName, const SamplerDesc& _desc) override;
+	const Handle CreateSampler(const String& _samplerName, const SamplerDesc& _desc) override;
 
 	// View作成
-	const Handle CreateSRV(const Handle& _textureHandle, const char* name,
-		const Format format, const uint16_t mostDetailedMip = 0, const int16_t mipLevels = -1) override;
-	const Handle CreateRTV(const Handle& _textureHandle, const char* name, const uint16_t mipSlice) override;
-	const Handle CreateDSV(const Handle& _textureHandle, const char* name, const Format format) override;
+	const Handle CreateSRV(const Handle& _textureHandle, 
+		const String& name,
+		const Format format, 
+		const uint16_t mostDetailedMip = 0, 
+		const int16_t mipLevels = -1) override;
+	const Handle CreateRTV(const Handle& _textureHandle, 
+		const String& name, 
+		const uint16_t mipSlice) override;
+	const Handle CreateDSV(const Handle& _textureHandle, 
+		const String& name, 
+		const Format format) override;
 
 	// テクスチャのロード
-	const TextureHandle LoadTexture(const char* textureName, const int16_t _mipLevels = -1, const char* textureFolderName = "") override;
+	const TextureHandle LoadTexture(const String& textureName, const int16_t _mipLevels = -1, const String& textureFolderName = u8"") override;
 	// モデルのロード
-	const Handle LoadModel(const char* modelName, const char* modelFolderName = "") override;
+	const Handle LoadModel(const String& modelName, const String& modelFolderName = u8"") override;
 };

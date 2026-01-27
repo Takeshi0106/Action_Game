@@ -32,7 +32,7 @@ bool ModelConversionModule::ModelConversion()
 		ModelData modelData;
 
 		// モデル読込み 重たいので注意
-		if (!ModelLoad(entry.path().string(), aiProcessPreset_TargetRealtime_MaxQuality, modelData)) {
+		if (!ModelLoad(entry.path().string().c_str(), aiProcessPreset_TargetRealtime_MaxQuality, modelData)) {
 			ErrorLog::OutputToConsole("モデルを読み込めませんでした");
 			return false;
 		}
@@ -45,9 +45,10 @@ bool ModelConversionModule::ModelConversion()
 // =====================================
 // モデルを読み込んで、各マネージャーに登録する
 // =====================================
-bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& modelName, 
+bool ModelConversionModule::LoadAndRegisterModelResources(
+	const char* modelName, 
 	BaseDrawManager& drawManager,ModelManager& modelManager,
-	const std::string& modelFile)
+	const char* modelFile)
 {
 	// 登録済みチェック
 	if (modelManager.CheckModelData(modelName)) {
@@ -83,7 +84,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 			static_cast<uint32_t>(mesh.vertices.size()),
 			PrimitiveType::TriangleList))
 		{
-			ErrorLog::OutputToConsole((modelName + " 頂点バッファの作成に失敗しました").c_str());
+			ErrorLog::OutputToConsole(std::string(" 頂点バッファの作成に失敗しました").c_str());
 			return false;
 		}
 
@@ -93,7 +94,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 			static_cast<const uint32_t*>(mesh.indices.data()),
 			static_cast<uint32_t>(mesh.indices.size())))
 		{
-			ErrorLog::OutputToConsole((modelName + " インデックスバッファの作成に失敗しました").c_str());
+			ErrorLog::OutputToConsole(std::string(" インデックスバッファの作成に失敗しました").c_str());
 			return false;
 		}
 	}
@@ -105,19 +106,19 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 		MeshMaterialData materialData = modelData.materialDataArray[i];
 
 		// テクスチャパスがあるか確認
-		if (!materialData.textureName.empty())
+		if (!materialData.textureName.GetU8String().empty())
 		{
 			// テクスチャロード
-			if (!drawManager.LoadTexture(materialData.textureName.c_str())) {
-				ErrorLog::OutputToConsole((modelName + " テクスチャの作成に失敗しました").c_str());
+			if (!drawManager.LoadTexture(reinterpret_cast<const char*>(materialData.textureName.GetU8String().c_str()))) {
+				ErrorLog::OutputToConsole(" テクスチャの作成に失敗しました");
 				return false;
 			}
 
 			// パスではなくファイル名に変換
 			modelData.materialDataArray[i].textureName = 
-				std::filesystem::path(materialData.textureName).filename().string();
+				std::filesystem::path(materialData.textureName.GetU8String()).filename().u8string();
 
-			DebugLog::OutputToConsole((modelName + " テクスチャのロードに成功しました : " + modelData.materialDataArray[i].textureName).c_str());
+			DebugLog::OutputToConsole(" テクスチャのロードに成功しました : ");
 		}
 	}
 
@@ -131,21 +132,26 @@ bool ModelConversionModule::LoadAndRegisterModelResources(const std::string& mod
 // =====================================
 // モデルを読み込む関数
 // =====================================
-bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag,
-	ModelData& modelData, const std::string& modelFile)
+bool ModelConversionModule::ModelLoad(
+	const char* _modelPath, 
+	int flag,
+	ModelData& modelData, 
+	const char* modelFile)
 {
 	// モデルが入っているパスを作成
 	std::filesystem::path modelPath;
 
 	// パスを作成
-	if (!modelFile.empty()) 
+	if (!std::string(modelFile).empty())
 	{
-		modelPath = std::filesystem::path(m_ModelPath) / modelFile 
-			/ ((_modelPath + kObjExtension));
+		modelPath = std::filesystem::path(m_ModelPath) / 
+			modelFile /
+			((std::string(_modelPath) + kObjExtension));
 	}
 	else
 	{
-		modelPath = std::filesystem::path(m_ModelPath) / (_modelPath + kObjExtension);
+		modelPath = std::filesystem::path(m_ModelPath) /
+			(std::string(_modelPath) + kObjExtension);
 	}
 
 	// 区切り文字統一
@@ -270,7 +276,7 @@ bool ModelConversionModule::ModelLoad(const std::string& _modelPath, int flag,
 		materialData.specular = Color(aiSpecular.r, aiSpecular.g, aiSpecular.b, aiSpecular.a);
 
 		// テクスチャ名をセット
-		materialData.textureName = fullPath.string();
+		materialData.textureName = fullPath.u8string();
 
 		// マテリアルデータをモデルデータに設定
 		modelData.materialDataArray[i] = materialData;

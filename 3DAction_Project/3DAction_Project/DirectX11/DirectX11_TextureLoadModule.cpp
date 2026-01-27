@@ -19,28 +19,29 @@
 // =======================================
 const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	ID3D11Device* _device,
-	const char* _textureName,
-	const char* _textureFolderName,
+	const String& _textureName,
+	const String& _textureFolderName,
 	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
 	// ファイルパス作成
 	std::filesystem::path filePath;
+	filePath = _textureFolderName.GetU8String();
 
 	// パス確認
-	if (!std::filesystem::path(_textureFolderName).empty())
+	if (!filePath.empty())
 	{
 		// 相対パスを追加
-		filePath = kPath;
-		filePath /= _textureFolderName;
-		filePath /= _textureName;
+		filePath = kPath.GetU8String();
+		filePath /= _textureFolderName.GetU8String();
+		filePath /= _textureName.GetU8String();
 	}
 	else
 	{
 		// そのまま使用
-		filePath = kPath;
-		filePath /= _textureName;
+		filePath = kPath.GetU8String();
+		filePath /= _textureName.GetU8String();
 	}
 
 	// 区切り文字を統一する
@@ -49,7 +50,7 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	// 画像のロード
 	return LoadTextureFromFile(
 		_device,
-		filePath.string().c_str(),
+		filePath.u8string(),
 		_mipLevels,
 		_textureManager,
 		_viewManager);
@@ -61,7 +62,7 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 // =======================================
 const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	ID3D11Device* _device,
-	const char* _texturePath,
+	const String& _texturePath,
 	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
@@ -81,23 +82,24 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 // =======================================
 const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
 	ID3D11Device* _device,
-	const char* _texturePath,
+	const String& _texturePath,
 	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
 	// ファイルパス作成
-	std::filesystem::path filePath(_texturePath);
+	std::filesystem::path filePath;
+	filePath = _texturePath.GetU8String();
 
 	// 登録名
-	std::string keyName = filePath.filename().string();
+	String keyName = filePath.filename().u8string();
 
 	// すでにSRVが登録されているか確認
-	if (_viewManager.ExistsSRV(keyName.c_str()))
+	if (_viewManager.ExistsSRV(keyName))
 	{
 		TextureHandle handle;
-		handle.textureHandle = _textureManager.GetHandle(keyName.c_str());
-		handle.srvHandle = _viewManager.GetSRVHandle(keyName.c_str());
+		handle.textureHandle = _textureManager.GetHandle(keyName);
+		handle.srvHandle = _viewManager.GetSRVHandle(keyName);
 		return handle;
 	}
 
@@ -110,6 +112,8 @@ const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
 		DirectX::WIC_FLAGS_NONE,
 		nullptr,
 		image);
+
+	// ロード失敗
 	if (FAILED(hr)) {
 		ErrorLog::OutputToConsole(("画像のロードに失敗しました" + std::to_string(hr)).c_str());
 		return TextureHandle();
@@ -144,7 +148,7 @@ const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
 	Handle texHandle = _textureManager.Texture2DBufferCreate(
 		_device,
 		&desc,
-		keyName.c_str(),
+		keyName,
 		&initData);
 
 	// テクスチャを取得
@@ -156,7 +160,7 @@ const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
 		data,
 		0,
 		static_cast<UINT>(meta.mipLevels),
-		keyName.c_str());
+		keyName);
 
 	TextureHandle handle;
 	handle.textureHandle = texHandle;

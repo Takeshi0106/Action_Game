@@ -16,6 +16,8 @@
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
 #include "../TemplateManager.h"
+// 文字列ヘッダー
+#include "../UTF8_String.h"
 
 
 // ==============================================
@@ -46,7 +48,7 @@ public:
 		size_t _size,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
-		const char* _name,
+		const String& _name,
 		const void* _data = nullptr);
 
 
@@ -59,18 +61,18 @@ public:
 	// ------------------------------------------
 	// 定数バッファチェック
 	// ------------------------------------------
-	bool Exists(const char* _name) const
+	bool Exists(const String& _name) const
 	{
-		return m_ConstantBuffers.Exists(_name);
+		return m_ConstantBuffers.Exists((Hashed_String)_name);
 	}
 
 
 	// ------------------------------------------
 	// 定数バッファハンドル取得
 	// ------------------------------------------
-	const Handle GetConstantBufferHandle(const char* _name) const
+	const Handle GetConstantBufferHandle(const String& _name) const
 	{
-		return m_ConstantBuffers.GetHandle(_name);
+		return m_ConstantBuffers.GetHandle((Hashed_String)_name);
 	}
 };
 

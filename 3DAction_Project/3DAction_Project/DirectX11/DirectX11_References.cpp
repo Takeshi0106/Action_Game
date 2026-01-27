@@ -26,7 +26,7 @@
 struct DX11_CBInfo
 {
 	// 定数バッファの名前
-	std::string m_Name = "";
+	String m_Name = u8"";
 	// レジスタ番号
 	uint16_t m_RegisterNumber = 0;
 	// 必ず１６の倍数にする
@@ -36,7 +36,7 @@ struct DX11_CBInfo
 // 入力レイアウト情報
 struct DX11_ILInfo {
 	// セマンティックの名前
-	std::string m_SemanticName = "";
+	String m_SemanticName = u8"";
 	// セマンティックの番号
 	uint16_t m_SemanticIndex = 0;
 	// スロット番号
@@ -60,7 +60,10 @@ bool ShaderInfoAcquisition(
 // ==============================================
 // シェーダーリファレンス出力
 // ==============================================
-void DirectX11_References::OutputShaderReferences(const std::string _shaderPath, const void* _blob, const size_t size)
+void DirectX11_References::OutputShaderReferences(
+	const String& _shaderPath, 
+	const void* _blob, 
+	const size_t size)
 {
 	// 取得する情報を格納する配列
 	std::vector<DX11_CBInfo> cbInfos;
@@ -114,22 +117,26 @@ bool ShaderInfoAcquisition(
 		D3D11_SIGNATURE_PARAMETER_DESC paramDesc = {};
 		reflector->GetInputParameterDesc(k, &paramDesc);
 
-		_ilInfo[k].m_SemanticName = paramDesc.SemanticName;
-		_ilInfo[k].m_SemanticIndex = (int)paramDesc.SemanticIndex;
+		// u8 に変換
+		String semanticName = String::FromASCII((char*)paramDesc.SemanticName);
+
+		// 代入
+		_ilInfo[k].m_SemanticName = semanticName;
+		_ilInfo[k].m_SemanticIndex = (uint16_t)paramDesc.SemanticIndex;
 		_ilInfo[k].m_InputSlot = 0;
 
 		// ComponentMask から DXGI_FORMAT を推定
 		if (paramDesc.Mask == 1) {
-			_ilInfo[k].m_Format = (int)DXGI_FORMAT_R32_FLOAT;
+			_ilInfo[k].m_Format = (uint16_t)DXGI_FORMAT_R32_FLOAT;
 		}
 		else if (paramDesc.Mask <= 3) {
-			_ilInfo[k].m_Format = (int)DXGI_FORMAT_R32G32_FLOAT;
+			_ilInfo[k].m_Format = (uint16_t)DXGI_FORMAT_R32G32_FLOAT;
 		}
 		else if (paramDesc.Mask <= 7) {
-			_ilInfo[k].m_Format = (int)DXGI_FORMAT_R32G32B32_FLOAT;
+			_ilInfo[k].m_Format = (uint16_t)DXGI_FORMAT_R32G32B32_FLOAT;
 		}
 		else if (paramDesc.Mask <= 15) {
-			_ilInfo[k].m_Format = (int)DXGI_FORMAT_R32G32B32A32_FLOAT;
+			_ilInfo[k].m_Format = (uint16_t)DXGI_FORMAT_R32G32B32A32_FLOAT;
 		}
 		else {
 			ErrorLog::OutputToConsole("未知のフォーマットです");
@@ -154,9 +161,8 @@ bool ShaderInfoAcquisition(
 			return false;
 		}
 
-		// nullptrチェックをしてるため問題ないが警告が出るため、？演算子を使用してstring 型に代入
-		std::string bufferName = bufferDesc.Name ? bufferDesc.Name : "";
-
+		// u8 に変換
+		String bufferName = String::FromASCII((char*)bufferDesc.Name);
 
 		// --------------------------------------------------------------------------------------------
 		// レジスタ番号と、サイズは一緒に取得できないため、同じ名前のバインド情報を探して、取得する
@@ -179,8 +185,8 @@ bool ShaderInfoAcquisition(
 				return false;
 			}
 
-			// nullptrチェックをしてるため問題ないが警告が出るため、？演算子を使用してstring 型に代入
-			std::string bindName = bindDesc.Name ? bindDesc.Name : "";
+			// u8に変換
+			String bindName = String::FromASCII((char*)bindDesc.Name);
 
 			// 同じ名前かをチェック
 			if (bindName == bufferName) {

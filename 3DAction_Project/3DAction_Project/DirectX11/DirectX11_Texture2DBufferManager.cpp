@@ -14,7 +14,7 @@
 const Handle DirectX11_Texture2DBufferManager::Texture2DBufferCreate(
 	ID3D11Device* _device,
 	const D3D11_TEXTURE2D_DESC* _desc,
-	const char* _name,
+	const String& _name,
 	const D3D11_SUBRESOURCE_DATA* _initialData)
 {
 	if (!_device || !_desc) {
@@ -32,7 +32,7 @@ const Handle DirectX11_Texture2DBufferManager::Texture2DBufferCreate(
 	}
 	
 	// 管理配列に追加してハンドルを返す
-	return m_Texture2DBuffers.AddData(_name, buffer);
+	return m_Texture2DBuffers.AddData((Hashed_String)_name, buffer);
 }
 
 

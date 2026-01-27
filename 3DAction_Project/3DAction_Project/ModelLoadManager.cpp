@@ -10,10 +10,11 @@
 // ============================================================
 // モデルハンドルを追加
 // ============================================================
-Handle ModelLoadManager::AddModelHandle(const char* _name, const ModelHandle& _modelHandle)
+Handle ModelLoadManager::AddModelHandle(const String& _name, 
+	const ModelHandle& _modelHandle)
 {
 	// モデルハンドルを追加
-	return m_ModelLoadManager.AddData(_name, _modelHandle);
+	return m_ModelLoadManager.AddData((Hashed_String)_name, _modelHandle);
 }
 
 

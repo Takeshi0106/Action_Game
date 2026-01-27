@@ -56,7 +56,7 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 		std::filesystem::directory_iterator(currentDirectory),
 		std::filesystem::directory_iterator{},
 		[this](const auto& entry) {
-			return entry.is_regular_file() && entry.path().extension() == std::string(kHlslExtension); 
+			return entry.is_regular_file() && entry.path().extension() == (std::filesystem::path)kHlslExtension.GetU8String(); 
 		});
 
 	// インデックス
@@ -66,7 +66,7 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory))
 	{
 		// 階層内の全てのファイルをを所得して、ファイルでなかったり、拡張子が違ったりすれば次のループへ
-		if (!entry.is_regular_file() || entry.path().extension() != khlslPath) { continue; }
+		if (!entry.is_regular_file() || entry.path().extension() != (std::filesystem::path)khlslPath.GetU8String()) { continue; }
 
 		// 念のためチェック
 		if ((uint16_t)shaderFileCount < hlslCount) {
@@ -76,7 +76,10 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 		// .hlslのパスをを取得
 		std::filesystem::path hlslPath = entry.path();
 		// コンパイルパスを作成
-		std::filesystem::path compilePath = std::filesystem::path(kCompilPath) / (hlslPath.filename().stem().string() + kCompilExtension);
+		std::filesystem::path compilePath = 
+			std::filesystem::path(kCompilPath.GetU8String()) / 
+			(hlslPath.filename().stem().u8string() + 
+			kCompilExtension.GetU8String());
 
 		// 区切り文字を統一
 		hlslPath = hlslPath.generic_string();

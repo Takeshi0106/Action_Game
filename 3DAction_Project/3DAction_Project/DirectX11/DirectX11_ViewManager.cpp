@@ -16,7 +16,7 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreate(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
 	UINT mmipSlice,
-	const char* _name)
+	const String& _name)
 {
 	if (!_device || !_resource) {
 		ErrorLog::OutputToConsole("無効なレンダーターゲットビューが作成されそうになりました");
@@ -43,11 +43,12 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_RenderTargetViews.AddData(_name, view);
+	return m_RenderTargetViews.AddData((Hashed_String)_name, view);
 }
 
 // 取得
-ID3D11RenderTargetView* DirectX11_ViewManager::GetRenderTargetView(const Handle& _handle)
+ID3D11RenderTargetView* DirectX11_ViewManager::GetRenderTargetView(
+	const Handle& _handle)
 {
 	return m_RenderTargetViews.GetData(_handle)->Get();
 }
@@ -62,7 +63,7 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreate(
 	ID3D11Texture2D* _resource,
 	UINT mostDetailedMip,
 	UINT mipLevels,
-	const char* _name)
+	const String& _name)
 {
 	if (!_device || !_resource) {
 		ErrorLog::OutputToConsole("無効なシェーダーリソースビューが作成されそうになりました");
@@ -90,11 +91,12 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_ShaderResourceViews.AddData(_name, view);
+	return m_ShaderResourceViews.AddData((Hashed_String)_name, view);
 }
 
 // 取得
-ID3D11ShaderResourceView* DirectX11_ViewManager::GetShaderResourceView(const Handle& _handle)
+ID3D11ShaderResourceView* DirectX11_ViewManager::GetShaderResourceView(
+	const Handle& _handle)
 {
 	return m_ShaderResourceViews.GetData(_handle)->Get();
 }
@@ -108,7 +110,7 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreate(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
 	UINT mipSlice,
-	const char* _name)
+	const String& _name)
 {
 	if (!_device || !_resource) {
 		ErrorLog::OutputToConsole("無効な深度ステンシルビューが作成されそうになりました");
@@ -135,7 +137,7 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_DepthStencilViews.AddData(_name, view);
+	return m_DepthStencilViews.AddData((Hashed_String)_name, view);
 }
 
 // 取得

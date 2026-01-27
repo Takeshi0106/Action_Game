@@ -18,17 +18,17 @@
 // コンストラクタ・デストラクタ
 DirectX_DrawManager::DirectX_DrawManager(const DrawPathConfig& _config) :
 	m_ShaderManager(
-		_config.shaderBinaryPath,
-		_config.shaderSourcePath,
-		_config.shaderReflectionPath
+		reinterpret_cast<const char*>(_config.shaderBinaryPath.GetU8String().c_str()),
+		reinterpret_cast<const char*>(_config.shaderSourcePath.GetU8String().c_str()),
+		reinterpret_cast<const char*>(_config.shaderReflectionPath.GetU8String().c_str())
 	),
 	m_TextureLoader(
 		&m_TextureManager,
 		&m_ViewManager,
-		_config.texturePath
+		reinterpret_cast<const char*>(_config.texturePath.GetU8String().c_str())
 	),
 	m_ModelConversionModule(
-		_config.objModelPath,
+		reinterpret_cast<const char*>(_config.objModelPath.GetU8String().c_str()),
 		"Asset/SelfModel"
 	)
 {
@@ -691,10 +691,11 @@ bool DirectX_DrawManager::DrawModelObject(
 		m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
 		// テクスチャバインド
-		if (!data->materialData[data->meshMaterialIDs[i]].textureName.empty())
+		if (!data->materialData[data->meshMaterialIDs[i]].textureName.GetU8String().empty())
 		{
 			// テクスチャ バインド
-			m_ViewManager.BindSRV(data->materialData[data->meshMaterialIDs[i]].textureName,
+			m_ViewManager.BindSRV(reinterpret_cast<const char*>
+				(data->materialData[data->meshMaterialIDs[i]].textureName.GetU8String().c_str()),
 				DirectX11::Get::GetContext(),
 				PIXSELSHADER);
 			// サンプラー バインド

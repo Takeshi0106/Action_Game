@@ -16,7 +16,7 @@ const Handle DirectX11_ConstantBufferManager::ConstantBufferCreate(
 	size_t _size,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
-	const char* _name,
+	const String& _name,
 	const void* _data)
 {
 	if (!_device || _size == 0) {
@@ -65,7 +65,7 @@ const Handle DirectX11_ConstantBufferManager::ConstantBufferCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_ConstantBuffers.AddData(_name, buffer);
+	return m_ConstantBuffers.AddData((Hashed_String)_name, buffer);
 }
 
 
