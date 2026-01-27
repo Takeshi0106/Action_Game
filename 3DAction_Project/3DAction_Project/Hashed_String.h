@@ -32,12 +32,15 @@ public:
 	// --------------------------------
 	// コンストラクタ
 	// --------------------------------
-	Hashed_String(const char8_t* _str)
-		: m_String(_str), m_Hash(std::hash<std::u8string>{}(_str)) {}
-	Hashed_String(const String& _str)
-		: m_String(_str), m_Hash(std::hash<std::u8string>{}(_str.GetU8String())) {}
-	Hashed_String(String&& _str) noexcept
-		: m_String(std::move(_str)), m_Hash(std::hash<std::u8string>{}(m_String.GetU8String())) {}
+	explicit Hashed_String(const char8_t* _str)
+		: m_String(_str), 
+		m_Hash(std::hash<std::u8string>{}(m_String.GetU8String())) {}
+	explicit Hashed_String(const String& _str)
+		: m_String(_str), 
+		m_Hash(std::hash<std::u8string>{}(m_String.GetU8String())) {}
+	explicit Hashed_String(String&& _str) noexcept
+		: m_String(std::move(_str)), 
+		m_Hash(std::hash<std::u8string>{}(m_String.GetU8String())) {}
 	Hashed_String(const Hashed_String&) = default;
 	Hashed_String(Hashed_String&&) noexcept = default;
 
@@ -50,7 +53,15 @@ public:
 	// コピー・ムーブ代入禁止
 	Hashed_String& operator=(const Hashed_String& str) = delete;
 	Hashed_String& operator=(Hashed_String&&) =delete;
-	
+
+	// --------------------------------
+	// 比較演算子
+	// --------------------------------
+	bool operator==(const Hashed_String& rhs) const noexcept
+	{
+		return m_Hash == rhs.GetHash() && m_String == rhs.GetString();
+	}
+
 	// --------------------------------
 	// ゲッター
 	// --------------------------------
