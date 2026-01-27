@@ -19,7 +19,7 @@
 // 時間
 #include "Timer.h"
 // 文字列
-#include <string>
+#include "UTF8_String.h"
 #endif
 
 
@@ -137,7 +137,7 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 
 #if defined(DEBUG) || defined(_DEBUG)
 	ImGui::Begin("UpdateTime");
-	ImGui::Text(("更新時間 : " + std::to_string(Timer::GetDeltaTime() - time)).c_str());
+	ImGui::Text("%s", (u8"更新時間 : " + String::to_u8string(Timer::GetDeltaTime() - time).GetU8String()).c_str());
 	ImGui::End();
 #endif
 }
@@ -225,8 +225,8 @@ void DebugSceneState::UpdateCollision()
 		// 時間出力
 		float outputTime = Timer::GetDeltaTime() - colTime;
 		ImGui::Begin("CollisionOneTime");
-		ImGui::Text((std::to_string(outputTime) + "秒 : 当たり判定更新時間").c_str());
-		ImGui::Text((std::to_string(results.size()) + "件 : 接触候補数").c_str());
+		ImGui::Text("%s", (String::to_u8string(outputTime) + u8"秒 : 当たり判定更新時間").GetU8Char());
+		ImGui::Text("%s", (String::to_u8string((int)results.size()) + u8"件 : 接触候補数").GetU8Char());
 		ImGui::End();
 #endif
 

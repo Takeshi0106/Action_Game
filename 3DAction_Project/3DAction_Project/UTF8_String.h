@@ -56,6 +56,10 @@ public:
 	{
 		return m_String;
 	}
+	// char8_t* を返す
+	const char8_t* GetU8Char() const noexcept{
+		return m_String.c_str();
+	}
 
 	// --------------------------------
 	// ASCII を UTF-8 に変換する関数
@@ -75,4 +79,52 @@ public:
 		// 同じなのでそのまま変換
 		return String(reinterpret_cast<const char8_t*>(ascii));
 	}
+
+	// ---------------------------------- 
+	// 数字をStringに変換
+	// ----------------------------------
+	static String to_u8string(int n)
+	{
+		// ASCII に変換
+		std::string s = std::to_string(n);
+		// U8 に変換(エンコードが同じ互換)
+		return String(reinterpret_cast<const char8_t*>(s.c_str()));
+	}
+	static String to_u8string(float n)
+	{
+		// ASCII に変換
+		std::string s = std::to_string(n);
+		// U8 に変換(エンコードが同じ互換)
+		return String(reinterpret_cast<const char8_t*>(s.c_str()));
+	}
 };
+
+
+// --------------------------------
+// 文字列結合演算子
+// --------------------------------
+// String同士
+inline String operator+(const String& lhs, const String& rhs) noexcept
+{
+	return String(lhs.GetU8String() + rhs.GetU8String());
+}
+// String + std::u8
+inline String operator+(const String& lhs, const std::u8string& rhs) noexcept
+{
+	return String(lhs.GetU8String() + rhs);
+}
+// std::u8 + String
+inline String operator+(const std::u8string& lhs, const String& rhs) noexcept
+{
+	return String(lhs + rhs.GetU8String());
+}
+// String + char8
+inline String operator+(const String& lhs, const char8_t* rhs) noexcept
+{
+	return String(lhs.GetU8String() + std::u8string(rhs));
+}
+// char8 + String
+inline String operator+(const char8_t* lhs, const String& rhs) noexcept
+{
+	return String(std::u8string(lhs) + rhs.GetU8String());
+}

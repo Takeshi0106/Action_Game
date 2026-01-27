@@ -336,6 +336,18 @@ void PlatformWindowsSystem::InitImGui()
     ImGui_ImplWin32_Init(m_WinInstance);
     ImGui_ImplDX11_Init(m_DrawManager->GetDevice(),
         m_DrawManager->GetDeviceContext());
+
+    // フォントをロード
+    ImFont* font = io.Fonts->AddFontFromFileTTF(
+        "Asset/Font/LINESeedJP-Regular.ttf",
+        18.0f,
+        nullptr,
+        io.Fonts->GetGlyphRangesJapanese());
+
+    // 失敗時
+    if (!font) {
+        ErrorLog::OutputToConsole("フォントを読み込めませんでした");
+    }
 }
 
 // 更新

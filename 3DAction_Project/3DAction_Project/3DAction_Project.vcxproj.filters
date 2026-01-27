@@ -896,9 +896,6 @@
     <ClInclude Include="AABBCollider.h">
       <Filter>4_Game\8_Core\Collider\AABB</Filter>
     </ClInclude>
-    <ClInclude Include="TemplateManager.h">
-      <Filter>2_Core\0_TemplateManager</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionSystemModule.h">
       <Filter>4_Game\8_Core\Collider</Filter>
     </ClInclude>
@@ -1033,6 +1030,9 @@
     </ClInclude>
     <ClInclude Include="SRT.h">
       <Filter>2_Core\3_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateManager.h">
+      <Filter>2_Core\0_TemplateManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

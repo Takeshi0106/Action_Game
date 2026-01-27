@@ -11,16 +11,6 @@
 
 
 // =======================================
-// 関数 
-// =======================================
-// 文字列は
-inline std::u8string to_u8string(int n)
-{
-	std::string s = std::to_string(n);
-	return std::u8string(reinterpret_cast<const char8_t*>(s.c_str()));
-}	
-
-// =======================================
 // 頂点バッファ作成
 // =======================================
 const Handle DirectX11_DrawCreate::CreateVertexBuffer(
@@ -304,7 +294,7 @@ const Handle DirectX11_DrawCreate::LoadModel(
 	for (int i = 0; i < modelData.materialDataArray.size(); i++)
 	{
 		// マテリアル名作成
-		String name = _modelName.GetU8String() + u8"_Material_" + to_u8string(i);
+		String name = _modelName.GetU8String() + u8"_Material_" + String::to_u8string(i);
 
 		// メッシュマテリアル情報取得
 		MeshMaterialData& materialData = modelData.materialDataArray[i];
@@ -347,7 +337,7 @@ const Handle DirectX11_DrawCreate::LoadModel(
 		MeshData& mesh = modelData.meshDataArray[i];
 
 		// 登録名作成
-		String meshName = _modelName.GetU8String() + to_u8string(i);
+		String meshName = _modelName.GetU8String() + String::to_u8string(i);
 
 		// 頂点バッファ作成
 		Handle vbHandle = CreateVertexBuffer(
