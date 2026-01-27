@@ -36,7 +36,7 @@ struct ModelData;
 struct ModelManagerData
 {
 	// メッシュのマテリアル番号
-	std::vector<uint16_t> meshMaterialIDs;
+	std::vector<uint32_t> meshMaterialIDs;
 	// マテリアル配列
 	std::vector<MeshMaterialData> materialData;
 };
