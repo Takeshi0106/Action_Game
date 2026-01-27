@@ -49,6 +49,27 @@ public:
 		return m_String == rhs.GetU8String();
 	}
 
+
+	// --------------------------------
+	// 代入演算子
+	// --------------------------------
+	String& operator+=(const String& rhs) noexcept
+	{
+		m_String = m_String + rhs.GetU8String();
+		return *this;
+	}
+	String& operator+=(const std::u8string& rhs) noexcept
+	{
+		m_String = m_String + rhs;
+		return *this;
+	}
+	String& operator+=(const char8_t* rhs) noexcept
+	{
+		m_String = m_String + std::u8string(rhs);
+		return *this;
+	}
+
+
 	// --------------------------------
 	// ゲッター
 	// --------------------------------
