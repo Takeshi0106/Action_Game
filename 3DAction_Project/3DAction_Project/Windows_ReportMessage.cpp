@@ -18,9 +18,35 @@
 #include <cstdlib>
 
 
+// ======================================
+// 関数
+// ======================================
+// String を char* に変換する関数
+inline const char* StringToChar(const String& str)
+{
+    // 内部の u8string を char* にキャスト
+    return reinterpret_cast<const char*>(str.GetU8Char());
+}
+
+// String を std::wstring に変換する関数
+inline std::wstring StringToWString(const String& str)
+{
+	// 文字数を取得
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, StringToChar(str), -1, nullptr, 0);
+	// std::wstring に変換バッファを確保
+    std::wstring wstrTo(size_needed, 0);
+	// 変換して代入
+    MultiByteToWideChar(CP_UTF8, 0, StringToChar(str), -1, &wstrTo[0], size_needed);
+    return wstrTo;
+}
+
+
+// ======================================
+// グローバル変数
+// ======================================
 namespace {
     // カラーコードリセット用
-    constexpr const char* RESET = "\x1b[0m";
+    constexpr const char8_t* RESET = u8"\x1b[0m";
 }
 
 
@@ -30,15 +56,17 @@ namespace {
 namespace ErrorLog
 {
     // カラーコード
-    constexpr const char* RED = "\x1b[31m";
+    constexpr const char8_t* RED = u8"\x1b[31m";
 
 
     // ====================================================
     // コンソールにメッセージを出力
     // ====================================================
-    void OutputToConsole(const char* message)
+    void OutputToConsole(const String& message)
     {
-        std::cerr << RED << "ERROR :" << message << RESET << std::endl;
+		// 赤色でエラーメッセージを表示
+		String output = String(RED) + u8"ERROR :" + message + RESET;
+        std::cerr << StringToChar(output) << std::endl;
 
 #if defined(DEBUG) || defined(_DEBUG)
         // プロジェクト停止
@@ -50,9 +78,9 @@ namespace ErrorLog
     // =====================================================
     // メッセージボックスでメッセージを表示
     // =====================================================
-    void OutputToMessageBox(const char* message)
+    void OutputToMessageBox(const String& message)
     {
-        MessageBoxA(nullptr, message, "Error", MB_ICONERROR | MB_OK);
+        MessageBoxW(nullptr, StringToWString(message).c_str(), L"Error", MB_ICONERROR | MB_OK);
 
 #if defined(DEBUG) || defined(_DEBUG)
         // プロジェクト停止
@@ -70,24 +98,27 @@ namespace ErrorLog
 namespace WarningLog
 {
     // ANSIカラーコード
-    constexpr const char* YELLOW = "\x1b[33m";
+    constexpr const char8_t* YELLOW = u8"\x1b[33m";
 
 
     // ====================================================
     // コンソールにメッセージを出力
     // ====================================================
-    void OutputToConsole(const char* message)
+    void OutputToConsole(const String& message)
     {
-        std::cerr << YELLOW << "WARNING :" << message << RESET << std::endl;
+		// 警告メッセージ作成
+		String output = String(YELLOW) + u8"WARNING :" + message + RESET;
+		// 黄色で警告メッセージを表示
+        std::cerr << StringToChar(output) << std::endl;
     }
 
 
     // =====================================================
     // メッセージボックスでメッセージを表示
     // =====================================================
-    void OutputToMessageBox(const char* message)
+    void OutputToMessageBox(const String& message)
     {
-        MessageBoxA(nullptr, message, "Warning", MB_ICONERROR | MB_OK);
+        MessageBoxW(nullptr, StringToWString(message).c_str(), L"Warning", MB_ICONERROR | MB_OK);
     }
 
 
@@ -104,9 +135,9 @@ namespace DebugLog
     // ===============================================
     // コンソールにメッセージ出力
     // ===============================================
-    void OutputToConsole(const char* message)
+    void OutputToConsole(const String& message)
     {
-        std::cout << message << std::endl;
+        std::cout << StringToChar(message) << std::endl;
     }
 
 

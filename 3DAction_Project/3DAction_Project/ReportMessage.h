@@ -13,15 +13,22 @@
 
 
 // ======================================
+// ヘッダー
+// ======================================
+// 文字列ヘッダー
+#include "UTF8_String.h"
+
+
+// ======================================
 // エラーログ（致命的な警告用）
 //  (デバッグ時、プロジェクトを停止させる)
 // ======================================
 namespace ErrorLog 
 {
     // コンソールにメッセージを出力
-    void OutputToConsole(const char* message);
+    void OutputToConsole(const String& message);
     // メッセージボックスでメッセージを表示
-    void OutputToMessageBox(const char* message);
+    void OutputToMessageBox(const String& message);
 }
 
 
@@ -31,9 +38,9 @@ namespace ErrorLog
 namespace WarningLog
 {
     // コンソールにメッセージを出力
-    void OutputToConsole(const char* message);
+    void OutputToConsole(const String& message);
     // メッセージボックスで出力
-    void OutputToMessageBox(const char* message);
+    void OutputToMessageBox(const String& message);
 }
 
 
@@ -45,11 +52,11 @@ namespace DebugLog
 {
 #if defined(DEBUG) || defined(_DEBUG)
     // コンソールにメッセージ出力
-    void OutputToConsole(const char* message);
+    void OutputToConsole(const String& message);
 
 #else
     // リリース時はインラインでビルドしないように
-    inline void OutputToConsole(const char* message) {
+    inline void OutputToConsole(const String& message) {
     }
 
 #endif
