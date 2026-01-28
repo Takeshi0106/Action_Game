@@ -14,6 +14,8 @@
 // =============================
 // 抽象化描画マネージャー
 #include "BaseDrawManager.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // =============================
@@ -42,14 +44,14 @@ public:
 	// ----------------------------------
 	// 初期化
 	void Init(BaseDrawManager& _draw, 
-		const char* _modelName, 
-		const char* _fileName = "");
+		const String& _modelName, 
+		const String& _fileName = u8"");
 	
 	// 描画
 	void Draw(
-		const char* _modelName,
-		const char* _vsShaderName,
-		const char* _psShaderName);
+		const String& _modelName,
+		const String& _vsShaderName,
+		const String& _psShaderName);
 
 	// 終了処理
 	void Uninit();
@@ -59,7 +61,7 @@ public:
 	// セッター
 	// ===================================
 	void CreateModel(
-		const char* _modelName, 
-		const char* _fileName);
+		const String& _modelName, 
+		const String& _fileName);
 };
 

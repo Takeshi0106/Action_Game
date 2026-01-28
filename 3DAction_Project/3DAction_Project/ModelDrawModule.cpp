@@ -12,8 +12,8 @@
 // ===================================
 void ModelDrawModule::Init(
 	BaseDrawManager& _draw, 
-	const char* _modelName,
-	const char* _filyName)
+	const String& _modelName,
+	const String& _filyName)
 {
 	// 描画マネージャー保存
 	m_Draw = &_draw;
@@ -25,9 +25,9 @@ void ModelDrawModule::Init(
 // 描画
 // ====================================
 void ModelDrawModule::Draw(
-	const char* _modelName,
-	const char* _vsName,
-	const char* _psName)
+	const String& _modelName,
+	const String& _vsName,
+	const String& _psName)
 {
 	m_Draw->ModelDraw(
 		_vsName,
@@ -49,8 +49,8 @@ void ModelDrawModule::Uninit()
 // モデル名セッター
 // ===================================
 void ModelDrawModule::CreateModel(
-	const char* _modelName,
-	const char* _fileName)
+	const String& _modelName,
+	const String& _fileName)
 {
 	// モデルのロード
 	if (m_Draw != nullptr)

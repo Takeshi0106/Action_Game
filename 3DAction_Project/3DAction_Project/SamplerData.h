@@ -16,8 +16,6 @@
 // DirectX用
 #include <d3d11.h>       // DirectXのAPI
 #include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
-// 名前などのデバッグ情報取得用
-#include <string>        // 名前など
 
 
 // ================================
@@ -41,13 +39,15 @@ public:
 	// --------------------------------
     // サンプラー作成
 	// --------------------------------
-    bool CreateSmplerData(ID3D11Device* device, 
+    bool CreateSmplerData(
+        ID3D11Device* device, 
         const D3D11_SAMPLER_DESC& desc);
 
 	// --------------------------------
 	// サンプラーバインド
 	// --------------------------------
-    void BindSampler(ID3D11DeviceContext* context,
+    void BindSampler(
+        ID3D11DeviceContext* context,
         UINT slot = 0);
 };
 

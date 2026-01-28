@@ -15,7 +15,7 @@
 #include "SRT.h"
 #include "Vector3.h"
 // 文字列ヘッダー
-#include <string>
+#include "UTF8_String.h"
 
 
 // ========================================
@@ -39,14 +39,14 @@ private:
 	Vector3 m_Axis = { 0.0f,1.0f,0.0f };
 
 	// シェーダー情報
-	const std::string m_VSName = "VS_Object";
-	std::string m_PSName = "PS_TextureModel";
+	const String m_VSName = u8"VS_Object";
+	const String m_PSName = u8"PS_TextureModel";
 
 	// 定数バッファ名
-	const std::string m_TransformCBName = "Transform";
+	const String m_TransformCBName = u8"Transform";
 
 	// モデル名
-	std::string m_ModelName = {};
+	String m_ModelName = u8"";
 
 public:
 	// --------------------------------
@@ -60,7 +60,7 @@ public:
 	// 基本関数
 	// --------------------------------
 	// 初期化
-	void Init(BaseDrawManager* _draw, const char* _modelName, const char* _modelFile = "");
+	void Init(BaseDrawManager* _draw, const String& _modelName, const String& _modelFile = u8"");
 	// 更新
 	void Update(float _time);
 	// 描画

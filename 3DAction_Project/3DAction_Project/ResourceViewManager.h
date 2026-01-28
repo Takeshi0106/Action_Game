@@ -10,8 +10,6 @@
 // ヘッダー
 // =====================================================
 #include "ResourceViewData.h"
-// 標準ヘッダー
-#include <string>
 // スマートポインターヘッダー
 #include <memory> // スマートポインター
 // 配列のヘッダー
@@ -22,6 +20,9 @@
 #include "UseShaderType.h"
 // アセットログ出力
 #include "AssetLogger.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // =====================================================
@@ -31,31 +32,34 @@ class ResourceViewManager
 {
 private:
 	// 配列
-	std::unordered_map<std::string, std::unique_ptr<SRVData>> m_SRVs;
+	std::unordered_map<Hashed_String, std::unique_ptr<SRVData>> m_SRVs;
 	//std::unordered_map<std::string, std::unique_ptr<UAVData>> m_UAVs;
-	std::unordered_map<std::string, std::unique_ptr<RTVData>> m_RTVs;
-	std::unordered_map<std::string, std::unique_ptr<DSVData>> m_DSVs;
+	std::unordered_map<Hashed_String, std::unique_ptr<RTVData>> m_RTVs;
+	std::unordered_map<Hashed_String, std::unique_ptr<DSVData>> m_DSVs;
 
-	AssetLogger m_Logger{ "View.txt" };
+	AssetLogger m_Logger{ u8"View.txt" };
 
 public:
 	ResourceViewManager() = default;
 	~ResourceViewManager() { m_Logger.WriteLog(); }
 
 	// 作成
-	bool CreateSRV(const std::string name,
+	bool CreateSRV(
+		const String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		Format format,
 		UINT mostDetailedMip = 0,
 		UINT mipLevels = -1);
 
-	bool CreateRTV(const std::string name,
+	bool CreateRTV(
+		const String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		UINT mmipSlice = 0);
 
-	bool CreateDSV(const std::string& name,
+	bool CreateDSV(
+		const String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		Format format);
@@ -69,9 +73,9 @@ public:
 
 
 	// ゲッター  名前を入れて、返す
-	bool BindSRV(const std::string& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
-	RTVData* GetRTV(const std::string& name);
-	DSVData* GetDSV(const std::string& name);
+	bool BindSRV(const String& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
+	RTVData* GetRTV(const String& name);
+	DSVData* GetDSV(const String& name);
 
 	
 	//bool BindUAV(const std::string& name, ID3D11DeviceContext* context);

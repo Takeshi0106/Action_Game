@@ -8,7 +8,7 @@
 // SRT情報
 #include "SRT.h"
 // 文字列
-#include <string>
+#include "UTF8_String.h"
 
 
 // =========================
@@ -24,7 +24,7 @@ protected:
 	BaseDrawManager* m_Draw = nullptr;
 
 	// このオブジェクトが更新する定数バッファ名
-	const std::string m_TransformCBName = "Transform";
+	const String m_TransformCBName = u8"Transform";
 
 	// SRT情報
 	SRT m_SRT = {};

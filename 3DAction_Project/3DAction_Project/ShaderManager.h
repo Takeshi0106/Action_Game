@@ -29,10 +29,9 @@
 // 配列のヘッダー
 #include <unordered_map> // ハッシュ値配列
 #include <vector> // 情報を渡す配列
-// 基底ヘッダー
-#include <string>
-// テンプレートマネージャーヘッダー
-#include "TemplateManager.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ==============================================
@@ -63,22 +62,15 @@ private:
     // ---------------------------------
     // メンバー変数
     // ---------------------------------
-
     // ファイルパス
-    const char* kCSOFilePath;     // .CSOを参照しに行くパス
-    const char* kHlslFailePath;  // .hlslが入っているフォルダーのパス
-    const char* kShaderInfoPath; // シェーダーや定数バッファの情報が入っている
+    const String& kCSOFilePath;     // .CSOを参照しに行くパス
+    const String& kHlslFailePath;  // .hlslが入っているフォルダーのパス
+    const String& kShaderInfoPath; // シェーダーや定数バッファの情報が入っている
 
     // シェーダー保存配列
-
-	// 頂点シェーダーテンプレートマネージャー
-    TemplateManager<VertexShaderData> m_Vertex;
-    TemplateManager<PixelShaderData> m_Pixel;
-    TemplateManager<ComputeShaderData> m_Compute;
-
-    std::unordered_map<std::string, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
-    std::unordered_map<std::string, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
-    std::unordered_map<std::string, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
+    std::unordered_map<Hashed_String, std::unique_ptr<VertexShaderData>>  m_Vertexs;  // 頂点シェーダーを入れる配列
+    std::unordered_map<Hashed_String, std::unique_ptr<PixelShaderData>>   m_Pixels;   // ピクセルシェーダを入れる配列
+    std::unordered_map<Hashed_String, std::unique_ptr<ComputeShaderData>> m_Computes; // コンピュートシェーダーを入れる配列
 
     // 関数
 #if defined(DEBUG) || defined(_DEBUG)
@@ -94,13 +86,23 @@ private:
 #endif
 
     // バイナリーデータを仕分けして、メンバー配列に代入する関数 引き数で拡張子なしの名前を渡す
-    bool JudgeBinaryMenber(const std::string shaderName, ID3D11Device* device, void* binary, size_t binarySize,
-        const std::vector<ConstantBufferInfo>& CBInfo, const std::vector<InputLayoutInfo>& ILInfo);
+    bool JudgeBinaryMenber(
+        const String& shaderName, 
+        ID3D11Device* device, 
+        void* binary, 
+        size_t binarySize,
+        const std::vector<ConstantBufferInfo>& CBInfo, 
+        const std::vector<InputLayoutInfo>& ILInfo);
 
 public:
     // コンストラクタ
-    ShaderManager(const char* CSOPath, const char* hlslPath, const char* infoFaile)
-        :kCSOFilePath(CSOPath), kHlslFailePath(hlslPath), kShaderInfoPath(infoFaile) {
+    ShaderManager(
+        const String& CSOPath,
+        const String& hlslPath,
+        const String& infoFaile) 
+        :kCSOFilePath(CSOPath), 
+        kHlslFailePath(hlslPath), 
+        kShaderInfoPath(infoFaile) {
     }
     // デストラクタ
 	~ShaderManager() = default;
@@ -110,8 +112,8 @@ public:
     void Uninit();
 
     // シェーダーのバインド　定数バッファの情報を返す
-    const std::vector<ConstantBufferInfo>* BindVertexShader (const std::string& name, ID3D11DeviceContext* context);
-    const std::vector<ConstantBufferInfo>* BindPixelShader  (const std::string& name, ID3D11DeviceContext* context);
-    const std::vector<ConstantBufferInfo>* BindComputeShader(const std::string& name, ID3D11DeviceContext* context);
+    const std::vector<ConstantBufferInfo>* BindVertexShader (const Hashed_String& name, ID3D11DeviceContext* context);
+    const std::vector<ConstantBufferInfo>* BindPixelShader  (const Hashed_String& name, ID3D11DeviceContext* context);
+    const std::vector<ConstantBufferInfo>* BindComputeShader(const Hashed_String& name, ID3D11DeviceContext* context);
 };
 

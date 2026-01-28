@@ -17,8 +17,8 @@
 // =============================
 // ヘッダー
 // =============================
-#include <string> // 文字列を使用するためのもの
-#include <string_view> // 文字列参照
+#include "UTF8_String.h"
+#include "UTF8_StringView.h"
 
 
 // ==============================
@@ -34,8 +34,8 @@ public:
 	virtual ~BaseSaveLoadObject() = default;
 
 	// セーブするデータを文字列にして返す関数
-	virtual std::string Serialize(int space) const = 0;
+	virtual String Serialize(int space) const = 0;
 	// 文字列からメンバー変数に代入する関数
-	virtual bool Deserialize(const std::string_view& data) = 0;
+	virtual bool Deserialize(const StringView& data) = 0;
 };
 

@@ -13,7 +13,7 @@
 // ヘッダー
 // =====================================================
 // 文字列ヘッダー
-#include <string>
+#include "UTF8_String.h"
 // 配列ヘッダー
 #include <vector>
 // 情報を入れるクラス
@@ -28,7 +28,7 @@
 namespace ShaderReflectionUtils
 {
 	// リファレンスしたシェーダー外部情報を読込み
-	bool ShaderInfoInput(const char* kShaderInfoPath, std::vector<ShaderInfo>& outShaderInfo);
+	bool ShaderInfoInput(const String& kShaderInfoPath, std::vector<ShaderInfo>& outShaderInfo);
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// デバッグ用関数　デバッグ時のみを行う
@@ -36,7 +36,7 @@ namespace ShaderReflectionUtils
 	// リフレクションした情報をShaderInfo配列に入れる
 	bool Reflect(void* blob, size_t blobsize, std::vector<ConstantBufferInfo>& CBInfo, std::vector<InputLayoutInfo>& ILInfo);
 	// リファレンスしたシェーダー情報配列を外部ファイルに出力する
-	bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shaderInfo);
+	bool ShaderInfoOutput(const String& kShaderInfoPath, std::vector<ShaderInfo>& shaderInfo);
 
 #endif
 

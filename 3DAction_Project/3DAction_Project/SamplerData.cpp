@@ -11,7 +11,8 @@
 // ==================================
 // サンプラー作成
 // ==================================
-bool SamplerData::CreateSmplerData(ID3D11Device* device,
+bool SamplerData::CreateSmplerData(
+    ID3D11Device* device,
 	const D3D11_SAMPLER_DESC& desc)
 {
     // サンプラーを作成
@@ -21,7 +22,7 @@ bool SamplerData::CreateSmplerData(ID3D11Device* device,
     // エラーチェック
     if (FAILED(hr))
     {
-        ErrorLog::OutputToConsole("サンプラーの作成に失敗しました");
+        ErrorLog::OutputToConsole(u8"サンプラーの作成に失敗しました");
         return false;
     }
 

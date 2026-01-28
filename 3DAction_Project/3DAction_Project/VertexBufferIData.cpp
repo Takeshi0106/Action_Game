@@ -22,7 +22,7 @@ bool VertexBufferData::CreateVertexBuffer(
 	D3D11_CPU_ACCESS_FLAG flag)
 {
 	if (!device || !vertices || vertexCount <= 0 || stride <= 0) {
-		ErrorLog::OutputToConsole("無効な頂点バッファが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効な頂点バッファが作成されそうになりました");
 		return false;
 	}
 
@@ -48,7 +48,7 @@ bool VertexBufferData::CreateVertexBuffer(
 	// 作成できたかチェック
 	HRESULT hr = device->CreateBuffer(&desc, &initData, m_Buffer.GetAddressOf());
 	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole(("頂点バッファが作成できませんでした" + std::to_string(hr)).c_str());
+		ErrorLog::OutputToConsole(u8"頂点バッファが作成できませんでした" + String::to_u8string((uint64_t)hr));
 		return false;
 	}
 
@@ -70,7 +70,7 @@ bool VertexBufferData::UpdateBuffer(ID3D11DeviceContext* context, const void* da
 	}
 	else
 	{
-		ErrorLog::OutputToConsole("頂点バッファが更新できませんでした");
+		ErrorLog::OutputToConsole(u8"頂点バッファが更新できませんでした");
 		return false;
 	}
 

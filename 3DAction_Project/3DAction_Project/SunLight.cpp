@@ -52,7 +52,7 @@ bool SunLight::DerivativeInit()
 		BufferUsage::Dynamic,
 		CPUAccess::Write))
 	{
-		ErrorLog::OutputToConsole("太陽光の定数バッファ作成に失敗");
+		ErrorLog::OutputToConsole(u8"太陽光の定数バッファ作成に失敗");
 		return false;
 	}
 

@@ -16,6 +16,8 @@
 #if defined(DEBUG) || defined(_DEBUG)
 // デバッグ用
 #pragma comment(lib, "dxguid.lib")
+// バイナリーデータヘッダー
+#include "BinaryView.h"
 #endif
 
 
@@ -34,30 +36,32 @@ UINT ToDXBindFlag(BindFlag flags); // バインドフラグをDirectXように�
 // ======================================
     // スワップチェインからテクスチャを作成
 bool TextureManager::CreateTextureFromSwapChain(
-    const std::string name,
+    const String& name,
     IDXGISwapChain* swapChain)
 {
+    Hashed_String nameHash{ name };
+
     // 情報を構造体にまとめてマップに保存
     auto textureData = std::make_unique<SwapchainTextureData>();
 
 	// スワップチェインからテクスチャ作成
     if (!textureData->CreateTextureFromSwapChain(swapChain))
     {
-        DebugLog::OutputToConsole(("スワップチェインからテクスチャの作成に失敗しました " + name).c_str());
+        DebugLog::OutputToConsole(u8"スワップチェインからテクスチャの作成に失敗しました " + name);
         return false;
 	}
 
 	// 配列に代入
-	m_Textures[name] = std::move(textureData);
+	m_Textures[nameHash] = std::move(textureData);
 
 #if defined(DEBUG) || defined(_DEBUG)
-    DebugLog::OutputToConsole(("テクスチャバッファ " + name + " を作成しました").c_str());
+    DebugLog::OutputToConsole(u8"テクスチャバッファ " + name + u8" を作成しました");
 
     // 名前を設定
-    m_Textures[name]->GetTexture()->SetPrivateData(
+    m_Textures[nameHash]->GetTexture()->SetPrivateData(
         WKPDID_D3DDebugObjectName,
-        UINT(name.size()),
-        name.c_str());
+        UINT(name.GetBinaryView().GetSize()),
+        name.GetBinaryView().GetData());
 #endif
 
     return true;
@@ -68,7 +72,7 @@ bool TextureManager::CreateTextureFromSwapChain(
 // テクスチャを作成
 // ======================================
 bool TextureManager::CreateTexture(
-    const std::string name,
+    const String& name,
     ID3D11Device* device,
     unsigned int width,
     unsigned int height,
@@ -78,10 +82,12 @@ bool TextureManager::CreateTexture(
     CPUAccess flag,
     TextureInitData* initData)
 {
+	Hashed_String nameHash{ name };
+
 	// すでに存在しているか確認
-    if (m_Textures.find(name) != m_Textures.end()) {
+    if (m_Textures.find(nameHash) != m_Textures.end()) {
         // すでに存在している
-        WarningLog::OutputToConsole(("テクスチャ : " + name + " はすでに存在しています").c_str());
+        WarningLog::OutputToConsole(u8"テクスチャ : " + name + u8" はすでに存在しています");
         return false;
     }
 
@@ -107,7 +113,7 @@ bool TextureManager::CreateTexture(
             D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(flag)),
             &dxInitData))
         {
-            DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
+            DebugLog::OutputToConsole(u8"テクスチャの作成に失敗しました " + name);
             return false;
         }
     }
@@ -124,22 +130,22 @@ bool TextureManager::CreateTexture(
             DirectX11_FormatConverter::ToDXUsage(usage),
             D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(flag))))
         {
-            DebugLog::OutputToConsole(("テクスチャの作成に失敗しました " + name).c_str());
+            DebugLog::OutputToConsole(u8"テクスチャの作成に失敗しました " + name);
             return false;
         }
     }
 
 	// 配列に代入
-	m_Textures[name] = std::move(textureData);
+	m_Textures[nameHash] = std::move(textureData);
 
 #if defined(DEBUG) || defined(_DEBUG)
-    DebugLog::OutputToConsole(("テクスチャバッファ " + name + " を作成しました").c_str());
+    DebugLog::OutputToConsole(u8"テクスチャバッファ " + name + u8" を作成しました");
 
     // 名前を設定
-    m_Textures[name]->GetTexture()->SetPrivateData(
+    m_Textures[nameHash]->GetTexture()->SetPrivateData(
         WKPDID_D3DDebugObjectName,
-        UINT(name.size()),
-        name.c_str());
+        UINT(name.GetBinaryView().GetSize()),
+        name.GetBinaryView().GetData());
 #endif
 
 	return true;
@@ -148,10 +154,12 @@ bool TextureManager::CreateTexture(
 // ======================================
 // テクスチャ２Dデータを探してポインターを返す
 // ======================================
-Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
+Texture2DData* TextureManager::GetFindTexture2DData(const String& name)
 {
+	Hashed_String nameHash{ name };
+
     // 探す
-    auto it = m_Textures.find(name);
+    auto it = m_Textures.find(nameHash);
 
     if (it != m_Textures.end())
     {
@@ -159,7 +167,7 @@ Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
         return it->second.get();
     }
     else {
-        ErrorLog::OutputToConsole(std::string(" テクスチャ : " + name + " が見つかりませんでした").c_str());
+        ErrorLog::OutputToConsole(u8" テクスチャ : " + name + u8" が見つかりませんでした");
     }
 
     return nullptr;
@@ -169,10 +177,12 @@ Texture2DData* TextureManager::GetFindTexture2DData(const std::string& name)
 // ========================================
 // テクスチャが存在するか
 // ========================================
-bool TextureManager::IsExistTexture(const std::string& name)
+bool TextureManager::IsExistTexture(const String& name)
 {
+	Hashed_String nameHash{ name };
+
     // 探す
-    auto it = m_Textures.find(name);
+    auto it = m_Textures.find(nameHash);
     if (it != m_Textures.end())
     {
         // 存在する

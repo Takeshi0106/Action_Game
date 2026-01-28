@@ -2,7 +2,7 @@
 
 // ヘッダー
 #include "BaseObject.h"
-#include <string>
+#include "UTF8_String.h"
 #include "Vertex.h"
 
 
@@ -10,11 +10,11 @@ class Triangle2D : public BaseObject
 {
 private:
 	// 使用するシェーダーの名前
-	std::string m_VsName = "VS_TriangleDebug";
-	std::string m_PsName = "PS_TriangleDebug";
+	String m_VsName = u8"VS_TriangleDebug";
+	String m_PsName = u8"PS_TriangleDebug";
 
     // 頂点バッファ名
-	std::string m_VsBufferName = "Triangle2D";
+	String m_VsBufferName = u8"Triangle2D";
 
 	// 頂点
     const Vertex m_Vertices[3] =

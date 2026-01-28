@@ -6,6 +6,8 @@
 #include "ShaderData.h"    // 自分のヘッダー
 // デバッグ用・メッセージボックス出力用
 #include "ReportMessage.h" // ログ出力用
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ================================================
@@ -33,7 +35,7 @@ bool VertexShaderData::CreateVertexShader(ID3D11Device* device, void* binary, si
     const std::vector<ConstantBufferInfo>& _CBInfo, const std::vector<InputLayoutInfo>& _ILInfo)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::OutputToConsole("引き数がおかしいです");
+        ErrorLog::OutputToConsole(u8"引き数がおかしいです");
         return false;
     }
 
@@ -47,7 +49,7 @@ bool VertexShaderData::CreateVertexShader(ID3D11Device* device, void* binary, si
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole("頂点シェーダーの初期化に失敗");
+        ErrorLog::OutputToConsole(u8"頂点シェーダーの初期化に失敗");
         return false;
     }
 
@@ -59,7 +61,7 @@ bool VertexShaderData::CreateVertexShader(ID3D11Device* device, void* binary, si
 
     for (int i = 0; i < _ILInfo.size(); i++)
     {
-        descArray[i].SemanticName = _ILInfo[i].GetSemanticName().c_str();
+        descArray[i].SemanticName = reinterpret_cast<const char*>(_ILInfo[i].GetSemanticName().GetU8Char());
         descArray[i].SemanticIndex = _ILInfo[i].GetSemanticIndex();
         descArray[i].InputSlot = _ILInfo[i].GetInputSlot();
         descArray[i].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT; // 自動オフセット
@@ -80,7 +82,7 @@ bool VertexShaderData::CreateVertexShader(ID3D11Device* device, void* binary, si
     );
 
     if (FAILED(hrLayout)) {
-        ErrorLog::OutputToConsole("入力レイアウトの作成に失敗しました");
+        ErrorLog::OutputToConsole(u8"入力レイアウトの作成に失敗しました");
         return false;
     }
 
@@ -107,7 +109,7 @@ bool PixelShaderData::CreatePixelShader(ID3D11Device* device, void* binary, size
     const std::vector<ConstantBufferInfo>& _CBInfo)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::OutputToConsole("引き数がおかしいです");
+        ErrorLog::OutputToConsole(u8"引き数がおかしいです");
         return false;
     }
 
@@ -121,7 +123,7 @@ bool PixelShaderData::CreatePixelShader(ID3D11Device* device, void* binary, size
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole("ピクセルシェーダーの初期化に失敗");
+        ErrorLog::OutputToConsole(u8"ピクセルシェーダーの初期化に失敗");
         return false;
     }
 
@@ -147,7 +149,7 @@ bool ComputeShaderData::CreateComputeShader(ID3D11Device* device, void* binary, 
     const std::vector<ConstantBufferInfo> &_CBInfo)
 {
     if (!device || !binary || size == 0) {
-        ErrorLog::OutputToConsole("引き数がおかしいです");
+        ErrorLog::OutputToConsole(u8"引き数がおかしいです");
         return false;
     }
 
@@ -161,7 +163,7 @@ bool ComputeShaderData::CreateComputeShader(ID3D11Device* device, void* binary, 
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole("コンピュートシェーダーの初期化に失敗");
+        ErrorLog::OutputToConsole(u8"コンピュートシェーダーの初期化に失敗");
         return false;
     }
 
@@ -184,16 +186,16 @@ void ComputeShaderData::BindComputeShader(ID3D11DeviceContext* context)
 // 入力レイアウトの名前を出力させる
 void OutputILname(const std::vector<InputLayoutInfo>& ILInfo)
 {
-    DebugLog::OutputToConsole("入力レイアウト情報");
+    DebugLog::OutputToConsole(u8"入力レイアウト情報");
 
     if (ILInfo.size() == 0)
     {
-        ErrorLog::OutputToConsole("入力レイアウトがありません");
+        ErrorLog::OutputToConsole(u8"入力レイアウトがありません");
     }
 
     for (int i = 0; i < ILInfo.size(); i++)
     {
-        DebugLog::OutputToConsole((" " + ILInfo[i].GetSemanticName()).c_str());
+        DebugLog::OutputToConsole(u8" " + ILInfo[i].GetSemanticName());
     }
 }
 
@@ -201,16 +203,16 @@ void OutputILname(const std::vector<InputLayoutInfo>& ILInfo)
 // 定数バッファを出力させる
 void OutputCBname(const std::vector<ConstantBufferInfo> &_CBInfo)
 {
-    DebugLog::OutputToConsole("定数バッファ情報");
+    DebugLog::OutputToConsole(u8"定数バッファ情報");
 
     if (_CBInfo.size() == 0)
     {
-        DebugLog::OutputToConsole("定数バッファがありませんでした");
+        DebugLog::OutputToConsole(u8"定数バッファがありませんでした");
     }
 
     for (int i = 0; i < _CBInfo.size(); i++)
     {
-        DebugLog::OutputToConsole(("  " + _CBInfo[i].GetName()).c_str());
+        DebugLog::OutputToConsole(u8"  " + _CBInfo[i].GetName());
     }
 }
 

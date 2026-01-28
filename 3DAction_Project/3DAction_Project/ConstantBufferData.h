@@ -16,8 +16,6 @@
 // DirectX用
 #include <d3d11.h>       // DirectXのAPI
 #include <wrl/client.h>  // マイクロソフトが提供するスマートポインタ
-// 名前などのデバッグ情報取得用
-#include <string>        // 名前など
 
 
 // ===================================

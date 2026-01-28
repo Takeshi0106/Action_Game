@@ -1,20 +1,27 @@
 ﻿#pragma once
+
+// ==================================
+// ヘッダー
+// ==================================
 #include "BaseObject.h"
 #include "Vertex.h"
-#include <string>
+#include "UTF8_String.h"
 
 
+// ==================================
+// クラス
+// ==================================
 class Square2D : public BaseObject
 {
 private:
 	// 使用するシェーダーの名前
-	const std::string m_VSName = "VS_Object";
-	const std::string m_PSName = "PS_Texture";
+	const String m_VSName = u8"VS_Object";
+	const String m_PSName = u8"PS_Texture";
 	// 頂点バッファ名
-	const std::string m_VsBufferName = "Square2D";
+	const String m_VsBufferName = u8"Square2D";
 
 	// 使用する画像名
-	const std::string m_TextureName = "pipo-halloweenchara2016_02.png";
+	const String m_TextureName = u8"pipo-halloweenchara2016_02.png";
 
 	// 頂点情報
 	const Vertex m_Vertices[4] =

@@ -17,6 +17,8 @@
 #include "FileUtils.h"
 // ログ出力
 #include "ReportMessage.h"
+// バイナリーデータヘッダー
+#include "BinaryView.h"
 
 
 // ================================================
@@ -26,7 +28,7 @@ namespace {
 
 	// リファレンス情報書き込み、読込み用
 	// シェーダー関連
-	const std::string kShaderStart = "Shader"; // シェーダーの数
+	const String kShaderStart = u8"Shader"; // シェーダーの数
 }
 
 
@@ -35,7 +37,7 @@ namespace {
 // ==================================================
 // 読み込む関数
 // Stringを渡して、配列に代入する処理
-inline bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& outShaderInfo);
+inline bool ParseShaderInfo(const StringView& dataView, std::vector<ShaderInfo>& outShaderInfo);
 
 
 namespace ShaderReflectionUtils
@@ -43,19 +45,19 @@ namespace ShaderReflectionUtils
 	// =================================================
 	// 読込み関数
 	// =================================================
-	bool ShaderInfoInput(const char* kShader_ConstantInfoPath, std::vector<ShaderInfo>& loadAllShaderInfo)
+	bool ShaderInfoInput(const String& kShader_ConstantInfoPath, std::vector<ShaderInfo>& loadAllShaderInfo)
 	{
 		// ファイルの内容を全て入れる変数
-		std::string allShaderInfo;
+		String allShaderInfo;
 
 		// ファイルパスの情報をStringに入れる処理
-		if (!FileUtis::ReadFile(kShader_ConstantInfoPath, allShaderInfo)) {
-			ErrorLog::OutputToConsole("リフレクション情報ロード失敗");
+		if (!FileUtis::ReadStringFile(kShader_ConstantInfoPath, allShaderInfo)) {
+			ErrorLog::OutputToConsole(u8"リフレクション情報ロード失敗");
 			return false;
 		}
 
 		if (!ParseShaderInfo(allShaderInfo, loadAllShaderInfo)) {
-			ErrorLog::OutputToConsole("リフレクション情報の読み込みに失敗");
+			ErrorLog::OutputToConsole(u8"リフレクション情報の読み込みに失敗");
 			return false;
 		}
 
@@ -75,7 +77,7 @@ namespace ShaderReflectionUtils
 		// バイナリーデータを解析
 		HRESULT hr = D3DReflect(blob, blobSize, IID_PPV_ARGS(&reflector));
 		if (FAILED(hr)) {
-			ErrorLog::OutputToConsole("リファレンス失敗 :" + hr);
+			ErrorLog::OutputToConsole(u8"リファレンス失敗 :" + hr);
 			return false;
 		}
 
@@ -97,7 +99,8 @@ namespace ShaderReflectionUtils
 			D3D11_SIGNATURE_PARAMETER_DESC paramDesc = {};
 			reflector->GetInputParameterDesc(k, &paramDesc);
 
-			ILinfo[k].SetSemanticName(paramDesc.SemanticName);
+			//　ASCII から U8 に変換
+			ILinfo[k].SetSemanticName(reinterpret_cast<const char8_t*>(paramDesc.SemanticName));
 			ILinfo[k].SetSemanticIndex(uint16_t(paramDesc.SemanticIndex));
 			ILinfo[k].SetInputSlot(0); // 通常は0
 
@@ -115,7 +118,7 @@ namespace ShaderReflectionUtils
 				ILinfo[k].SetFormat(int(DXGI_FORMAT_R32G32B32A32_FLOAT));
 			}
 			else {
-				ErrorLog::OutputToConsole("未知のフォーマットです");
+				ErrorLog::OutputToConsole(u8"未知のフォーマットです");
 				return false;
 			}
 		}
@@ -133,12 +136,12 @@ namespace ShaderReflectionUtils
 
 			// 名前が付けられていない定数バッファがあれば、プロジェクトを停止させる
 			if (bufferDesc.Name == nullptr || std::strlen(bufferDesc.Name) == 0) {
-				ErrorLog::OutputToConsole("定数バッファの情報に名前が入っていませんでした");
+				ErrorLog::OutputToConsole(u8"定数バッファの情報に名前が入っていませんでした");
 				return false;
 			}
 
 			// nullptrチェックをしてるため問題ないが警告が出るため、？演算子を使用してstring 型に代入
-			std::string bufferName = bufferDesc.Name ? bufferDesc.Name : "";
+			String bufferName = reinterpret_cast<const char8_t*>(bufferDesc.Name ? bufferDesc.Name : "");
 
 
 			// --------------------------------------------------------------------------------------------
@@ -158,12 +161,12 @@ namespace ShaderReflectionUtils
 
 				// 名前が使われていない定数バッファがあれば、プロジェクトを停止させる
 				if (bindDesc.Name == nullptr || std::strlen(bindDesc.Name) == 0) {
-					ErrorLog::OutputToConsole("リフレクションした情報に名前が入っていませんでした");
+					ErrorLog::OutputToConsole(u8"リフレクションした情報に名前が入っていませんでした");
 					return false;
 				}
 
 				// nullptrチェックをしてるため問題ないが警告が出るため、？演算子を使用してstring 型に代入
-				std::string bindName = bindDesc.Name ? bindDesc.Name : "";
+				String bindName = reinterpret_cast<const char8_t*>(bindDesc.Name ? bindDesc.Name : "");
 
 				// 同じ名前かをチェック
 				if (bindName == bufferName) {
@@ -180,7 +183,7 @@ namespace ShaderReflectionUtils
 				CBInfo[i].SetSize(bufferDesc.Size);
 			}
 			else {
-				ErrorLog::OutputToConsole("バインド番号が見つかりませんでした");
+				ErrorLog::OutputToConsole(u8"バインド番号が見つかりませんでした");
 				return false;
 			}
 		}
@@ -192,20 +195,23 @@ namespace ShaderReflectionUtils
 	// ================================================
 	// リファレンスした情報を出力する関数
 	// ================================================
-	bool ShaderInfoOutput(const char* kShaderInfoPath, std::vector<ShaderInfo>& shaderInfo)
+	bool ShaderInfoOutput(const String& kShaderInfoPath, std::vector<ShaderInfo>& shaderInfo)
 	{
 		// セーブ情報を取得
-		std::string data;
+		String data;
 		for (int i = 0; i < (int)shaderInfo.size(); i++)
 		{
 			data += SaveUtils::FormatAnonymousBlock(shaderInfo[i].Serialize(2), 1);
-			data += "\n";
+			data += u8"\n";
 		}
 		data = SaveUtils::FormatBlock(kShaderStart, (int)shaderInfo.size(), data, 0);
 
+		// バイナリーデータ作成
+		BinaryView binaryView = data.GetBinaryView();
+
 		// ファイルに書出し
-		if (!FileUtis::WriteFile(kShaderInfoPath, data)) {
-			ErrorLog::OutputToConsole("リファレンス情報を書き出すことに失敗しました");
+		if (!FileUtis::WriteStringFile(kShaderInfoPath, binaryView)) {
+			ErrorLog::OutputToConsole(u8"リファレンス情報を書き出すことに失敗しました");
 			return false;
 		}
 
@@ -220,13 +226,14 @@ namespace ShaderReflectionUtils
 // ================================================
 // String_viewを渡して、配列に代入する処理
 // ================================================
-inline bool ParseShaderInfo(const std::string_view& dataView, std::vector<ShaderInfo>& loadShaderInfo)
+inline bool ParseShaderInfo(const StringView& dataView, std::vector<ShaderInfo>& loadShaderInfo)
 {
-	std::vector<std::string_view> blocks; // ブロックを入れる
+	// ブロックを入れる
+	std::vector<StringView> blocks;
 
 	// ブロックごとに分ける
 	if (!LoadUtils::ExtractSubBlocks(dataView, kShaderStart, blocks)) {
-		ErrorLog::OutputToConsole("シェーダー情報をブロックに出来ませんでした");
+		ErrorLog::OutputToConsole(u8"シェーダー情報をブロックに出来ませんでした");
 		return false;
 	}
 
@@ -236,8 +243,8 @@ inline bool ParseShaderInfo(const std::string_view& dataView, std::vector<Shader
 	// シェーダーに情報を入れていく
 	for (int i = 0; i < (int)blocks.size(); i++)
 	{
-		if (!loadShaderInfo[i].Deserialize(std::string(blocks[i]))) {
-			ErrorLog::OutputToConsole("シェーダー情報を読み込むことが出来ませんでした");
+		if (!loadShaderInfo[i].Deserialize(blocks[i])) {
+			ErrorLog::OutputToConsole(u8"シェーダー情報を読み込むことが出来ませんでした");
 			return false;
 		}
 	}

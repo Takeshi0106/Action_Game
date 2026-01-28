@@ -19,7 +19,7 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreate(
 	const String& _name)
 {
 	if (!_device || !_resource) {
-		ErrorLog::OutputToConsole("無効なレンダーターゲットビューが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効なレンダーターゲットビューが作成されそうになりました");
 		return Handle();
 	}
 
@@ -66,7 +66,7 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreate(
 	const String& _name)
 {
 	if (!_device || !_resource) {
-		ErrorLog::OutputToConsole("無効なシェーダーリソースビューが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効なシェーダーリソースビューが作成されそうになりました");
 		return Handle();
 	}
 
@@ -113,7 +113,7 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreate(
 	const String& _name)
 {
 	if (!_device || !_resource) {
-		ErrorLog::OutputToConsole("無効な深度ステンシルビューが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効な深度ステンシルビューが作成されそうになりました");
 		return Handle();
 	}
 

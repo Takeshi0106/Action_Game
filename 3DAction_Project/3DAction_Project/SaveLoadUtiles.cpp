@@ -11,14 +11,14 @@
 // =========================================
 namespace {
 	// データの種類とデータを区切る文字
-	const std::string kKey = " :";
+	const String kKey = u8" :";
 
     // ブロック区切り
-    const std::string kBlockStart = "{ \n";
-    const std::string kBlockEnd = "} \n";
+    const String kBlockStart = u8"{ \n";
+    const String kBlockEnd = u8"} \n";
 
     // ブロックの数
-    const std::string kBlockNumber = "BlockNumber :";
+    const String kBlockNumber = u8"BlockNumber :";
 }
 
 
@@ -27,7 +27,7 @@ namespace {
 // ==========================================
 namespace {
     // 最初の区切り位置を渡して、それに対応する終わり区切り位置を代入する
-    bool FindBlockEnd(const std::string_view& data, const size_t& startPos, size_t& endPos);
+    bool FindBlockEnd(const StringView& data, const size_t& startPos, size_t& endPos);
 }
 
 
@@ -36,34 +36,34 @@ namespace {
 // =========================================
 namespace SaveUtils {
 	// データの種類とデータ文字列を受け取り、キーを付けて文字列にして返す
-	std::string MakeTypeInfo(const std::string& dataType, const std::string& data, int spaceNumber)
+	String MakeTypeInfo(const String& dataType, const String& data, int spaceNumber)
 	{
-		std::string saveData(spaceNumber, ' '); // 空白を開ける
+		String saveData(std::u8string(spaceNumber, ' ')); // 空白を開ける
 
-        saveData += dataType + kKey + data + "\n"; // セーブ文字列を作成
+        saveData += dataType + kKey + data + u8"\n"; // セーブ文字列を作成
 
 		return saveData;
 	}
 
 
     // ブロックごとにする
-    std::string FormatAnonymousBlock(const std::string& data, int spaceNumber)
+    String FormatAnonymousBlock(const String& data, int spaceNumber)
     {
-        std::string block;
-        std::string space(spaceNumber, ' ');
+        String block;
+        String space(std::u8string(spaceNumber, ' '));
         block += space + kBlockStart + data + space + kBlockEnd;
         return block;
     }
 
 
     // ブロックごとに作成
-    std::string FormatBlock(const std::string& blockName, const int blockNumber, const std::string& data, int spaceNumber)
+    String FormatBlock(const String& blockName, const int blockNumber, const String& data, int spaceNumber)
     {
-        std::string block;
-        std::string space(spaceNumber, ' ');
+        String block;
+        String space(std::u8string(spaceNumber, ' '));
 
-        block += space + blockName + " " + kBlockStart;      // ブロック開始
-        block += space + kBlockNumber + std::to_string(blockNumber) + "\n\n"; // 要素数
+        block += space + blockName + u8" " + kBlockStart;      // ブロック開始
+        block += space + kBlockNumber + String::to_u8string(blockNumber) + u8"\n\n"; // 要素数
         block += data;                                      // ブロック内データ
         block += space + kBlockEnd;                         // ブロック終了
 
@@ -79,59 +79,59 @@ namespace SaveUtils {
 // =========================================
 namespace LoadUtils {
     // データからデータの種類の内容を返す関数
-    bool ExtractTypeInfo(const std::string_view& data, const std::string& type, std::string_view& info)
+    bool ExtractTypeInfo(const StringView& data, const String& type, StringView& info)
     {
-        size_t infoLineStartPos = data.find(type); // データの種類がある行を探す
+        size_t infoLineStartPos = data.GetFind(type); // データの種類がある行を探す
         if (infoLineStartPos == std::string::npos) {
-            ErrorLog::OutputToConsole("データの種類が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"データの種類が見つかりませんでした");
             return false;
         }
-        size_t infotypeEndPos = data.find(kKey, infoLineStartPos);
+        size_t infotypeEndPos = data.GetFind(kKey, infoLineStartPos);
         if (infotypeEndPos == std::string_view::npos) {
-            ErrorLog::OutputToConsole("区切り文字が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"区切り文字が見つかりませんでした");
             return false;
         }
 
-        size_t infoLineEndPos = data.find("\n", infoLineStartPos);
+        size_t infoLineEndPos = data.GetFind(u8"\n", infoLineStartPos);
         if (infoLineEndPos == std::string_view::npos) {
-            infoLineEndPos = data.size(); // 改行がなければ末尾まで
+            infoLineEndPos = data.GetSize(); // 改行がなければ末尾まで
         }
 
 
-        info = std::string_view(data.data() + infotypeEndPos + kKey.size(),
-            infoLineEndPos - (infotypeEndPos + kKey.size()));
+        info = StringView(data.GetData() + infotypeEndPos + kKey.GetSize(),
+            infoLineEndPos - (infotypeEndPos + kKey.GetSize()));
 
         return true;
     }
 
 
 	// 文字列を解析して、データの種類をキーにしてデータを配列に代入する
-	std::unordered_map<std::string_view, std::string_view> AllExtractTypeInfo(const std::string_view& data)
+	std::unordered_map<Hashed_String, StringView> AllExtractTypeInfo(const StringView& data)
 	{
-        std::unordered_map<std::string_view, std::string_view> dataInfo; // データを入れる配列
+        std::unordered_map<Hashed_String, StringView> dataInfo; // データを入れる配列
         size_t pos = 0; // 今の位置
 
-        while (pos < data.size())
+        while (pos < data.GetSize())
         {
-            size_t nextPos = data.find('\n', pos); // １行の終わりの位置
-            std::string_view line; // 一行を入れる
+            size_t nextPos = data.GetFind(u8"\n", pos); // １行の終わりの位置
+            StringView line; // 一行を入れる
 
             if (nextPos == std::string::npos)
             {
-                line = std::string_view(data.data() + pos, data.size() - pos); // 今の位置から最後までを取り出す
-                pos = data.size();       // 位置をデータの最後にする
+                line = StringView(data.GetData() + pos, data.GetSize() - pos); // 今の位置から最後までを取り出す
+                pos = data.GetSize();       // 位置をデータの最後にする
             }
             else
             {
-                line = std::string_view(data.data() + pos, nextPos - pos); // １行を取り出す
+                line = StringView(data.GetData() + pos, nextPos - pos); // １行を取り出す
                 pos = nextPos + 1; // 次の位置を求める
             }
 
             // 先頭の空白を削除 
-            size_t firstNonSpace = line.find_first_not_of(' ');
+            size_t firstNonSpace = line.GetFindFirstNotof(u8" ");
             if (firstNonSpace != std::string_view::npos)
             {
-                line.remove_prefix(firstNonSpace);
+                line.SetRemovePrefix(firstNonSpace);
             }
             else
             {
@@ -139,13 +139,13 @@ namespace LoadUtils {
             }
 
             // キーと値を分割
-            size_t delimPos = line.find(kKey); // 区切り文字が出てくる位置を検索
+            size_t delimPos = line.GetFind(kKey); // 区切り文字が出てくる位置を検索
 
             if (delimPos != std::string::npos)
             {
-                std::string_view dataType = line.substr(0, delimPos); // キーまでを代入
-                std::string_view dataString = line.substr(delimPos + kKey.size()); // キーから上を代入
-                dataInfo[dataType] = dataString; // 配列に代入
+                StringView dataType = line.SubStr(0, delimPos); // キーまでを代入
+                StringView dataString = line.SubStr(delimPos + kKey.GetSize()); // キーから上を代入
+                dataInfo[Hashed_String(dataType)] = dataString; // 配列に代入
             }
         }
 
@@ -154,63 +154,67 @@ namespace LoadUtils {
 
 
     // データからブロックの情報を取り出す
-    bool ExtractBlocks(const std::string_view& data, const std::string& blockName, std::string_view& block)
+    bool ExtractBlocks(const StringView& data, const String& blockName, StringView& block)
     {
         // ブロック名の位置を探す
-        size_t startNamePos = data.find(blockName, 0);
+        size_t startNamePos = data.GetFind(blockName, 0);
         if (startNamePos == std::string::npos) {
-            ErrorLog::OutputToConsole("ブロック名が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"ブロック名が見つかりませんでした");
             return false;
         }
 
         // ブロック情報の開始位置を探す
-        size_t blockStartPos = data.find(kBlockStart, startNamePos + blockName.size()); // ブロック数の位置を探す
+        size_t blockStartPos = data.GetFind(kBlockStart, startNamePos + blockName.GetSize()); // ブロック数の位置を探す
         if (blockStartPos == std::string::npos) {
-            ErrorLog::OutputToConsole("ブロック情報の開示位置が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"ブロック情報の開示位置が見つかりませんでした");
             return false;
         }
 
         // 対応する終了位置を探す
         size_t blockEndPos;
         if (!FindBlockEnd(data, blockStartPos, blockEndPos)) {
-            ErrorLog::OutputToConsole("対応する区切り文字が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"対応する区切り文字が見つかりませんでした");
             return false;
         }
 
         // 最初から最後までの範囲を std::string_view に代入
-        block = std::string_view(data.data() + startNamePos,
-            blockEndPos - startNamePos + kBlockEnd.size());
+        block = StringView(data.GetData() + startNamePos,
+            blockEndPos - startNamePos + kBlockEnd.GetSize());
 
         return true;
     }
 
 
     // ブロックの中身を取得する（指定した blockName の直下ブロックをすべて返す）
-    bool ExtractSubBlocks(const std::string_view& data, const std::string& blockName, std::vector<std::string_view>& blocks)
+    bool ExtractSubBlocks(const StringView& data, const String& blockName, std::vector<StringView>& blocks)
     {
         // ブロック名の位置を探す
-        size_t startNamePos = data.find(blockName, 0);
+        size_t startNamePos = data.GetFind(blockName, 0);
         if (startNamePos == std::string::npos) {
-            ErrorLog::OutputToConsole("ブロック名が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"ブロック名が見つかりませんでした");
             return false;
         }
 
         // ブロック情報の数を取得する
-        size_t BlockNumberPos = data.find(kBlockNumber, startNamePos); // ブロック数の位置を探す
+        size_t BlockNumberPos = data.GetFind(kBlockNumber, startNamePos); // ブロック数の位置を探す
         if (BlockNumberPos == std::string::npos) {
-            ErrorLog::OutputToConsole("ブロック情報の数が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"ブロック情報の数が見つかりませんでした");
             return false;
         }
 
-        size_t numberStart = BlockNumberPos + kBlockNumber.size(); // ブロック数の開始位置を求める
-        size_t numberEnd = data.find_first_of("\r\n ", numberStart); // ブロック数の最後位置を求める
+        size_t numberStart = BlockNumberPos + kBlockNumber.GetSize(); // ブロック数の開始位置を求める
+        size_t numberEnd = data.GetFindFirstNotof(u8"\r\n ", numberStart); // ブロック数の最後位置を求める
         if (numberEnd == std::string::npos) {
-            ErrorLog::OutputToConsole("ブロック数の後に改行、空白などがありません");
+            ErrorLog::OutputToConsole(u8"ブロック数の後に改行、空白などがありません");
             return false;
         }
 
-        std::string numberStr = std::string(data.data() + numberStart, numberEnd - numberStart); // 開始と終わりまでの文字列を代入
-        int blockNumber = std::stoi(numberStr); // ブロック数を取得
+        // 開始と終わりまでの文字列を代入
+        String numberStr(data.GetData() + numberStart, numberEnd - numberStart);
+        // ブロック数を取得
+        int blockNumber = std::stoi(std::string(
+            numberStr.GetU8String().begin(), 
+            numberStr.GetU8String().end()));
 
         blocks.resize(blockNumber); // 配列をリサイズする
 
@@ -220,9 +224,9 @@ namespace LoadUtils {
         }
 
         // ブロック情報の開始位置を探す
-        size_t blockInfoStartPos = data.find(kBlockStart, numberEnd); // ブロック数の位置を探す
+        size_t blockInfoStartPos = data.GetFind(kBlockStart, numberEnd); // ブロック数の位置を探す
         if (blockInfoStartPos == std::string::npos) {
-            ErrorLog::OutputToConsole("ブロック情報の開示位置が見つかりませんでした");
+            ErrorLog::OutputToConsole(u8"ブロック情報の開示位置が見つかりませんでした");
             return false;
         }
 
@@ -233,20 +237,20 @@ namespace LoadUtils {
 
             // 対応する区切り文字を探す
             if (!FindBlockEnd(data, blockInfoStartPos, blockInfoEndPos)) {
-                ErrorLog::OutputToConsole("対応する区切り文字が見つかりませんでした");
+                ErrorLog::OutputToConsole(u8"対応する区切り文字が見つかりませんでした");
                 return false;
             }
 
             // 中身だけを抽出して配列に追加
-            std::string_view blockContent(data.data() + blockInfoStartPos + kBlockStart.size(),
-                blockInfoEndPos - blockInfoStartPos - kBlockStart.size());
+            StringView blockContent(data.GetData() + blockInfoStartPos + kBlockStart.GetSize(),
+                blockInfoEndPos - blockInfoStartPos - kBlockStart.GetSize());
             blocks[i] = blockContent;
 
             // 次のブロック開始位置に移動
-            blockInfoStartPos = data.find(kBlockStart, blockInfoEndPos + kBlockEnd.size());
+            blockInfoStartPos = data.GetFind(kBlockStart, blockInfoEndPos + kBlockEnd.GetSize());
             if (i + 1 < blockNumber) {
                 if (blockInfoStartPos == std::string::npos) {
-                    ErrorLog::OutputToConsole("次のブロック開始位置を見つけられませんでした");
+                    ErrorLog::OutputToConsole(u8"次のブロック開始位置を見つけられませんでした");
                 }
             }
         }
@@ -264,14 +268,14 @@ namespace LoadUtils {
 // ==================================
 namespace {
         // 最初の区切り文字と対応する、区切り終わり文字の位置を返す
-        bool FindBlockEnd(const std::string_view& data, const size_t& startPos, size_t& endPos)
+        bool FindBlockEnd(const StringView& data, const size_t& startPos, size_t& endPos)
         {
-            size_t nextStartPos = data.find(kBlockStart, startPos + kBlockStart.size()); // 次の区切り開始位置
-            size_t nextEndPos = data.find(kBlockEnd, startPos + kBlockStart.size()); // 次の区切り終了位置
+            size_t nextStartPos = data.GetFind(kBlockStart, startPos + kBlockStart.GetSize()); // 次の区切り開始位置
+            size_t nextEndPos = data.GetFind(kBlockEnd, startPos + kBlockStart.GetSize()); // 次の区切り終了位置
 
             if (nextEndPos == std::string_view::npos) 
             {
-                ErrorLog::OutputToConsole("データに区切り終了文字が含まれていません");
+                ErrorLog::OutputToConsole(u8"データに区切り終了文字が含まれていません");
                 return false; // 終了文字なし
             }
             int depth = 0; // 深度
@@ -282,7 +286,7 @@ namespace {
                 if (nextStartPos != std::string_view::npos && nextStartPos < nextEndPos)
                 {
                     depth++;
-                    nextStartPos = data.find(kBlockStart, nextStartPos + kBlockStart.size());
+                    nextStartPos = data.GetFind(kBlockStart, nextStartPos + kBlockStart.GetSize());
                 }
                 else
                 {
@@ -293,9 +297,9 @@ namespace {
                     }
 
                     depth--; // 深度を減らす
-                    nextEndPos = data.find(kBlockEnd, nextEndPos + kBlockEnd.size()); // 終わりを探す
+                    nextEndPos = data.GetFind(kBlockEnd, nextEndPos + kBlockEnd.GetSize()); // 終わりを探す
                     if (nextEndPos == std::string_view::npos) {
-                        ErrorLog::OutputToConsole("対応する区切り文字が見つかりませんでした");
+                        ErrorLog::OutputToConsole(u8"対応する区切り文字が見つかりませんでした");
                         return false;
                     }
                 }

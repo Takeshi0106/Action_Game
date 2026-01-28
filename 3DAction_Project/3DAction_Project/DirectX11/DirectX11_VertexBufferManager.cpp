@@ -21,7 +21,7 @@ const Handle DirectX11_VertexBufferManager::VertexBufferCreate(
 	const String& _name)
 {
 	if (!_device || !_vertices || _size == 0) {
-		ErrorLog::OutputToConsole("無効な頂点バッファが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効な頂点バッファが作成されそうになりました");
 		return Handle();
 	}
 

@@ -60,7 +60,7 @@ bool ConstantBufferData::UpdateConstantBuffer(ID3D11DeviceContext* context, cons
 	}
 	else
 	{
-		ErrorLog::OutputToConsole("定数バッファが更新できませんでした");
+		ErrorLog::OutputToConsole(u8"定数バッファが更新できませんでした");
 		return false;
 	}
 

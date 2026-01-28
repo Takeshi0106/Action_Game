@@ -18,7 +18,7 @@
 bool DCCCamera3D::DerivativInit()
 {
 	if (!m_Controller.IsInit()) {
-		ErrorLog::OutputToConsole("DCCCamera3Dのコントローラーが初期化されていません");
+		ErrorLog::OutputToConsole(u8"DCCCamera3Dのコントローラーが初期化されていません");
 		return false;
 	}
 

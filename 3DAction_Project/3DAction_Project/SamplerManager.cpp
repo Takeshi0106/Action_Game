@@ -9,13 +9,13 @@
 // ログ出力
 #include "ReportMessage.h"
 // 文字列
-#include <string>
+#include "UTF8_String.h"
 
 
 // ===============================
 // プロトタイプ宣言
 // ===============================
-std::string SamplerDescToString(const SamplerDesc* _desc);
+String SamplerDescToString(const SamplerDesc* _desc);
 
 
 // =======================================
@@ -29,13 +29,13 @@ bool SamplerManager::CreateSampler(
     if (m_Samplers.count(_desc))
     {
         // ログ出力
-        WarningLog::OutputToConsole((
-            std::to_string(static_cast<int>(_desc.filter)) + "\n" +
-            std::to_string(static_cast<int>(_desc.addressU)) + "\n" +
-            std::to_string(static_cast<int>(_desc.addressV)) + "\n" +
-            std::to_string(static_cast<int>(_desc.addressW)) + "\n" +
-            std::to_string(static_cast<int>(_desc.comparisonFunc)) + "\n" +
-            " サンプラーが既に存在します").c_str());
+        WarningLog::OutputToConsole(
+            String::to_u8string(static_cast<int>(_desc.filter)) + u8"\n" +
+            String::to_u8string(static_cast<int>(_desc.addressU)) + u8"\n" +
+            String::to_u8string(static_cast<int>(_desc.addressV)) + u8"\n" +
+            String::to_u8string(static_cast<int>(_desc.addressW)) + u8"\n" +
+            String::to_u8string(static_cast<int>(_desc.comparisonFunc)) + u8"\n" +
+            u8" サンプラーが既に存在します");
 
         return true;
     }
@@ -54,9 +54,9 @@ bool SamplerManager::CreateSampler(
     auto samplerData = std::make_shared<SamplerData>();
     if (!samplerData->CreateSmplerData(device, directxDesc)) {
         // エラーログ出力
-        ErrorLog::OutputToConsole((
+        ErrorLog::OutputToConsole(
             SamplerDescToString(&_desc) +
-            " サンプラーの作成に失敗しました").c_str());
+            u8" サンプラーの作成に失敗しました");
 
         return false;
     }
@@ -85,9 +85,9 @@ bool SamplerManager::BindSampler(const SamplerDesc& _sampler,ID3D11DeviceContext
     }
 
 
-    ErrorLog::OutputToConsole((
+    ErrorLog::OutputToConsole(
         SamplerDescToString(&_sampler) +
-        "サンプラーが見つかりませんでした").c_str());
+        u8"サンプラーが見つかりませんでした");
     return false;
 }
 
@@ -105,15 +105,16 @@ void SamplerManager::ReleaseAllSamplers()
 // ==================================
 // 文字列に変換
 // ==================================
-std::string SamplerDescToString(const SamplerDesc* _desc)
+String SamplerDescToString(const SamplerDesc* _desc)
 {
-    std::string data;
+    String data;
 
-    data = (std::to_string(static_cast<int>(_desc->filter)) + "\n" +
-        std::to_string(static_cast<int>(_desc->addressU)) + "\n" +
-        std::to_string(static_cast<int>(_desc->addressV)) + "\n" +
-        std::to_string(static_cast<int>(_desc->addressW)) + "\n" +
-        std::to_string(static_cast<int>(_desc->comparisonFunc)) + "\n");
+    data = (
+        String::to_u8string(static_cast<int>(_desc->filter)) + u8"\n" +
+        String::to_u8string(static_cast<int>(_desc->addressU)) + u8"\n" +
+        String::to_u8string(static_cast<int>(_desc->addressV)) + u8"\n" +
+        String::to_u8string(static_cast<int>(_desc->addressW)) + u8"\n" +
+        String::to_u8string(static_cast<int>(_desc->comparisonFunc)) + u8"\n");
 
     return data;
 }

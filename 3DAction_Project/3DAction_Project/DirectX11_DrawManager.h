@@ -59,8 +59,8 @@ private:
 	// --------------------------------
 
 	// 最終描画に使用するRTの名前
-	const char* kFinalRTName = "FinalRT";
-	const char* kFInalDSName = "FinalDS";
+	const String kFinalRTName = u8"FinalRT";
+	const String kFInalDSName = u8"FinalDS";
 	// クリアカラー
 	const Color kClearColor = Color(0.1f, 0.3f, 0.7f, 1.0f);
 
@@ -99,23 +99,25 @@ private:
 	// 描画コマンド
 	// --------------------------------
 	// 描画
-	bool DrawModelObject(const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _modelName);
+	bool DrawModelObject(
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _modelName);
 
 	// インデックスバッファを使用したメッシュ描画
 	bool DrawIndexObject(
-		const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _vbName,
-		const char* _ibName,
-		const char* _textureName,
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _vbName,
+		const String& _ibName,
+		const String& _textureName,
 		const SamplerDesc _sampler);
 
-	bool DrawPrimitiveObject(const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _vsBufferName,
-		const char* _textureName, 
+	bool DrawPrimitiveObject(
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _vsBufferName,
+		const String& _textureName, 
 		const SamplerDesc _desc);
 
 public:
@@ -133,29 +135,31 @@ public:
 	void EndDraw();
 
 	// モデル描画
-	void ModelDraw(const char* _vsShaderName, 
-		const char* _psShaderName, 
-		const char* _modelName) override final;
+	void ModelDraw(
+		const String& _vsShaderName, 
+		const String& _psShaderName, 
+		const String& _modelName) override final;
 
 	// インデックスバッファを使用したメッシュ描画
 	void IndexedDraw(
-		const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _vbName,
-		const char* _ibName,
-		const char* _textureName = nullptr,
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _vbName,
+		const String& _ibName,
+		const String& _textureName = u8"",
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override final;
 	
 	// プリミティブ描画
-	void PrimitiveDraw(const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _vsBufferName,
-		const char* _textureName = nullptr,
+	void PrimitiveDraw(
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _vsBufferName,
+		const String& _textureName = u8"",
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override final;
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
-		const char* modelName,
+		const String& modelName,
 		const void* data,
 		size_t size,
 		uint32_t vertexNumber,
@@ -166,13 +170,13 @@ public:
 
 	// インデックスバッファ作成
 	bool CreateIndexBuffer(
-		const char* modelName,
+		const String& modelName,
 		const uint32_t* indexData,
 		uint32_t indexNumber) override final;
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(
-		const char* constantName,
+		const String& constantName,
 		const void* data,
 		size_t size,
 		BufferUsage usage = BufferUsage::Dynamic,
@@ -180,7 +184,7 @@ public:
 
 	// テクスチャ作成
 	bool CreateTexture(
-		const char* name,
+		const String& name,
 		uint32_t width,
 		uint32_t height,
 		Format format,
@@ -192,25 +196,25 @@ public:
 	bool CreateSampler(const SamplerDesc& _desc) override final;
 
 	// テクスチャのロード
-	bool LoadTexture(const char* textureName) override final;
+	bool LoadTexture(const String& textureName) override final;
 	// モデルのロード
-	bool LoadModel(const char* modelName, const char* modelFolderName = "") override final;
+	bool LoadModel(const String& modelName, const String& modelFolderName = u8"") override final;
 
 	// View作成
-	bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override final;
-	bool CreateRTV(const char* name, uint32_t mipSlice) override final;
-	bool CreateDSV(const char* name, Format format) override final;
+	bool CreateSRV(const String& name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override final;
+	bool CreateRTV(const String& name, uint32_t mipSlice) override final;
+	bool CreateDSV(const String& name, Format format) override final;
 
 	//bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
 	
 	// バッファ更新
 	// 定数バッファ更新
-	void UpdateShaderConstants(const char* constantName, const void* data, const int size) override final;
+	void UpdateShaderConstants(const String& constantName, const void* data, const int size) override final;
 	// 頂点バッファ更新
-	void UpdateVertexBuffer(const char* vertexName, const void* data, int size) override final;
+	void UpdateVertexBuffer(const String& vertexName, const void* data, int size) override final;
 
 	// レンダーターゲットバインド
-	void BindRenderTarget(const char* rtvName = nullptr, const char* dsvName = nullptr) override final;
+	void BindRenderTarget(const String& rtvName = u8"", const String& dsvName = u8"") override final;
 
 	/* ------------ 描画設定 ------------ */
 	// 描画設定(カリング、塗り)

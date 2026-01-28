@@ -14,6 +14,8 @@
 #include "FileUtils.h" // 外部ファイルに書出し
 // デバッグ情報ややエラー出力用
 #include "ReportMessage.h"
+// バイナリーデータ
+#include "BinaryView.h"
 
 
 namespace ShaderCompilerUtils
@@ -21,7 +23,12 @@ namespace ShaderCompilerUtils
 	// =================================================
 	// シェーダーをコンパイルする関数
 	// =================================================
-	bool OutputCompileShader(const std::filesystem::path kFilePath, const std::filesystem::path path, const std::string entryPoint, const std::string shaderTypeModel, ID3DBlob** blob)
+	bool OutputCompileShader(
+		const std::filesystem::path kFilePath, 
+		const std::filesystem::path path, 
+		const String& entryPoint, 
+		const String& shaderTypeModel, 
+		ID3DBlob** blob)
 	{
 		// エラーを取得する
 		Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;
@@ -43,38 +50,38 @@ namespace ShaderCompilerUtils
 			path.wstring().c_str(),            // シェーダーのパス
 			nullptr,                           // GPUで使用するマクロ定義（ない場合nullptr）
 			D3D_COMPILE_STANDARD_FILE_INCLUDE, // HLSLで他のHLSLを読み込むフラグ
-			entryPoint.c_str(),                // シェーダーないで最初に実行される関数の名前
-			shaderTypeModel.c_str(),           // シェーダーの種類とバージョン
+			reinterpret_cast<const char*>(entryPoint.GetU8Char()),            // シェーダーないで最初に実行される関数の名前
+			reinterpret_cast<const char*>(shaderTypeModel.GetU8Char()),           // シェーダーの種類とバージョン
 			dwShaderFlags,                     // コンパイルのフラグ
 			0,                                 // 今は何もないフラグ
 			compileBlob.GetAddressOf(),        // コンパイルしたシェーダーを取得する
 			errorBlob.GetAddressOf()           // エラーメッセージを取得する
 		);
 		if (FAILED(hr)) {
-			ErrorLog::OutputToConsole((path.string() + "のコンパイルに失敗" + std::string(static_cast<const char*>(errorBlob->GetBufferPointer()))).c_str());
+			ErrorLog::OutputToConsole(path.u8string() + u8"のコンパイルに失敗" + static_cast<const char8_t*>(errorBlob->GetBufferPointer()));
 			return false;
 		}
 
 		// 拡張子なしの名前を取得
-		std::string filename = path.stem().string();
+		String filename = path.stem().u8string();
 		// 出力パスを作成
-		std::filesystem::path outputPath = kFilePath / (filename + kCompileExtension);
+		std::filesystem::path outputPath = kFilePath / 
+			(filename + kCompileExtension).GetU8Char();
 
 		// 書き出す内容を作成
-		std::string_view blobData(
-			static_cast<const char*>(compileBlob->GetBufferPointer()),
-			compileBlob->GetBufferSize()
-		);
+		BinaryView blobData(
+			compileBlob->GetBufferPointer(),
+			compileBlob->GetBufferSize());
 
 		// 外部ファイルに書出し
-		if (!FileUtis::WriteFile(outputPath.string(), blobData)) {
+		if (!FileUtis::WriteStringFile(outputPath.u8string(), blobData)) {
 			MessageBoxA(nullptr, "CSOファイルの書き込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
 		}
 
 		// 所有権を渡す
 		*blob = compileBlob.Detach();
 
-		DebugLog::OutputToConsole((filename + "シェーダーをコンパイルして書き出しました").c_str());
+		DebugLog::OutputToConsole(filename + u8"シェーダーをコンパイルして書き出しました");
 
 		// 一応明示的に解放　
 		errorBlob.Reset();
@@ -92,14 +99,14 @@ namespace ShaderCompilerUtils
 		// ファイルを開ける
 		std::ifstream ifs(csoPath, std::ios::binary | std::ios::ate); // 読み取り専用
 		if (!ifs) {
-			ErrorLog::OutputToConsole(std::string(csoPath.string() + "　：　開けませんでした").c_str());
+			ErrorLog::OutputToConsole(csoPath.u8string() + u8"　：　開けませんでした");
 			return false;
 		}
 
 		// ファイルサイズを取得する
 		std::streamsize size = ifs.tellg();
 		if (size <= 0) {
-			ErrorLog::OutputToConsole(std::string(csoPath.string() + " : ファイルサイズ取得に失敗しました").c_str());
+			ErrorLog::OutputToConsole(csoPath.u8string() + u8" : ファイルサイズ取得に失敗しました");
 			return false;
 		}
 
@@ -109,7 +116,7 @@ namespace ShaderCompilerUtils
 		// ID3DBlobを作成する
 		HRESULT hr = D3DCreateBlob(static_cast<SIZE_T>(size), blob);
 		if (FAILED(hr)) {
-			ErrorLog::OutputToConsole("バイナリーデータの作製に失敗しました");
+			ErrorLog::OutputToConsole(u8"バイナリーデータの作製に失敗しました");
 			ifs.close(); // ファイルを閉じる
 			return false;
 		}
@@ -117,12 +124,12 @@ namespace ShaderCompilerUtils
 		// 中にバイナリーデータを書き込む
 		ifs.read(reinterpret_cast<char*>((*blob)->GetBufferPointer()), size);
 		if (!ifs) {
-			ErrorLog::OutputToConsole(std::string(csoPath.string() + " : バイナリーデータの読み込みに失敗しました").c_str());
+			ErrorLog::OutputToConsole(csoPath.u8string() + u8" : バイナリーデータの読み込みに失敗しました");
 			ifs.close();
 			return false;
 		}
 
-		DebugLog::OutputToConsole((csoPath.string() + "シェーダーを読み込みました。").c_str());
+		DebugLog::OutputToConsole(csoPath.u8string() + u8"シェーダーを読み込みました。");
 
 		ifs.close(); // ファイルを閉じる
 

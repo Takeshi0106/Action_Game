@@ -17,33 +17,35 @@
 // ============================
 // 画像ファイルをロードする
 // ============================
-bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* device)
+bool TextureLoader::ImageFileLoader(
+    const String& fileName, 
+    ID3D11Device* device)
 {
     // ファイルパス作成
     std::filesystem::path filePath;
 
     // パス確認
-    if (std::filesystem::path(fileName).parent_path().empty())
+    if (std::filesystem::path(fileName.GetU8String()).parent_path().empty())
     {
         // 相対パスを追加
-        filePath = m_ImageFailePath;
-        filePath /= fileName;
+        filePath = m_ImageFailePath.GetU8String();
+        filePath /= fileName.GetU8String();
     }
     else
     {
         // そのまま使用
-        filePath = fileName;
+        filePath = fileName.GetU8String();
     }
 
     // 区切り文字を統一する
     filePath.make_preferred();
 
     // 登録名
-    std::string keyName = filePath.filename().string();
+    String keyName = filePath.filename().u8string();
 
 	// すでに登録されているか確認
     if (m_TextureManager->IsExistTexture(keyName)) {
-        DebugLog::OutputToConsole((keyName + " はすでに登録されています。").c_str());
+        DebugLog::OutputToConsole(keyName + u8" はすでに登録されています。");
 		return true;
     }
 
@@ -57,7 +59,7 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
     );
 
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(("画像のロードに失敗しました" + std::to_string(hr)).c_str());
+        ErrorLog::OutputToConsole(u8"画像のロードに失敗しました" + String::to_u8string((uint64_t)hr));
         return false;
     }
 
@@ -67,7 +69,7 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
     // イメージデータ取得（mipmap0, arraySlice0）
     const DirectX::Image* img = image.GetImage(0, 0, 0);
     if (!img) {
-        ErrorLog::OutputToConsole("画像データの取得に失敗しました");
+        ErrorLog::OutputToConsole(u8"画像データの取得に失敗しました");
         return false;
     }
 
@@ -89,7 +91,7 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
         CPUAccess::None,
         &initData))
     {
-        ErrorLog::OutputToConsole((keyName + " のテクスチャの作成に失敗しました。").c_str());
+        ErrorLog::OutputToConsole(keyName + u8" のテクスチャの作成に失敗しました。");
         return false;
     }
 
@@ -103,11 +105,11 @@ bool TextureLoader::ImageFileLoader(const std::string fileName, ID3D11Device* de
         data->GetTexture(),
         DirectX11_FormatConverter::ToSelfFormat(meta.format)))
     {
-        ErrorLog::OutputToConsole((keyName + " のSRVの作成に失敗しました。").c_str());
+        ErrorLog::OutputToConsole(keyName + u8" のSRVの作成に失敗しました。");
         return false;
     }
 
     // テクスチャ作成ログ出力
-    DebugLog::OutputToConsole((keyName + " のロードに成功しました。").c_str());
+    DebugLog::OutputToConsole(keyName + u8" のロードに成功しました。");
     return true;
 }

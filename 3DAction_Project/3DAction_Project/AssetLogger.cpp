@@ -16,8 +16,8 @@
 // 外部ファイルに使用したオブジェクト名を入れる
 bool AssetLogger::WriteLog()
 {
-	if (!FileUtis::WriteFile(kAssetLogPath, m_UseObjectList)) {
-		ErrorLog::OutputToConsole("ログファイルの書出しに失敗しました");
+	if (!FileUtis::WriteStringFile(kAssetLogPath, m_UseObjectList.GetBinaryView())) {
+		ErrorLog::OutputToConsole(u8"ログファイルの書出しに失敗しました");
 		return false;
 	}
 
@@ -25,7 +25,7 @@ bool AssetLogger::WriteLog()
 }
 
 // 名前を保存しておく
-void AssetLogger::Log(const char* name)
+void AssetLogger::Log(const String& name)
 {
-	m_UseObjectList += std::string(name) + "\n";
+	m_UseObjectList += name + u8"\n";
 }

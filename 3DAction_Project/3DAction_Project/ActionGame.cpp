@@ -22,7 +22,7 @@ bool ActionGame::DerivativeInit()
 {
 	// シーンマネージャー初期化
 	if (!m_SceneManager.Init(&m_Modules)) {
-		ErrorLog::OutputToConsole("シーンマネージャーの初期化に失敗");
+		ErrorLog::OutputToConsole(u8"シーンマネージャーの初期化に失敗");
 		return false;
 	}
 
@@ -47,7 +47,7 @@ bool ActionGame::Update()
 
 	// シーン更新
 	if (!m_SceneManager.Update(time)) {
-		DebugLog::OutputToConsole("ゲームを終了します");
+		DebugLog::OutputToConsole(u8"ゲームを終了します");
 		return false;
 	}
 
@@ -90,9 +90,9 @@ void ActionGame::Uninit()
 void ActionGame::DebugImgui()
 {
 	// FPS出力
-	ImGui::Begin("Debug Information");
+	ImGui::Begin(reinterpret_cast<const char*>(u8"FPS情報"));
 	ImGuiIO& io = ImGui::GetIO();
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+	ImGui::Text("%s", u8"1フレームの時間 %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
 	ImGui::End();
 }

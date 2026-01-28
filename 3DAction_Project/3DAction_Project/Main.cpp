@@ -78,7 +78,7 @@ int main(void)
 
 	system.Execute(actionGame.get()); // 起動
 
-	DebugLog::OutputToConsole("正常に終了しました");
+	DebugLog::OutputToConsole(u8"正常に終了しました");
 
 
 	return 0;

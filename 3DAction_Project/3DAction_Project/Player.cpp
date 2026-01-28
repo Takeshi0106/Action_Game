@@ -35,7 +35,7 @@ namespace Player_AABB{
 void Player::DerivationInit()
 {
 	// モデルのロード
-	m_Draw->LoadModel(m_ModelName.c_str(), "Character");
+	m_Draw->LoadModel(m_ModelName, u8"Character");
 
 	// 位置を更新
 	m_SRT.scale = { 1.0f, 1.0f, 1.0f };
@@ -46,7 +46,7 @@ void Player::DerivationInit()
 
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&world,
 		sizeof(world),
 		BufferUsage::Dynamic,
@@ -84,10 +84,10 @@ void Player::Draw()
 	Matrix4x4 world = m_SRT.world.toGPU();
 
 	// 定数バッファ更新
-	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));
+	m_Draw->UpdateShaderConstants(m_TransformCBName, &world, sizeof(world));
 
 	// 描画
-	m_Draw->ModelDraw(m_VSName.c_str(), m_PSName.c_str(), m_ModelName.c_str());
+	m_Draw->ModelDraw(m_VSName, m_PSName, m_ModelName);
 }
 
 

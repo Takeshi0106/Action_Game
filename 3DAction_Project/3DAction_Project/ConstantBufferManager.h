@@ -15,8 +15,6 @@
 #include <wrl/client.h>   // スマートポインター
 // 定数バッファデータ
 #include "ConstantBufferData.h"
-// 標準ヘッダー
-#include <string>
 // スマートポインターヘッダー
 #include <memory> // スマートポインター
 // 配列のヘッダー
@@ -31,6 +29,9 @@
 #include "UseShaderType.h"
 // 外部ファイルにアセット名ログ出量用
 #include "AssetLogger.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ======================================
@@ -43,8 +44,8 @@ class ConstantBufferManager
 {
 private:
 	// 定数バッファメンバー配列
-	std::unordered_map<std::string, std::unique_ptr<ConstantBufferData>> m_ConstantBuffers;
-	AssetLogger m_Logger = { "ConstantBuffers.txt" };
+	std::unordered_map<Hashed_String, std::unique_ptr<ConstantBufferData>> m_ConstantBuffers;
+	AssetLogger m_Logger = { u8"ConstantBuffers.txt" };
 
 public:
 	// コンストラクタ
@@ -53,7 +54,8 @@ public:
 	~ConstantBufferManager() { m_Logger.WriteLog(); }
 
 	// 定数バッファ作成
-	bool CreateConstantBuffer(const std::string constantName,
+	bool CreateConstantBuffer(
+		const String& constantName,
 		ID3D11Device* device,
 		const void* data,
 		size_t size,
@@ -61,7 +63,7 @@ public:
 		CPUAccess access = CPUAccess::Write);
 
 	// 定数バッファ更新
-	bool UpdateConstantBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size);
+	bool UpdateConstantBuffer(const String& name, ID3D11DeviceContext* context, const void* data, int size);
 
 	// 定数バッファを探して、バインド
 	bool BindConstantBuffer(const std::vector<ConstantBufferInfo>* cbInfo, ID3D11DeviceContext* context, SETSHADERTYPE type);

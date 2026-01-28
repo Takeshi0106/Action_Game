@@ -20,6 +20,8 @@
 #include "ModelManager.h"
 // モデル情報構造体
 #include "ModelData.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ==============================
@@ -29,20 +31,20 @@ class ModelConversionModule
 {
 private:
 	// モデルパス
-	const char* m_ModelPath;
-	const char* m_SelfModelPath;
+	const String& m_ModelPath;
+	const String& m_SelfModelPath;
 
 	// .Objだけをロードする
-	const char* kObjExtension = ".obj";
+	const String kObjExtension = u8".obj";
 
 	// モデルをロードする (モデルファイルはm_ModelPathの下にフォルダーを入れていたらフォルダー名を入れる)
-	bool ModelLoad(const char* modelPath, int flag, ModelData& modelData, const char* modelFile = "");
+	bool ModelLoad(const String& modelPath, int flag, ModelData& modelData, const String& modelFile = u8"");
 
 public:
 	// コンストラクタ・デストラクタ
 	ModelConversionModule(
-		const char* modelPath,
-		const char* SelfModelPath)
+		const String& modelPath,
+		const String& SelfModelPath)
 		: m_ModelPath(modelPath),m_SelfModelPath(SelfModelPath)
 	{}
 	~ModelConversionModule() = default;
@@ -53,8 +55,8 @@ public:
 	// 今はモデルをロードしてモデルマネージャーに入れる関数
 	// modelFile はモデルパスの下にファイルがあった場合、ファイル名を入れる
 	bool LoadAndRegisterModelResources(
-		const char* modelName,
+		const String& modelName,
 		BaseDrawManager& drawManager,
 		ModelManager& modelManager,
-		const char* modelFile = "");
+		const String& modelFile = u8"");
 };

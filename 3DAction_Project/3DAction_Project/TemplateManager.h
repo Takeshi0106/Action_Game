@@ -212,12 +212,12 @@ public:
 			{
 				// .reset 関数がある場合
 				m_Datas[handle.index].reset();
-				DebugLog::OutputToConsole(".restを実行");
+				DebugLog::OutputToConsole(u8".restを実行");
 			}
 			else {
 				// デフォルト初期化
 				m_Datas[handle.index] = T{};
-				DebugLog::OutputToConsole("デフォルトコンストラクタを実行");
+				DebugLog::OutputToConsole(u8"デフォルトコンストラクタを実行");
 			}
 		}
 	}

@@ -12,7 +12,7 @@ void Square2D::DerivationInit()
 {
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(
-		m_VsBufferName.c_str(),
+		m_VsBufferName,
 		m_Vertices,
 		sizeof(Vertex),
 		sizeof(m_Vertices) / sizeof(Vertex),
@@ -27,14 +27,14 @@ void Square2D::DerivationInit()
 
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&world,
 		sizeof(world),
 		BufferUsage::Dynamic,
 		CPUAccess::Write);
 
 	// 外部画像をロード
-	m_Draw->LoadTexture(m_TextureName.c_str());
+	m_Draw->LoadTexture(m_TextureName);
 }
 
 
@@ -55,10 +55,10 @@ void Square2D::Draw()
 {
 	// 定数バッファ更新
 	Matrix4x4 world = m_SRT.world.toGPU();
-	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));
+	m_Draw->UpdateShaderConstants(m_TransformCBName, &world, sizeof(world));
 
 	// 描画
-	m_Draw->PrimitiveDraw(m_VSName.c_str(), m_PSName.c_str(), m_VsBufferName.c_str(), m_TextureName.c_str());
+	m_Draw->PrimitiveDraw(m_VSName, m_PSName, m_VsBufferName, m_TextureName);
 }
 
 

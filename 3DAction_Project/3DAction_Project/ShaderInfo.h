@@ -16,8 +16,8 @@
 // 入力レイアウトクラス
 #include "InputLayoutInfo.h"
 // 文字列
-#include <string>      // 文字列
-#include <string_view> // 文字列参照
+#include "UTF8_String.h"
+#include "UTF8_StringView.h"
 // 配列
 #include <vector>
 
@@ -29,7 +29,7 @@ class ShaderInfo : public BaseSaveLoadObject
 {
 private:
 	// シェーダーの名前
-	std::string m_ShaderName = "";
+	String m_ShaderName = u8"";
 	// 定数バッファ情報
 	std::vector<ConstantBufferInfo> m_CBInfo;
 	// 入力レイアウトの情報
@@ -46,20 +46,20 @@ public:
 	// ---------------------------------
 	// セーブ・ロード
 	// ---------------------------------
-	std::string Serialize(int space)const override;
-	bool Deserialize(const std::string_view& data) override;
+	String Serialize(int space)const override;
+	bool Deserialize(const StringView& data) override;
 
 	// ---------------------------------
 	// セッター
 	// ---------------------------------
-	void SetShaderName(const std::string& name) { m_ShaderName = name; }
+	void SetShaderName(const String& name) { m_ShaderName = name; }
 	void SetConstantBufferInfo(std::vector<ConstantBufferInfo>& cB) { m_CBInfo = std::move(cB); }
 	void SetInputLayoutInfo(std::vector<InputLayoutInfo>& iL) { m_ILInfo = std::move(iL); }
 
 	// ---------------------------------
 	// ゲッター
 	// ---------------------------------
-	const std::string& GetShaderName() const { return m_ShaderName; }
+	const String& GetShaderName() const { return m_ShaderName; }
 	const std::vector<ConstantBufferInfo>& GetConstantBufferInfo() const { return m_CBInfo; }
 	const std::vector<InputLayoutInfo>& GetInputLayoutInfo() const { return m_ILInfo; }
 };

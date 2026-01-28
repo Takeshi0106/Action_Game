@@ -6,20 +6,24 @@
 #include "IndexBufferManager.h"
 // ログ出力用
 #include "ReportMessage.h"
+// バイナリーデータ
+#include "BinaryView.h"
 
 
 // =======================================
 // バッファ作成
 // =======================================
 bool IndexBufferManager::CreateIndexBuffer(
-	std::string name,
+	const String& name,
     ID3D11Device* device,
 	const uint32_t* indexData,
 	uint32_t indexNumber)
 {
+	Hashed_String nameHash = (Hashed_String)name;
+
     // 既に作成済み
     if (Exists(name)) {
-        DebugLog::OutputToConsole((name + " インデックスバッファが既に作成されていました").c_str());
+        DebugLog::OutputToConsole(name + u8" インデックスバッファが既に作成されていました");
         return true;
     }
 
@@ -32,20 +36,22 @@ bool IndexBufferManager::CreateIndexBuffer(
         indexData,
         indexNumber))
     {
-        ErrorLog::OutputToConsole("インデックスバッファの作成に失敗");
+        ErrorLog::OutputToConsole(u8"インデックスバッファの作成に失敗");
         return false;
     }
 
     // バッファデータを配列に代入
-    m_IndexBuffers[name] = std::move(vbd);
+    m_IndexBuffers[nameHash] = std::move(vbd);
 
 
 #if defined(DEBUG) || defined(_DEBUG)
     // コンソールに出力
-    DebugLog::OutputToConsole(("インデックスバッファ " + name + " を作成しました").c_str());
+    DebugLog::OutputToConsole(u8"インデックスバッファ " + name + u8" を作成しました");
 
     // 名前を設定
-    m_IndexBuffers[name]->SetDebugName(name.c_str());
+    m_IndexBuffers[nameHash]->SetDebugName(
+            reinterpret_cast<const char*>(
+        name.GetBinaryView().GetData()));
 #endif
 
     return true;
@@ -55,13 +61,15 @@ bool IndexBufferManager::CreateIndexBuffer(
 // =============================================
 // インデックスバッファをバインド
 // =============================================
-uint32_t IndexBufferManager::BindIndexData(const std::string& name,ID3D11DeviceContext* context) const
+uint32_t IndexBufferManager::BindIndexData(const String& name,ID3D11DeviceContext* context) const
 {
+    Hashed_String nameHash{ name };
+
 	// 探す
-	auto it = m_IndexBuffers.find(name);
+	auto it = m_IndexBuffers.find(nameHash);
 
 	if (it == m_IndexBuffers.end()) {
-		WarningLog::OutputToConsole(std::string(" インデックスバッファ : " + name + " が見つかりませんでした").c_str());
+		WarningLog::OutputToConsole(u8" インデックスバッファ : " + name + u8" が見つかりませんでした");
         return UINT32_MAX;
 	}
 
@@ -75,9 +83,10 @@ uint32_t IndexBufferManager::BindIndexData(const std::string& name,ID3D11DeviceC
 // =============================================
 // インデックスバッファがあるかのチェック
 // =============================================
-bool IndexBufferManager::Exists(const std::string& name) const
+bool IndexBufferManager::Exists(const String& name) const
 {
-	return m_IndexBuffers.find(name) != m_IndexBuffers.end();
+	Hashed_String nameHash{ name };
+	return m_IndexBuffers.find(nameHash) != m_IndexBuffers.end();
 }
 
 

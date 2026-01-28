@@ -88,11 +88,11 @@ bool DirectX_Input::Init()
 
 	// RawInputデバイス登録
 	if (!RegisterRawInputDevices(rid, 2, sizeof(RAWINPUTDEVICE))) {
-		ErrorLog::OutputToConsole("RawInputデバイス登録に失敗しました");
+		ErrorLog::OutputToConsole(u8"RawInputデバイス登録に失敗しました");
 		return false;
 	}
 
-	DebugLog::OutputToConsole("RawInputデバイス登録に成功しました");
+	DebugLog::OutputToConsole(u8"RawInputデバイス登録に成功しました");
 	return true;
 }
 

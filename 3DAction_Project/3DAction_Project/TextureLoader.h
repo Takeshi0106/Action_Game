@@ -13,7 +13,7 @@
 #include "TextureManager.h"
 #include "ResourceViewManager.h"
 // 文字列
-#include <string>
+#include "UTF8_String.h"
 
 
 // ============================
@@ -27,16 +27,16 @@ private:
     ResourceViewManager* m_ViewManager;
 
     // 画像ファイルを入れておく相対パス
-    const std::string m_ImageFailePath;
+    const String& m_ImageFailePath;
 
 public:
     // コンストラクタ・デストラクタ
-    TextureLoader(TextureManager* texMgr, ResourceViewManager* viewMgr, const char* failePath)
+    TextureLoader(TextureManager* texMgr, ResourceViewManager* viewMgr, const String& failePath)
         : m_TextureManager(texMgr), m_ViewManager(viewMgr), m_ImageFailePath(failePath) {
     }
     ~TextureLoader() = default;
 
     // 外部ファイルの画像ファイルをロード
-    bool ImageFileLoader(const std::string fileName, ID3D11Device* device);
+    bool ImageFileLoader(const String& fileName, ID3D11Device* device);
 };
 

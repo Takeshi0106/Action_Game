@@ -24,7 +24,7 @@ Vertex UIDrawModule::m_Vertices[4] = {
 // ==================================
 // 初期化
 // ==================================
-void UIDrawModule::Init(BaseDrawManager& _draw, const char* _textureName)
+void UIDrawModule::Init(BaseDrawManager& _draw, const String& _textureName)
 {
 	// 描画マネージャー保存
 	m_Draw = &_draw;
@@ -71,7 +71,7 @@ void UIDrawModule::Init(BaseDrawManager& _draw, const char* _textureName)
 // ==================================
 // テクスチャ読み込み
 // ==================================
-bool UIDrawModule::LoadTexture(const char* _textureName)
+bool UIDrawModule::LoadTexture(const String& _textureName)
 {
 	return m_Draw->LoadTexture(_textureName);
 }
@@ -80,7 +80,7 @@ bool UIDrawModule::LoadTexture(const char* _textureName)
 // ==================================
 // 描画
 // ==================================
-void UIDrawModule::Draw(const char* _textureName)
+void UIDrawModule::Draw(const String& _textureName)
 {
 	// プリミティブ描画
 	m_Draw->PrimitiveDraw(

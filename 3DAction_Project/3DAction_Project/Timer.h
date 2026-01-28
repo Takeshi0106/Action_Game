@@ -4,6 +4,13 @@
 // 経過時間を取得・渡す関数群
 // ===============================================
 
+
+// ================================================
+// ヘッダー
+// ================================================
+#include "UTF8_String.h"
+
+
 namespace Timer
 {
 	// =======================================================
@@ -34,11 +41,11 @@ namespace Timer
 	// ---------------------------------------------------
 	namespace Label {
 		// タイマー開始
-		void StartTimer(const char* name);
+		void StartTimer(const String& name);
 		// 経過時間取得
-		float GetElapsedTimer(const char* name);
+		float GetElapsedTimer(const String& name);
 		// タイマー削除
-		bool RemoveTimer(const char* name);
+		bool RemoveTimer(const String& name);
 		// 全削除（リセット）
 		void ClearTimers();
 	}

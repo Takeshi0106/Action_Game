@@ -101,29 +101,29 @@ namespace DirectX11 {
 		// デバイスやスワップチェインの初期化
 		if (!DXCore::Init(windowHandle)) {
 			// メッセージボックス出力 環境の問題かもしれないためユーザーに分かるようにする
-			ErrorLog::OutputToMessageBox("デバイスやスワップチェインの初期化に失敗");
+			ErrorLog::OutputToMessageBox(u8"デバイスやスワップチェインの初期化に失敗");
 			return false;
 		}
 
 		// 描画設定の初期化
 		if (!DrawSetting::Init()) {
-			ErrorLog::OutputToConsole("描画設定の初期化に失敗");
+			ErrorLog::OutputToConsole(u8"描画設定の初期化に失敗");
 			return false;
 		}
 
 		// 深度ステンシルの初期化
 		if (!DepthStencil::Init()) {
-			ErrorLog::OutputToConsole("深度ステンシルの初期化に失敗");
+			ErrorLog::OutputToConsole(u8"深度ステンシルの初期化に失敗");
 			return false;
 		}
 
 		// アルファディザ設定の初期化
 		if (!AlphaDiza::Init()) {
-			ErrorLog::OutputToConsole("アルファディザ設定の初期化に失敗");
+			ErrorLog::OutputToConsole(u8"アルファディザ設定の初期化に失敗");
 			return false;
 		}
 
-		DebugLog::OutputToConsole("DirectXの初期化に成功しました");
+		DebugLog::OutputToConsole(u8"DirectXの初期化に成功しました");
 
 		return true;
 	}
@@ -285,11 +285,11 @@ namespace DirectX11 {
 				}
 
 				if (FAILED(hr)) {
-					ErrorLog::OutputToConsole("選択されたドライバで生成することが出来ませんでした。");
+					ErrorLog::OutputToConsole(u8"選択されたドライバで生成することが出来ませんでした。");
 					return false;
 				}
 
-				DebugLog::OutputToConsole("デバイス・スワップチェインの初期化に成功");
+				DebugLog::OutputToConsole(u8"デバイス・スワップチェインの初期化に成功");
 
 				return true;
 			}
@@ -360,7 +360,7 @@ namespace DirectX11 {
 					HRESULT hr = d3dDevice->CreateRasterizerState(&rasterDesc, drawSetting[i].GetAddressOf());
 
 					if (FAILED(hr)) {
-						DebugLog::OutputToConsole("カリング設定の作成に失敗しました");
+						DebugLog::OutputToConsole(u8"カリング設定の作成に失敗しました");
 						return false;
 					}
 				}
@@ -427,7 +427,7 @@ namespace DirectX11 {
 					HRESULT hr = d3dDevice->CreateDepthStencilState(&dsDesc, depthStencilSetting[i].GetAddressOf());
 
 					if (FAILED(hr)) {
-						DebugLog::OutputToConsole("深度ステンシルの作成に失敗しました");
+						DebugLog::OutputToConsole(u8"深度ステンシルの作成に失敗しました");
 						return false;
 					}
 				}
@@ -493,7 +493,7 @@ namespace DirectX11 {
 					HRESULT hr = d3dDevice->CreateBlendState(&blendDesc, alphaDizaSetting[i].GetAddressOf());
 
 					if (FAILED(hr)) {
-						DebugLog::OutputToConsole("アルファディザ設定の作成に失敗しました");
+						DebugLog::OutputToConsole(u8"アルファディザ設定の作成に失敗しました");
 						return false;
 					}
 				}

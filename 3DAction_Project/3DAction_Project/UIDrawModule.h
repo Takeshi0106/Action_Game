@@ -14,6 +14,8 @@
 #include "Matrix4x4.h"
 // 頂点構造体
 #include "Vertex.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ================================
@@ -28,14 +30,14 @@ private:
 	static Vertex m_Vertices[4];
 
 	// 頂点バッファ名
-	const char* m_VSBufferName = "UI_VSBuffer";
+	const String m_VSBufferName = u8"UI_VSBuffer";
 
 	// 正射影行列バッファ名
-	const char* m_CSBufferName = "UIOrthoMatrix";
+	const String m_CSBufferName = u8"UIOrthoMatrix";
 
 	// シェーダー名
-	const char* m_VSShaderName = "VS_UI";
-	const char* m_PSShaderName = "PS_Texture";
+	const String m_VSShaderName = u8"VS_UI";
+	const String m_PSShaderName = u8"PS_Texture";
 
 public:
 	// コンストラクタ・デストラクタ
@@ -43,12 +45,12 @@ public:
 	~UIDrawModule() = default;
 	
 	// 初期化
-	void Init(BaseDrawManager& _draw, const char* _textureName);
+	void Init(BaseDrawManager& _draw, const String& _textureName);
 
 	// テクスチャ読み込み
-	bool LoadTexture(const char* _textureName);
+	bool LoadTexture(const String& _textureName);
 
 	// 描画
-	void Draw(const char* _textureName);
+	void Draw(const String& _textureName);
 };
 

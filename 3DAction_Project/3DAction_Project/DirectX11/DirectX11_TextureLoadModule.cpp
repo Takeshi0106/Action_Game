@@ -115,7 +115,7 @@ const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
 
 	// ロード失敗
 	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole(("画像のロードに失敗しました" + std::to_string(hr)).c_str());
+		ErrorLog::OutputToConsole(u8"画像のロードに失敗しました" + String::to_u8string((uint64_t)hr));
 		return TextureHandle();
 	}
 

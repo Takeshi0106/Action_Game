@@ -10,16 +10,18 @@
 #include "MaterialData.h"
 // ログ出力ヘッダー
 #include "ReportMessage.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ==================================
 // 静的メンバー変数定義
 // ==================================
-const std::string Board::m_VSName = "VS_Object";
-const std::string Board::m_PSName = "PS_NoTexture";
-const std::string Board::m_VBName = "Board_VertexBuffer";
-const std::string Board::m_MaterialName = "Material";
-const std::string Board::m_TransformCBName = "Transform";
+const String Board::m_VSName = u8"VS_Object";
+const String Board::m_PSName = u8"PS_NoTexture";
+const String Board::m_VBName = u8"Board_VertexBuffer";
+const String Board::m_MaterialName = u8"Material";
+const String Board::m_TransformCBName = u8"Transform";
 
 const Vertex Board::m_Vertex[4] = {
 	// 位置　　　　　　　法線　　　　　　UV
@@ -38,7 +40,7 @@ bool Board::Init(BaseDrawManager* _drawManager)
 {
 	// 頂点バッファ作成
 	if (!_drawManager->CreateVertexBuffer(
-		m_VBName.c_str(),
+		m_VBName,
 		m_Vertex,
 		sizeof(Vertex),
 		sizeof(m_Vertex) / sizeof(Vertex),
@@ -47,7 +49,7 @@ bool Board::Init(BaseDrawManager* _drawManager)
 		BufferUsage::Dynamic,
 		CPUAccess::Write))
 	{
-		ErrorLog::OutputToConsole("BOXの頂点バッファ作成に失敗");
+		ErrorLog::OutputToConsole(u8"BOXの頂点バッファ作成に失敗");
 		return false;
 	}
 
@@ -65,10 +67,10 @@ void Board::Draw(BaseDrawManager* drawManager, const Color& color)
 
 	// マテリアル設定
 	drawManager->UpdateShaderConstants(
-		m_MaterialName.c_str(),
+		m_MaterialName,
 		&material,
 		sizeof(MeshMaterialData));
 
 	// 描画
-	drawManager->PrimitiveDraw(m_VSName.c_str(), m_PSName.c_str(), m_VBName.c_str());
+	drawManager->PrimitiveDraw(m_VSName, m_PSName, m_VBName);
 }

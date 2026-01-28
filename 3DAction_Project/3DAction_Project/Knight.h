@@ -10,7 +10,7 @@
 // ヘッダー
 // ==============================
 #include "ColliderObject.h"
-#include <string>
+#include "UTF8_String.h"
 
 
 // ==============================
@@ -23,11 +23,11 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// モデル名
-	std::string m_ModelName = "Mech_FinnTheFrog";
+	String m_ModelName = u8"Mech_FinnTheFrog";
 	
 	// シェーダー名
-	std::string m_VSName = "VS_Object";
-	std::string m_PSName = "PS_TextureModel";
+	String m_VSName = u8"VS_Object";
+	String m_PSName = u8"PS_TextureModel";
 
 
 	//--------------------------------

@@ -12,6 +12,8 @@
 #include "BaseLight.h"
 // 計算ヘッダー
 #include "Vector3.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ===============================
@@ -23,7 +25,7 @@ private:
 	// 光の方向
 	Vector3 m_Direction;
 	// 定数文字列
-	const char* m_CBName = "SunLight";
+	const String m_CBName = u8"SunLight";
 
 	// 派生初期化
 	bool DerivativeInit();

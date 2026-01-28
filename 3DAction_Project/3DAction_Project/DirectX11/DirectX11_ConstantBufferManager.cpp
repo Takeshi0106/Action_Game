@@ -20,7 +20,7 @@ const Handle DirectX11_ConstantBufferManager::ConstantBufferCreate(
 	const void* _data)
 {
 	if (!_device || _size == 0) {
-		ErrorLog::OutputToConsole("無効な定数バッファが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効な定数バッファが作成されそうになりました");
 		return Handle();
 	}
 

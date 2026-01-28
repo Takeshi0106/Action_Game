@@ -32,7 +32,7 @@ bool IndexBufferData::CreateIndexBuffer(
 	// バッファ作成
 	HRESULT hr = device->CreateBuffer(&desc, &initData, m_Buffer.GetAddressOf());
 	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole("インデックスバッファが作成できませんでした");
+		ErrorLog::OutputToConsole(u8"インデックスバッファが作成できませんでした");
 		return false;
 	}
 

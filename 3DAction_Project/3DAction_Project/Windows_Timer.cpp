@@ -15,7 +15,8 @@
 // 配列ヘッダー
 #include <unordered_map>
 // 名前検索用ヘッダー
-#include <string>
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 // デバッグ出力用ヘッダー
 #include "ReportMessage.h"
 
@@ -159,29 +160,29 @@ namespace Timer {
 
 		namespace {
 			// タイム配列
-			std::unordered_map<std::string, LARGE_INTEGER> timers;
+			std::unordered_map<Hashed_String, LARGE_INTEGER> timers;
 		}
 
 
 		// =======================================
 		// タイマー開始
 		// =======================================
-		void StartTimer(const char* name)
+		void StartTimer(const String& name)
 		{
 			LARGE_INTEGER time;
 			QueryPerformanceCounter(&time);
-			timers[name] = time;
+			timers[Hashed_String(name)] = time;
 		}
 
 
 		// ======================================
 		// 経過時間取得
 		// ======================================
-		float GetElapsedTimer(const char* name)
+		float GetElapsedTimer(const String& name)
 		{
-			auto it = timers.find(name);
+			auto it = timers.find((Hashed_String)name);
 			if (it == timers.end()) {
-				ErrorLog::OutputToConsole((std::string(name) + "が見つかりませんでした").c_str());
+				ErrorLog::OutputToConsole(name + u8"が見つかりませんでした");
 				return 0.0f;
 			}
 
@@ -194,9 +195,9 @@ namespace Timer {
 		// ======================================
 		// タイマー削除
 		// ======================================
-		bool RemoveTimer(const char* name)
+		bool RemoveTimer(const String& name)
 		{
-			return timers.erase(name) > 0;
+			return timers.erase((Hashed_String)name) > 0;
 		}
 
 		

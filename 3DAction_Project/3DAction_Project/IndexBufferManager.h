@@ -22,7 +22,8 @@
 // テンプレートマネージャー
 #include "TemplateManager.h"
 // 文字列
-#include <string>
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 // 必須ヘッダー
 #include <cstdint>
 
@@ -37,7 +38,7 @@ private:
 	TemplateManager<IndexBufferData> m_IndexBufferr;
 
 	// 頂点バッファメンバー配列
-	std::unordered_map<std::string, std::unique_ptr<IndexBufferData>> m_IndexBuffers;
+	std::unordered_map<Hashed_String, std::unique_ptr<IndexBufferData>> m_IndexBuffers;
 
 public:
 	// コンストラクタ・デストラクタ
@@ -48,7 +49,7 @@ public:
 	// バッファ作成
 	// --------------------------------
 	bool CreateIndexBuffer(
-		std::string name,
+		const String& name,
 		ID3D11Device* device,
 		const uint32_t* indexData,
 		uint32_t indexNumber);
@@ -56,12 +57,12 @@ public:
 	// --------------------------------
 	// インデックスバッファを探して、戻り値で返す
 	// --------------------------------
-	uint32_t BindIndexData(const std::string& name, ID3D11DeviceContext* context) const;
+	uint32_t BindIndexData(const String& name, ID3D11DeviceContext* context) const;
 
 	// --------------------------------
 	// インデックスバッファがあるかのチェック
 	// --------------------------------
-	bool Exists(const std::string& name) const;
+	bool Exists(const String& name) const;
 
 	// --------------------------------
 	// 後処理

@@ -2,9 +2,11 @@
 
 // ==================================
 // 【関数群概要】
-// 外部ファイルに読込書出しをする共通関数
+// 外部ファイルにStringを読込書出しをする共通関数
 // 
-// *文字列を読込み、書き込み
+// 読込は全てUTF-8として読み込む
+// ＊ファイルのエンコードがUTF-8でない場合、文字化けします
+// 　チェックは行いません。
 // ===================================
 
 
@@ -12,8 +14,8 @@
 // ヘッダー
 // ==================================
 // 文字列
-#include <string> // 文字列
-#include <string_view> // 文字列参照
+#include "UTF8_String.h"
+#include "BinaryView.h"
 
 
 // ==================================
@@ -21,8 +23,8 @@
 // ==================================
 namespace FileUtis {
 	// 書き出すファイル
-	bool WriteFile(const std::string& filePath, const std::string_view& data);
+	bool WriteStringFile(const String& filePath, const BinaryView& data);
 	// 読み込むファイル
-	bool ReadFile(const std::string& path, std::string& data);
+	bool ReadStringFile(const String& path, String& data);
 }
 

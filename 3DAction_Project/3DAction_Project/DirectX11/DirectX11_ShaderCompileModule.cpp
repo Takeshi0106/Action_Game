@@ -13,6 +13,8 @@
 #include <fstream> 
 // ファイルシステムヘッダー
 #include <filesystem>
+// 文字列
+#include "../UTF8_String.h"
 // デバッグ情報ややエラー出力用
 #include "../ReportMessage.h"
 
@@ -35,8 +37,8 @@ bool Chacke_ShaderCompaile(
 bool OutputCompileShader(
 	const std::filesystem::path _hlslPath,
 	const std::filesystem::path _compilePath,
-	const std::string entryPoint,
-	const std::string shaderTypeModel,
+	const String& entryPoint,
+	const String& shaderTypeModel,
 	Microsoft::WRL::ComPtr<ID3DBlob>& blob);
 
 
@@ -70,7 +72,7 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 
 		// 念のためチェック
 		if ((uint16_t)shaderFileCount < hlslCount) {
-			ErrorLog::OutputToConsole(".hlslファイルの数が一致しません");
+			ErrorLog::OutputToConsole(u8".hlslファイルの数が一致しません");
 		}
 
 		// .hlslのパスをを取得
@@ -95,7 +97,7 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 
 		// シェーダーの種類を判定してコンパイル依頼
 		if (!Chacke_ShaderCompaile(hlslPath, compilePath, shaderBlob)) {
-			ErrorLog::OutputToConsole(std::string("シェーダーのコンパイルに失敗しました: " + hlslPath.string()).c_str());
+			ErrorLog::OutputToConsole(u8"シェーダーのコンパイルに失敗しました: " + hlslPath.u8string());
 			continue;
 		}
 
@@ -149,33 +151,33 @@ bool Chacke_ShaderCompaile(
 {
 
 	// ファイルの最初の名前でシェーダー判定
-	if (_hlslPath.stem().string().rfind("PS_", 0) == 0)
+	if (_hlslPath.stem().u8string().rfind(u8"PS_", 0) == 0)
 	{
 		// コンパイルして書き出す
-		if (!OutputCompileShader(_hlslPath, _compilePath, "main", "ps_5_0", blob)) {
-			ErrorLog::OutputToConsole(std::string("ピクセルシェーダー " + _hlslPath.string() + " のコンパイル失敗").c_str());
+		if (!OutputCompileShader(_hlslPath, _compilePath, u8"main", u8"ps_5_0", blob)) {
+			ErrorLog::OutputToConsole(u8"ピクセルシェーダー " + _hlslPath.u8string() + u8" のコンパイル失敗");
 			return false;
 		}
 	}
-	else if (_hlslPath.stem().string().rfind("VS_", 0) == 0)
+	else if (_hlslPath.stem().u8string().rfind(u8"VS_", 0) == 0)
 	{
 		// コンパイルして書き出す
-		if (!OutputCompileShader(_hlslPath, _compilePath, "main", "vs_5_0", blob)) {
-			ErrorLog::OutputToConsole(std::string("頂点シェーダー " + _hlslPath.string() + " のコンパイル失敗").c_str());
+		if (!OutputCompileShader(_hlslPath, _compilePath, u8"main", u8"vs_5_0", blob)) {
+			ErrorLog::OutputToConsole(u8"頂点シェーダー " + _hlslPath.u8string() + u8" のコンパイル失敗");
 			return false;
 		}
 	}
 	else if (_hlslPath.stem().string().rfind("CS_", 0) == 0)
 	{
 		// コンパイルして書き出す
-		if (!OutputCompileShader(_hlslPath, _compilePath, "main", "cs_5_0", blob)) {
-			ErrorLog::OutputToConsole(std::string("コンピュートシェーダ " + _hlslPath.string() + " のコンパイル失敗").c_str());
+		if (!OutputCompileShader(_hlslPath, _compilePath, u8"main", u8"cs_5_0", blob)) {
+			ErrorLog::OutputToConsole(u8"コンピュートシェーダ " + _hlslPath.u8string() + u8" のコンパイル失敗");
 			return false;
 		}
 	}
 	else
 	{
-		ErrorLog::OutputToConsole(std::string(_hlslPath.string() + " : 先頭にシェーダーの種類が記載されていません").c_str());
+		ErrorLog::OutputToConsole(_hlslPath.u8string() + u8" : 先頭にシェーダーの種類が記載されていません");
 		return  false;
 	}
 
@@ -189,8 +191,8 @@ bool Chacke_ShaderCompaile(
 bool OutputCompileShader(
 	const std::filesystem::path _hlslPath,
 	const std::filesystem::path _compilepath,
-	const std::string entryPoint,
-	const std::string shaderTypeModel,
+	const String& entryPoint,
+	const String& shaderTypeModel,
 	Microsoft::WRL::ComPtr<ID3DBlob>& blob)
 {
 	// エラーを取得する
@@ -213,15 +215,15 @@ bool OutputCompileShader(
 		_hlslPath.wstring().c_str(),            // シェーダーのパス
 		nullptr,                                // GPUで使用するマクロ定義（ない場合nullptr）
 		D3D_COMPILE_STANDARD_FILE_INCLUDE,      // HLSLで他のHLSLを読み込むフラグ
-		entryPoint.c_str(),                     // シェーダーないで最初に実行される関数の名前
-		shaderTypeModel.c_str(),                // シェーダーの種類とバージョン
+		reinterpret_cast<const char*>(entryPoint.GetU8Char()),                     // シェーダーないで最初に実行される関数の名前
+		reinterpret_cast<const char*>(shaderTypeModel.GetU8Char()),                // シェーダーの種類とバージョン
 		dwShaderFlags,                          // コンパイルのフラグ
 		0,                                      // 今は何もないフラグ
 		blob.GetAddressOf(),                    // コンパイルしたシェーダーを取得する
 		errorBlob.GetAddressOf()                // エラーメッセージを取得する
 	);
 	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole((_hlslPath.string() + "のコンパイルに失敗" + std::string(static_cast<const char*>(errorBlob->GetBufferPointer()))).c_str());
+		ErrorLog::OutputToConsole(_hlslPath.u8string() + u8"のコンパイルに失敗" + (static_cast<const char8_t*>(errorBlob->GetBufferPointer())));
 		return false;
 	}
 
@@ -236,7 +238,7 @@ bool OutputCompileShader(
 	{
 		if (!std::filesystem::create_directories(_compilepath.parent_path())) 
 		{
-			ErrorLog::OutputToConsole("ファイルが作成できませんでした");
+			ErrorLog::OutputToConsole(u8"ファイルが作成できませんでした");
 			return false;
 		}
 	}
@@ -246,7 +248,7 @@ bool OutputCompileShader(
 	std::ofstream ofs(_compilepath, std::ios::binary | std::ios::out);
 	if (!ofs)
 	{
-		ErrorLog::OutputToConsole(("ファイルを開けませんでした: " + _compilepath.string()).c_str());
+		ErrorLog::OutputToConsole(u8"ファイルを開けませんでした: " + _compilepath.u8string());
 		return false;
 	}
 
@@ -254,7 +256,7 @@ bool OutputCompileShader(
 	ofs.write(blobData.data(), blobData.size());
 	if (!ofs)
 	{
-		ErrorLog::OutputToConsole(("ファイル書き込みに失敗しました: " + _compilepath.string()).c_str());
+		ErrorLog::OutputToConsole(u8"ファイル書き込みに失敗しました: " + _compilepath.u8string());
 		return false;
 	}
 

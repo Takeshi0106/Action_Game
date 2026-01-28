@@ -27,6 +27,8 @@
 #include "DepthStencilSetting.h" // 深度ステンシル設定
 // 基本ヘッダー
 #include <cstdint>
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ==============================
@@ -47,30 +49,32 @@ public:
 	// 描画
 	virtual void BegingDraw() = 0;
 	virtual void EndDraw() = 0;
-	virtual void ModelDraw(const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _modelName) = 0;
+	virtual void ModelDraw(
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _modelName) = 0;
 	
 	// インデックス描画
 	virtual void IndexedDraw(
-		const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _vsBufferName,
-		const char* _indexBufferName,
-		const char* _textureNam = nullptr,
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _vsBufferName,
+		const String& _indexBufferName,
+		const String& _textureNam = u8"",
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
 	// プリミティブ描画
-	virtual void PrimitiveDraw(const char* _vsShaderName,
-		const char* _psShaderName,
-		const char* _vsBufferName,
-		const char* _textureNam = nullptr,
+	virtual void PrimitiveDraw(
+		const String& _vsShaderName,
+		const String& _psShaderName,
+		const String& _vsBufferName,
+		const String& _textureNam = u8"",
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
 	/* ------------ リソース作成 ------------ */
 	// 頂点バッファ作成
 	virtual bool CreateVertexBuffer(
-		const char* modelName, 
+		const String& modelName, 
 		const void* data, 
 		size_t size,
 		uint32_t vertexNumber,
@@ -81,13 +85,13 @@ public:
 
 	// インデックスバッファ作成
 	virtual bool CreateIndexBuffer(
-		const char* modelName,
+		const String& modelName,
 		const uint32_t* indexData,
 		uint32_t indexNumber) = 0;
 
 	// 定数バッファ作成
 	virtual bool CreateConstantBuffer(
-		const char* constantName,
+		const String& constantName,
 		const void* data,
 		size_t size,
 		BufferUsage usage = BufferUsage::Dynamic,
@@ -95,7 +99,7 @@ public:
 
 	// テクスチャ作成
 	virtual bool CreateTexture(
-		const char* name,
+		const String& name,
 		unsigned int width,
 		unsigned int height,
 		Format format,
@@ -104,29 +108,29 @@ public:
 		CPUAccess cpu = CPUAccess::None) = 0;
 
 	// テクスチャのロード
-	virtual bool LoadTexture(const char* textureName) = 0;
+	virtual bool LoadTexture(const String& textureName) = 0;
 	// モデルのロード
-	virtual bool LoadModel(const char* modelName, const char* modelFolderName = "") = 0;
+	virtual bool LoadModel(const String& modelName, const String& modelFolderName = u8"") = 0;
 
 	// サンプラー作成
 	virtual bool CreateSampler(const SamplerDesc& _desc) = 0;
 
 	// View作成
-	virtual bool CreateSRV(const char* name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
-	virtual bool CreateRTV(const char* name, uint32_t mipSlice) = 0;
-	virtual bool CreateDSV(const char* name, Format format) = 0;
+	virtual bool CreateSRV(const String& name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
+	virtual bool CreateRTV(const String& name, uint32_t mipSlice) = 0;
+	virtual bool CreateDSV(const String& name, Format format) = 0;
 
 	//virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
 
 
 	/* ------------ バッファ更新 ------------ */
 	// 頂点バッファ更新
-	virtual void UpdateVertexBuffer(const char* vertexName, const void* data, int size) = 0;
+	virtual void UpdateVertexBuffer(const String& vertexName, const void* data, int size) = 0;
 	// 定数バッファ更新
-	virtual void UpdateShaderConstants(const char* constantName, const void* data, const int size) = 0;
+	virtual void UpdateShaderConstants(const String& constantName, const void* data, const int size) = 0;
 
 	// バインドレンダーターゲット
-	virtual void BindRenderTarget(const char* rtvName, const char* dsvName = nullptr) = 0;
+	virtual void BindRenderTarget(const String& rtvName, const String& dsvName = nullptr) = 0;
 
 
 	/* ------------ 描画設定 ------------ */

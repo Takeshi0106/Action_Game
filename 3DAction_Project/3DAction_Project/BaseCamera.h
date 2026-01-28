@@ -15,6 +15,8 @@
 #include "Matrix4x4.h"
 // 描画マネージャ
 #include "BaseDrawManager.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
 
 
 // ============================
@@ -55,7 +57,7 @@ protected:
 	// 描画マネージャー
 	BaseDrawManager* m_DrawManager = nullptr;
 	// 更新するカメラ情報名
-	const char* kCameraInfoBufferName = "CameraInfo";
+	const String kCameraInfoBufferName = u8"CameraInfo";
 
 	// 派生初期化
 	virtual bool DerivativInit() { return true; }

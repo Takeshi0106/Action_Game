@@ -10,14 +10,14 @@
 // =================================
 void MovePlanet::Init(
 	BaseDrawManager* _draw,
-	const char* _modelName,
-	const char* _modelFile)
+	const String& _modelName,
+	const String& _modelFile)
 {
 	m_Draw = _draw;
 
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&m_SRT.world,
 		sizeof(m_SRT.world),
 		BufferUsage::Dynamic,
@@ -57,15 +57,15 @@ void MovePlanet::Draw()
 
 	// 定数バッファ更新
 	m_Draw->UpdateShaderConstants(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&worldMatrix,
 		sizeof(Matrix4x4));
 
 	// モデル描画
 	m_Draw->ModelDraw(
-		m_VSName.c_str(),
-		m_PSName.c_str(),
-		m_ModelName.c_str());
+		m_VSName,
+		m_PSName,
+		m_ModelName);
 }
 
 

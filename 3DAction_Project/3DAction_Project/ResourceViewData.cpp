@@ -28,7 +28,7 @@ bool SRVData::CreateSRV(ID3D11Device* device,
     // 作成
     HRESULT hr = device->CreateShaderResourceView(resource, &desc, m_SRV.GetAddressOf());
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(("SRVが作成できませんでした " + std::to_string(hr)).c_str());
+        ErrorLog::OutputToConsole(u8"SRVが作成できませんでした " + String::to_u8string((uint64_t)hr));
         return false;
     }
 
@@ -53,7 +53,7 @@ bool UAVData::CreateUAV(ID3D11Device* device,
     // 作成
     HRESULT hr = device->CreateUnorderedAccessView(resource, &desc, m_UAV.GetAddressOf());
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(("UAVが作成できませんでした " + std::to_string(hr)).c_str());
+        ErrorLog::OutputToConsole(u8"UAVが作成できませんでした " + String::to_u8string((uint64_t)hr));
         return false;
     }
 
@@ -83,7 +83,7 @@ bool RTVData::CreateRTV(ID3D11Device* device,
     // 作成
     HRESULT hr = device->CreateRenderTargetView(resource, &desc, m_RTV.GetAddressOf());
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(("RTVが作成できませんでした " + std::to_string(hr)).c_str());
+        ErrorLog::OutputToConsole(u8"RTVが作成できませんでした " + String::to_u8string((uint64_t)hr));
         return false;
     }
 
@@ -106,7 +106,7 @@ bool DSVData::CreateDSV(ID3D11Device* device,
     // 作成
     HRESULT hr = device->CreateDepthStencilView(resource, &desc, m_DSV.GetAddressOf());
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(("DSVが作成できませんでした " + std::to_string(hr)).c_str());
+        ErrorLog::OutputToConsole(u8"DSVが作成できませんでした " + String::to_u8string((uint64_t)hr));
         return false;
     }
 

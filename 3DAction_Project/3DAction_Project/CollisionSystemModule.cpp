@@ -49,8 +49,10 @@ bool CollisionSystemModule::CheckCollision(
 #if defined(_DEBUG) || defined(DEBUG)
 	// 関数が設定されているかチェック
 	if (func == nullptr) {
-		ErrorLog::OutputToConsole(("衝突判定関数が未設定 A: " + std::to_string(shapeA) +
-			"B: " + std::to_string(shapeB)).c_str());
+		ErrorLog::OutputToConsole(u8"衝突判定関数が未設定 A: " + 
+			String::to_u8string(shapeA) +
+			u8"B: " + 
+			String::to_u8string(shapeB));
 		return false;
 	}
 #endif

@@ -41,7 +41,7 @@ bool DebugSceneState::DerivativeInit()
 
 	// カメラ初期化
 	if (!m_Camera->Init(m_Modules->drawManager)) {
-		ErrorLog::OutputToConsole("DCCカメラの初期化に失敗");
+		ErrorLog::OutputToConsole(u8"DCCカメラの初期化に失敗");
 		return false;
 	}
 
@@ -59,7 +59,7 @@ bool DebugSceneState::DerivativeInit()
 	m_Light = std::make_unique<SunLight>();
 	// ライト初期化
 	if (!m_Light->Init(m_Modules->drawManager)) {
-		ErrorLog::OutputToConsole("太陽光の初期化に失敗");
+		ErrorLog::OutputToConsole(u8"太陽光の初期化に失敗");
 		return false;
 	}
 
@@ -89,9 +89,9 @@ bool DebugSceneState::DerivativeInit()
 #if defined(DEBUG) || defined(_DEBUG)
 	// 時間出力
 	float outputTime = Timer::GetDeltaTime() - time;
-	DebugLog::OutputToConsole((std::to_string(outputTime) + "秒 : AABB登録時間").c_str());
-	DebugLog::OutputToConsole((std::to_string(balance.averageDepth) + " : 平均深度").c_str());
-	DebugLog::OutputToConsole((std::to_string(balance.maxDepth) + " : 最大深度").c_str());
+	DebugLog::OutputToConsole(String::to_u8string(outputTime) + u8"秒 : AABB登録時間");
+	DebugLog::OutputToConsole(String::to_u8string(balance.averageDepth) + u8" : 平均深度");
+	DebugLog::OutputToConsole(String::to_u8string((uint64_t)balance.maxDepth) + u8" : 最大深度");
 #endif
 
 	// デバッグ初期化

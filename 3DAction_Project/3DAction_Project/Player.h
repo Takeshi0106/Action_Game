@@ -10,7 +10,7 @@
 // ヘッダー
 // ===================================
 #include "ColliderObject.h"
-#include <string>
+#include "UTF8_String.h"
 
 
 // ===================================
@@ -23,11 +23,11 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// モデル名
-	const std::string m_ModelName = "Mech_FinnTheFrog";
+	const String m_ModelName = u8"Mech_FinnTheFrog";
 
 	// シェーダー名
-	const std::string m_VSName = "VS_Object";
-	const std::string m_PSName = "PS_TextureModel";
+	const String m_VSName = u8"VS_Object";
+	const String m_PSName = u8"PS_TextureModel";
 
 	// --------------------------------
 	// 非仮想関数

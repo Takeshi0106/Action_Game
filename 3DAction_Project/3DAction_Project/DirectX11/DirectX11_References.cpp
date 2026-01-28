@@ -71,7 +71,7 @@ void DirectX11_References::OutputShaderReferences(
 
 	// リファレンス
 	if (!ShaderInfoAcquisition(_blob, size, cbInfos, ilInfos)) {
-		ErrorLog::OutputToMessageBox("シェーダーリファレンスに失敗しました");
+		ErrorLog::OutputToMessageBox(u8"シェーダーリファレンスに失敗しました");
 		return;
 	}
 
@@ -95,7 +95,7 @@ bool ShaderInfoAcquisition(
 	// バイナリーデータを解析
 	HRESULT hr = D3DReflect(_blob, _size, IID_PPV_ARGS(&reflector));
 	if (FAILED(hr)) {
-		ErrorLog::OutputToConsole("リファレンス失敗 :" + hr);
+		ErrorLog::OutputToConsole(u8"リファレンス失敗 :" + String::to_u8string((uint64_t)hr));
 		return false;
 	}
 
@@ -139,7 +139,7 @@ bool ShaderInfoAcquisition(
 			_ilInfo[k].m_Format = (uint16_t)DXGI_FORMAT_R32G32B32A32_FLOAT;
 		}
 		else {
-			ErrorLog::OutputToConsole("未知のフォーマットです");
+			ErrorLog::OutputToConsole(u8"未知のフォーマットです");
 			return false;
 		}
 	}
@@ -157,7 +157,7 @@ bool ShaderInfoAcquisition(
 
 		// 名前が付けられていない定数バッファがあれば、プロジェクトを停止させる
 		if (bufferDesc.Name == nullptr || std::strlen(bufferDesc.Name) == 0) {
-			ErrorLog::OutputToConsole("定数バッファの情報に名前が入っていませんでした");
+			ErrorLog::OutputToConsole(u8"定数バッファの情報に名前が入っていませんでした");
 			return false;
 		}
 
@@ -181,7 +181,7 @@ bool ShaderInfoAcquisition(
 
 			// 名前が使われていない定数バッファがあれば、プロジェクトを停止させる
 			if (bindDesc.Name == nullptr || std::strlen(bindDesc.Name) == 0) {
-				ErrorLog::OutputToConsole("リフレクションした情報に名前が入っていませんでした");
+				ErrorLog::OutputToConsole(u8"リフレクションした情報に名前が入っていませんでした");
 				return false;
 			}
 
@@ -202,7 +202,7 @@ bool ShaderInfoAcquisition(
 			_cbInfo[i].m_Size = bufferDesc.Size;
 		}
 		else {
-			ErrorLog::OutputToConsole("バインド番号が見つかりませんでした");
+			ErrorLog::OutputToConsole(u8"バインド番号が見つかりませんでした");
 			return false;
 		}
 	}

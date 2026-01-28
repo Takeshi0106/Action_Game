@@ -34,7 +34,7 @@ bool MoveObjectSystem::Init(BaseDrawManager* _draw)
 	m_Draw = _draw;
 
 	// モデルのロード
-	m_Draw->LoadModel(m_ModelName.c_str(), "Character/Player");
+	m_Draw->LoadModel(m_ModelName, u8"Character/Player");
 
 	// SRT初期化
 	SRT srt = {
@@ -44,7 +44,7 @@ bool MoveObjectSystem::Init(BaseDrawManager* _draw)
 
 	// 定数バッファ作成
 	m_Draw->CreateConstantBuffer(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&srt.world,
 		sizeof(srt.world),
 		BufferUsage::Dynamic,
@@ -179,15 +179,15 @@ void MoveObjectSystem::Draw()
 
 		// 定数バッファ更新
 		m_Draw->UpdateShaderConstants(
-			m_TransformCBName.c_str(),
+			m_TransformCBName,
 			&world,
 			sizeof(world));
 
 		// モデル描画
 		m_Draw->ModelDraw(
-			m_VSName.c_str(),
-			m_PSName.c_str(),
-			m_ModelName.c_str());
+			m_VSName,
+			m_PSName,
+			m_ModelName);
 	}
 }
 

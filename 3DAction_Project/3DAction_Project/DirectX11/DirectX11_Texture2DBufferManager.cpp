@@ -18,7 +18,7 @@ const Handle DirectX11_Texture2DBufferManager::Texture2DBufferCreate(
 	const D3D11_SUBRESOURCE_DATA* _initialData)
 {
 	if (!_device || !_desc) {
-		ErrorLog::OutputToConsole("無効な2Dテクスチャバッファが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効な2Dテクスチャバッファが作成されそうになりました");
 		return Handle();
 	}
 

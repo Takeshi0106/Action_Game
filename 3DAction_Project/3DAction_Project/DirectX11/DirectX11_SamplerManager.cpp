@@ -18,7 +18,7 @@ const Handle DirectX11_SamplerManager::SamplerStateCreate(
 {
 
 	if (!_device) {
-		ErrorLog::OutputToConsole("無効なサンプラーが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効なサンプラーが作成されそうになりました");
 		return Handle();
 	}
 

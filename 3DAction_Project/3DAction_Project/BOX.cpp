@@ -20,12 +20,12 @@
 // ==================================
 // 静的メンバー変数定義
 // ==================================
-const std::string BOX::m_VSName = "VS_Object";
-const std::string BOX::m_PSName = "PS_NoTexture";
-const std::string BOX::m_VBName = "BOX_VertexBuffer";
-const std::string BOX::m_IBName = "BOX_IndexBuffer";
-const std::string BOX::m_MaterialName = "Material";
-const std::string BOX::m_TransformCBName = "Transform";
+const String BOX::m_VSName = u8"VS_Object";
+const String BOX::m_PSName = u8"PS_NoTexture";
+const String BOX::m_VBName = u8"BOX_VertexBuffer";
+const String BOX::m_IBName = u8"BOX_IndexBuffer";
+const String BOX::m_MaterialName = u8"Material";
+const String BOX::m_TransformCBName = u8"Transform";
 
 const Vertex BOX::m_Vertex[24] = {
 	// 前面 (Z-)
@@ -99,7 +99,7 @@ bool BOX::Init(BaseDrawManager* drawManager)
 {
 	// 頂点バッファ作成
 	if (!drawManager->CreateVertexBuffer(
-		m_VBName.c_str(),
+		m_VBName,
 		m_Vertex,
 		sizeof(Vertex),
 		sizeof(m_Vertex) / sizeof(Vertex),
@@ -108,17 +108,17 @@ bool BOX::Init(BaseDrawManager* drawManager)
 		BufferUsage::Dynamic,
 		CPUAccess::Write))
 	{
-		ErrorLog::OutputToConsole("BOXの頂点バッファ作成に失敗");
+		ErrorLog::OutputToConsole(u8"BOXの頂点バッファ作成に失敗");
 		return false;
 	}
 
 	// インデックスバッファ作成
 	if(!drawManager->CreateIndexBuffer(
-		m_IBName.c_str(),
+		m_IBName,
 		m_Index,
-		sizeof(m_Index) / sizeof(uint16_t)))
+		sizeof(m_Index) / sizeof(uint32_t)))
 	{
-		ErrorLog::OutputToConsole("BOXのインデックスバッファ作成に失敗");
+		ErrorLog::OutputToConsole(u8"BOXのインデックスバッファ作成に失敗");
 		return false;
 	}
 
@@ -136,12 +136,12 @@ void BOX::Draw(BaseDrawManager* drawManager, const Color& color)
 
 	// マテリアル設定
 	drawManager->UpdateShaderConstants(
-		m_MaterialName.c_str(),
+		m_MaterialName,
 		&material,
 		sizeof(MeshMaterialData));
 
 	// 描画
-	drawManager->IndexedDraw(m_VSName.c_str(), m_PSName.c_str(), m_VBName.c_str(),m_IBName.c_str());
+	drawManager->IndexedDraw(m_VSName, m_PSName, m_VBName,m_IBName);
 }
 
 
@@ -161,7 +161,7 @@ void BOX::DrawAABB(BaseDrawManager* drawManager, const AABBCollider& aabb, const
 
 	// 定数バッファ更新
 	world = world.toGPU();
-	drawManager->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));
+	drawManager->UpdateShaderConstants(m_TransformCBName, &world, sizeof(world));
 	
 	// マテリアル設定
 	MeshMaterialData material;
@@ -169,10 +169,10 @@ void BOX::DrawAABB(BaseDrawManager* drawManager, const AABBCollider& aabb, const
 
 	// マテリアル更新
 	drawManager->UpdateShaderConstants(
-		m_MaterialName.c_str(),
+		m_MaterialName,
 		&material,
 		sizeof(MeshMaterialData));
 
 	// 描画
-	drawManager->IndexedDraw(m_VSName.c_str(), m_PSName.c_str(), m_VBName.c_str(), m_IBName.c_str());
+	drawManager->IndexedDraw(m_VSName, m_PSName, m_VBName, m_IBName);
 }

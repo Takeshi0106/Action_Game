@@ -51,12 +51,12 @@ ModelData ModelLoadeModule::ModelLoad(
 	Assimp::Importer importer;
 
 		// モデルロード
-		const aiScene* scene = importer.ReadFile(modelPath.string(),
-			aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
+	const aiScene* scene = importer.ReadFile(modelPath.string(),
+		aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
 
 	// ロードチェック
 	if (!scene) {
-		ErrorLog::OutputToConsole("モデルロード失敗");
+		ErrorLog::OutputToConsole(u8"モデルロード失敗");
 		return modelData;
 	}
 

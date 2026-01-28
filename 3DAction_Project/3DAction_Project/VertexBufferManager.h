@@ -28,7 +28,8 @@
 // バッファ設定ヘッダー
 #include "GraphicsEnums.h"
 // 文字列
-#include <string>
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 // 外部ファイルにアセット名ログ出力
 #include "AssetLogger.h"
 
@@ -40,8 +41,8 @@ class VertexBufferManager
 {
 private:
 	// 頂点バッファメンバー配列
-	std::unordered_map<std::string, std::unique_ptr<VertexBufferData>> m_VertexBuffers;
-	AssetLogger m_Logger = { "VertexBuffers.txt" };
+	std::unordered_map<Hashed_String, std::unique_ptr<VertexBufferData>> m_VertexBuffers;
+	AssetLogger m_Logger = { u8"VertexBuffers.txt" };
 
 public:
 	// コンストラクタ
@@ -51,7 +52,7 @@ public:
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
-		const std::string name,
+		const String& name,
 		ID3D11Device* device,
 		const void* vertices,
 		int vertexCount,
@@ -63,13 +64,13 @@ public:
 	);
 
 	// 頂点バッファ更新
-	bool UpdateVertexBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size);
+	bool UpdateVertexBuffer(const String& name, ID3D11DeviceContext* context, const void* data, int size);
 
 	// 頂点バッファをバインドして描画する頂点数を返す
-	int BindVertexBuffer(const std::string& name, ID3D11DeviceContext* context) const;
+	int BindVertexBuffer(const String& name, ID3D11DeviceContext* context) const;
 	
 	// 頂点バッファがあるかのチェック
-	bool Exists(const std::string& name) const;
+	bool Exists(const String& name) const;
 
 	// 後処理
 	void ReleaseAllVertexBuffers();

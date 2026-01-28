@@ -642,6 +642,9 @@
     <ClCompile Include="MovePlanet.cpp">
       <Filter>4_Game\6_Object\0_Object\Planet</Filter>
     </ClCompile>
+    <ClCompile Include="UTF8_String.cpp">
+      <Filter>2_Core\3_Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -1033,6 +1036,12 @@
     </ClInclude>
     <ClInclude Include="TemplateManager.h">
       <Filter>2_Core\0_TemplateManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8_StringView.h">
+      <Filter>2_Core\3_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryView.h">
+      <Filter>2_Core\3_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

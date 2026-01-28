@@ -21,13 +21,13 @@ bool ModelManager::Init(BaseDrawManager& drawManager)
 
 	// モデルの定数バッファ作成
     if (!drawManager.CreateConstantBuffer(
-        m_MaterialCBName.c_str(),
+        m_MaterialCBName,
         &materialData,
         sizeof(materialData),
         BufferUsage::Dynamic,
         CPUAccess::Write))
     {
-        ErrorLog::OutputToConsole("モデルマテリアル用定数バッファの作成に失敗しました");
+        ErrorLog::OutputToConsole(u8"モデルマテリアル用定数バッファの作成に失敗しました");
         return false;
     }
 
@@ -38,8 +38,10 @@ bool ModelManager::Init(BaseDrawManager& drawManager)
 // ===============================
 // モデルマネージャーに登録
 // ===============================
-void ModelManager::RegisterModel(const std::string& modelName, const ModelData& modelData)
+void ModelManager::RegisterModel(const String& modelName, const ModelData& modelData)
 {
+	// ハッシュ化
+	Hashed_String modelNameHash{ modelName };
     // データを作成
 	ModelManagerData modelManagerData;
 
@@ -54,17 +56,18 @@ void ModelManager::RegisterModel(const std::string& modelName, const ModelData& 
     // マテリアルデータを登録
     modelManagerData.materialData = modelData.materialDataArray;
     // モデルデータを登録
-	m_Models[modelName] = modelManagerData;
+	m_Models[modelNameHash] = modelManagerData;
 }
 
 
 // ===============================
 // モデルデータゲッター
 // ===============================
-const ModelManagerData* ModelManager::GetModelData(const std::string& modelName)
+const ModelManagerData* ModelManager::GetModelData(const String& modelName)
 {
+	Hashed_String modelNameHash{ modelName };
     // 探す
-    auto it = m_Models.find(modelName);
+    auto it = m_Models.find(modelNameHash);
 
     if (it != m_Models.end())
     {
@@ -72,7 +75,7 @@ const ModelManagerData* ModelManager::GetModelData(const std::string& modelName)
     }
 
     ErrorLog::OutputToConsole(
-        (modelName + "が見つかりませんでした").c_str());
+        modelName + u8"が見つかりませんでした");
     return nullptr;
 }
 
@@ -80,7 +83,8 @@ const ModelManagerData* ModelManager::GetModelData(const std::string& modelName)
 // ================================
 // モデルデータがあるかのチェック
 // ================================
-bool ModelManager::CheckModelData(const std::string& modelName)
+bool ModelManager::CheckModelData(const String& modelName)
 {
-    return m_Models.find(modelName) != m_Models.end();
+	Hashed_String modelNameHash{ modelName };
+    return m_Models.find(modelNameHash) != m_Models.end();
 }

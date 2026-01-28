@@ -22,7 +22,7 @@ const Handle DirectX11_IndexBufferManager::IndexBufferCreate(
 {
 
 	if (!_device || !_indices || _size == 0) {
-		ErrorLog::OutputToConsole("無効なインデックスバッファが作成されそうになりました");
+		ErrorLog::OutputToConsole(u8"無効なインデックスバッファが作成されそうになりました");
 		return Handle();
 	}
 

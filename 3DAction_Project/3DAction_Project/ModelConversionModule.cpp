@@ -23,17 +23,17 @@
 bool ModelConversionModule::ModelConversion()
 {
 	// モデルが入っているパス内を捜査
-	for (const auto& entry : std::filesystem::directory_iterator(m_ModelPath))
+	for (const auto& entry : std::filesystem::directory_iterator(m_ModelPath.GetU8String()))
 	{
 		// モデルかチェック
-		if (!entry.is_regular_file() || entry.path().extension() != kObjExtension) { continue; }
+		if (!entry.is_regular_file() || entry.path().extension() != kObjExtension.GetU8String()) { continue; }
 
 		// モデルデータ
 		ModelData modelData;
 
 		// モデル読込み 重たいので注意
-		if (!ModelLoad(entry.path().string().c_str(), aiProcessPreset_TargetRealtime_MaxQuality, modelData)) {
-			ErrorLog::OutputToConsole("モデルを読み込めませんでした");
+		if (!ModelLoad(entry.path().u8string().c_str(), aiProcessPreset_TargetRealtime_MaxQuality, modelData)) {
+			ErrorLog::OutputToConsole(u8"モデルを読み込めませんでした");
 			return false;
 		}
 	}
@@ -46,9 +46,9 @@ bool ModelConversionModule::ModelConversion()
 // モデルを読み込んで、各マネージャーに登録する
 // =====================================
 bool ModelConversionModule::LoadAndRegisterModelResources(
-	const char* modelName, 
+	const String& modelName, 
 	BaseDrawManager& drawManager,ModelManager& modelManager,
-	const char* modelFile)
+	const String& modelFile)
 {
 	// 登録済みチェック
 	if (modelManager.CheckModelData(modelName)) {
@@ -63,7 +63,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 		aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded,
 		modelData,
 		modelFile)) {
-		ErrorLog::OutputToConsole("モデルを読み込めませんでした");
+		ErrorLog::OutputToConsole(u8"モデルを読み込めませんでした");
 		return false;
 	}
 
@@ -73,28 +73,28 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 		// メッシュデータ取得
 		MeshData& mesh = modelData.meshDataArray[i];
 		// 登録名
-		std::string keyName = modelName + std::to_string(i);
+		String keyName = modelName + String::to_u8string(i);
 
 		// 頂点バッファ作成
 		if (!drawManager.CreateVertexBuffer(
-			keyName.c_str(),
+			keyName,
 			mesh.vertices.data(),
 			sizeof(Vertex),
 			static_cast<uint32_t>(mesh.vertices.size()),
 			static_cast<uint32_t>(mesh.vertices.size()),
 			PrimitiveType::TriangleList))
 		{
-			ErrorLog::OutputToConsole(std::string(" 頂点バッファの作成に失敗しました").c_str());
+			ErrorLog::OutputToConsole(u8" 頂点バッファの作成に失敗しました");
 			return false;
 		}
 
 		// インデックスバッファ作成
 		if (!drawManager.CreateIndexBuffer(
-			keyName.c_str(),
+			keyName,
 			static_cast<const uint32_t*>(mesh.indices.data()),
 			static_cast<uint32_t>(mesh.indices.size())))
 		{
-			ErrorLog::OutputToConsole(std::string(" インデックスバッファの作成に失敗しました").c_str());
+			ErrorLog::OutputToConsole(u8" インデックスバッファの作成に失敗しました");
 			return false;
 		}
 	}
@@ -109,8 +109,8 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 		if (!materialData.textureName.GetU8String().empty())
 		{
 			// テクスチャロード
-			if (!drawManager.LoadTexture(reinterpret_cast<const char*>(materialData.textureName.GetU8String().c_str()))) {
-				ErrorLog::OutputToConsole(" テクスチャの作成に失敗しました");
+			if (!drawManager.LoadTexture(materialData.textureName)) {
+				ErrorLog::OutputToConsole(u8" テクスチャの作成に失敗しました");
 				return false;
 			}
 
@@ -118,7 +118,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 			modelData.materialDataArray[i].textureName = 
 				std::filesystem::path(materialData.textureName.GetU8String()).filename().u8string();
 
-			DebugLog::OutputToConsole(" テクスチャのロードに成功しました : ");
+			DebugLog::OutputToConsole(u8" テクスチャのロードに成功しました : ");
 		}
 	}
 
@@ -133,25 +133,25 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 // モデルを読み込む関数
 // =====================================
 bool ModelConversionModule::ModelLoad(
-	const char* _modelPath, 
+	const String& _modelPath, 
 	int flag,
 	ModelData& modelData, 
-	const char* modelFile)
+	const String& modelFile)
 {
 	// モデルが入っているパスを作成
 	std::filesystem::path modelPath;
 
 	// パスを作成
-	if (!std::string(modelFile).empty())
+	if (!modelFile.IsEmpty())
 	{
-		modelPath = std::filesystem::path(m_ModelPath) / 
-			modelFile /
-			((std::string(_modelPath) + kObjExtension));
+		modelPath = std::filesystem::path(m_ModelPath.GetU8String()) / 
+			modelFile.GetU8String() /
+			(_modelPath + kObjExtension).GetU8String();
 	}
 	else
 	{
-		modelPath = std::filesystem::path(m_ModelPath) /
-			(std::string(_modelPath) + kObjExtension);
+		modelPath = std::filesystem::path(m_ModelPath.GetU8String()) /
+			(_modelPath + kObjExtension).GetU8String();
 	}
 
 	// 区切り文字統一
@@ -165,7 +165,7 @@ bool ModelConversionModule::ModelLoad(
 
 	// ロードチェック
 	if (!scene) {
-		ErrorLog::OutputToConsole("モデルロード失敗");
+		ErrorLog::OutputToConsole(u8"モデルロード失敗");
 		return false;
 	}
 

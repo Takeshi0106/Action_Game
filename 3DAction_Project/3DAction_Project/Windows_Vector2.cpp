@@ -158,7 +158,7 @@ Vector2 operator/(const Vector2& vec1, float scalar) noexcept
 #if defined(DEBUG) || defined(_DEBUG)
 	// 防止
 	if (scalar == 0.0f) {
-		ErrorLog::OutputToConsole("Vector4 : 0で除算しようとしました");
+		ErrorLog::OutputToConsole(u8"Vector4 : 0で除算しようとしました");
 		return Vector2(0.0f, 0.0f);
 	}
 #endif

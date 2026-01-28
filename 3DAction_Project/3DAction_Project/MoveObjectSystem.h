@@ -11,7 +11,7 @@
 // ===================================
 #include "ObjectSystem.h"
 #include <cstdint>
-#include <string>
+#include "UTF8_String.h"
 #include "AABBTree.h"
 
 
@@ -38,14 +38,14 @@ private:
 	// 描画マネージャー
 	BaseDrawManager* m_Draw = nullptr;
 	// モデル名
-	std::string m_ModelName = "Mech_FinnTheFrog";
+	String m_ModelName = u8"Mech_FinnTheFrog";
 
 	// シェーダー名
-	std::string m_VSName = "VS_Object";
-	std::string m_PSName = "PS_TextureModel";
+	String m_VSName = u8"VS_Object";
+	String m_PSName = u8"PS_TextureModel";
 
 	// 定数バッファ
-	const std::string m_TransformCBName = "Transform";
+	const String m_TransformCBName = u8"Transform";
 
 	// --------------------------------
 	// メンバー配列変数

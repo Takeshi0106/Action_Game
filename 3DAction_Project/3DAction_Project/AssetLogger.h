@@ -14,7 +14,7 @@
 // ==================================================================
 // ヘッダー
 // ==================================================================
-#include <string> // 使用した情報を入れる　リリース時も使用する
+#include "UTF8_String.h"
 
 
 // ==================================================================
@@ -22,9 +22,9 @@
 // ==================================================================
 namespace {
 #if defined(DEBUG) || defined(_DEBUG)
-	const std::string Type = "Debug";
+	const String Type = u8"Debug";
 #else
-	const std::string Type = "Release";
+	const String Type = u8"Release";
 #endif
 }
 
@@ -37,37 +37,37 @@ class AssetLogger
 {
 protected:
 	// アセットのログ デバッグビルド時に書出し
-	std::string kAssetLogPath = { "Debug/Log/" };
+	String kAssetLogPath = u8"Debug/Log/";
 	// 使用したオブジェクトを入れる
-	std::string m_UseObjectList;
+	String m_UseObjectList;
 
 public:
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// コンストラクタ
-	AssetLogger(const char* assetLog)
+	AssetLogger(const String& assetLog)
 	{
-		kAssetLogPath = std::string(kAssetLogPath + assetLog);
-		m_UseObjectList += Type + "\n\n";
+		kAssetLogPath += assetLog;
+		m_UseObjectList += Type + u8"\n\n";
 	}
 
 	// 外部ファイルに使用したオブジェクトのリストを書き出す
 	bool WriteLog();
 	// オブジェクトの名前をセットする
-	void Log(const char* name);
+	void Log(const String& name);
 
 #else
 
 	// コンストラクタ
-	AssetLogger(const char* assetLog) {
-		kAssetLogPath = std::string(kAssetLogPath + assetLog);
-		m_UseObjectList += Type + "\n\n";
+	AssetLogger(const String& assetLog) {
+		kAssetLogPath += assetLog;
+		m_UseObjectList += Type + u8"\n\n";
 	}
 
 	// 外部ファイルに使用したオブジェクトのリストを書き出す
 	bool WriteLog();
 	// オブジェクトの名前をセットする
-	void Log(const char* name);
+	void Log(const String& name);
 #endif
 
 	// デストラクタ　

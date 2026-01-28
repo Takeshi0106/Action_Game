@@ -19,6 +19,9 @@
 #include <unordered_map> // ハッシュ値検索
 // バッファ設定
 #include "GraphicsEnums.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // =================================
@@ -39,7 +42,7 @@ class TextureManager
 {
 private:
 	// テクスチャ配列
-	std::unordered_map<std::string, std::unique_ptr<Texture2DData>> m_Textures;
+	std::unordered_map<Hashed_String, std::unique_ptr<Texture2DData>> m_Textures;
 
 public:
 	// -------------------------------
@@ -51,12 +54,12 @@ public:
 
 	// スワップチェインからテクスチャを作成
     bool CreateTextureFromSwapChain(
-        const std::string name,
+        const String& name,
         IDXGISwapChain* swapChain);
 
     // テクスチャを作成
     bool CreateTexture(
-        const std::string name,
+        const String& name,
         ID3D11Device* device,
         unsigned int width,
         unsigned int height,
@@ -67,9 +70,9 @@ public:
         TextureInitData* initData = nullptr);
 
     // テクスチャを探して、戻り値で返す
-    Texture2DData* GetFindTexture2DData(const std::string& name);
+    Texture2DData* GetFindTexture2DData(const String& name);
 	// テクスチャが存在するか
-	bool IsExistTexture(const std::string& name);
+	bool IsExistTexture(const String& name);
 
     // 後処理
     void ReleaseAllTexture();

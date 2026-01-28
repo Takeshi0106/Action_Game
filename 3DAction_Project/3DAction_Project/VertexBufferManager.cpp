@@ -11,6 +11,7 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment(lib, "dxguid.lib")
+#include "BinaryView.h"
 #endif
 
 
@@ -26,7 +27,7 @@ inline D3D11_PRIMITIVE_TOPOLOGY ToDXPrimitive(PrimitiveType type);
 // =======================================
 // 頂点バッファ作成
 bool VertexBufferManager::CreateVertexBuffer(
-    const std::string name,
+    const String& name,
     ID3D11Device* device,
     const void* vertices,
     int vertexCount,
@@ -38,7 +39,7 @@ bool VertexBufferManager::CreateVertexBuffer(
 {
     // 既に作成済み
     if (Exists(name)) { 
-        WarningLog::OutputToConsole((name + " 頂点バッファが既に作成されていました").c_str());
+        WarningLog::OutputToConsole(name + u8" 頂点バッファが既に作成されていました");
         return true; 
     }
 
@@ -55,24 +56,24 @@ bool VertexBufferManager::CreateVertexBuffer(
         DirectX11_FormatConverter::ToDXUsage(usage),
         D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(access))))
     {
-        ErrorLog::OutputToConsole("頂点バッファの作成に失敗");
+        ErrorLog::OutputToConsole(u8"頂点バッファの作成に失敗");
         return false;
     }
 
     // 定数バッファデータを配列に代入
-    m_VertexBuffers[name] = std::move(vbd);
+    m_VertexBuffers[(Hashed_String)name] = std::move(vbd);
 
     // 作製した頂点バッファの名前を保存
-    m_Logger.Log(name.c_str());
+    m_Logger.Log(name);
 
 #if defined(DEBUG) || defined(_DEBUG)
-    DebugLog::OutputToConsole(("頂点バッファ " + name + " を作成しました").c_str());
+    DebugLog::OutputToConsole(u8"頂点バッファ " + name + u8" を作成しました");
 
 	// 名前を設定
-    m_VertexBuffers[name]->GetVertexBuffer()->SetPrivateData(
+    m_VertexBuffers[(Hashed_String)name]->GetVertexBuffer()->SetPrivateData(
         WKPDID_D3DDebugObjectName,
-        UINT(name.size()),
-        name.c_str());
+        UINT(name.GetBinaryView().GetSize()),
+        name.GetBinaryView().GetData());
 #endif
 
     return true;
@@ -82,10 +83,14 @@ bool VertexBufferManager::CreateVertexBuffer(
 // =======================================
 // 頂点バッファ更新
 // =======================================
-bool VertexBufferManager::UpdateVertexBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size)
+bool VertexBufferManager::UpdateVertexBuffer(
+    const String& name, 
+    ID3D11DeviceContext* context,
+    const void* data, 
+    int size)
 {
     // 探す
-    auto it = m_VertexBuffers.find(name);
+    auto it = m_VertexBuffers.find((Hashed_String)name);
 
     if (it != m_VertexBuffers.end())
     {
@@ -94,7 +99,7 @@ bool VertexBufferManager::UpdateVertexBuffer(const std::string& name, ID3D11Devi
         return true;
     }
 
-    ErrorLog::OutputToConsole(std::string("頂点バッファ" + name + " が見つかりませんでした").c_str());
+    ErrorLog::OutputToConsole(u8"頂点バッファ" + name + u8" が見つかりませんでした");
     return false;
 }
 
@@ -102,10 +107,12 @@ bool VertexBufferManager::UpdateVertexBuffer(const std::string& name, ID3D11Devi
 // =======================================
 // 頂点バッファをバインド
 // =======================================
-int VertexBufferManager::BindVertexBuffer(const std::string& name, ID3D11DeviceContext* context) const
+int VertexBufferManager::BindVertexBuffer(
+    const String& name, 
+    ID3D11DeviceContext* context) const
 {
     // 探す
-    auto it = m_VertexBuffers.find(name);
+    auto it = m_VertexBuffers.find((Hashed_String)name);
 
     if (it != m_VertexBuffers.end())
     {
@@ -132,9 +139,9 @@ int VertexBufferManager::BindVertexBuffer(const std::string& name, ID3D11DeviceC
 // ========================================
 // 頂点バッファがあるかのチェック
 // ========================================
-bool VertexBufferManager::Exists(const std::string& name) const
+bool VertexBufferManager::Exists(const String& name) const
 {
-    return m_VertexBuffers.find(name) != m_VertexBuffers.end();
+    return m_VertexBuffers.find((Hashed_String)name) != m_VertexBuffers.end();
 }
 
 
@@ -171,7 +178,7 @@ inline D3D11_PRIMITIVE_TOPOLOGY ToDXPrimitive(PrimitiveType type)
         break;
     }
     default: {
-        ErrorLog::OutputToConsole("トポロギーに変換できませんでした");
+        ErrorLog::OutputToConsole(u8"トポロギーに変換できませんでした");
         return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     }
     }

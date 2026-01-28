@@ -21,6 +21,9 @@
 #include <unordered_map>
 // 描画マネージャー
 #include "BaseDrawManager.h"
+// 文字列ヘッダー
+#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ==============================
@@ -49,9 +52,9 @@ class ModelManager
 {
 private:
 	// モデルデータ配列
-	std::unordered_map<std::string, ModelManagerData> m_Models;
+	std::unordered_map<Hashed_String, ModelManagerData> m_Models;
 	// マテリアル情報
-	std::string m_MaterialCBName = "Material";
+	String m_MaterialCBName = u8"Material";
 
 public:
 	// コンストラクタ・デストラクタ
@@ -61,11 +64,11 @@ public:
 	bool Init(BaseDrawManager& drawManager);
 
 	// モデルマネージャーに登録
-	void RegisterModel(const std::string& modelName, const ModelData& modelData);
+	void RegisterModel(const String& modelName, const ModelData& modelData);
 	// モデルデータ取得
-	const ModelManagerData* GetModelData(const std::string& modelName);
+	const ModelManagerData* GetModelData(const String& modelName);
 	// マテリアル定数バッファ名ゲッター
-	const std::string GetMaterialCBName() const { return m_MaterialCBName; }
+	const String GetMaterialCBName() const { return m_MaterialCBName; }
 	// モデルデータがあるかチェック
-	bool CheckModelData(const std::string& modelName);
+	bool CheckModelData(const String& modelName);
 };

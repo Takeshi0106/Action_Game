@@ -15,7 +15,7 @@ bool SwapchainTextureData::CreateTextureFromSwapChain(IDXGISwapChain* swapChain)
     // スワップチェインが生成したバックバッファを取得する
     HRESULT hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)m_Texture.GetAddressOf());
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole("スワップチェインからバックバッファを取得することが出来ませんでした。");
+        ErrorLog::OutputToConsole(u8"スワップチェインからバックバッファを取得することが出来ませんでした。");
         return false;
     }
 
@@ -52,7 +52,7 @@ bool BindableTextureData::CreateTexture2D(ID3D11Device* device,
     // テクスチャ作成
     HRESULT hr = device->CreateTexture2D(&desc, initData, m_Texture.GetAddressOf());
     if (FAILED(hr)) {
-        ErrorLog::OutputToConsole(("テクスチャの作成に失敗しました " + std::to_string(hr)).c_str());
+        ErrorLog::OutputToConsole(u8"テクスチャの作成に失敗しました " + String::to_u8string((uint64_t)hr));
         return false;
     }
 

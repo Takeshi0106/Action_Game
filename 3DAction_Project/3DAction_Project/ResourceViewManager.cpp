@@ -16,17 +16,20 @@
 // SRV
 // =============================
 // 作成
-bool ResourceViewManager::CreateSRV(const std::string name,
+bool ResourceViewManager::CreateSRV(
+	const String& name,
 	ID3D11Device* device,
 	ID3D11Texture2D* resource,
 	Format format,
 	UINT mostDetailedMip,
 	UINT mipLevels)
 {
+	Hashed_String nameHash{ name };
+
 	// 同じ名前のものが存在するか確認
-	if (m_SRVs.find(name) != m_SRVs.end())
+	if (m_SRVs.find(nameHash) != m_SRVs.end())
 	{
-		ErrorLog::OutputToConsole(std::string(("同じ名前のSRVが存在します: " + name)).c_str());
+		ErrorLog::OutputToConsole(u8"同じ名前のSRVが存在します: " + name);
 		return false;
 	}
 
@@ -41,24 +44,29 @@ bool ResourceViewManager::CreateSRV(const std::string name,
 		mostDetailedMip,
 		mipLevels))
 	{
-		ErrorLog::OutputToConsole(std::string(("SRV の作成失敗: " + name)).c_str());
+		ErrorLog::OutputToConsole(u8"SRV の作成失敗: " + name);
 		return false;
 	}
 
 	// 配列に代入
-	m_SRVs[name] = std::move(srv);
+	m_SRVs[nameHash] = std::move(srv);
 
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(("SRV : " + name).c_str());
+	m_Logger.Log(u8"SRV : " + name);
 
 	return true;
 }
 
 // ゲッター
-bool ResourceViewManager::BindSRV(const std::string& name, ID3D11DeviceContext* context, SETSHADERTYPE type)
+bool ResourceViewManager::BindSRV(
+	const String& name, 
+	ID3D11DeviceContext* context, 
+	SETSHADERTYPE type)
 {
+	Hashed_String nameHasy{ name };
+
 	// 探す
-	auto it = m_SRVs.find(name);
+	auto it = m_SRVs.find(nameHasy);
 
 	if (it != m_SRVs.end()) {
 		
@@ -78,7 +86,7 @@ bool ResourceViewManager::BindSRV(const std::string& name, ID3D11DeviceContext* 
 			context->CSSetShaderResources(0, 1, &srv);
 			break;
 		default:
-			ErrorLog::OutputToConsole("無効なタイプが使用されています");
+			ErrorLog::OutputToConsole(u8"無効なタイプが使用されています");
 			return false;
 			break;
 		}
@@ -87,7 +95,7 @@ bool ResourceViewManager::BindSRV(const std::string& name, ID3D11DeviceContext* 
 	}
 
 	// ログ出力
-	ErrorLog::OutputToConsole(std::string("SRV" + name + "が見つかりませんでした").c_str());
+	ErrorLog::OutputToConsole(u8"SRV" + name + u8"が見つかりませんでした");
 	return false;
 }
 
@@ -95,15 +103,18 @@ bool ResourceViewManager::BindSRV(const std::string& name, ID3D11DeviceContext* 
 // RTV
 // =============================
 // 作成
-bool ResourceViewManager::CreateRTV(const std::string name,
+bool ResourceViewManager::CreateRTV(
+	const String& name,
 	ID3D11Device* device,
 	ID3D11Texture2D* resource,
 	UINT mipSlice)
 {
+	Hashed_String nameHasy{ name };
+
 	// 同じ名前のものが存在するか確認
-	if (m_RTVs.find(name) != m_RTVs.end())
+	if (m_RTVs.find(nameHasy) != m_RTVs.end())
 	{
-		ErrorLog::OutputToConsole(std::string(("同じ名前のRTVが存在します: " + name)).c_str());
+		ErrorLog::OutputToConsole(u8"同じ名前のRTVが存在します: " + name);
 		return false;
 	}
 
@@ -116,23 +127,25 @@ bool ResourceViewManager::CreateRTV(const std::string name,
 		resource,
 		mipSlice))
 	{
-		ErrorLog::OutputToConsole(std::string(("RTV の作成失敗: " + name)).c_str());
+		ErrorLog::OutputToConsole(u8"RTV の作成失敗: " + name);
 		return false;
 	}
 
 	// 配列に代入
-	m_RTVs[name] = std::move(rtv);
+	m_RTVs[nameHasy] = std::move(rtv);
 
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(("RTV : " + name).c_str());
+	m_Logger.Log(u8"RTV : " + name);
 
 	return true;
 }
 
 // バインド
-RTVData* ResourceViewManager::GetRTV(const std::string& name)
+RTVData* ResourceViewManager::GetRTV(const String& name)
 {
-	auto it = m_RTVs.find(name);
+	Hashed_String nameHasy{ name };
+
+	auto it = m_RTVs.find(nameHasy);
 
 	if (it != m_RTVs.end()) {
 		return it->second.get();
@@ -145,15 +158,18 @@ RTVData* ResourceViewManager::GetRTV(const std::string& name)
 // DSV
 // =============================
 // 作成
-bool ResourceViewManager::CreateDSV(const std::string& name,
+bool ResourceViewManager::CreateDSV(
+	const String& name,
 	ID3D11Device* device,
 	ID3D11Texture2D* resource,
 	Format format)
 {
+	Hashed_String nameHasy{ name };
+
 	// 同じ名前のものが存在するか確認
-	if (m_DSVs.find(name) != m_DSVs.end())
+	if (m_DSVs.find(nameHasy) != m_DSVs.end())
 	{
-		ErrorLog::OutputToConsole(std::string(("同じ名前のDSVが存在します: " + name)).c_str());
+		ErrorLog::OutputToConsole(u8"同じ名前のDSVが存在します: " + name);
 		return false;
 	}
 
@@ -166,23 +182,25 @@ bool ResourceViewManager::CreateDSV(const std::string& name,
 		resource,
 		DirectX11_FormatConverter::ToDXFormat(format)))
 	{
-		ErrorLog::OutputToConsole(std::string(("DSV の作成失敗: " + name)).c_str());
+		ErrorLog::OutputToConsole(u8"DSV の作成失敗: " + name);
 		return false;
 	}
 
 	// 配列に代入
-	m_DSVs[name] = std::move(dsv);
+	m_DSVs[nameHasy] = std::move(dsv);
 
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(("DSV : " + name).c_str());
+	m_Logger.Log(u8"DSV : " + name);
 
 	return true;
 }
 
 // バインド
-DSVData* ResourceViewManager::GetDSV(const std::string& name)
+DSVData* ResourceViewManager::GetDSV(const String& name)
 {
-	auto it = m_DSVs.find(name);
+	Hashed_String nameHasy { name };
+
+	auto it = m_DSVs.find(nameHasy);
 
 	if (it != m_DSVs.end()) {
 		return it->second.get();

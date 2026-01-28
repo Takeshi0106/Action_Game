@@ -122,7 +122,7 @@ bool PlatformWindowsSystem::Init()
 
     // ウィンドウの登録 失敗したらfalseを返す
     if (!RegisterClassEx(&windClass)) {
-        ErrorLog::OutputToConsole("ウィンドウの登録に失敗しました");
+        ErrorLog::OutputToConsole(u8"ウィンドウの登録に失敗しました");
         return false; 
     } 
 
@@ -153,7 +153,7 @@ bool PlatformWindowsSystem::Init()
 
     // ウィンドウを作成できたかのチェック
     if (m_WinInstance == nullptr) {
-        ErrorLog::OutputToConsole("ウィンドウが作成されませんでした");
+        ErrorLog::OutputToConsole(u8"ウィンドウが作成されませんでした");
         return false; 
     }
 
@@ -252,7 +252,7 @@ bool PlatformWindowsSystem::GameInit()
 
     // ゲームの初期化
     if (!m_Game->Init(modules)) {
-        ErrorLog::OutputToConsole("ゲームの初期化に失敗しました");
+        ErrorLog::OutputToConsole(u8"ゲームの初期化に失敗しました");
         return false;
     }
 
@@ -270,7 +270,7 @@ bool PlatformWindowsSystem::GameMain()
 
     // ゲーム更新処理
     if (!m_Game->Update()) {
-        DebugLog::OutputToConsole("ゲームを終了します");
+        DebugLog::OutputToConsole(u8"ゲームを終了します");
         return false;
     }
 
@@ -349,7 +349,7 @@ void PlatformWindowsSystem::InitImGui()
 
     // 失敗時
     if (!font) {
-        ErrorLog::OutputToConsole("フォントを読み込めませんでした");
+        ErrorLog::OutputToConsole(u8"フォントを読み込めませんでした");
     }
 }
 

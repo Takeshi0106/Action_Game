@@ -11,6 +11,7 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment(lib, "dxguid.lib")
+#include "BinaryView.h"
 #endif
 
 
@@ -18,28 +19,31 @@
 // 定数バッファ作成
 // ========================================
 bool ConstantBufferManager::CreateConstantBuffer(
-	const std::string constantName,
+	const String& constantName,
 	ID3D11Device* device,
 	const void* data,
 	size_t size,
 	BufferUsage usage,
 	CPUAccess access)
 {
+	Hashed_String nameHash = (Hashed_String)constantName;
+
 	// エラーチェック
-	if (m_ConstantBuffers.count(constantName))
+	if (m_ConstantBuffers.count(nameHash))
 	{
 		// 定数バッファ取得
-		auto& existing = m_ConstantBuffers[constantName];
+		auto& existing = m_ConstantBuffers[nameHash];
 
 		// サイズ比較
 		if (existing->GetSize() != (size + 15) / 16 * 16) {
 			ErrorLog::OutputToConsole(
-				(constantName + " 同じ名前の定数バッファが作成されましたが、サイズが異なります").c_str());
+				constantName + 
+				u8" 同じ名前の定数バッファが作成されましたが、サイズが異なります");
 
 			return false;
 		}
 		else {
-			WarningLog::OutputToConsole((constantName + " 同じ名前の定数バッファが再作成されました").c_str());
+			WarningLog::OutputToConsole(constantName + u8" 同じ名前の定数バッファが再作成されました");
 
 			return true;
 		}
@@ -56,24 +60,24 @@ bool ConstantBufferManager::CreateConstantBuffer(
 		DirectX11_FormatConverter::ToDXUsage(usage),
 		D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(access))))
 	{
-		ErrorLog::OutputToConsole(std::string(("定数バッファの作成失敗: " + constantName)).c_str());
+		ErrorLog::OutputToConsole(u8"定数バッファの作成失敗: " + constantName);
 		return false;
 	}
 	
 	// 配列に代入
-	m_ConstantBuffers[constantName] = std::move(bafferData);
+	m_ConstantBuffers[nameHash] = std::move(bafferData);
 	
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(constantName.c_str());
+	m_Logger.Log(constantName);
 
 #if defined(DEBUG) || defined(_DEBUG)
-	DebugLog::OutputToConsole(("定数バッファ " + constantName + " を作成しました").c_str());
+	DebugLog::OutputToConsole(u8"定数バッファ " + constantName + u8" を作成しました");
 
 	// 名前を設定
-	m_ConstantBuffers[constantName]->GetBuffer()->SetPrivateData(
+	m_ConstantBuffers[nameHash]->GetBuffer()->SetPrivateData(
 		WKPDID_D3DDebugObjectName,
-		UINT(constantName.size()),
-		constantName.c_str());
+		UINT(constantName.GetBinaryView().GetSize()),
+		constantName.GetBinaryView().GetData());
 #endif
 
 	return true;
@@ -83,10 +87,14 @@ bool ConstantBufferManager::CreateConstantBuffer(
 // =======================================
 // 定数バッファ更新
 // =======================================
-bool ConstantBufferManager::UpdateConstantBuffer(const std::string& name, ID3D11DeviceContext* context, const void* data, int size)
+bool ConstantBufferManager::UpdateConstantBuffer(
+	const String& name, 
+	ID3D11DeviceContext* context, 
+	const void* data, 
+	int size)
 {
 	// 探す
-	auto it = m_ConstantBuffers.find(name);
+	auto it = m_ConstantBuffers.find((Hashed_String)name);
 
 	// あるかどうかのチェック
 	if (it != m_ConstantBuffers.end())
@@ -95,7 +103,7 @@ bool ConstantBufferManager::UpdateConstantBuffer(const std::string& name, ID3D11
 		return true;
 	}
 
-	ErrorLog::OutputToConsole("定数バッファが見つかりませんでした");
+	ErrorLog::OutputToConsole(u8"定数バッファが見つかりませんでした");
 	return false;
 }
 
@@ -103,7 +111,10 @@ bool ConstantBufferManager::UpdateConstantBuffer(const std::string& name, ID3D11
 // =======================================
 // 定数バッファを探して,バインドを行う
 // =======================================
-bool ConstantBufferManager::BindConstantBuffer(const std::vector<ConstantBufferInfo>* cbInfo, ID3D11DeviceContext* context, SETSHADERTYPE type)
+bool ConstantBufferManager::BindConstantBuffer(
+	const std::vector<ConstantBufferInfo>* cbInfo, 
+	ID3D11DeviceContext* context, 
+	SETSHADERTYPE type)
 {
 	// バッファ配列を作成
 	std::vector<ID3D11Buffer*> buffers(cbInfo->size(), nullptr);
@@ -112,7 +123,7 @@ bool ConstantBufferManager::BindConstantBuffer(const std::vector<ConstantBufferI
 	for (size_t i = 0; i < cbInfo->size(); i++)
 	{
 		// 探す
-		auto it = m_ConstantBuffers.find((*cbInfo)[i].GetName());
+		auto it = m_ConstantBuffers.find((Hashed_String)(*cbInfo)[i].GetName());
 
 		// あるかどうかのチェック
 		if (it != m_ConstantBuffers.end())
@@ -121,7 +132,7 @@ bool ConstantBufferManager::BindConstantBuffer(const std::vector<ConstantBufferI
 			buffers[i] = it->second.get()->GetBuffer();
 		}
 		else {
-			ErrorLog::OutputToConsole(std::string(" 定数バッファ : " + (*cbInfo)[i].GetName() + " が見つかりませんでした").c_str());
+			ErrorLog::OutputToConsole(u8" 定数バッファ : " + (*cbInfo)[i].GetName() + u8" が見つかりませんでした");
 			return false;
 		}
 	}
@@ -149,7 +160,7 @@ bool ConstantBufferManager::BindConstantBuffer(const std::vector<ConstantBufferI
 		break;
 
 	default:
-		ErrorLog::OutputToConsole(("無効なシェーダータイプが選択されています。"));
+		ErrorLog::OutputToConsole(u8"無効なシェーダータイプが選択されています。");
 		break;
 	}
 

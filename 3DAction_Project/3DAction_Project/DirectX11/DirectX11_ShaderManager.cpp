@@ -168,8 +168,8 @@ void LoadShaderBinaryData(
 	std::ifstream file(fullPath, std::ios::binary);
 	if (!file.is_open()) {
 		ErrorLog::OutputToConsole(
-			(std::string("シェーダーバイナリーの読み込みに失敗: ") + 
-				fullPath.string()).c_str());
+			u8"シェーダーバイナリーの読み込みに失敗: " + 
+				fullPath.u8string());
 		return;
 	}
 
@@ -184,8 +184,7 @@ void LoadShaderBinaryData(
 	HRESULT hr = D3DCreateBlob(fileSize, _outBlob.GetAddressOf());
 	if (FAILED(hr)) {
 		ErrorLog::OutputToConsole(
-			(std::string("Blob作成失敗: ")
-				+ fullPath.string()).c_str());
+			u8"Blob作成失敗: "+ fullPath.u8string());
 		return;
 	}
 

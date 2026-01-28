@@ -22,7 +22,7 @@ D3D11_USAGE DirectX11_FormatConverter::ToDXUsage(BufferUsage usage)
         return D3D11_USAGE_DYNAMIC;
         break;
     default:
-        ErrorLog::OutputToConsole("BufferUsageに変換できませんでした");
+        ErrorLog::OutputToConsole(u8"BufferUsageに変換できませんでした");
         return D3D11_USAGE_DEFAULT;
         break;
     }
@@ -43,7 +43,7 @@ UINT DirectX11_FormatConverter::ToDXCPUAccess(CPUAccess access)
         return D3D11_CPU_ACCESS_WRITE;
         break;
     default:
-        ErrorLog::OutputToConsole("CPUAccessに変換できませんでした");
+        ErrorLog::OutputToConsole(u8"CPUAccessに変換できませんでした");
         return static_cast<D3D11_CPU_ACCESS_FLAG>(0);
         break;
     }
@@ -79,7 +79,7 @@ DXGI_FORMAT DirectX11_FormatConverter::ToDXFormat(Format format)
         return DXGI_FORMAT_D24_UNORM_S8_UINT;
         break;
     default:
-        ErrorLog::OutputToConsole("Formatに変換できませんでした");
+        ErrorLog::OutputToConsole(u8"Formatに変換できませんでした");
         return DXGI_FORMAT_UNKNOWN;
         break;
     }
@@ -115,7 +115,7 @@ Format DirectX11_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
         return Format::Format_D24_UNorm_S8_UInt;
         break;
     default:
-        ErrorLog::OutputToConsole("Formatに変換できませんでした");
+        ErrorLog::OutputToConsole(u8"Formatに変換できませんでした");
         return Format::Format_Unknown;
         break;
     }
@@ -136,7 +136,7 @@ D3D11_FILTER DirectX11_FormatConverter::ConvertFilter(SamplerFilter filter)
         return D3D11_FILTER_ANISOTROPIC;
         break;
     default: 
-        ErrorLog::OutputToConsole("D3D11_FILTER に変換できませんでした");
+        ErrorLog::OutputToConsole(u8"D3D11_FILTER に変換できませんでした");
         return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         break;
     }
@@ -159,7 +159,7 @@ D3D11_TEXTURE_ADDRESS_MODE DirectX11_FormatConverter::ConvertAddressMode(Sampler
         return D3D11_TEXTURE_ADDRESS_BORDER;
         break;
     default: 
-        ErrorLog::OutputToConsole("D3D11_TEXTURE_ADDRESS_MODE に変換できませんでした");
+        ErrorLog::OutputToConsole(u8"D3D11_TEXTURE_ADDRESS_MODE に変換できませんでした");
         return D3D11_TEXTURE_ADDRESS_WRAP;
         break;
     }
@@ -194,7 +194,7 @@ D3D11_COMPARISON_FUNC DirectX11_FormatConverter::ConvertComparisonFunc(SamplerCo
         return D3D11_COMPARISON_ALWAYS;
         break;
     default: 
-        ErrorLog::OutputToConsole("D3D11_COMPARISON_FUNC に変換できませんでした");
+        ErrorLog::OutputToConsole(u8"D3D11_COMPARISON_FUNC に変換できませんでした");
         return D3D11_COMPARISON_ALWAYS;
         break;
     }

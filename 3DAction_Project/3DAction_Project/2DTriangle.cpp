@@ -17,7 +17,7 @@ void Triangle2D::DerivationInit()
 {
 	// 頂点バッファ作成
 	m_Draw->CreateVertexBuffer(
-		m_VsBufferName.c_str(),
+		m_VsBufferName,
 		m_Vertices,
 		sizeof(Vertex),
 		sizeof(m_Vertices) / sizeof(Vertex),
@@ -31,7 +31,7 @@ void Triangle2D::DerivationInit()
 
 	// ワールド作成
 	m_Draw->CreateConstantBuffer(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&world,
 		sizeof(world),
 		BufferUsage::Dynamic,
@@ -78,10 +78,10 @@ void Triangle2D::Draw()
 	Matrix4x4 world = m_SRT.world.toGPU();
 
 	// 定数バッファ更新
-	m_Draw->UpdateShaderConstants(m_TransformCBName.c_str(), &world, sizeof(world));
+	m_Draw->UpdateShaderConstants(m_TransformCBName, &world, sizeof(world));
 
 	// 描画
-	m_Draw->PrimitiveDraw(m_VsName.c_str(), m_PsName.c_str(), m_VsBufferName.c_str());
+	m_Draw->PrimitiveDraw(m_VsName, m_PsName, m_VsBufferName);
 }
 
 

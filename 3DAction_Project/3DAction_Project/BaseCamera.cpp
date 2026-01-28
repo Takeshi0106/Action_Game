@@ -36,14 +36,14 @@ bool BaseCamera::Init(BaseDrawManager* drawManager)
 		BufferUsage::Dynamic,
 		CPUAccess::Write))
 	{
-		ErrorLog::OutputToConsole("カメラ定数バッファの作成に失敗");
+		ErrorLog::OutputToConsole(u8"カメラ定数バッファの作成に失敗");
 		return false;
 	}
 
 	// 派生クラス初期化
 	if (!DerivativInit())
 	{
-		ErrorLog::OutputToConsole("派生クラスの初期化に失敗");
+		ErrorLog::OutputToConsole(u8"派生クラスの初期化に失敗");
 		return false;
 	}
 

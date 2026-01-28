@@ -44,7 +44,7 @@ bool TitleSceneState::DerivativeInit()
 	world = world.toGPU();
 
 	m_Modules->drawManager->CreateConstantBuffer(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&world,
 		sizeof(world),
 		BufferUsage::Dynamic,
@@ -52,24 +52,24 @@ bool TitleSceneState::DerivativeInit()
 
 	// UI描画モジュール初期化
 	m_UIDrawModule.Init(*m_Modules->drawManager,
-		m_TitleLogoTextureName.c_str());
+		m_TitleLogoTextureName);
 
 	// モジュール初期化
 	m_ModelModule.Init(*m_Modules->drawManager,
-		m_FrogModelName.c_str(),
-		"Character/Nomal");
+		m_FrogModelName,
+		u8"Character/Nomal");
 
 	m_ModelModule.CreateModel(
-		m_Female.c_str(),
-		"Character/Flamingo");
+		m_Female,
+		u8"Character/Flamingo");
 
 	m_ModelModule.CreateModel(
-		m_Terrain.c_str(),
-		"Terrain");
+		m_Terrain,
+		u8"Terrain");
 
 	m_ModelModule.CreateModel(
-		m_PlanetGroundModel.c_str(),
-		"Planet/Planet6");
+		m_PlanetGroundModel,
+		u8"Planet/Planet6");
 
 	// 移動惑星初期化
 	m_MovePlanet.SetMoveOriginPos(Vector3(0.0f, -37.5f, 7.0f));
@@ -80,8 +80,8 @@ bool TitleSceneState::DerivativeInit()
 
 	m_MovePlanet.Init(
 		m_Modules->drawManager,
-		"Planet_10",
-		"Planet/Planet10");
+		u8"Planet_10",
+		u8"Planet/Planet10");
 
 	// スペースシップ初期化
 	m_SpaceShip.SetMoveOriginPos(Vector3(0.0f, 0.0f, 0.0f));
@@ -92,8 +92,8 @@ bool TitleSceneState::DerivativeInit()
 
 	m_SpaceShip.Init(
 		m_Modules->drawManager,
-		"Spaceship_BarbaraTheBee",
-		"Spaceship");
+		u8"Spaceship_BarbaraTheBee",
+		u8"Spaceship");
 
 	return true;
 }
@@ -148,48 +148,48 @@ void TitleSceneState::Draw()
 
 	// 定数バッファ更新
 	m_Modules->drawManager->UpdateShaderConstants(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&m_FrogMat,
 		sizeof(m_FrogMat));
 
 	// モデル描画
-	m_ModelModule.Draw(m_FrogModelName.c_str(), 
-		m_VSName.c_str(), 
-		m_PSTextureModelName.c_str());
+	m_ModelModule.Draw(m_FrogModelName, 
+		m_VSName, 
+		m_PSTextureModelName);
 	
 	// 定数バッファ更新
 	m_Modules->drawManager->UpdateShaderConstants(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&m_FemaleMat,
 		sizeof(m_FemaleMat));
 
 	// モデル描画
-	m_ModelModule.Draw(m_Female.c_str(),
-		m_VSName.c_str(),
-		m_PSTextureModelName.c_str());
+	m_ModelModule.Draw(m_Female,
+		m_VSName,
+		m_PSTextureModelName);
 
 	// 定数バッファ更新
 	m_Modules->drawManager->UpdateShaderConstants(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&m_TerrainMat,
 		sizeof(m_TerrainMat));
 
 	// モデル描画
-	m_ModelModule.Draw(m_Terrain.c_str(),
-		m_VSName.c_str(),
-		m_PSTextureModelName.c_str());
+	m_ModelModule.Draw(m_Terrain,
+		m_VSName,
+		m_PSTextureModelName);
 
 	// 定数バッファ更新
 	m_Modules->drawManager->UpdateShaderConstants(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&m_PlanetGroundMat,
 		sizeof(m_PlanetGroundMat));
 
 	// モデル描画
 	m_ModelModule.Draw(
-		m_PlanetGroundModel.c_str(),
-		m_VSName.c_str(),
-		m_PSTextureModelName.c_str());
+		m_PlanetGroundModel,
+		m_VSName,
+		m_PSTextureModelName);
 
 	// 移動惑星描画
 	m_MovePlanet.Draw();
@@ -203,12 +203,12 @@ void TitleSceneState::Draw()
 
 	// 定数バッファ更新
 	m_Modules->drawManager->UpdateShaderConstants(
-		m_TransformCBName.c_str(),
+		m_TransformCBName,
 		&m_TitleLogoMat,
 		sizeof(m_TitleLogoMat));
 	
 	// UI描画
-	m_UIDrawModule.Draw(m_TitleLogoTextureName.c_str());
+	m_UIDrawModule.Draw(m_TitleLogoTextureName);
 }
 
 
