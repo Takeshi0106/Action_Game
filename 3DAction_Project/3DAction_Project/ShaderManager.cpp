@@ -453,7 +453,7 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device)
 		if (!ShaderCompilerUtils::LoadCompiledShader(compailPath, blob.GetAddressOf()))
 		{
 			// 失敗したらコンパイル処理
-			if (!JudgeCompileShader(std::filesystem::u8path(kCSOFilePath.GetU8String()), 
+			if (!JudgeCompileShader(std::filesystem::path(kCSOFilePath.GetU8String()), 
 				hlslPath, 
 				blob)) {
 				ErrorLog::OutputToMessageBox(hlslPath.u8string() + u8" : コンパイルに失敗しました");

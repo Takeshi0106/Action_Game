@@ -128,7 +128,7 @@ namespace LoadUtils {
             }
 
             // 先頭の空白を削除 
-            size_t firstNonSpace = line.GetFindFirstNotof(u8" ");
+            size_t firstNonSpace = line.GetFindFirstNotOf(u8" ");
             if (firstNonSpace != std::string_view::npos)
             {
                 line.SetRemovePrefix(firstNonSpace);
@@ -202,8 +202,10 @@ namespace LoadUtils {
             return false;
         }
 
-        size_t numberStart = BlockNumberPos + kBlockNumber.GetSize(); // ブロック数の開始位置を求める
-        size_t numberEnd = data.GetFindFirstNotof(u8"\r\n ", numberStart); // ブロック数の最後位置を求める
+        // ブロック数の開始位置を求める
+        size_t numberStart = BlockNumberPos + kBlockNumber.GetSize();
+        // ブロック数の最後位置を求める
+        size_t numberEnd = data.GetFindFirstOf(u8"\n\n", numberStart);
         if (numberEnd == std::string::npos) {
             ErrorLog::OutputToConsole(u8"ブロック数の後に改行、空白などがありません");
             return false;
@@ -212,9 +214,8 @@ namespace LoadUtils {
         // 開始と終わりまでの文字列を代入
         String numberStr(data.GetData() + numberStart, numberEnd - numberStart);
         // ブロック数を取得
-        int blockNumber = std::stoi(std::string(
-            numberStr.GetU8String().begin(), 
-            numberStr.GetU8String().end()));
+        int blockNumber = std::stoi(
+             reinterpret_cast<const char*>(numberStr.GetU8Char()));
 
         blocks.resize(blockNumber); // 配列をリサイズする
 

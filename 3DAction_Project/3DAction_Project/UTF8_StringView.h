@@ -66,14 +66,22 @@ public:
     constexpr const char8_t* GetData() const noexcept { return m_View.data(); }
     constexpr size_t GetSize() const noexcept { return m_View.size(); }
     constexpr bool IsEmpty() const noexcept { return m_View.empty(); }
+	// 部分文字列検索 引数の文字列と一致する最初の位置を返す
     constexpr size_t GetFind(const StringView& substr, size_t pos = 0) const noexcept
     {
         return m_View.find(substr.m_View, pos);
 	}
-    constexpr size_t GetFindFirstNotof(const StringView& charSet, size_t pos = 0) const noexcept
+	// 指定した文字集合に含まれる文字のうち、最初に現れる位置を返す
+    constexpr size_t GetFindFirstOf(const StringView& charSet, size_t pos = 0) const noexcept
+    {
+        return m_View.find_first_of(charSet.m_View, pos);
+	}
+	// 指定した文字集合に含まれない文字のうち、最初に現れる位置を返す
+    constexpr size_t GetFindFirstNotOf(const StringView& charSet, size_t pos = 0) const noexcept
     {
         return m_View.find_first_not_of(charSet.m_View, pos);
     }
+	// 部分文字列取得 指定した位置から指定した数の部分文字列を返す
     constexpr StringView SubStr(size_t pos = 0, size_t count = std::u8string_view::npos) const noexcept
     {
         return StringView(m_View.substr(pos, count).data(), m_View.substr(pos, count).size());
