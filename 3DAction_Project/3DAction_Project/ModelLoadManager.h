@@ -41,7 +41,7 @@ public:
 	// -------------------------------
 	// モデルハンドルを追加
 	// -------------------------------
-	Handle AddModelHandle(const String& _name, const ModelHandle& _modelHandle);
+	Handle AddModelHandle(const Hashed_String& _name, const ModelHandle& _modelHandle);
 
 
 	// -------------------------------
@@ -53,16 +53,16 @@ public:
 	// -------------------------------
 	// モデルが存在するか確認
 	// -------------------------------
-	bool CheckModelHandle(const String& _name) {
-		return m_ModelLoadManager.Exists((Hashed_String)_name);
+	bool CheckModelHandle(const Hashed_String& _name) {
+		return m_ModelLoadManager.Exists(_name);
 	}
 
 
 	// -------------------------------
 	// モデルハンドルを取得
 	// -------------------------------
-	const Handle GetModelHandle(const String& _name) {
-		const Handle handle = m_ModelLoadManager.GetHandle((Hashed_String)_name);
+	const Handle GetModelHandle(const Hashed_String& _name) {
+		const Handle handle = m_ModelLoadManager.GetHandle(_name);
 		return handle;
 	}
 };

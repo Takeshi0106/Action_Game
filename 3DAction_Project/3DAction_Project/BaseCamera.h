@@ -57,7 +57,7 @@ protected:
 	// 描画マネージャー
 	BaseDrawManager* m_DrawManager = nullptr;
 	// 更新するカメラ情報名
-	const String kCameraInfoBufferName = u8"CameraInfo";
+	const Hashed_String kCameraInfoBufferName = Hashed_String(u8"CameraInfo");
 
 	// 派生初期化
 	virtual bool DerivativInit() { return true; }

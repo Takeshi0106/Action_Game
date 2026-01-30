@@ -80,7 +80,7 @@ bool TitleSceneState::DerivativeInit()
 
 	m_MovePlanet.Init(
 		m_Modules->drawManager,
-		u8"Planet_10",
+		Hashed_String(u8"Planet_10"),
 		u8"Planet/Planet10");
 
 	// スペースシップ初期化
@@ -92,7 +92,7 @@ bool TitleSceneState::DerivativeInit()
 
 	m_SpaceShip.Init(
 		m_Modules->drawManager,
-		u8"Spaceship_BarbaraTheBee",
+		Hashed_String(u8"Spaceship_BarbaraTheBee"),
 		u8"Spaceship");
 
 	return true;

@@ -27,8 +27,7 @@
 #include "DepthStencilSetting.h" // 深度ステンシル設定
 // 基本ヘッダー
 #include <cstdint>
-// 文字列ヘッダー
-#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ==============================
@@ -50,31 +49,31 @@ public:
 	virtual void BegingDraw() = 0;
 	virtual void EndDraw() = 0;
 	virtual void ModelDraw(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _modelName) = 0;
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _modelName) = 0;
 	
 	// インデックス描画
 	virtual void IndexedDraw(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _vsBufferName,
-		const String& _indexBufferName,
-		const String& _textureNam = u8"",
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _vsBufferName,
+		const Hashed_String& _indexBufferName,
+		const Hashed_String& _textureNam = Hashed_String(u8""),
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
 	// プリミティブ描画
 	virtual void PrimitiveDraw(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _vsBufferName,
-		const String& _textureNam = u8"",
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _vsBufferName,
+		const Hashed_String& _textureNam = Hashed_String(u8""),
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) = 0;
 
 	/* ------------ リソース作成 ------------ */
 	// 頂点バッファ作成
 	virtual bool CreateVertexBuffer(
-		const String& modelName, 
+		const Hashed_String& modelName, 
 		const void* data, 
 		size_t size,
 		uint32_t vertexNumber,
@@ -85,13 +84,13 @@ public:
 
 	// インデックスバッファ作成
 	virtual bool CreateIndexBuffer(
-		const String& modelName,
+		const Hashed_String& modelName,
 		const uint32_t* indexData,
 		uint32_t indexNumber) = 0;
 
 	// 定数バッファ作成
 	virtual bool CreateConstantBuffer(
-		const String& constantName,
+		const Hashed_String& constantName,
 		const void* data,
 		size_t size,
 		BufferUsage usage = BufferUsage::Dynamic,
@@ -99,7 +98,7 @@ public:
 
 	// テクスチャ作成
 	virtual bool CreateTexture(
-		const String& name,
+		const Hashed_String& name,
 		unsigned int width,
 		unsigned int height,
 		Format format,
@@ -108,29 +107,30 @@ public:
 		CPUAccess cpu = CPUAccess::None) = 0;
 
 	// テクスチャのロード
-	virtual bool LoadTexture(const String& textureName) = 0;
+	virtual bool LoadTexture(const Hashed_String& textureName) = 0;
 	// モデルのロード
-	virtual bool LoadModel(const String& modelName, const String& modelFolderName = u8"") = 0;
+	virtual bool LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") = 0;
 
 	// サンプラー作成
 	virtual bool CreateSampler(const SamplerDesc& _desc) = 0;
 
 	// View作成
-	virtual bool CreateSRV(const String& name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
-	virtual bool CreateRTV(const String& name, uint32_t mipSlice) = 0;
-	virtual bool CreateDSV(const String& name, Format format) = 0;
+	virtual bool CreateSRV(const Hashed_String& name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) = 0;
+	virtual bool CreateRTV(const Hashed_String& name, uint32_t mipSlice) = 0;
+	virtual bool CreateDSV(const Hashed_String& name, Format format) = 0;
 
 	//virtual bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) = 0;
 
 
 	/* ------------ バッファ更新 ------------ */
 	// 頂点バッファ更新
-	virtual void UpdateVertexBuffer(const String& vertexName, const void* data, int size) = 0;
+	virtual void UpdateVertexBuffer(const Hashed_String& vertexName, const void* data, int size) = 0;
 	// 定数バッファ更新
-	virtual void UpdateShaderConstants(const String& constantName, const void* data, const int size) = 0;
+	virtual void UpdateShaderConstants(const Hashed_String& constantName, const void* data, const int size) = 0;
 
 	// バインドレンダーターゲット
-	virtual void BindRenderTarget(const String& rtvName, const String& dsvName = nullptr) = 0;
+	virtual void BindRenderTarget(const Hashed_String& rtvName = Hashed_String(u8""), 
+		const Hashed_String& dsvName = Hashed_String(u8"")) = 0;
 
 
 	/* ------------ 描画設定 ------------ */

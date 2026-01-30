@@ -11,8 +11,6 @@
 // ================================
 // テクスチャデータヘッダー
 #include "TextureData.h"
-// 文字列ヘッダー
-#include <string>
 // スマートポインターヘッダー
 #include <memory> // スマートポインター
 // 配列のヘッダー
@@ -20,7 +18,6 @@
 // バッファ設定
 #include "GraphicsEnums.h"
 // 文字列ヘッダー
-#include "UTF8_String.h"
 #include "Hashed_String.h"
 
 
@@ -54,12 +51,12 @@ public:
 
 	// スワップチェインからテクスチャを作成
     bool CreateTextureFromSwapChain(
-        const String& name,
+        const Hashed_String& name,
         IDXGISwapChain* swapChain);
 
     // テクスチャを作成
     bool CreateTexture(
-        const String& name,
+        const Hashed_String& name,
         ID3D11Device* device,
         unsigned int width,
         unsigned int height,
@@ -70,9 +67,9 @@ public:
         TextureInitData* initData = nullptr);
 
     // テクスチャを探して、戻り値で返す
-    Texture2DData* GetFindTexture2DData(const String& name);
+    Texture2DData* GetFindTexture2DData(const Hashed_String& name);
 	// テクスチャが存在するか
-	bool IsExistTexture(const String& name);
+	bool IsExistTexture(const Hashed_String& name);
 
     // 後処理
     void ReleaseAllTexture();

@@ -25,7 +25,7 @@ private:
 	// 光の方向
 	Vector3 m_Direction;
 	// 定数文字列
-	const String m_CBName = u8"SunLight";
+	const Hashed_String m_CBName = Hashed_String(u8"SunLight");
 
 	// 派生初期化
 	bool DerivativeInit();

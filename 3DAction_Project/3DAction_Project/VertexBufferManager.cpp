@@ -27,7 +27,7 @@ inline D3D11_PRIMITIVE_TOPOLOGY ToDXPrimitive(PrimitiveType type);
 // =======================================
 // 頂点バッファ作成
 bool VertexBufferManager::CreateVertexBuffer(
-    const String& name,
+    const Hashed_String& name,
     ID3D11Device* device,
     const void* vertices,
     int vertexCount,
@@ -39,7 +39,8 @@ bool VertexBufferManager::CreateVertexBuffer(
 {
     // 既に作成済み
     if (Exists(name)) { 
-        WarningLog::OutputToConsole(name + u8" 頂点バッファが既に作成されていました");
+        WarningLog::OutputToConsole(name.GetString() + 
+            u8" 頂点バッファが既に作成されていました");
         return true; 
     }
 
@@ -61,19 +62,19 @@ bool VertexBufferManager::CreateVertexBuffer(
     }
 
     // 定数バッファデータを配列に代入
-    m_VertexBuffers[(Hashed_String)name] = std::move(vbd);
+    m_VertexBuffers[name] = std::move(vbd);
 
     // 作製した頂点バッファの名前を保存
-    m_Logger.Log(name);
+    m_Logger.Log(name.GetString());
 
 #if defined(DEBUG) || defined(_DEBUG)
-    DebugLog::OutputToConsole(u8"頂点バッファ " + name + u8" を作成しました");
+    DebugLog::OutputToConsole(u8"頂点バッファ " + name.GetString() + u8" を作成しました");
 
 	// 名前を設定
     m_VertexBuffers[(Hashed_String)name]->GetVertexBuffer()->SetPrivateData(
         WKPDID_D3DDebugObjectName,
-        UINT(name.GetBinaryView().GetSize()),
-        name.GetBinaryView().GetData());
+        UINT(name.GetString().GetBinaryView().GetSize()),
+        name.GetString().GetBinaryView().GetData());
 #endif
 
     return true;
@@ -84,13 +85,13 @@ bool VertexBufferManager::CreateVertexBuffer(
 // 頂点バッファ更新
 // =======================================
 bool VertexBufferManager::UpdateVertexBuffer(
-    const String& name, 
+    const Hashed_String& name, 
     ID3D11DeviceContext* context,
     const void* data, 
     int size)
 {
     // 探す
-    auto it = m_VertexBuffers.find((Hashed_String)name);
+    auto it = m_VertexBuffers.find(name);
 
     if (it != m_VertexBuffers.end())
     {
@@ -99,7 +100,7 @@ bool VertexBufferManager::UpdateVertexBuffer(
         return true;
     }
 
-    ErrorLog::OutputToConsole(u8"頂点バッファ" + name + u8" が見つかりませんでした");
+    ErrorLog::OutputToConsole(u8"頂点バッファ" + name.GetString() + u8" が見つかりませんでした");
     return false;
 }
 
@@ -108,11 +109,11 @@ bool VertexBufferManager::UpdateVertexBuffer(
 // 頂点バッファをバインド
 // =======================================
 int VertexBufferManager::BindVertexBuffer(
-    const String& name, 
+    const Hashed_String& name, 
     ID3D11DeviceContext* context) const
 {
     // 探す
-    auto it = m_VertexBuffers.find((Hashed_String)name);
+    auto it = m_VertexBuffers.find(name);
 
     if (it != m_VertexBuffers.end())
     {
@@ -139,9 +140,9 @@ int VertexBufferManager::BindVertexBuffer(
 // ========================================
 // 頂点バッファがあるかのチェック
 // ========================================
-bool VertexBufferManager::Exists(const String& name) const
+bool VertexBufferManager::Exists(const Hashed_String& name) const
 {
-    return m_VertexBuffers.find((Hashed_String)name) != m_VertexBuffers.end();
+    return m_VertexBuffers.find(name) != m_VertexBuffers.end();
 }
 
 

@@ -10,7 +10,7 @@
 // ヘッダー
 // ===================================
 #include "ColliderObject.h"
-#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ===================================
@@ -23,11 +23,11 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// モデル名
-	const String m_ModelName = u8"Mech_FinnTheFrog";
+	const Hashed_String m_ModelName = Hashed_String(u8"Mech_FinnTheFrog");
 
 	// シェーダー名
-	const String m_VSName = u8"VS_Object";
-	const String m_PSName = u8"PS_TextureModel";
+	const Hashed_String m_VSName = Hashed_String(u8"VS_Object");
+	const Hashed_String m_PSName = Hashed_String(u8"PS_TextureModel");
 
 	// --------------------------------
 	// 非仮想関数

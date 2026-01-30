@@ -55,7 +55,7 @@ public:
 	// 今はモデルをロードしてモデルマネージャーに入れる関数
 	// modelFile はモデルパスの下にファイルがあった場合、ファイル名を入れる
 	bool LoadAndRegisterModelResources(
-		const String& modelName,
+		const Hashed_String& modelName,
 		BaseDrawManager& drawManager,
 		ModelManager& modelManager,
 		const String& modelFile = u8"");

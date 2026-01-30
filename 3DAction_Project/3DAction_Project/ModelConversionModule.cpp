@@ -46,7 +46,7 @@ bool ModelConversionModule::ModelConversion()
 // モデルを読み込んで、各マネージャーに登録する
 // =====================================
 bool ModelConversionModule::LoadAndRegisterModelResources(
-	const String& modelName, 
+	const Hashed_String& modelName, 
 	BaseDrawManager& drawManager,ModelManager& modelManager,
 	const String& modelFile)
 {
@@ -59,7 +59,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 	ModelData modelData;
 
 	// モデルを読み込む
-	if (!ModelLoad(modelName,
+	if (!ModelLoad(modelName.GetString(),
 		aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded,
 		modelData,
 		modelFile)) {
@@ -73,7 +73,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 		// メッシュデータ取得
 		MeshData& mesh = modelData.meshDataArray[i];
 		// 登録名
-		String keyName = modelName + String::to_u8string(i);
+		Hashed_String keyName = Hashed_String(modelName.GetString() + String::to_u8string(i));
 
 		// 頂点バッファ作成
 		if (!drawManager.CreateVertexBuffer(
@@ -106,7 +106,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 		MeshMaterialData materialData = modelData.materialDataArray[i];
 
 		// テクスチャパスがあるか確認
-		if (!materialData.textureName.GetU8String().empty())
+		if (!materialData.textureName.GetString().GetU8String().empty())
 		{
 			// テクスチャロード
 			if (!drawManager.LoadTexture(materialData.textureName)) {
@@ -116,7 +116,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 
 			// パスではなくファイル名に変換
 			modelData.materialDataArray[i].textureName = 
-				std::filesystem::path(materialData.textureName.GetU8String()).filename().u8string();
+				Hashed_String(std::filesystem::path(materialData.textureName.GetString().GetU8String()).filename().u8string());
 
 			DebugLog::OutputToConsole(u8" テクスチャのロードに成功しました : ");
 		}
@@ -276,7 +276,7 @@ bool ModelConversionModule::ModelLoad(
 		materialData.specular = Color(aiSpecular.r, aiSpecular.g, aiSpecular.b, aiSpecular.a);
 
 		// テクスチャ名をセット
-		materialData.textureName = fullPath.u8string();
+		materialData.textureName = Hashed_String(fullPath.u8string());
 
 		// マテリアルデータをモデルデータに設定
 		modelData.materialDataArray[i] = materialData;

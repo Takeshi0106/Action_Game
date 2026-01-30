@@ -258,7 +258,7 @@ const TextureHandle DirectX11_DrawCreate::LoadTexture(
 // モデルのロード
 // =======================================
 const Handle DirectX11_DrawCreate::LoadModel(
-	const String& _modelName, 
+	const Hashed_String& _modelName, 
 	const String& _modelFolderName)
 {
 	// すでにモデルが存在する場合はハンドルを返す
@@ -267,7 +267,7 @@ const Handle DirectX11_DrawCreate::LoadModel(
 	}
 
 	// モデルデータを取得
-	ModelData modelData = m_ModelLoad.ModelLoad(_modelName, _modelFolderName);
+	ModelData modelData = m_ModelLoad.ModelLoad(_modelName.GetString(), _modelFolderName);
 
 	// テクスチャパス取得
 	std::filesystem::path modelPath = m_ModelLoad.GetModelLoadPath().GetU8String();
@@ -294,15 +294,15 @@ const Handle DirectX11_DrawCreate::LoadModel(
 	for (int i = 0; i < modelData.materialDataArray.size(); i++)
 	{
 		// マテリアル名作成
-		String name = _modelName.GetU8String() + u8"_Material_" + String::to_u8string(i);
+		String name = _modelName.GetString().GetU8String() + u8"_Material_" + String::to_u8string(i);
 
 		// メッシュマテリアル情報取得
 		MeshMaterialData& materialData = modelData.materialDataArray[i];
 
 		TextureHandle textureHandle = {};
-		std::filesystem::path texturePath = modelPath / materialData.textureName.GetU8String();
+		std::filesystem::path texturePath = modelPath / materialData.textureName.GetString().GetU8String();
 
-		if (!materialData.textureName.GetU8String().empty())
+		if (!materialData.textureName.GetString().GetU8String().empty())
 		{
 			// テクスチャロード
 			textureHandle = m_TextureLoad.LoadFaileTexture(
@@ -337,7 +337,7 @@ const Handle DirectX11_DrawCreate::LoadModel(
 		MeshData& mesh = modelData.meshDataArray[i];
 
 		// 登録名作成
-		String meshName = _modelName.GetU8String() + String::to_u8string(i);
+		String meshName = _modelName.GetString().GetU8String() + String::to_u8string(i);
 
 		// 頂点バッファ作成
 		Handle vbHandle = CreateVertexBuffer(

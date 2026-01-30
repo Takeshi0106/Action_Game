@@ -23,11 +23,11 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// モデル名
-	String m_ModelName = u8"Mech_FinnTheFrog";
+	Hashed_String m_ModelName = Hashed_String(u8"Mech_FinnTheFrog");
 	
 	// シェーダー名
-	String m_VSName = u8"VS_Object";
-	String m_PSName = u8"PS_TextureModel";
+	Hashed_String m_VSName = Hashed_String(u8"VS_Object");
+	Hashed_String m_PSName = Hashed_String(u8"PS_TextureModel");
 
 
 	//--------------------------------

@@ -15,7 +15,7 @@
 // 頂点構造体
 #include "Vertex.h"
 // 文字列ヘッダー
-#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ================================
@@ -30,14 +30,14 @@ private:
 	static Vertex m_Vertices[4];
 
 	// 頂点バッファ名
-	const String m_VSBufferName = u8"UI_VSBuffer";
+	const Hashed_String m_VSBufferName = Hashed_String(u8"UI_VSBuffer");
 
 	// 正射影行列バッファ名
-	const String m_CSBufferName = u8"UIOrthoMatrix";
+	const Hashed_String m_CSBufferName = Hashed_String(u8"UIOrthoMatrix");
 
 	// シェーダー名
-	const String m_VSShaderName = u8"VS_UI";
-	const String m_PSShaderName = u8"PS_Texture";
+	const Hashed_String m_VSShaderName = Hashed_String(u8"VS_UI");
+	const Hashed_String m_PSShaderName = Hashed_String(u8"PS_Texture");
 
 public:
 	// コンストラクタ・デストラクタ
@@ -45,12 +45,12 @@ public:
 	~UIDrawModule() = default;
 	
 	// 初期化
-	void Init(BaseDrawManager& _draw, const String& _textureName);
+	void Init(BaseDrawManager& _draw, const Hashed_String& _textureName);
 
 	// テクスチャ読み込み
-	bool LoadTexture(const String& _textureName);
+	bool LoadTexture(const Hashed_String& _textureName);
 
 	// 描画
-	void Draw(const String& _textureName);
+	void Draw(const Hashed_String& _textureName);
 };
 

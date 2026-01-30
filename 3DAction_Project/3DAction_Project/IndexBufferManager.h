@@ -49,7 +49,7 @@ public:
 	// バッファ作成
 	// --------------------------------
 	bool CreateIndexBuffer(
-		const String& name,
+		const Hashed_String& name,
 		ID3D11Device* device,
 		const uint32_t* indexData,
 		uint32_t indexNumber);
@@ -57,12 +57,12 @@ public:
 	// --------------------------------
 	// インデックスバッファを探して、戻り値で返す
 	// --------------------------------
-	uint32_t BindIndexData(const String& name, ID3D11DeviceContext* context) const;
+	uint32_t BindIndexData(const Hashed_String& name, ID3D11DeviceContext* context) const;
 
 	// --------------------------------
 	// インデックスバッファがあるかのチェック
 	// --------------------------------
-	bool Exists(const String& name) const;
+	bool Exists(const Hashed_String& name) const;
 
 	// --------------------------------
 	// 後処理

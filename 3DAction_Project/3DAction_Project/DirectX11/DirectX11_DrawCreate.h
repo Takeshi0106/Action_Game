@@ -172,5 +172,5 @@ public:
 	// テクスチャのロード
 	const TextureHandle LoadTexture(const String& textureName, const int16_t _mipLevels = -1, const String& textureFolderName = u8"") override;
 	// モデルのロード
-	const Handle LoadModel(const String& modelName, const String& modelFolderName = u8"") override;
+	const Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") override;
 };

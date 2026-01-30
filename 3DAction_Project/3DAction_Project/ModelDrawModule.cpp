@@ -12,7 +12,7 @@
 // ===================================
 void ModelDrawModule::Init(
 	BaseDrawManager& _draw, 
-	const String& _modelName,
+	const Hashed_String& _modelName,
 	const String& _filyName)
 {
 	// 描画マネージャー保存
@@ -25,9 +25,9 @@ void ModelDrawModule::Init(
 // 描画
 // ====================================
 void ModelDrawModule::Draw(
-	const String& _modelName,
-	const String& _vsName,
-	const String& _psName)
+	const Hashed_String& _modelName,
+	const Hashed_String& _vsName,
+	const Hashed_String& _psName)
 {
 	m_Draw->ModelDraw(
 		_vsName,
@@ -49,7 +49,7 @@ void ModelDrawModule::Uninit()
 // モデル名セッター
 // ===================================
 void ModelDrawModule::CreateModel(
-	const String& _modelName,
+	const Hashed_String& _modelName,
 	const String& _fileName)
 {
 	// モデルのロード

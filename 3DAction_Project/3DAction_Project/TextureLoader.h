@@ -14,6 +14,7 @@
 #include "ResourceViewManager.h"
 // 文字列
 #include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ============================
@@ -37,6 +38,6 @@ public:
     ~TextureLoader() = default;
 
     // 外部ファイルの画像ファイルをロード
-    bool ImageFileLoader(const String& fileName, ID3D11Device* device);
+    bool ImageFileLoader(const Hashed_String& fileName, ID3D11Device* device);
 };
 

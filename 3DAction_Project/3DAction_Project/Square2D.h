@@ -15,13 +15,13 @@ class Square2D : public BaseObject
 {
 private:
 	// 使用するシェーダーの名前
-	const String m_VSName = u8"VS_Object";
-	const String m_PSName = u8"PS_Texture";
+	const Hashed_String m_VSName = Hashed_String(u8"VS_Object");
+	const Hashed_String m_PSName = Hashed_String(u8"PS_Texture");
 	// 頂点バッファ名
-	const String m_VsBufferName = u8"Square2D";
+	const Hashed_String m_VsBufferName = Hashed_String(u8"Square2D");
 
 	// 使用する画像名
-	const String m_TextureName = u8"pipo-halloweenchara2016_02.png";
+	const Hashed_String m_TextureName = Hashed_String(u8"pipo-halloweenchara2016_02.png");
 
 	// 頂点情報
 	const Vertex m_Vertices[4] =

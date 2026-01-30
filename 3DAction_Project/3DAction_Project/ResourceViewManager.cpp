@@ -17,19 +17,17 @@
 // =============================
 // 作成
 bool ResourceViewManager::CreateSRV(
-	const String& name,
+	const Hashed_String& name,
 	ID3D11Device* device,
 	ID3D11Texture2D* resource,
 	Format format,
 	UINT mostDetailedMip,
 	UINT mipLevels)
 {
-	Hashed_String nameHash{ name };
-
 	// 同じ名前のものが存在するか確認
-	if (m_SRVs.find(nameHash) != m_SRVs.end())
+	if (m_SRVs.find(name) != m_SRVs.end())
 	{
-		ErrorLog::OutputToConsole(u8"同じ名前のSRVが存在します: " + name);
+		ErrorLog::OutputToConsole(u8"同じ名前のSRVが存在します: " + name.GetString());
 		return false;
 	}
 
@@ -44,29 +42,27 @@ bool ResourceViewManager::CreateSRV(
 		mostDetailedMip,
 		mipLevels))
 	{
-		ErrorLog::OutputToConsole(u8"SRV の作成失敗: " + name);
+		ErrorLog::OutputToConsole(u8"SRV の作成失敗: " + name.GetString());
 		return false;
 	}
 
 	// 配列に代入
-	m_SRVs[nameHash] = std::move(srv);
+	m_SRVs[name] = std::move(srv);
 
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(u8"SRV : " + name);
+	m_Logger.Log(u8"SRV : " + name.GetString());
 
 	return true;
 }
 
 // ゲッター
 bool ResourceViewManager::BindSRV(
-	const String& name, 
+	const Hashed_String& name, 
 	ID3D11DeviceContext* context, 
 	SETSHADERTYPE type)
 {
-	Hashed_String nameHasy{ name };
-
 	// 探す
-	auto it = m_SRVs.find(nameHasy);
+	auto it = m_SRVs.find(name);
 
 	if (it != m_SRVs.end()) {
 		
@@ -95,7 +91,7 @@ bool ResourceViewManager::BindSRV(
 	}
 
 	// ログ出力
-	ErrorLog::OutputToConsole(u8"SRV" + name + u8"が見つかりませんでした");
+	ErrorLog::OutputToConsole(u8"SRV" + name.GetString() + u8"が見つかりませんでした");
 	return false;
 }
 
@@ -104,17 +100,15 @@ bool ResourceViewManager::BindSRV(
 // =============================
 // 作成
 bool ResourceViewManager::CreateRTV(
-	const String& name,
+	const Hashed_String& name,
 	ID3D11Device* device,
 	ID3D11Texture2D* resource,
 	UINT mipSlice)
 {
-	Hashed_String nameHasy{ name };
-
 	// 同じ名前のものが存在するか確認
-	if (m_RTVs.find(nameHasy) != m_RTVs.end())
+	if (m_RTVs.find(name) != m_RTVs.end())
 	{
-		ErrorLog::OutputToConsole(u8"同じ名前のRTVが存在します: " + name);
+		ErrorLog::OutputToConsole(u8"同じ名前のRTVが存在します: " + name.GetString());
 		return false;
 	}
 
@@ -127,25 +121,24 @@ bool ResourceViewManager::CreateRTV(
 		resource,
 		mipSlice))
 	{
-		ErrorLog::OutputToConsole(u8"RTV の作成失敗: " + name);
+		ErrorLog::OutputToConsole(u8"RTV の作成失敗: " + name.GetString());
 		return false;
 	}
 
 	// 配列に代入
-	m_RTVs[nameHasy] = std::move(rtv);
+	m_RTVs[name] = std::move(rtv);
 
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(u8"RTV : " + name);
+	m_Logger.Log(u8"RTV : " + name.GetString());
 
 	return true;
 }
 
 // バインド
-RTVData* ResourceViewManager::GetRTV(const String& name)
+RTVData* ResourceViewManager::GetRTV(
+	const Hashed_String& name)
 {
-	Hashed_String nameHasy{ name };
-
-	auto it = m_RTVs.find(nameHasy);
+	auto it = m_RTVs.find(name);
 
 	if (it != m_RTVs.end()) {
 		return it->second.get();
@@ -159,17 +152,15 @@ RTVData* ResourceViewManager::GetRTV(const String& name)
 // =============================
 // 作成
 bool ResourceViewManager::CreateDSV(
-	const String& name,
+	const Hashed_String& name,
 	ID3D11Device* device,
 	ID3D11Texture2D* resource,
 	Format format)
 {
-	Hashed_String nameHasy{ name };
-
 	// 同じ名前のものが存在するか確認
-	if (m_DSVs.find(nameHasy) != m_DSVs.end())
+	if (m_DSVs.find(name) != m_DSVs.end())
 	{
-		ErrorLog::OutputToConsole(u8"同じ名前のDSVが存在します: " + name);
+		ErrorLog::OutputToConsole(u8"同じ名前のDSVが存在します: " + name.GetString());
 		return false;
 	}
 
@@ -182,25 +173,23 @@ bool ResourceViewManager::CreateDSV(
 		resource,
 		DirectX11_FormatConverter::ToDXFormat(format)))
 	{
-		ErrorLog::OutputToConsole(u8"DSV の作成失敗: " + name);
+		ErrorLog::OutputToConsole(u8"DSV の作成失敗: " + name.GetString());
 		return false;
 	}
 
 	// 配列に代入
-	m_DSVs[nameHasy] = std::move(dsv);
+	m_DSVs[name] = std::move(dsv);
 
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(u8"DSV : " + name);
+	m_Logger.Log(u8"DSV : " + name.GetString());
 
 	return true;
 }
 
 // バインド
-DSVData* ResourceViewManager::GetDSV(const String& name)
+DSVData* ResourceViewManager::GetDSV(const Hashed_String& name)
 {
-	Hashed_String nameHasy { name };
-
-	auto it = m_DSVs.find(nameHasy);
+	auto it = m_DSVs.find(name);
 
 	if (it != m_DSVs.end()) {
 		return it->second.get();

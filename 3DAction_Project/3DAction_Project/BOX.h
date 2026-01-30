@@ -17,7 +17,7 @@
 // AABBコライダーヘッダー
 #include "AABBCollider.h"
 // 文字列ヘッダー
-#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ===================================
@@ -33,19 +33,19 @@ class BOX
 {
 private:
 	// 頂点シェーダー
-	const static String m_VSName;
+	const static Hashed_String m_VSName;
 	// ピクセルシェーダー
-	const static String m_PSName;
+	const static Hashed_String m_PSName;
 
 	// 頂点バッファ名
-	const static String m_VBName;
-	const static String m_IBName;
+	const static Hashed_String m_VBName;
+	const static Hashed_String m_IBName;
 
 	// 定数バッファ名
-	const static String m_TransformCBName;
+	const static Hashed_String m_TransformCBName;
 
 	// マテリアル名
-	const static String m_MaterialName;
+	const static Hashed_String m_MaterialName;
 
 	// 頂点配列
 	const static Vertex m_Vertex[24];

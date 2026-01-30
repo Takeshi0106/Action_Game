@@ -54,7 +54,7 @@ private:
 	// モデルデータ配列
 	std::unordered_map<Hashed_String, ModelManagerData> m_Models;
 	// マテリアル情報
-	String m_MaterialCBName = u8"Material";
+	Hashed_String m_MaterialCBName = Hashed_String(u8"Material");
 
 public:
 	// コンストラクタ・デストラクタ
@@ -64,11 +64,11 @@ public:
 	bool Init(BaseDrawManager& drawManager);
 
 	// モデルマネージャーに登録
-	void RegisterModel(const String& modelName, const ModelData& modelData);
+	void RegisterModel(const Hashed_String& modelName, const ModelData& modelData);
 	// モデルデータ取得
-	const ModelManagerData* GetModelData(const String& modelName);
+	const ModelManagerData* GetModelData(const Hashed_String& modelName);
 	// マテリアル定数バッファ名ゲッター
-	const String GetMaterialCBName() const { return m_MaterialCBName; }
+	const Hashed_String& GetMaterialCBName() const { return m_MaterialCBName; }
 	// モデルデータがあるかチェック
-	bool CheckModelData(const String& modelName);
+	bool CheckModelData(const Hashed_String& modelName);
 };

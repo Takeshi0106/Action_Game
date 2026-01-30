@@ -11,7 +11,7 @@
 // ===================================
 #include "ObjectSystem.h"
 #include <cstdint>
-#include "UTF8_String.h"
+#include "Hashed_String.h"
 #include "AABBTree.h"
 
 
@@ -38,14 +38,14 @@ private:
 	// 描画マネージャー
 	BaseDrawManager* m_Draw = nullptr;
 	// モデル名
-	String m_ModelName = u8"Mech_FinnTheFrog";
+	Hashed_String m_ModelName = Hashed_String(u8"Mech_FinnTheFrog");
 
 	// シェーダー名
-	String m_VSName = u8"VS_Object";
-	String m_PSName = u8"PS_TextureModel";
+	Hashed_String m_VSName = Hashed_String(u8"VS_Object");
+	Hashed_String m_PSName = Hashed_String(u8"PS_TextureModel");
 
 	// 定数バッファ
-	const String m_TransformCBName = u8"Transform";
+	const Hashed_String m_TransformCBName = Hashed_String(u8"Transform");
 
 	// --------------------------------
 	// メンバー配列変数

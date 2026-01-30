@@ -19,31 +19,30 @@
 // 定数バッファ作成
 // ========================================
 bool ConstantBufferManager::CreateConstantBuffer(
-	const String& constantName,
+	const Hashed_String& constantName,
 	ID3D11Device* device,
 	const void* data,
 	size_t size,
 	BufferUsage usage,
 	CPUAccess access)
 {
-	Hashed_String nameHash = (Hashed_String)constantName;
-
 	// エラーチェック
-	if (m_ConstantBuffers.count(nameHash))
+	if (m_ConstantBuffers.count(constantName))
 	{
 		// 定数バッファ取得
-		auto& existing = m_ConstantBuffers[nameHash];
+		auto& existing = m_ConstantBuffers[constantName];
 
 		// サイズ比較
 		if (existing->GetSize() != (size + 15) / 16 * 16) {
 			ErrorLog::OutputToConsole(
-				constantName + 
+				constantName.GetString() +
 				u8" 同じ名前の定数バッファが作成されましたが、サイズが異なります");
 
 			return false;
 		}
 		else {
-			WarningLog::OutputToConsole(constantName + u8" 同じ名前の定数バッファが再作成されました");
+			WarningLog::OutputToConsole(constantName.GetString() + 
+				u8" 同じ名前の定数バッファが再作成されました");
 
 			return true;
 		}
@@ -60,24 +59,25 @@ bool ConstantBufferManager::CreateConstantBuffer(
 		DirectX11_FormatConverter::ToDXUsage(usage),
 		D3D11_CPU_ACCESS_FLAG(DirectX11_FormatConverter::ToDXCPUAccess(access))))
 	{
-		ErrorLog::OutputToConsole(u8"定数バッファの作成失敗: " + constantName);
+		ErrorLog::OutputToConsole(u8"定数バッファの作成失敗: " + 
+			constantName.GetString());
 		return false;
 	}
 	
 	// 配列に代入
-	m_ConstantBuffers[nameHash] = std::move(bafferData);
+	m_ConstantBuffers[constantName] = std::move(bafferData);
 	
 	// デバッグ用に名前を保存しておく
-	m_Logger.Log(constantName);
+	m_Logger.Log(constantName.GetString());
 
 #if defined(DEBUG) || defined(_DEBUG)
-	DebugLog::OutputToConsole(u8"定数バッファ " + constantName + u8" を作成しました");
+	DebugLog::OutputToConsole(u8"定数バッファ " + constantName.GetString() + u8" を作成しました");
 
 	// 名前を設定
-	m_ConstantBuffers[nameHash]->GetBuffer()->SetPrivateData(
+	m_ConstantBuffers[constantName]->GetBuffer()->SetPrivateData(
 		WKPDID_D3DDebugObjectName,
-		UINT(constantName.GetBinaryView().GetSize()),
-		constantName.GetBinaryView().GetData());
+		UINT(constantName.GetString().GetBinaryView().GetSize()),
+		constantName.GetString().GetBinaryView().GetData());
 #endif
 
 	return true;
@@ -88,13 +88,13 @@ bool ConstantBufferManager::CreateConstantBuffer(
 // 定数バッファ更新
 // =======================================
 bool ConstantBufferManager::UpdateConstantBuffer(
-	const String& name, 
+	const Hashed_String& name, 
 	ID3D11DeviceContext* context, 
 	const void* data, 
 	int size)
 {
 	// 探す
-	auto it = m_ConstantBuffers.find((Hashed_String)name);
+	auto it = m_ConstantBuffers.find(name);
 
 	// あるかどうかのチェック
 	if (it != m_ConstantBuffers.end())

@@ -53,19 +53,19 @@ private:
 	// シェーダー名
 	// --------------------------------------
 	// 頂点シェーダー
-	const String m_VSName = u8"VS_Object";
+	const Hashed_String m_VSName = Hashed_String(u8"VS_Object");
 	// ピクセルシェーダー
-	const String m_PSTextureModelName = u8"PS_TextureModel";
-	const String m_PSNoTextureName = u8"PS_NoTexture";
+	const Hashed_String m_PSTextureModelName = Hashed_String(u8"PS_TextureModel");
+	const Hashed_String m_PSNoTextureName = Hashed_String(u8"PS_NoTexture");
 
 	// 定数名
-	const String m_TransformCBName = u8"Transform";
+	const Hashed_String m_TransformCBName = Hashed_String(u8"Transform");
 
 
 	// ---------------------------------------
 	// テクスチャ名
 	// ---------------------------------------
-	const String m_TitleLogoTextureName = u8"pipo-halloweenchara2016_02.png";
+	const Hashed_String m_TitleLogoTextureName = Hashed_String(u8"pipo-halloweenchara2016_02.png");
 	const Matrix4x4 m_TitleLogoMat =
 		Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.5f, 0.5f, 0.0f)) *
 		Matrix4x4::CreateScalingMatrix_LH(Vector3(100.0f, 100.0f, 1.0f));
@@ -75,25 +75,25 @@ private:
 	// モデル情報
 	// ---------------------------------------
 	// モデル名
-	const String m_FrogModelName = u8"Astronaut_FinnTheFrog";
+	const Hashed_String m_FrogModelName = Hashed_String(u8"Astronaut_FinnTheFrog");
 	const Matrix4x4 m_FrogMat = Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f,0.0f,5.0f)).toGPU();
 
 	// モデル名
-	const String m_Female = u8"Mech_FernandoTheFlamingo";
+	const Hashed_String m_Female = Hashed_String(u8"Mech_FernandoTheFlamingo");
 	const Matrix4x4 m_FemaleMat = Matrix4x4::CreateTranslationMatrix_LH(Vector3(5.0f, 00.0f, 5.0f)).toGPU();
 
 	// モデル
-	const String m_Terrain = u8"Base_Large";
+	const Hashed_String m_Terrain = Hashed_String(u8"Base_Large");
 	const Matrix4x4 m_TerrainMat = Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, 0.0f, 10.0f)).toGPU();
 
 	// 宙に浮いている惑星
-	const String m_PlanetModel = u8"Planet_10";
+	const Hashed_String m_PlanetModel = Hashed_String(u8"Planet_10");
 	const Matrix4x4 m_PlanetMat =
 		(Matrix4x4::CreateTranslationMatrix_LH(Vector3(-10.0f, 5.0f, 5.0f)) *
 			Matrix4x4::CreateScalingMatrix_LH(Vector3(2.0f, 2.0f, 2.0f))).toGPU();
 
 	// 地面惑星
-	const String m_PlanetGroundModel = u8"Planet_6";
+	const Hashed_String m_PlanetGroundModel = Hashed_String(u8"Planet_6");
 	const Matrix4x4 m_PlanetGroundMat =
 		(Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, -17.5f, 5.0f)) *
 			Matrix4x4::CreateRotationYawPitchRollMatrix_LH(0.0f, 5.0f, 0.0f) *

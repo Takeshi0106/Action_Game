@@ -30,7 +30,6 @@
 // 外部ファイルにアセット名ログ出量用
 #include "AssetLogger.h"
 // 文字列ヘッダー
-#include "UTF8_String.h"
 #include "Hashed_String.h"
 
 
@@ -55,7 +54,7 @@ public:
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(
-		const String& constantName,
+		const Hashed_String& constantName,
 		ID3D11Device* device,
 		const void* data,
 		size_t size,
@@ -63,7 +62,7 @@ public:
 		CPUAccess access = CPUAccess::Write);
 
 	// 定数バッファ更新
-	bool UpdateConstantBuffer(const String& name, ID3D11DeviceContext* context, const void* data, int size);
+	bool UpdateConstantBuffer(const Hashed_String& name, ID3D11DeviceContext* context, const void* data, int size);
 
 	// 定数バッファを探して、バインド
 	bool BindConstantBuffer(const std::vector<ConstantBufferInfo>* cbInfo, ID3D11DeviceContext* context, SETSHADERTYPE type);

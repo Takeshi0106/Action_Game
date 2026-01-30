@@ -17,11 +17,11 @@
 // ==================================
 // 静的メンバー変数定義
 // ==================================
-const String Board::m_VSName = u8"VS_Object";
-const String Board::m_PSName = u8"PS_NoTexture";
-const String Board::m_VBName = u8"Board_VertexBuffer";
-const String Board::m_MaterialName = u8"Material";
-const String Board::m_TransformCBName = u8"Transform";
+const Hashed_String Board::m_VSName = Hashed_String(u8"VS_Object");
+const Hashed_String Board::m_PSName = Hashed_String(u8"PS_NoTexture");
+const Hashed_String Board::m_VBName = Hashed_String(u8"Board_VertexBuffer");
+const Hashed_String Board::m_MaterialName = Hashed_String(u8"Material");
+const Hashed_String Board::m_TransformCBName = Hashed_String(u8"Transform");
 
 const Vertex Board::m_Vertex[4] = {
 	// 位置　　　　　　　法線　　　　　　UV

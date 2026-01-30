@@ -12,7 +12,7 @@
 // 色情報
 #include "Color.h"
 // 文字列ヘッダー
-#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ==========================
@@ -28,6 +28,6 @@ struct MeshMaterialData
 	// 鏡面光
 	Color specular;
 	// テクスチャの名前(テクスチャマネージャーに登録する名前)
-	String textureName;
+	Hashed_String textureName = Hashed_String(u8"");
 };
 

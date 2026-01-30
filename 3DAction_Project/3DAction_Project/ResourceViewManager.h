@@ -21,7 +21,6 @@
 // アセットログ出力
 #include "AssetLogger.h"
 // 文字列ヘッダー
-#include "UTF8_String.h"
 #include "Hashed_String.h"
 
 
@@ -45,7 +44,7 @@ public:
 
 	// 作成
 	bool CreateSRV(
-		const String& name,
+		const Hashed_String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		Format format,
@@ -53,13 +52,13 @@ public:
 		UINT mipLevels = -1);
 
 	bool CreateRTV(
-		const String& name,
+		const Hashed_String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		UINT mmipSlice = 0);
 
 	bool CreateDSV(
-		const String& name,
+		const Hashed_String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		Format format);
@@ -73,9 +72,11 @@ public:
 
 
 	// ゲッター  名前を入れて、返す
-	bool BindSRV(const String& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
-	RTVData* GetRTV(const String& name);
-	DSVData* GetDSV(const String& name);
+	bool BindSRV(const Hashed_String& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
+
+	// RTVとDSVのゲッター
+	RTVData* GetRTV(const Hashed_String& name);
+	DSVData* GetDSV(const Hashed_String& name);
 
 	
 	//bool BindUAV(const std::string& name, ID3D11DeviceContext* context);

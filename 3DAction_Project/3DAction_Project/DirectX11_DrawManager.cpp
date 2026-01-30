@@ -172,20 +172,20 @@ void DirectX_DrawManager::EndDraw()
 
 // モデル描画
 void DirectX_DrawManager::ModelDraw(
-	const String& _vsShaderName, 
-	const String& _psShaderName, 
-	const String& _modelName)
+	const Hashed_String& _vsShaderName, 
+	const Hashed_String& _psShaderName, 
+	const Hashed_String& _modelName)
 {
 	DrawModelObject(_vsShaderName, _psShaderName, _modelName);
 }
 
 // インデックスバッファを使用したメッシュ描画
 void DirectX_DrawManager::IndexedDraw(
-	const String& _vsShaderName,
-	const String& _psShaderName,
-	const String& _vbName,
-	const String& _ibName,
-	const String& _textureName,
+	const Hashed_String& _vsShaderName,
+	const Hashed_String& _psShaderName,
+	const Hashed_String& _vbName,
+	const Hashed_String& _ibName,
+	const Hashed_String& _textureName,
 	const SamplerDesc& _sampler)
 {
 	DrawIndexObject(_vsShaderName, _psShaderName, _vbName, _ibName, _textureName, _sampler);
@@ -193,10 +193,10 @@ void DirectX_DrawManager::IndexedDraw(
 
 // 描画情報を記載して描画
 void DirectX_DrawManager::PrimitiveDraw(
-	const String& _vsShaderName,
-	const String& _psShaderName,
-	const String& _vertexName,
-	const String& _textureName,
+	const Hashed_String& _vsShaderName,
+	const Hashed_String& _psShaderName,
+	const Hashed_String& _vertexName,
+	const Hashed_String& _textureName,
 	const SamplerDesc& _sampler)
 {
 	// 描画
@@ -208,7 +208,7 @@ void DirectX_DrawManager::PrimitiveDraw(
 // 頂点バッファ作成
 // ===========================================
 bool DirectX_DrawManager::CreateVertexBuffer(
-	const String& modelName,
+	const Hashed_String& modelName,
 	const void* data,
 	size_t stride,
 	uint32_t vertexNumber,
@@ -217,9 +217,6 @@ bool DirectX_DrawManager::CreateVertexBuffer(
 	BufferUsage usage,
 	CPUAccess access)
 {
-	// 描画IDを使用して頂点数を取得
-
-
 	// 頂点バッファ作成
 	if (!m_VBManager.CreateVertexBuffer(
 		modelName,
@@ -244,7 +241,7 @@ bool DirectX_DrawManager::CreateVertexBuffer(
 // インデックスバッファ作成
 // ===========================================
 bool DirectX_DrawManager::CreateIndexBuffer(
-	const String& modelName,
+	const Hashed_String& modelName,
 	const uint32_t* indexData,
 	uint32_t indexNumber)
 {
@@ -267,7 +264,7 @@ bool DirectX_DrawManager::CreateIndexBuffer(
 // 定数バッファ作成
 // ===========================================
 bool DirectX_DrawManager::CreateConstantBuffer(
-	const String& constantName,
+	const Hashed_String& constantName,
 	const void* data,
 	size_t size,
 	BufferUsage usage,
@@ -294,7 +291,7 @@ bool DirectX_DrawManager::CreateConstantBuffer(
 // テクスチャ作成
 // =========================================
 bool DirectX_DrawManager::CreateTexture(
-	const String& name,
+	const Hashed_String& name,
 	uint32_t width,
 	uint32_t height,
 	Format format,
@@ -303,7 +300,8 @@ bool DirectX_DrawManager::CreateTexture(
 	CPUAccess cpu)
 {
 	// テクスチャマネージャー作成
-	if (!m_TextureManager.CreateTexture(name, 
+	if (!m_TextureManager.CreateTexture(
+		name, 
 		DirectX11::Get::GetDevice(), 
 		width, 
 		height, 
@@ -340,7 +338,7 @@ bool DirectX_DrawManager::CreateSampler(
 // ===========================================
 // テクスチャロード
 // ===========================================
-bool DirectX_DrawManager::LoadTexture(const String& textureName)
+bool DirectX_DrawManager::LoadTexture(const Hashed_String& textureName)
 {
 	// テクスチャのロード関数
 	if (!m_TextureLoader.ImageFileLoader(textureName, DirectX11::Get::GetDevice())) {
@@ -355,7 +353,7 @@ bool DirectX_DrawManager::LoadTexture(const String& textureName)
 // ===========================================
 // モデルロード
 // ===========================================
-bool DirectX_DrawManager::LoadModel(const String& modelName, const String& modelFolderName)
+bool DirectX_DrawManager::LoadModel(const Hashed_String& modelName, const String& modelFolderName)
 {
 	// モデル変換モジュールを使用してモデルをロード
 	if (!m_ModelConversionModule.LoadAndRegisterModelResources(
@@ -375,8 +373,11 @@ bool DirectX_DrawManager::LoadModel(const String& modelName, const String& model
 // View作成
 // ===========================================
 // SRV作成
-bool DirectX_DrawManager::CreateSRV(const String& name, Format format, 
-	unsigned int mostDetailedMip, unsigned int mipLevels)
+bool DirectX_DrawManager::CreateSRV(
+	const Hashed_String& name, 
+	Format format, 
+	unsigned int mostDetailedMip, 
+	unsigned int mipLevels)
 {
 	// リソースビュ―取得
 	Texture2DData* tex = m_TextureManager.GetFindTexture2DData(name);
@@ -384,7 +385,8 @@ bool DirectX_DrawManager::CreateSRV(const String& name, Format format,
 	if (tex == nullptr) { return false; }
 
 	// SRV作成
-	if (!m_ViewManager.CreateSRV(name,
+	if (!m_ViewManager.CreateSRV(
+		name,
 		DirectX11::Get::GetDevice(),
 		tex->GetTexture(),
 		format,
@@ -399,7 +401,9 @@ bool DirectX_DrawManager::CreateSRV(const String& name, Format format,
 }
 
 // RTV作成
-bool DirectX_DrawManager::CreateRTV(const String& name, uint32_t mipSlice)
+bool DirectX_DrawManager::CreateRTV(
+	const Hashed_String& name, 
+	uint32_t mipSlice)
 {
 	// リソースビュ―取得
 	Texture2DData* tex = m_TextureManager.GetFindTexture2DData(name);
@@ -420,7 +424,9 @@ bool DirectX_DrawManager::CreateRTV(const String& name, uint32_t mipSlice)
 }
 
 // DSV作成
-bool DirectX_DrawManager::CreateDSV(const String& name, Format format)
+bool DirectX_DrawManager::CreateDSV(
+	const Hashed_String& name, 
+	Format format)
 {
 	// リソースビュ―取得
 	Texture2DData* tex = m_TextureManager.GetFindTexture2DData(name);
@@ -465,7 +471,7 @@ bool DirectX_DrawManager::CreateDSV(const String& name, Format format)
 // ===========================================
 // 定数バッファ更新
 // ===========================================
-void DirectX_DrawManager::UpdateShaderConstants(const String& constantName, const void* data, const int size)
+void DirectX_DrawManager::UpdateShaderConstants(const Hashed_String& constantName, const void* data, const int size)
 {
 	m_CBManager.UpdateConstantBuffer(constantName, DirectX11::Get::GetContext(), data, size);
 }
@@ -474,7 +480,7 @@ void DirectX_DrawManager::UpdateShaderConstants(const String& constantName, cons
 // =============================================
 // 頂点バッファ更新
 // =============================================
-void DirectX_DrawManager::UpdateVertexBuffer(const String& vertexName, const void* data, int size)
+void DirectX_DrawManager::UpdateVertexBuffer(const Hashed_String& vertexName, const void* data, int size)
 {
 	m_VBManager.UpdateVertexBuffer(vertexName, DirectX11::Get::GetContext(), data, size);
 }
@@ -483,14 +489,14 @@ void DirectX_DrawManager::UpdateVertexBuffer(const String& vertexName, const voi
 // =============================================
 // レンダーターゲットバインド
 // =============================================
-void DirectX_DrawManager::BindRenderTarget(const String& rtvName, const String& dsvName)
+void DirectX_DrawManager::BindRenderTarget(const Hashed_String& rtvName, const Hashed_String& dsvName)
 {
 	// RTV・DSV取得
 	RTVData* rtv;
 	DSVData* dsv;
 
 	// 空だったら最終描画用をセット
-	if (rtvName.IsEmpty())
+	if (rtvName.GetString().IsEmpty())
 	{
 		rtv = m_ViewManager.GetRTV(kFinalRTName);
 	}
@@ -499,7 +505,7 @@ void DirectX_DrawManager::BindRenderTarget(const String& rtvName, const String& 
 		rtv = m_ViewManager.GetRTV(rtvName);
 	}
 
-	if (dsvName.IsEmpty())
+	if (dsvName.GetString().IsEmpty())
 	{
 		dsv = m_ViewManager.GetDSV(kFInalDSName);
 	}
@@ -563,15 +569,15 @@ ID3D11DeviceContext* DirectX_DrawManager::GetDeviceContext()
 // 自作メッシュを描画
 // ===================================================
 bool DirectX_DrawManager::DrawPrimitiveObject(
-	const String& _vsShaderName, 
-	const String& _psShaderName,
-	const String& _modelName,
-	const String& _textureName, 
+	const Hashed_String& _vsShaderName, 
+	const Hashed_String& _psShaderName,
+	const Hashed_String& _modelName,
+	const Hashed_String& _textureName, 
 	const SamplerDesc _sampler)
 {
 	// シェーダーバインド
-	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager.BindVertexShader((Hashed_String)_vsShaderName,DirectX11::Get::GetContext());
-	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader((Hashed_String)_psShaderName, DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager.BindVertexShader(_vsShaderName,DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
 
 	// 頂点バッファをバインド
 	int vertexCount = m_VBManager.BindVertexBuffer(_modelName, DirectX11::Get::GetContext());
@@ -586,7 +592,7 @@ bool DirectX_DrawManager::DrawPrimitiveObject(
 	m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
 	// テクスチャバインド
-	if (!_textureName.IsEmpty())
+	if (!_textureName.GetString().IsEmpty())
 	{
 		// テクスチャ・サンプラー バインド
 		m_ViewManager.BindSRV(_textureName, DirectX11::Get::GetContext(), PIXSELSHADER);
@@ -603,16 +609,16 @@ bool DirectX_DrawManager::DrawPrimitiveObject(
 // インデックスバッファを使用したメッシュ描画
 // ===================================================
 bool DirectX_DrawManager::DrawIndexObject(
-	const String& _vsShaderName,
-	const String& _psShaderName,
-	const String& _vbName,
-	const String& _ibName,
-	const String& _textureName,
+	const Hashed_String& _vsShaderName,
+	const Hashed_String& _psShaderName,
+	const Hashed_String& _vbName,
+	const Hashed_String& _ibName,
+	const Hashed_String& _textureName,
 	const SamplerDesc _sampler)
 {
 	// シェーダーバインド
-	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager.BindVertexShader((Hashed_String)_vsShaderName, DirectX11::Get::GetContext());
-	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader((Hashed_String)_psShaderName, DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager.BindVertexShader(_vsShaderName, DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
 
 	// 頂点バッファをバインド
 	int vertexCount = m_VBManager.BindVertexBuffer(_vbName, DirectX11::Get::GetContext());
@@ -633,7 +639,7 @@ bool DirectX_DrawManager::DrawIndexObject(
 	m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
 	// テクスチャバインド
-	if (!_textureName.IsEmpty())
+	if (!_textureName.GetString().IsEmpty())
 	{
 		// テクスチャ・サンプラー バインド
 		m_ViewManager.BindSRV(_textureName, DirectX11::Get::GetContext(), PIXSELSHADER);
@@ -651,28 +657,30 @@ bool DirectX_DrawManager::DrawIndexObject(
 // モデルを描画
 // ===================================================
 bool DirectX_DrawManager::DrawModelObject(
-	const String& _vsShaderName,
-	const String& _psShaderName,
-	const String& _modelName)
+	const Hashed_String& _vsShaderName,
+	const Hashed_String& _psShaderName,
+	const Hashed_String& _modelName)
 {
 	// シェーダーバインド
-	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager.BindVertexShader((Hashed_String)_vsShaderName, DirectX11::Get::GetContext());
-	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader((Hashed_String)_psShaderName, DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* vsCB = m_ShaderManager.BindVertexShader(_vsShaderName, DirectX11::Get::GetContext());
+	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
 
 	// 頂点シェーダーの定数バッファ情報をバインド
 	m_CBManager.BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
 
 	// モデル情報を取得
 	const ModelManagerData* data = m_ModelManager.GetModelData(_modelName);
-	const String materialCBName = m_ModelManager.GetMaterialCBName();
+	const Hashed_String& materialCBName = m_ModelManager.GetMaterialCBName();
 
 	for (int i = 0; i < data->meshMaterialIDs.size(); i++)
 	{
+		Hashed_String meshName = Hashed_String(_modelName.GetString() + String::to_u8string(i));
+
 		// 頂点バッファをバインド
-		m_VBManager.BindVertexBuffer(_modelName + String::to_u8string(i), DirectX11::Get::GetContext());
+		m_VBManager.BindVertexBuffer(meshName, DirectX11::Get::GetContext());
 
 		// インデックスバッファをバインド
-		uint32_t count = m_IndexBufferManager.BindIndexData(_modelName + String::to_u8string(i), DirectX11::Get::GetContext());
+		uint32_t count = m_IndexBufferManager.BindIndexData(meshName, DirectX11::Get::GetContext());
 
 		// マテリアル情報取得
 		Color color[3] = {
@@ -689,7 +697,7 @@ bool DirectX_DrawManager::DrawModelObject(
 		m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
 
 		// テクスチャバインド
-		if (!data->materialData[data->meshMaterialIDs[i]].textureName.IsEmpty())
+		if (!data->materialData[data->meshMaterialIDs[i]].textureName.GetString().IsEmpty())
 		{
 			// テクスチャ バインド
 			m_ViewManager.BindSRV(

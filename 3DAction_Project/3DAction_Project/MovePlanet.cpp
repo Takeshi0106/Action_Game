@@ -10,7 +10,7 @@
 // =================================
 void MovePlanet::Init(
 	BaseDrawManager* _draw,
-	const String& _modelName,
+	const Hashed_String& _modelName,
 	const String& _modelFile)
 {
 	m_Draw = _draw;

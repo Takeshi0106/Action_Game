@@ -166,7 +166,7 @@ ModelData ModelLoadeModule::ModelLoad(
 		materialData.specular = Color(aiSpecular.r, aiSpecular.g, aiSpecular.b, aiSpecular.a);
 
 		// テクスチャ名をセット
-		materialData.textureName = fullPath.u8string();
+		materialData.textureName = Hashed_String(fullPath.u8string());
 
 		// マテリアルデータをモデルデータに設定
 		modelData.materialDataArray[i] = materialData;

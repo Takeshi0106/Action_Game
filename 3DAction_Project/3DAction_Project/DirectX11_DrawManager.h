@@ -20,7 +20,6 @@
 #include "Color.h"
 // 標準ライブラリ
 #include <cstdint>
-
 // マネージャーヘッダー
 #include "ShaderManager.h" // シェーダーマネージャー
 #include "ConstantBufferManager.h" // 定数バッファマネージャー
@@ -59,8 +58,8 @@ private:
 	// --------------------------------
 
 	// 最終描画に使用するRTの名前
-	const String kFinalRTName = u8"FinalRT";
-	const String kFInalDSName = u8"FinalDS";
+	const Hashed_String kFinalRTName = Hashed_String(u8"FinalRT");
+	const Hashed_String kFInalDSName = Hashed_String(u8"FinalDS");
 	// クリアカラー
 	const Color kClearColor = Color(0.1f, 0.3f, 0.7f, 1.0f);
 
@@ -100,24 +99,24 @@ private:
 	// --------------------------------
 	// 描画
 	bool DrawModelObject(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _modelName);
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _modelName);
 
 	// インデックスバッファを使用したメッシュ描画
 	bool DrawIndexObject(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _vbName,
-		const String& _ibName,
-		const String& _textureName,
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _vbName,
+		const Hashed_String& _ibName,
+		const Hashed_String& _textureName,
 		const SamplerDesc _sampler);
 
 	bool DrawPrimitiveObject(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _vsBufferName,
-		const String& _textureName, 
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _vsBufferName,
+		const Hashed_String& _textureName, 
 		const SamplerDesc _desc);
 
 public:
@@ -136,30 +135,30 @@ public:
 
 	// モデル描画
 	void ModelDraw(
-		const String& _vsShaderName, 
-		const String& _psShaderName, 
-		const String& _modelName) override final;
+		const Hashed_String& _vsShaderName, 
+		const Hashed_String& _psShaderName, 
+		const Hashed_String& _modelName) override final;
 
 	// インデックスバッファを使用したメッシュ描画
 	void IndexedDraw(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _vbName,
-		const String& _ibName,
-		const String& _textureName = u8"",
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _vbName,
+		const Hashed_String& _ibName,
+		const Hashed_String& _textureName = Hashed_String(u8""),
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override final;
 	
 	// プリミティブ描画
 	void PrimitiveDraw(
-		const String& _vsShaderName,
-		const String& _psShaderName,
-		const String& _vsBufferName,
-		const String& _textureName = u8"",
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName,
+		const Hashed_String& _vsBufferName,
+		const Hashed_String& _textureName = Hashed_String(u8""),
 		const SamplerDesc& _sampler = SamplerDesc::NormalSampler()) override final;
 
 	// 頂点バッファ作成
 	bool CreateVertexBuffer(
-		const String& modelName,
+		const Hashed_String& modelName,
 		const void* data,
 		size_t size,
 		uint32_t vertexNumber,
@@ -170,13 +169,13 @@ public:
 
 	// インデックスバッファ作成
 	bool CreateIndexBuffer(
-		const String& modelName,
+		const Hashed_String& modelName,
 		const uint32_t* indexData,
 		uint32_t indexNumber) override final;
 
 	// 定数バッファ作成
 	bool CreateConstantBuffer(
-		const String& constantName,
+		const Hashed_String& constantName,
 		const void* data,
 		size_t size,
 		BufferUsage usage = BufferUsage::Dynamic,
@@ -184,7 +183,7 @@ public:
 
 	// テクスチャ作成
 	bool CreateTexture(
-		const String& name,
+		const Hashed_String& name,
 		uint32_t width,
 		uint32_t height,
 		Format format,
@@ -196,25 +195,26 @@ public:
 	bool CreateSampler(const SamplerDesc& _desc) override final;
 
 	// テクスチャのロード
-	bool LoadTexture(const String& textureName) override final;
+	bool LoadTexture(const Hashed_String& textureName) override final;
 	// モデルのロード
-	bool LoadModel(const String& modelName, const String& modelFolderName = u8"") override final;
+	bool LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") override final;
 
 	// View作成
-	bool CreateSRV(const String& name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override final;
-	bool CreateRTV(const String& name, uint32_t mipSlice) override final;
-	bool CreateDSV(const String& name, Format format) override final;
+	bool CreateSRV(const Hashed_String& name, Format format, unsigned int mostDetailedMip = 0, unsigned int mipLevels = -1) override final;
+	bool CreateRTV(const Hashed_String& name, uint32_t mipSlice) override final;
+	bool CreateDSV(const Hashed_String& name, Format format) override final;
 
 	//bool CreateUAV(const char* name, Format format, unsigned int mipSlice = 0) override;
 	
 	// バッファ更新
 	// 定数バッファ更新
-	void UpdateShaderConstants(const String& constantName, const void* data, const int size) override final;
+	void UpdateShaderConstants(const Hashed_String& constantName, const void* data, const int size) override final;
 	// 頂点バッファ更新
-	void UpdateVertexBuffer(const String& vertexName, const void* data, int size) override final;
+	void UpdateVertexBuffer(const Hashed_String& vertexName, const void* data, int size) override final;
 
 	// レンダーターゲットバインド
-	void BindRenderTarget(const String& rtvName = u8"", const String& dsvName = u8"") override final;
+	void BindRenderTarget(const Hashed_String& rtvName = Hashed_String(u8""), 
+		const Hashed_String& dsvName = Hashed_String(u8"")) override final;
 
 	/* ------------ 描画設定 ------------ */
 	// 描画設定(カリング、塗り)

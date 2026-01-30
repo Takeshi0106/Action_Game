@@ -8,7 +8,7 @@
 // SRT情報
 #include "SRT.h"
 // 文字列
-#include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // =========================
@@ -24,7 +24,7 @@ protected:
 	BaseDrawManager* m_Draw = nullptr;
 
 	// このオブジェクトが更新する定数バッファ名
-	const String m_TransformCBName = u8"Transform";
+	const Hashed_String m_TransformCBName = Hashed_String(u8"Transform");
 
 	// SRT情報
 	SRT m_SRT = {};

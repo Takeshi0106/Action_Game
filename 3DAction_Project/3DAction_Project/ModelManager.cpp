@@ -38,10 +38,8 @@ bool ModelManager::Init(BaseDrawManager& drawManager)
 // ===============================
 // モデルマネージャーに登録
 // ===============================
-void ModelManager::RegisterModel(const String& modelName, const ModelData& modelData)
+void ModelManager::RegisterModel(const Hashed_String& modelName, const ModelData& modelData)
 {
-	// ハッシュ化
-	Hashed_String modelNameHash{ modelName };
     // データを作成
 	ModelManagerData modelManagerData;
 
@@ -56,18 +54,17 @@ void ModelManager::RegisterModel(const String& modelName, const ModelData& model
     // マテリアルデータを登録
     modelManagerData.materialData = modelData.materialDataArray;
     // モデルデータを登録
-	m_Models[modelNameHash] = modelManagerData;
+	m_Models[modelName] = modelManagerData;
 }
 
 
 // ===============================
 // モデルデータゲッター
 // ===============================
-const ModelManagerData* ModelManager::GetModelData(const String& modelName)
+const ModelManagerData* ModelManager::GetModelData(const Hashed_String& modelName)
 {
-	Hashed_String modelNameHash{ modelName };
     // 探す
-    auto it = m_Models.find(modelNameHash);
+    auto it = m_Models.find(modelName);
 
     if (it != m_Models.end())
     {
@@ -75,7 +72,7 @@ const ModelManagerData* ModelManager::GetModelData(const String& modelName)
     }
 
     ErrorLog::OutputToConsole(
-        modelName + u8"が見つかりませんでした");
+        modelName.GetString() + u8"が見つかりませんでした");
     return nullptr;
 }
 
@@ -83,8 +80,7 @@ const ModelManagerData* ModelManager::GetModelData(const String& modelName)
 // ================================
 // モデルデータがあるかのチェック
 // ================================
-bool ModelManager::CheckModelData(const String& modelName)
+bool ModelManager::CheckModelData(const Hashed_String& modelName)
 {
-	Hashed_String modelNameHash{ modelName };
-    return m_Models.find(modelNameHash) != m_Models.end();
+    return m_Models.find(modelName) != m_Models.end();
 }

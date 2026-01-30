@@ -23,6 +23,7 @@
 #include <cstdint>
 // 文字列ヘッダー
 #include "UTF8_String.h"
+#include "Hashed_String.h"
 
 
 // ===============================================
@@ -90,5 +91,5 @@ public:
 	// テクスチャのロード
 	virtual const TextureHandle LoadTexture(const String& textureName, const int16_t _mipLevels = -1, const String& textureFolderName = u8"") = 0;
 	// モデルのロード
-	virtual const Handle LoadModel(const String& modelName, const String& modelFolderName = u8"") = 0;
+	virtual const Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") = 0;
 };

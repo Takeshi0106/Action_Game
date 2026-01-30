@@ -20,12 +20,13 @@
 // ==================================
 // 静的メンバー変数定義
 // ==================================
-const String BOX::m_VSName = u8"VS_Object";
-const String BOX::m_PSName = u8"PS_NoTexture";
-const String BOX::m_VBName = u8"BOX_VertexBuffer";
-const String BOX::m_IBName = u8"BOX_IndexBuffer";
-const String BOX::m_MaterialName = u8"Material";
-const String BOX::m_TransformCBName = u8"Transform";
+const Hashed_String BOX::m_VSName = Hashed_String(u8"VS_Object")
+;
+const Hashed_String BOX::m_PSName = Hashed_String(u8"PS_NoTexture");
+const Hashed_String BOX::m_VBName = Hashed_String(u8"BOX_VertexBuffer");
+const Hashed_String BOX::m_IBName = Hashed_String(u8"BOX_IndexBuffer");
+const Hashed_String BOX::m_MaterialName = Hashed_String(u8"Material");
+const Hashed_String BOX::m_TransformCBName = Hashed_String(u8"Transform");
 
 const Vertex BOX::m_Vertex[24] = {
 	// 前面 (Z-)

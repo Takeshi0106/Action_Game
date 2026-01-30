@@ -39,14 +39,14 @@ private:
 	Vector3 m_Axis = { 0.0f,1.0f,0.0f };
 
 	// シェーダー情報
-	const String m_VSName = u8"VS_Object";
-	const String m_PSName = u8"PS_TextureModel";
+	const Hashed_String m_VSName = Hashed_String(u8"VS_Object");
+	const Hashed_String m_PSName = Hashed_String(u8"PS_TextureModel");
 
 	// 定数バッファ名
-	const String m_TransformCBName = u8"Transform";
+	const Hashed_String m_TransformCBName = Hashed_String(u8"Transform");
 
 	// モデル名
-	String m_ModelName = u8"";
+	Hashed_String m_ModelName = Hashed_String(u8"");
 
 public:
 	// --------------------------------
@@ -60,7 +60,7 @@ public:
 	// 基本関数
 	// --------------------------------
 	// 初期化
-	void Init(BaseDrawManager* _draw, const String& _modelName, const String& _modelFile = u8"");
+	void Init(BaseDrawManager* _draw, const Hashed_String& _modelName, const String& _modelFile = u8"");
 	// 更新
 	void Update(float _time);
 	// 描画
