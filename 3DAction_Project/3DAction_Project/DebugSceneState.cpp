@@ -137,7 +137,7 @@ void DebugSceneState::DerivatIveUpdate(float _deltaTime)
 
 #if defined(DEBUG) || defined(_DEBUG)
 	ImGui::Begin("UpdateTime");
-	ImGui::Text("%s", (u8"更新時間 : " + String::to_u8string(Timer::GetDeltaTime() - time).GetU8String()).c_str());
+	ImGui::Text("%s", (u8"更新時間 : " + String::to_u8string(Timer::GetDeltaTime() - time)).GetU8Char());
 	ImGui::End();
 #endif
 }
@@ -165,7 +165,7 @@ void DebugSceneState::Draw()
 	// 時間出力
 	float outputTime = Timer::GetDeltaTime() - time;
 	ImGui::Begin("DrawTime");
-	ImGui::Text((std::to_string(outputTime) + "秒 : 描画時間").c_str());
+	ImGui::Text("%s", (String::to_u8string(outputTime) + u8"秒 : 描画時間").GetU8Char());
 	ImGui::End();
 #endif
 
@@ -259,14 +259,14 @@ void DebugSceneState::UpdateCollision()
 	// 時間出力
 	float outputTime = Timer::GetDeltaTime() - time;
 	ImGui::Begin("CollisionTime");
-	ImGui::Text((std::to_string(outputTime) + "秒 : 当たり判定更新時間").c_str());
+	ImGui::Text("%s", (String::to_u8string(outputTime) + u8"秒 : 当たり判定更新時間").GetU8Char());
 	ImGui::End();
 
 	// 深度情報取得
 	TreeBalance balance = m_AABBTree.CalculateBalance();
 	ImGui::Begin("AABBTreeBalance");
-	ImGui::Text((std::to_string(balance.averageDepth) + " : 平均深度").c_str());
-	ImGui::Text((std::to_string(balance.maxDepth) + " : 最大深度").c_str());
+	ImGui::Text("%s", (String::to_u8string(balance.averageDepth) + u8" : 平均深度").GetU8Char());
+	ImGui::Text("%s", (String::to_u8string((uint64_t)balance.maxDepth) + u8" : 最大深度").GetU8Char());
 	ImGui::End();
 #endif
 }
@@ -305,8 +305,8 @@ void DebugSceneState::UpdateColliderCheck()
 	// 時間出力
 	float outputTime = Timer::GetDeltaTime() - time;
 	ImGui::Begin("ChaeckCollider");
-	ImGui::Text((std::to_string(outputTime) + "秒 : 更新時間").c_str());
-	ImGui::Text((std::to_string(updateCount) + "件 : 更新数").c_str());
+	ImGui::Text("%s", (String::to_u8string(outputTime) + u8"秒 : 更新時間").GetU8Char());
+	ImGui::Text("%s", (String::to_u8string(updateCount) + u8"件 : 更新数").GetU8Char());
 	ImGui::End();
 #endif
 }
@@ -337,25 +337,6 @@ void DebugSceneState::DebugUpdate()
 
 	// 反映
 	m_MoveObjectSystem.SetTargetPos({ pos[0], pos[1], pos[2] });
-
-	//Vector3 pos = m_Knight[0].GetSRT().position;
-	//Quaternion rot = m_Knight[0].GetSRT().rotation;
-
-	//float position[3] = {};
-	//float rotation[3] = {};
-
-	//ImGui::Begin("Knight1");
-
-	//ImGui::DragFloat3("Position", position, 1.0f, 10.0f);
-	//ImGui::DragFloat3("Rotation", rotation, 1.0f, 360.0f);
-
-	//ImGui::End();
-
-	//// 反映
-	//m_Knight[0].SetPosition({pos.x + position[0], pos.y + position[1], pos.z + position[2]});
-	//// オイラー角をクォータニオンに変換
-	//Quaternion newRot = Quaternion::CreateQuaternionFromEuler(rotation[0], rotation[1], rotation[2]);
-	//m_Knight[0].SetRotation(rot * newRot);
 }
 
 
@@ -376,10 +357,12 @@ void DebugSceneState::DebugDraw()
 		Vector3(0.0f, 0.0f, 0.0f),
 		Vector3(1.0f, 1.0f, 1.0f));
 
+	/*
 	BOX::DrawAABB(
 		m_Modules->drawManager,
 		aabb,
 		Color(0.0f, 0.5f, 0.0f, 1.0f));
+		*/
 }
 
 #else

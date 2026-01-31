@@ -14,10 +14,6 @@
 #include "BaseCamera.h"
 // 基本ライト
 #include "BaseLight.h"
-// 四角形描画
-#include "Square2D.h"
-// ナイトモデル
-#include "Knight.h"
 // 移動オブジェクトシステム
 #include "MoveObjectSystem.h"
 // 当たり判定チェック
