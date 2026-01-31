@@ -21,6 +21,8 @@ bool TextureLoader::ImageFileLoader(
     const Hashed_String& fileName, 
     ID3D11Device* device)
 {
+    // ハッシュ
+	Hashed_String hashedName = fileName;
     // ファイルパス作成
     std::filesystem::path filePath;
 
@@ -35,14 +37,15 @@ bool TextureLoader::ImageFileLoader(
     {
         // そのまま使用
         filePath = fileName.GetString().GetU8String();
+		hashedName = Hashed_String(filePath.filename().u8string());
     }
 
     // 区切り文字を統一する
     filePath.make_preferred();
 
 	// すでに登録されているか確認
-    if (m_TextureManager->IsExistTexture(fileName)) {
-        DebugLog::OutputToConsole(fileName.GetString() + u8" はすでに登録されています。");
+    if (m_TextureManager->IsExistTexture(hashedName)) {
+        DebugLog::OutputToConsole(hashedName.GetString() + u8" はすでに登録されています。");
 		return true;
     }
 
@@ -78,7 +81,7 @@ bool TextureLoader::ImageFileLoader(
 
     // TextureManagerに登録
     if (!m_TextureManager->CreateTexture(
-        fileName,
+        hashedName,
         device,
         (unsigned int)(meta.width),
         (unsigned int)(meta.height),
@@ -88,25 +91,25 @@ bool TextureLoader::ImageFileLoader(
         CPUAccess::None,
         &initData))
     {
-        ErrorLog::OutputToConsole(fileName.GetString() + u8" のテクスチャの作成に失敗しました。");
+        ErrorLog::OutputToConsole(hashedName.GetString() + u8" のテクスチャの作成に失敗しました。");
         return false;
     }
 
     // テクスチャを取得
-    Texture2DData* data = m_TextureManager->GetFindTexture2DData(fileName);
+    Texture2DData* data = m_TextureManager->GetFindTexture2DData(hashedName);
 
     // SRVを作成して ResourceViewManager に登録
     if (!m_ViewManager->CreateSRV(
-        fileName,
+        hashedName,
         device,
         data->GetTexture(),
         DirectX11_FormatConverter::ToSelfFormat(meta.format)))
     {
-        ErrorLog::OutputToConsole(fileName.GetString() + u8" のSRVの作成に失敗しました。");
+        ErrorLog::OutputToConsole(hashedName.GetString() + u8" のSRVの作成に失敗しました。");
         return false;
     }
 
     // テクスチャ作成ログ出力
-    DebugLog::OutputToConsole(fileName.GetString() + u8" のロードに成功しました。");
+    DebugLog::OutputToConsole(hashedName.GetString() + u8" のロードに成功しました。");
     return true;
 }
