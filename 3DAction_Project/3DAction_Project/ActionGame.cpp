@@ -46,10 +46,7 @@ bool ActionGame::Update()
 	float time = Timer::GetDeltaTime();
 
 	// シーン更新
-	if (!m_SceneManager.Update(time)) {
-		DebugLog::OutputToConsole(u8"ゲームを終了します");
-		return false;
-	}
+	bool IsGameEnd = m_SceneManager.Update(time);
 
 	// Imguiを実行
 	DebugImgui();
@@ -57,7 +54,7 @@ bool ActionGame::Update()
 	// タイマー更新処理
 	Timer::LastUpdate();
 
-	return true;
+	return IsGameEnd;
 }
 
 
@@ -92,7 +89,9 @@ void ActionGame::DebugImgui()
 	// FPS出力
 	ImGui::Begin(reinterpret_cast<const char*>(u8"FPS情報"));
 	ImGuiIO& io = ImGui::GetIO();
-	ImGui::Text("%s", u8"1フレームの時間 %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+	ImGui::Text(reinterpret_cast <const char*>(u8"1フレームの時間 %.3f ms/frame (%.1f FPS)"),
+		1000.0f / io.Framerate,
+		io.Framerate);
 
 	ImGui::End();
 }
