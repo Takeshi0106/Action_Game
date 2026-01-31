@@ -32,6 +32,10 @@ private:
 	// 現在のシーン
 	std::unique_ptr<BaseSceneState> m_CurrentSceneState;
 
+
+	// シーンの切り替え
+	bool ChangeScene(SceneEventID event);
+
 public:
 	// コンストラクタ・デストラクタ
 	SceneManager() = default;
@@ -39,14 +43,11 @@ public:
 
 	// シーンの初期化
 	bool Init(GameModules* _modules);
-	// シーンの更新
+	// シーンの更新 ゲームを終了するべき場合はfalseを返す
 	bool Update(float time);
 	// シーンの描画
 	void Draw();
 	// シーンの終了処理
 	void Uninit();
-
-	// シーンの切り替え
-	bool ChangeScene(SceneEventID event);
 };
 
