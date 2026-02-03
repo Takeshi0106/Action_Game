@@ -14,9 +14,9 @@
 // ファイルシステムヘッダー
 #include <filesystem>
 // 文字列
-#include "../UTF8_String.h"
+#include "../../UTF8_String.h"
 // デバッグ情報ややエラー出力用
-#include "../ReportMessage.h"
+#include "../../ReportMessage.h"
 
 
 // =====================================

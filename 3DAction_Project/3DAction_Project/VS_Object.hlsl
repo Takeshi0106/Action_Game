@@ -3,10 +3,10 @@
 // ==================================================
 struct VS_IN
 {
-    float3 pos : POSITION; // 頂点位置
-    float3 normal : NORMAL; // 法線
-    float2 uv : TEXCOORD; // UV
-    float4 color : COLOR; // 頂点カラー
+    float3 pos : POSITION0; // 頂点位置
+    float3 normal : NORMAL0; // 法線
+    float2 uv : TEXCOORD0; // UV
+    float4 color : COLOR0; // 頂点カラー
 };
 
 // ==================================================
@@ -14,10 +14,10 @@ struct VS_IN
 // ==================================================
 struct VS_OUT
 {
-    float4 pos : SV_POSITION; // クリッピング後の座標
-    float3 normal : NORMAL; // 法線
-    float2 uv : TEXCOORD; // UV
-    float4 color : COLOR; // 頂点カラー
+    float4 pos : SV_POSITION0; // クリッピング後の座標
+    float3 normal : NORMAL0; // 法線
+    float2 uv : TEXCOORD0; // UV
+    float4 color : COLOR0; // 頂点カラー
 };
 
 // ==================================================

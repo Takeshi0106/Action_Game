@@ -12,13 +12,13 @@
 // DirectXヘッダー
 #include <d3d11.h>
 // テクスチャハンドル
-#include "../TextureHandleh.h"
+#include "../../TextureHandleh.h"
 // SRVマネージャー
 #include "DirectX11_ViewManager.h"
 // テクスチャ作成ヘッダー
 #include "DirectX11_Texture2DBufferManager.h"
 // 文字列ヘッダー
-#include "../UTF8_String.h"
+#include "../../UTF8_String.h"
 
 
 // =========================================

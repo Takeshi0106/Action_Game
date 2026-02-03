@@ -19,14 +19,14 @@
 #include "DirectX11_Texture2DBufferManager.h"
 #include "DirectX11_SamplerManager.h"
 #include "DirectX11_ViewManager.h"
-#include "../ModelLoadManager.h"
-#include "../MeshMaterialManager.h"
+#include "../../ModelLoadManager.h"
+#include "../../MeshMaterialManager.h"
 // 作成クラスヘッダー
 #include "DirectX11_DrawCreate.h"
 // 動的確保
 #include <memory>
 // 設定パスヘッダー
-#include "../DrawPathConfig.h"
+#include "../../DrawPathConfig.h"
 
 
 // =======================================

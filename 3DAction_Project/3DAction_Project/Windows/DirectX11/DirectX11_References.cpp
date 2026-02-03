@@ -16,7 +16,7 @@
 // 配列ヘッダー
 #include <vector>
 // ログ出力
-#include "../ReportMessage.h"
+#include "../../ReportMessage.h"
 
 
 // ==============================================

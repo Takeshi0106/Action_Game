@@ -2,7 +2,7 @@
 
 // ==============================================
 // 【クラス概要】
-// DirectX11用サンプラーマネージャー
+// DirectX11用インデックスバッファマネージャー
 // APIObject を管理するマネージャー
 // ==============================================
 
@@ -15,60 +15,76 @@
 // スマートポインタ
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
-#include "../TemplateManager.h"
+#include "../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../UTF8_String.h"
+#include "../../UTF8_String.h"
+
+
+// ==============================================
+// 構造体宣言
+// ==============================================
+struct IndexBufferData
+{
+	// インデックスバッファ
+	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
+	// インデックス数
+	uint32_t indexCount = 0;
+};
 
 
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_SamplerManager
+class DirectX11_IndexBufferManager
 {
 private:
 	// ------------------------------------------
 	// メンバー変数
 	// ------------------------------------------
-	// サンプラー管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11SamplerState>> m_Samplers;
+	// インデックスバッファ管理
+	TemplateManager<IndexBufferData> m_IndexBuffers;
 
 
 public:
 	// ------------------------------------------
 	// コンストラクタ・デストラクタ
 	// ------------------------------------------
-	DirectX11_SamplerManager() = default;
-	~DirectX11_SamplerManager() = default;
+	DirectX11_IndexBufferManager() = default;
+	~DirectX11_IndexBufferManager() = default;
 
 
 	// ------------------------------------------
-	// サンプラー作成関数
+	// インデックスバッファ作成関数
 	// ------------------------------------------
-	const Handle SamplerStateCreate(
+	const Handle IndexBufferCreate(
 		ID3D11Device* _device,
-		D3D11_SAMPLER_DESC& desc,
+		const void* _indices,
+		const size_t _size,
+		const uint32_t _indexCount,
+		D3D11_USAGE _usage,
+		D3D11_CPU_ACCESS_FLAG _flag,
 		const String& _name);
 
 
 	// ------------------------------------------
-	// サンプラー取得関数
+	// インデックスバッファ取得関数
 	// ------------------------------------------
-	ID3D11SamplerState* GetSamplerState(const Handle& _handle);
+	IndexBufferData* GetIndexBuffer(const Handle& _handle);
 
 
 	// ------------------------------------------
-	// サンプラーチェック
+	// インデックスバッファチェック
 	// ------------------------------------------
 	bool Exists(const String& _name) const {
-		return m_Samplers.Exists((Hashed_String)_name);
+		return m_IndexBuffers.Exists((Hashed_String)_name);
 	}
 
 
 	// ------------------------------------------
-	// サンプラーハンドル取得
+	// インデックスバッファハンドル取得
 	// ------------------------------------------
-	Handle GetHandle(const String& _name) const {
-		return m_Samplers.GetHandle((Hashed_String)_name);
+	const Handle GetIndexBufferHandle(const String& _name) const {
+		return m_IndexBuffers.GetHandle((Hashed_String)_name);
 	}
 };
 

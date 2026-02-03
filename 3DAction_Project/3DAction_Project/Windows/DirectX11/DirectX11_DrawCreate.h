@@ -21,13 +21,13 @@
 #include "DirectX11_SamplerManager.h"
 #include "DirectX11_ViewManager.h"
 // 共通リソース管理ヘッダー
-#include "../ModelLoadManager.h"
-#include "../MeshMaterialManager.h"
+#include "../../ModelLoadManager.h"
+#include "../../MeshMaterialManager.h"
 // モジュール
 #include "DirectX11_TextureLoadModule.h"
-#include "../ModelLoadeModule.h"
+#include "../../ModelLoadeModule.h"
 // 基底ヘッダー
-#include "../BaseDrawCreate.h"
+#include "../../BaseDrawCreate.h"
 
 
 // ===============================================

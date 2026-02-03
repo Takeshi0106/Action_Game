@@ -10,7 +10,7 @@
 #include <DirectXTex.h>
 #pragma comment(lib, "DirectXTex.lib")
 // ログ表示ヘッダー
-#include "../ReportMessage.h"
+#include "../../ReportMessage.h"
 
 
 // =======================================

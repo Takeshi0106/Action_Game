@@ -2,7 +2,7 @@
 
 // ==============================================
 // 【クラス概要】
-// DirectX11用インデックスバッファマネージャー
+// DirectX11用頂点バッファマネージャー
 // APIObject を管理するマネージャー
 // ==============================================
 
@@ -15,76 +15,88 @@
 // スマートポインタ
 #include <wrl/client.h>
 // データ管理テンプレートヘッダー
-#include "../TemplateManager.h"
+#include "../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../UTF8_String.h"
+#include "../../UTF8_String.h"
 
 
 // ==============================================
 // 構造体宣言
 // ==============================================
-struct IndexBufferData
+struct VertexBufferData
 {
-	// インデックスバッファ
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
-	// インデックス数
-	uint32_t indexCount = 0;
+	// 頂点バッファ
+	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+	// 頂点数
+	uint32_t vertexCount = 0;
 };
 
 
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_IndexBufferManager
+class DirectX11_VertexBufferManager
 {
 private:
 	// ------------------------------------------
 	// メンバー変数
 	// ------------------------------------------
-	// インデックスバッファ管理
-	TemplateManager<IndexBufferData> m_IndexBuffers;
+	// 頂点バッファ管理
+	TemplateManager<VertexBufferData> m_VertexBuffers;
 
 
 public:
 	// ------------------------------------------
 	// コンストラクタ・デストラクタ
 	// ------------------------------------------
-	DirectX11_IndexBufferManager() = default;
-	~DirectX11_IndexBufferManager() = default;
+	DirectX11_VertexBufferManager() = default;
+	~DirectX11_VertexBufferManager() = default;
 
 
 	// ------------------------------------------
-	// インデックスバッファ作成関数
+	// 頂点バッファ作成関数
 	// ------------------------------------------
-	const Handle IndexBufferCreate(
+	const Handle VertexBufferCreate(
 		ID3D11Device* _device,
-		const void* _indices,
+		const void* _vertices,
 		const size_t _size,
-		const uint32_t _indexCount,
+		const uint32_t _vertexCount,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
 		const String& _name);
 
 
 	// ------------------------------------------
-	// インデックスバッファ取得関数
+	// 頂点バッファ取得関数
 	// ------------------------------------------
-	IndexBufferData* GetIndexBuffer(const Handle& _handle);
+	VertexBufferData* GetVertexBuffer(const Handle& _handle);
+	
+
+	// ------------------------------------------
+	// 頂点バッファ削除関数
+	// ------------------------------------------
+	void ReleaseVertexBuffer(const Handle& _handle);
 
 
 	// ------------------------------------------
-	// インデックスバッファチェック
+	// 全頂点バッファ削除関数
+	// ------------------------------------------
+	void ReleaseAllVertexBuffers();
+
+
+	// ------------------------------------------
+	// 頂点バッファチェック
 	// ------------------------------------------
 	bool Exists(const String& _name) const {
-		return m_IndexBuffers.Exists((Hashed_String)_name);
+		return m_VertexBuffers.Exists((Hashed_String)_name);
 	}
 
 
 	// ------------------------------------------
-	// インデックスバッファハンドル取得
+	// 頂点バッファハンドル取得関数
 	// ------------------------------------------
-	const Handle GetIndexBufferHandle(const String& _name) const {
-		return m_IndexBuffers.GetHandle((Hashed_String)_name);
+	const Handle GetVertexBufferHandle(const String& _name) const {
+		return m_VertexBuffers.GetHandle((Hashed_String)_name);
 	}
 };
 

@@ -125,7 +125,6 @@ namespace WarningLog
 }
 
 
-#if defined(DEBUG) || defined(_DEBUG)
 // ==============================================================
 // デバッグログ
 // ここにある関数はリリース時はインラインでビルドを行わないように
@@ -144,4 +143,3 @@ namespace DebugLog
 }
 
 
-#endif

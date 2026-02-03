@@ -14,7 +14,7 @@
 // シェイダーコンパイル用ヘッダー
 #include <d3dcommon.h>
 // ログ出力用ヘッダー
-#include "../ReportMessage.h"
+#include "../../ReportMessage.h"
 
 
 // ===========================================

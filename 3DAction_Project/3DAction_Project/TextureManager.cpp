@@ -8,7 +8,7 @@
 // DirectXヘッダー
 #include <d3d11.h>        // DirectXのAPIヘッダー
 // バッファユーリアリティヘッダー
-#include "DirectX11/DirectX11_FormatConverter.h"
+#include "Windows/DirectX11/DirectX11_FormatConverter.h"
 // ログ出力
 #include "ReportMessage.h"
 

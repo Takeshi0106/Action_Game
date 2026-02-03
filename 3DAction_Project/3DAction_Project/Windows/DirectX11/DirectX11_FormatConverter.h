@@ -16,9 +16,9 @@
 // DirectX用
 #include <d3d11.h>
 // 独自用
-#include "../GraphicsEnums.h"
+#include "../../GraphicsEnums.h"
 // サンプラー設定用
-#include "../SamplerSetting.h"
+#include "../../SamplerSetting.h"
 
 
 // =================================

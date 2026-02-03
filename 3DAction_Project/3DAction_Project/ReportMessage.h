@@ -46,18 +46,10 @@ namespace WarningLog
 
 // ==============================================================
 // デバッグログ
-// ここにある関数はリリース時はインラインでビルドを行わないように
+// Releaseビルド時は何も行わないようにしています。
 // ==============================================================
 namespace DebugLog
 {
-#if defined(DEBUG) || defined(_DEBUG)
     // コンソールにメッセージ出力
     void OutputToConsole(const String& message);
-
-#else
-    // リリース時はインラインでビルドしないように
-    inline void OutputToConsole(const String& message) {
-    }
-
-#endif
 }
