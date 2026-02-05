@@ -69,6 +69,7 @@ const bool String::IsEmpty() const noexcept
 	return m_String.empty();
 }
 
+
 // ==================================
 // ASCIIをutf8に変換する
 // ==================================
@@ -96,22 +97,57 @@ String String::to_u8string(int n)
 {
 	// ASCII に変換
 	std::string s = std::to_string(n);
-	// U8 に変換(エンコードが同じ互換)
-	return String(reinterpret_cast<const char8_t*>(s.c_str()));
+
+	// 文字数を予約
+	std::u8string u8;
+	u8.reserve(s.size());
+
+	// 1文字ずつ変換
+	for (char c : s)
+	{
+		u8.push_back(static_cast<char8_t>(c));
+	}
+
+	// U8 に変換
+	return String(u8);
 }
+
 String String::to_u8string(uint64_t n)
 {
 	// ASCII に変換
 	std::string s = std::to_string(n);
-	// U8 に変換(エンコードが同じ互換)
-	return String(reinterpret_cast<const char8_t*>(s.c_str()));
+
+	// 文字数を予約
+	std::u8string u8;
+	u8.reserve(s.size());
+
+	// 1文字ずつ変換
+	for (char c : s)
+	{
+		u8.push_back(static_cast<char8_t>(c));
+	}
+
+	// U8 に変換
+	return String(u8);
 }
+
 String String::to_u8string(float n)
 {
 	// ASCII に変換
 	std::string s = std::to_string(n);
-	// U8 に変換(エンコードが同じ互換)
-	return String(reinterpret_cast<const char8_t*>(s.c_str()));
+
+	// 文字数を予約
+	std::u8string u8;
+	u8.reserve(s.size());
+
+	// 1文字ずつ変換
+	for (char c : s)
+	{
+		u8.push_back(static_cast<char8_t>(c));
+	}
+
+	// U8 に変換
+	return String(u8);
 }
 
 

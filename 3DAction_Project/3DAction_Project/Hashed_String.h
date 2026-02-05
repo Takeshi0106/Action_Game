@@ -44,8 +44,8 @@ public:
 	Hashed_String(const Hashed_String&) = default;
 	Hashed_String(Hashed_String&&) noexcept = default;
 
-	// デフォルトコンストラクタ禁止
-	Hashed_String() = delete;
+	// デフォルトコンストラクタ
+	Hashed_String() = default;
 
 	// --------------------------------
 	// コピー・ムーブ
