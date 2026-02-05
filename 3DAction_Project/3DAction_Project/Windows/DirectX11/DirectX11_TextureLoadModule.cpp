@@ -149,7 +149,7 @@ const TextureHandle LoadTextureFromFile(
 	// TextureManagerに登録
 	Handle texHandle = _textureManager.Texture2DBufferCreateOnGet(
 		_device,
-		&desc,
+		desc,
 		_keyName,
 		&initData);
 
@@ -157,16 +157,16 @@ const TextureHandle LoadTextureFromFile(
 	ID3D11Texture2D* data = _textureManager.GetTexture2DBuffer(texHandle);
 
 	// SRVを作成して ResourceViewManager に登録
-	Handle srvHandle = _viewManager.ShaderResourceViewCreateOnGet(
-		_device,
-		data,
-		0,
-		static_cast<UINT>(meta.mipLevels),
-		_keyName);
+	//Handle srvHandle = _viewManager.ShaderResourceViewCreateOnGet(
+	//	_device,
+	//	data,
+	//	0,
+	//	static_cast<UINT>(meta.mipLevels),
+	//	_keyName);
 
 	TextureHandle handle;
 	handle.textureHandle = texHandle;
-	handle.srvHandle = srvHandle;
+	handle.srvHandle = Handle();
 
 	return handle;
 }

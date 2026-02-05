@@ -114,7 +114,7 @@ const Handle DirectX11_DrawCreate::CreateTexture(
 	// マネージャー登録
 	return m_Texture2DBufferManager.Texture2DBufferCreateOnGet(
 		m_Device,
-		&desc,
+		desc,
 		_name);
 }
 
@@ -158,12 +158,12 @@ void DirectX11_DrawCreate::CreateSRV(
 	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_outTextureHandle.textureHandle);
 
 	// SRV作成
-	_outTextureHandle.srvHandle = m_ViewManager.ShaderResourceViewCreateOnGet(
-		m_Device,
-		tex,
-		_mostDetailedMip,
-		_mipLevels,
-		_name);
+	//_outTextureHandle.srvHandle = m_ViewManager.ShaderResourceViewCreateOnGet(
+	//	m_Device,
+	//	tex,
+	//	_mostDetailedMip,
+	//	_mipLevels,
+	//	_name);
 }
 
 // RTV作成
@@ -176,11 +176,11 @@ void DirectX11_DrawCreate::CreateRTV(
 	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_textureHandle.textureHandle);
 
 	// RTV作成
-	_textureHandle.rtvHandle = m_ViewManager.RenderTargetViewCreateOnGet(
-		m_Device,
-		tex,
-		mipSlice,
-		name);
+	//_textureHandle.rtvHandle = m_ViewManager.RenderTargetViewCreateOnGet(
+	//	m_Device,
+	//	tex,
+	//	mipSlice,
+	//	name);
 }
 
 // DSV作成
@@ -193,11 +193,11 @@ void DirectX11_DrawCreate::CreateDSV(
 	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_textureHandle.textureHandle);
 
 	// DSV作成
-	_textureHandle.dsvHandle = m_ViewManager.DepthStencilViewCreateOnGet(
-		m_Device,
-		tex,
-		DirectX11_FormatConverter::ToDXFormat(format),
-		name);
+	//_textureHandle.dsvHandle = m_ViewManager.DepthStencilViewCreateOnGet(
+	//	m_Device,
+	//	tex,
+	//	DirectX11_FormatConverter::ToDXFormat(format),
+	//	name);
 }
 
 
