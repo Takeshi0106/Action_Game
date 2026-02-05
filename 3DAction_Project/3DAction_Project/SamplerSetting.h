@@ -42,18 +42,27 @@ enum class SamplerComparisonFunc
 	Always
 };
 
+// ==============================
 // サンプラーの設定をまとめた構造体
-struct SamplerDesc {
+// 
+// ==============================
+struct SamplerDesc 
+{
+private:
+	// ハッシュ値
+	size_t m_Hash = 0;
+
+public:
 	// フィルター
-	SamplerFilter filter;
+	const SamplerFilter filter;
 
 	// アドレス
-	SamplerAddressMode addressU;
-	SamplerAddressMode addressV;
-	SamplerAddressMode addressW; // 2Dの時は Clamp を設定してください。
+	const SamplerAddressMode addressU;
+	const SamplerAddressMode addressV;
+	const SamplerAddressMode addressW; // 2Dの時は Clamp を設定してください。
 
 	// 比較
-	SamplerComparisonFunc comparisonFunc;
+	const SamplerComparisonFunc comparisonFunc;
 
 	// コンストラクタ
 	SamplerDesc(
@@ -68,6 +77,15 @@ struct SamplerDesc {
 		addressW(_addressW),
 		comparisonFunc(_comparisonFunc)
 	{
+		// 各メンバーを int にしてハッシュ値を作成する
+		size_t h1 = std::hash<int>()(static_cast<int>(filter));
+		size_t h2 = std::hash<int>()(static_cast<int>(addressU));
+		size_t h3 = std::hash<int>()(static_cast<int>(addressV));
+		size_t h4 = std::hash<int>()(static_cast<int>(addressW));
+		size_t h5 = std::hash<int>()(static_cast<int>(comparisonFunc));
+
+		// 全てのハッシュ値を混ぜる　(XORと左にビットをずらして簡単なハッシュ値を計算する)
+		m_Hash = ((((h1 ^ (h2 << 1)) ^ (h3 << 1)) ^ (h4 << 1)) ^ (h5 << 1));
 	}
 
 	// 基本サンプラー
@@ -94,21 +112,20 @@ struct SamplerDesc {
 			comparisonFunc == other.comparisonFunc;
 	}
 
+	// ハッシュ値取得
+	size_t GetHash() const noexcept
+	{
+		return m_Hash;
+	}
 };
 
-// ハッシュ関数を作成する
+
+// ハッシュ関数
 struct SamplerDescHash
 {
-	size_t operator()(const SamplerDesc& _desc) const noexcept
+	size_t operator()(const SamplerDesc& desc) const noexcept
 	{
-		// 各メンバーを int にしてハッシュ値を作成する
-		size_t h1 = std::hash<int>()(static_cast<int>(_desc.filter));
-		size_t h2 = std::hash<int>()(static_cast<int>(_desc.addressU));
-		size_t h3 = std::hash<int>()(static_cast<int>(_desc.addressV));
-		size_t h4 = std::hash<int>()(static_cast<int>(_desc.addressW));
-		size_t h5 = std::hash<int>()(static_cast<int>(_desc.comparisonFunc));
-
-		// 全てのハッシュ値を混ぜる　(XORと左にビットをずらして簡単なハッシュ値を計算する)
-		return (((((h1 ^ (h2 << 1)) ^ (h3 << 1)) ^ (h4 << 1)) ^ (h5 << 1)));	
+		// SamplerDesc 内に保持しているハッシュ値を返すだけ
+		return desc.GetHash();
 	}
 };
