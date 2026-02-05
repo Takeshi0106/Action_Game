@@ -33,7 +33,11 @@
 // クラス
 // ===================================
 // テンプレートマネージャークラス
-template<typename T>
+template<
+	typename T,
+	typename Key = Hashed_String,
+	typename Hash = std::hash<Key>,
+	typename Equal = std::equal_to<Key>>
 class TemplateManager
 {
 private:
@@ -50,9 +54,9 @@ private:
 	std::vector<uint32_t> m_FreeIndexs;
 
 	// 名前からハンドルを取得する配列 (複数制作しない用)
-	std::unordered_map<Hashed_String, Handle> m_NameToHandleMap;
+	std::unordered_map<Key, Handle, Hash, Equal> m_KeyToHandleMap;
 	// インデックスから名前を取得する配列 (複数制作しない用)
-	std::vector<Hashed_String> m_IndexToNames;
+	std::vector<Key> m_IndexToKeys;
 
 public:
 	TemplateManager() = default;
@@ -69,20 +73,20 @@ public:
 		m_RefHandleCounts.reserve(size);
 		m_FreeIndexs.reserve(size);
 
-		m_NameToHandleMap.reserve(size);
-		m_IndexToNames.reserve(size);
+		m_KeyToHandleMap.reserve(size);
+		m_IndexToKeys.reserve(size);
 	}
 
 
 	// ==============================
 	// データ追加
 	// ==============================
-	Handle AddData(const Hashed_String& name, const T& data)
+	Handle AddData(const Key& key, const T& data)
 	{
-		// 名前が既に存在する場合はハンドルを返す
-		auto it = m_NameToHandleMap.find(name);
+		// 既に存在する場合はハンドルを返す
+		auto it = m_KeyToHandleMap.find(key);
 
-		if (it != m_NameToHandleMap.end()) 
+		if (it != m_KeyToHandleMap.end()) 
 		{
 			// 参照カウントを増やす
 			m_RefHandleCounts[it->second.index]++;
@@ -104,7 +108,7 @@ public:
 			// データを更新
 			m_Datas[handle.index] = data;
 			// 名前を保存
-			m_IndexToNames[handle.index] = name;
+			m_IndexToKeys[handle.index] = key;
 			// 参照を更新
 			m_RefHandleCounts[handle.index] = 1;
 		}
@@ -116,7 +120,7 @@ public:
 			// データを更新
 			m_Datas.push_back(data);
 			// 名前を更新
-			m_IndexToNames.push_back(name);
+			m_IndexToKeys.push_back(key);
 			// 参照を初期化
 			m_RefHandleCounts.push_back(1);
 
@@ -125,8 +129,8 @@ public:
 			handle.generation = 0;
 		}
 
-		// 名前からハンドルを保存
-		m_NameToHandleMap[name] = handle;
+		// キーからハンドルを保存
+		m_KeyToHandleMap[key] = handle;
 		return handle;
 	}
 
@@ -149,15 +153,20 @@ public:
 	// ================================
 	// 名前からハンドルを取得
 	// ================================
-	const Handle GetHandle(const Hashed_String& name) const
+	const Handle GetHandle(const Key& key)
 	{
-		// 名前からハンドルを取得
-		auto it = m_NameToHandleMap.find(name);
+		// キーからハンドルを取得
+		auto it = m_KeyToHandleMap.find(key);
 
 		// 見つかったらハンドルを返す
-		if (it != m_NameToHandleMap.end())
+		if (it != m_KeyToHandleMap.end())
 		{
-			return it->second;
+			// ハンドル取得
+			Handle handle = it->second;
+			// 参照カウントを増やす
+			m_RefHandleCounts[handle.index]++;
+
+			return handle;
 		}
 
 		return Handle();
@@ -167,9 +176,9 @@ public:
 	// ================================
 	// 存在チェック
 	// ================================
-	bool Exists(const Hashed_String& name) const
+	bool Exists(const Key& key) const
 	{
-		return m_NameToHandleMap.find(name) != m_NameToHandleMap.end();
+		return m_KeyToHandleMap.find(key) != m_KeyToHandleMap.end();
 	}
 
 
@@ -179,15 +188,12 @@ public:
 	void Remove(Handle handle)
 	{
 		// 存在チェック
-		if (m_IndexToNames.size() <= handle.index) { return; }
+		if (m_IndexToKeys.size() <= handle.index) { return; }
 		// 世代チェック
 		if (handle.generation != m_Generations[handle.index]) { return; }
 
 		// ハンドルから名前を取得
-		const Hashed_String& name = m_IndexToNames[handle.index];
-
-		// 名前が空かチェック
-		if (name.GetString().GetU8String().empty()) { return; }
+		const Key& key = m_IndexToKeys[handle.index];
 
 		// 参照カウントをデクリメント
 		m_RefHandleCounts[handle.index]--;
@@ -202,9 +208,9 @@ public:
 			m_FreeIndexs.push_back(handle.index);
 
 			// 配列から削除
-			m_NameToHandleMap.erase(name);
-			// ハンドルから名前を削除
-			m_IndexToNames[handle.index].Clear();
+			m_KeyToHandleMap.erase(key);
+			// ハンドルから削除
+			m_IndexToKeys[handle.index] = Key();
 
 			// データの初期化
 			// コンパイル時にどちらかか確定させる
@@ -233,8 +239,8 @@ public:
 		m_RefHandleCounts.clear();
 		m_FreeIndexs.clear();
 
-		m_NameToHandleMap.clear();
-		m_IndexToNames.clear();
+		m_KeyToHandleMap.clear();
+		m_IndexToKeys.clear();
 	}
 
 };
