@@ -44,7 +44,7 @@ public:
 	// --------------------------------
 	// 頂点バッファ作成
 	virtual const Handle CreateVertexBuffer(
-		const String& _vbName,
+		const Hashed_String& _vbName,
 		const void* _data,
 		const size_t _size,
 		const uint32_t _vertexNumber,
@@ -54,7 +54,7 @@ public:
 
 	// インデックスバッファ作成
 	virtual const Handle CreateIndexBuffer(
-		const String& _indexName,
+		const Hashed_String& _indexName,
 		const uint32_t* _indexData,
 		const size_t _indexSize,
 		const uint32_t _indexNumber, 
@@ -63,7 +63,7 @@ public:
 
 	// 定数バッファ作成
 	virtual const Handle CreateConstantBuffer(
-		const String& _constantName,
+		const Hashed_String& _constantName,
 		const size_t _size,
 		const void* _data = nullptr,
 		const BufferUsage _usage = BufferUsage::Dynamic,
@@ -71,7 +71,7 @@ public:
 
 	// テクスチャ作成
 	virtual const Handle CreateTexture(
-		const String& _name,
+		const Hashed_String& _name,
 		const uint16_t _width,
 		const uint16_t _height,
 		const Format _format,
@@ -79,17 +79,35 @@ public:
 		const BufferUsage _usage = BufferUsage::Default,
 		const CPUAccess _cpu = CPUAccess::None) = 0;
 
-	// サンプラー作成
-	virtual const Handle CreateSampler(const String& _samplerName, const SamplerDesc& _desc) = 0;
+	// サンプラー作成_
+	virtual const Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) = 0;
 
 	// View作成
-	virtual const Handle CreateSRV(const Handle& _textureHandle, const String& name,
-		const Format format, const uint16_t mostDetailedMip = 0, const int16_t mipLevels = -1) = 0;
-	virtual const Handle CreateRTV(const Handle& _textureHandle, const String& name, const uint16_t mipSlice) = 0;
-	virtual const Handle CreateDSV(const Handle& _textureHandle, const String& name, const Format format) = 0;
+	// SRV
+	virtual void CreateSRV(
+		const Hashed_String& name,
+		const Format format, 
+		TextureHandle& _outTextureHandle,
+		const uint16_t mostDetailedMip = 0, 
+		const int16_t mipLevels = -1) = 0;
+	// RTV
+	virtual void CreateRTV(
+		const Hashed_String& name, 
+		const uint16_t mipSlice,
+		TextureHandle& _outputTextureHandle) = 0;
+	// DSV
+	virtual void CreateDSV(
+		const Hashed_String& name, 
+		const Format format,
+		TextureHandle& _outputTextureHandle) = 0;
 
 	// テクスチャのロード
-	virtual const TextureHandle LoadTexture(const String& textureName, const int16_t _mipLevels = -1, const String& textureFolderName = u8"") = 0;
+	virtual void LoadTexture(
+		const Hashed_String& textureName, 
+		TextureHandle& outTextureHandle,
+		const int16_t _mipLevels = -1, 
+		const String& textureFolderName = u8"") = 0;
+
 	// モデルのロード
 	virtual const Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") = 0;
 };

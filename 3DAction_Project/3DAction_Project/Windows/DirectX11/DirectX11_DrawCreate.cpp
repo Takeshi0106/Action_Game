@@ -4,6 +4,16 @@
 // =======================================
 // 必須ヘッダー
 #include "DirectX11_DrawCreate.h"
+// DirectX11リソース管理ヘッダー
+#include "DirectX11_ShaderManager.h"
+#include "DirectX11_VertexBufferManager.h"
+#include "DirectX11_IndexBufferManager.h"
+#include "DirectX11_ConstantBufferManager.h"
+#include "DirectX11_Texture2DBufferManager.h"
+#include "DirectX11_SamplerManager.h"
+#include "DirectX11_ViewManager.h"
+// モデル管理ヘッダー
+#include "../../MeshMaterialManager.h"
 // 変換ヘッダー
 #include "DirectX11_FormatConverter.h"
 // ファイルシステムヘッダー
@@ -14,7 +24,7 @@
 // 頂点バッファ作成
 // =======================================
 const Handle DirectX11_DrawCreate::CreateVertexBuffer(
-	const String& _vbName,
+	const Hashed_String& _vbName,
 	const void* _data,
 	const size_t _size,
 	const uint32_t _vertexNumber,
@@ -22,13 +32,8 @@ const Handle DirectX11_DrawCreate::CreateVertexBuffer(
 	const BufferUsage _usage,
 	const CPUAccess _access)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_VertexBufferManager.Exists(_vbName)) {
-		return m_VertexBufferManager.GetVertexBufferHandle(_vbName);
-	}
-
 	// マネージャー登録
-	return m_VertexBufferManager.VertexBufferCreate(
+	return m_VertexBufferManager.VertexBufferCreateOnGet(
 		m_Device,
 		_data,
 		_size,
@@ -43,20 +48,15 @@ const Handle DirectX11_DrawCreate::CreateVertexBuffer(
 // インデックスバッファ作成
 // =======================================
 const Handle DirectX11_DrawCreate::CreateIndexBuffer(
-	const String& _indexName,
+	const Hashed_String& _indexName,
 	const uint32_t* _indexData,
 	const size_t _indexSize,
 	const uint32_t _indexNumber, 
 	const BufferUsage _usage,
 	const CPUAccess _access)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_IndexBufferManager.Exists(_indexName)) {
-		return m_IndexBufferManager.GetIndexBufferHandle(_indexName);
-	}
-
 	// マネージャー登録
-	return m_IndexBufferManager.IndexBufferCreate(
+	return m_IndexBufferManager.IndexBufferCreateOnGet(
 		m_Device,
 		_indexData,
 		_indexSize,
@@ -71,20 +71,14 @@ const Handle DirectX11_DrawCreate::CreateIndexBuffer(
 // 定数バッファ作成
 // =======================================
 const Handle DirectX11_DrawCreate::CreateConstantBuffer(
-	const String& _constantName,
+	const Hashed_String& _constantName,
 	const size_t _size,
 	const void* _data,
 	const BufferUsage _usage,
 	const CPUAccess _access)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_ConstantBufferManager.Exists(_constantName))
-	{
-		return m_ConstantBufferManager.GetConstantBufferHandle(_constantName);
-	}
-
 	// マネージャー登録
-	return m_ConstantBufferManager.ConstantBufferCreate(
+	return m_ConstantBufferManager.ConstantBufferCreateOnGet(
 		m_Device,
 		_size,
 		DirectX11_FormatConverter::ToDXUsage(_usage),
@@ -97,7 +91,7 @@ const Handle DirectX11_DrawCreate::CreateConstantBuffer(
 // テクスチャ作成
 // =======================================
 const Handle DirectX11_DrawCreate::CreateTexture(
-	const String& _name,
+	const Hashed_String& _name,
 	const uint16_t _width,
 	const uint16_t _height,
 	const Format _format,
@@ -105,12 +99,6 @@ const Handle DirectX11_DrawCreate::CreateTexture(
 	const BufferUsage _usage,
 	const CPUAccess _cpu)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_Texture2DBufferManager.Exists(_name))
-	{
-		return m_Texture2DBufferManager.GetHandle(_name);
-	}
-
 	// デスク作成
 	D3D11_TEXTURE2D_DESC desc{};
 	desc.Width = _width;
@@ -124,7 +112,7 @@ const Handle DirectX11_DrawCreate::CreateTexture(
 	desc.CPUAccessFlags = DirectX11_FormatConverter::ToDXCPUAccess(_cpu);
 
 	// マネージャー登録
-	return m_Texture2DBufferManager.Texture2DBufferCreate(
+	return m_Texture2DBufferManager.Texture2DBufferCreateOnGet(
 		m_Device,
 		&desc,
 		_name);
@@ -135,15 +123,9 @@ const Handle DirectX11_DrawCreate::CreateTexture(
 // サンプラー作成
 // =======================================
 const Handle DirectX11_DrawCreate::CreateSampler(
-	const String& _samplerName, 
+	const Hashed_String& _samplerName, 
 	const SamplerDesc& _desc)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_SamplerManager.Exists(_samplerName))
-	{
-		return m_SamplerManager.GetHandle(_samplerName);
-	}
-
 	// デスク作成
 	D3D11_SAMPLER_DESC desc{};
 	desc.Filter = DirectX11_FormatConverter::ConvertFilter(_desc.filter);
@@ -155,7 +137,7 @@ const Handle DirectX11_DrawCreate::CreateSampler(
 	desc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	// マネージャー登録
-	return m_SamplerManager.SamplerStateCreate(
+	return m_SamplerManager.SamplerStateCreateOnGet(
 		m_Device,
 		desc,
 		_samplerName);
@@ -165,24 +147,18 @@ const Handle DirectX11_DrawCreate::CreateSampler(
 // View作成
 // =======================================
 // SRV作成
-const Handle DirectX11_DrawCreate::CreateSRV(
-	const Handle& _textureHandle, 
-	const String& _name,
+void DirectX11_DrawCreate::CreateSRV(
+	const Hashed_String& _name,
 	const Format _format, 
+	TextureHandle& _outTextureHandle,
 	const uint16_t _mostDetailedMip, 
 	const int16_t _mipLevels)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_ViewManager.ExistsSRV(_name))
-	{
-		return m_ViewManager.GetSRVHandle(_name);
-	}
-
 	// テクスチャ取得
-	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_textureHandle);
+	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_outTextureHandle.textureHandle);
 
 	// SRV作成
-	return m_ViewManager.ShaderResourceViewCreate(
+	_outTextureHandle.srvHandle = m_ViewManager.ShaderResourceViewCreateOnGet(
 		m_Device,
 		tex,
 		_mostDetailedMip,
@@ -191,22 +167,16 @@ const Handle DirectX11_DrawCreate::CreateSRV(
 }
 
 // RTV作成
-const Handle DirectX11_DrawCreate::CreateRTV(
-	const Handle& _textureHandle, 
-	const String& name, 
-	const uint16_t mipSlice)
+void DirectX11_DrawCreate::CreateRTV(
+	const Hashed_String& name, 
+	const uint16_t mipSlice,
+	TextureHandle& _textureHandle)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_ViewManager.ExistsRTV(name))
-	{
-		return m_ViewManager.GetRTVHandle(name);
-	}
-
 	// テクスチャ取得
-	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_textureHandle);
+	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_textureHandle.textureHandle);
 
 	// RTV作成
-	return m_ViewManager.RenderTargetViewCreate(
+	_textureHandle.rtvHandle = m_ViewManager.RenderTargetViewCreateOnGet(
 		m_Device,
 		tex,
 		mipSlice,
@@ -214,21 +184,16 @@ const Handle DirectX11_DrawCreate::CreateRTV(
 }
 
 // DSV作成
-const Handle DirectX11_DrawCreate::CreateDSV(
-	const Handle& _textureHandle, 
-	const String& name, 
-	const Format format)
+void DirectX11_DrawCreate::CreateDSV(
+	const Hashed_String& name, 
+	const Format format,
+	TextureHandle& _textureHandle)
 {
-	// すでに存在する場合はハンドルを返す
-	if (m_ViewManager.ExistsDSV(name)) {
-		return m_ViewManager.GetDSVHandle(name);
-	}
-
 	// テクスチャ取得
-	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_textureHandle);
+	ID3D11Texture2D* tex = m_Texture2DBufferManager.GetTexture2DBuffer(_textureHandle.textureHandle);
 
 	// DSV作成
-	return m_ViewManager.DepthStencilViewCreate(
+	_textureHandle.dsvHandle = m_ViewManager.DepthStencilViewCreateOnGet(
 		m_Device,
 		tex,
 		DirectX11_FormatConverter::ToDXFormat(format),
@@ -239,18 +204,19 @@ const Handle DirectX11_DrawCreate::CreateDSV(
 // =======================================
 // テクスチャのロード
 // =======================================
-const TextureHandle DirectX11_DrawCreate::LoadTexture(
-	const String& _textureName, 
+void DirectX11_DrawCreate::LoadTexture(
+	const Hashed_String& _textureName, 
+	TextureHandle& _outTextureHandle,
 	const int16_t _mipLevel, 
 	const String& _textureFolderName)
 {
-	return m_TextureLoad.LoadFaileTexture_TextureFolder(
-		m_Device,
-		_textureName,
-		_textureFolderName,
-		(uint32_t)_mipLevel,
-		m_Texture2DBufferManager,
-		m_ViewManager);
+	//return m_TextureLoad.LoadFaileTexture_TextureFolder(
+	//	m_Device,
+	//	_textureName,
+	//	_textureFolderName,
+	//	(uint32_t)_mipLevel,
+	//	m_Texture2DBufferManager,
+	//	m_ViewManager);
 }
 
 
@@ -304,13 +270,13 @@ const Handle DirectX11_DrawCreate::LoadModel(
 
 		if (!materialData.textureName.GetString().GetU8String().empty())
 		{
-			// テクスチャロード
-			textureHandle = m_TextureLoad.LoadFaileTexture(
-				m_Device,
-				texturePath.u8string(),
-				1,
-				m_Texture2DBufferManager,
-				m_ViewManager);
+			//// テクスチャロード
+			//textureHandle = m_TextureLoad.LoadFaileTexture(
+			//	m_Device,
+			//	texturePath.u8string(),
+			//	1,
+			//	m_Texture2DBufferManager,
+			//	m_ViewManager);
 		}
 
 		// マテリアル取得
@@ -339,28 +305,28 @@ const Handle DirectX11_DrawCreate::LoadModel(
 		// 登録名作成
 		String meshName = _modelName.GetString().GetU8String() + String::to_u8string(i);
 
-		// 頂点バッファ作成
-		Handle vbHandle = CreateVertexBuffer(
-			meshName,
-			mesh.vertices.data(),
-			sizeof(Vertex) * mesh.vertices.size(),
-			static_cast<uint32_t>(mesh.vertices.size()),
-			PrimitiveType::TriangleList,
-			BufferUsage::Default,
-			CPUAccess::None);
+		//// 頂点バッファ作成
+		//Handle vbHandle = CreateVertexBuffer(
+		//	meshName,
+		//	mesh.vertices.data(),
+		//	sizeof(Vertex) * mesh.vertices.size(),
+		//	static_cast<uint32_t>(mesh.vertices.size()),
+		//	PrimitiveType::TriangleList,
+		//	BufferUsage::Default,
+		//	CPUAccess::None);
 
-		// インデックスバッファ作成
-		Handle ibHandle = CreateIndexBuffer(
-			meshName,
-			mesh.indices.data(),
-			mesh.indices.size() * sizeof(uint32_t),
-			static_cast<uint32_t>(mesh.indices.size()),
-			BufferUsage::Default,
-			CPUAccess::None);
+		//// インデックスバッファ作成
+		//Handle ibHandle = CreateIndexBuffer(
+		//	meshName,
+		//	mesh.indices.data(),
+		//	mesh.indices.size() * sizeof(uint32_t),
+		//	static_cast<uint32_t>(mesh.indices.size()),
+		//	BufferUsage::Default,
+		//	CPUAccess::None);
 
 		// ハンドルに登録
-		modelHandle.meshHandles[i].meshVertexBufferHandles = vbHandle;
-		modelHandle.meshHandles[i].meshIndexBufferHandles = ibHandle;
+		//modelHandle.meshHandles[i].meshVertexBufferHandles = vbHandle;
+		//modelHandle.meshHandles[i].meshIndexBufferHandles = ibHandle;
 		// マテリアル・テクスチャハンドル登録
 		modelHandle.meshHandles[i].materialHandle = materialHandles[mesh.materialID];
 		modelHandle.meshHandles[i].textureHandle = textureHandles[mesh.materialID];

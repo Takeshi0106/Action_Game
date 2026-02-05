@@ -12,22 +12,29 @@
 // ===============================================
 // ヘッダー
 // ===============================================
-// DirectX11リソース管理ヘッダー
-#include "DirectX11_ShaderManager.h"
-#include "DirectX11_VertexBufferManager.h"
-#include "DirectX11_IndexBufferManager.h"
-#include "DirectX11_ConstantBufferManager.h"
-#include "DirectX11_Texture2DBufferManager.h"
-#include "DirectX11_SamplerManager.h"
-#include "DirectX11_ViewManager.h"
 // 共通リソース管理ヘッダー
 #include "../../ModelLoadManager.h"
-#include "../../MeshMaterialManager.h"
 // モジュール
 #include "DirectX11_TextureLoadModule.h"
 #include "../../ModelLoadeModule.h"
 // 基底ヘッダー
 #include "../../BaseDrawCreate.h"
+// キー文字列
+#include "../../Hashed_String.h"
+
+
+// ===============================================
+// 前方宣言
+// ===============================================
+class DirectX11_ShaderManager;
+class DirectX11_VertexBufferManager;
+class DirectX11_IndexBufferManager;
+class DirectX11_ConstantBufferManager;
+class DirectX11_Texture2DBufferManager;
+class DirectX11_SamplerManager;
+class DirectX11_ViewManager;
+class ModelLoadManager;
+class MeshMaterialManager;
 
 
 // ===============================================
@@ -68,7 +75,7 @@ private:
 	// コンテキスト
 	ID3D11Device* m_Device;
 
-	// リソースマネージャーの参照
+	// 各リソースマネージャーの参照
 	DirectX11_ShaderManager& m_ShaderManager;
 	DirectX11_VertexBufferManager& m_VertexBufferManager;
 	DirectX11_IndexBufferManager& m_IndexBufferManager;
@@ -118,7 +125,7 @@ public:
 	// --------------------------------
 	// 頂点バッファ作成
 	const Handle CreateVertexBuffer(
-		const String& _vbName,
+		const Hashed_String& _vbName,
 		const void* _data,
 		const size_t _size,
 		const uint32_t _vertexNumber,
@@ -128,7 +135,7 @@ public:
 
 	// インデックスバッファ作成
 	const Handle CreateIndexBuffer(
-		const String& _indexName,
+		const Hashed_String& _indexName,
 		const uint32_t* _indexData,
 		const size_t _indexSize,
 		const uint32_t _indexNumber,
@@ -137,7 +144,7 @@ public:
 	
 	// 定数バッファ作成
 	const Handle CreateConstantBuffer(
-		const String& _constantName,
+		const Hashed_String& _constantName,
 		const size_t _size,
 		const void* _data = nullptr,
 		const BufferUsage _usage = BufferUsage::Dynamic,
@@ -145,7 +152,7 @@ public:
 
 	// テクスチャ作成
 	const Handle CreateTexture(
-		const String& _name,
+		const Hashed_String& _name,
 		const uint16_t _width,
 		const uint16_t _height,
 		const Format _format,
@@ -154,23 +161,36 @@ public:
 		const CPUAccess _cpu = CPUAccess::None) override;
 
 	// サンプラー作成
-	const Handle CreateSampler(const String& _samplerName, const SamplerDesc& _desc) override;
+	const Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) override;
 
 	// View作成
-	const Handle CreateSRV(const Handle& _textureHandle, 
-		const String& name,
+	// SRV
+	void CreateSRV(
+		const Hashed_String& name,
 		const Format format, 
+		TextureHandle& _outTextureHandle,
 		const uint16_t mostDetailedMip = 0, 
 		const int16_t mipLevels = -1) override;
-	const Handle CreateRTV(const Handle& _textureHandle, 
-		const String& name, 
-		const uint16_t mipSlice) override;
-	const Handle CreateDSV(const Handle& _textureHandle, 
-		const String& name, 
-		const Format format) override;
+	// RTV
+	void CreateRTV(
+		const Hashed_String& name, 
+		const uint16_t mipSlice,
+		TextureHandle& _outTextureHandle) override;
+	// DSV
+	void CreateDSV(
+		const Hashed_String& name, 
+		const Format format,
+		TextureHandle& _outTextureHandle) override;
 
 	// テクスチャのロード
-	const TextureHandle LoadTexture(const String& textureName, const int16_t _mipLevels = -1, const String& textureFolderName = u8"") override;
+	void LoadTexture(
+		const Hashed_String& textureName,
+		TextureHandle& outTextureHandle,
+		const int16_t _mipLevels = -1, 
+		const String& textureFolderName = u8"") override;
+
 	// モデルのロード
-	const Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") override;
+	const Handle LoadModel(
+		const Hashed_String& modelName, 
+		const String& modelFolderName = u8"") override;
 };
