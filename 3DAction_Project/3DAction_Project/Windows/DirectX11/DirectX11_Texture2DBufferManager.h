@@ -10,14 +10,12 @@
 // ==============================================
 // ヘッダー
 // ==============================================
-// DirectXヘッダー
-#include <d3d11.h>
-// スマートポインタ
-#include <wrl/client.h>
+// テクスチャ2Dの実態
+#include "DirectX11_Texture2DData.h"
 // データ管理テンプレートヘッダー
 #include "../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../../UTF8_String.h"
+#include "../../Hashed_String.h"
 
 
 // ==============================================
@@ -30,7 +28,7 @@ private:
 	// メンバー変数
 	// ------------------------------------------
 	// 2Dテクスチャバッファ管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Texture2D>> m_Texture2DBuffers;
+	TemplateManager<DirectX11_Texture2DData> m_Texture2DBuffers;
 
 public:
 	// ------------------------------------------
@@ -45,7 +43,7 @@ public:
 	// ------------------------------------------
 	const Handle Texture2DBufferCreateOnGet(
 		ID3D11Device* _device,
-		const D3D11_TEXTURE2D_DESC* _desc,
+		const D3D11_TEXTURE2D_DESC& _desc,
 		const Hashed_String& _name,
 		const D3D11_SUBRESOURCE_DATA* _initialData = nullptr);
 
