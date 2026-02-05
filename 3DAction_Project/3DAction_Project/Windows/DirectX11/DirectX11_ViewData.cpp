@@ -14,12 +14,12 @@
 // 作成
 bool DirectX11_RTVData::Create_DX11RTV(
 	ID3D11Device* _device,
-	ID3D11Texture2D* _resource,
+	ID3D11Texture2D& _resource,
 	const D3D11_RENDER_TARGET_VIEW_DESC& desc)
 {
 	// レンダーターゲットビュー作成
 	HRESULT hr = _device->CreateRenderTargetView(
-		_resource,
+		&_resource,
 		&desc,
 		m_RTV.GetAddressOf());
 
@@ -44,12 +44,12 @@ bool DirectX11_RTVData::Create_DX11RTV(
 // ==========================================
 bool DirectX11_SRVData::Create_DX11SRV(
 	ID3D11Device* _device,
-	ID3D11Texture2D* _resource,
+	ID3D11Texture2D& _resource,
 	const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc)
 {
 	// シェーダーリソースビュー作成
 	HRESULT hr = _device->CreateShaderResourceView(
-		_resource,
+		&_resource,
 		&_desc,
 		m_SRV.GetAddressOf());
 
@@ -74,12 +74,12 @@ bool DirectX11_SRVData::Create_DX11SRV(
 // ==========================================
 bool DirectX11_DSVData::Create_DX11DSV(
 	ID3D11Device* _device,
-	ID3D11Texture2D* _resource,
+	ID3D11Texture2D& _resource,
 	const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc)
 {	
 	// 深度ステンシルビュー作成
 	HRESULT hr = _device->CreateDepthStencilView(
-		_resource,
+		&_resource,
 		&_desc,
 		m_DSV.GetAddressOf());
 	

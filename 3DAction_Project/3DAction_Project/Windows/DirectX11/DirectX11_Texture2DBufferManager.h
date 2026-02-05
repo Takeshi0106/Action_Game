@@ -21,7 +21,7 @@
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_Texture2DBufferManager
+class DirectX11_Texture2DBufferManager final
 {
 private:
 	// ------------------------------------------

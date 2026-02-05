@@ -18,7 +18,7 @@
 // ==============================================
 // RTV データ クラス
 // ==============================================
-class DirectX11_RTVData
+class DirectX11_RTVData final
 {
 private:
 	// -----------------------------------
@@ -49,7 +49,7 @@ public:
 	// 作成
 	bool Create_DX11RTV(
 		ID3D11Device* _device,
-		ID3D11Texture2D* _resource,
+		ID3D11Texture2D& _resource,
 		const D3D11_RENDER_TARGET_VIEW_DESC& _desc);
 
 	// ゲッター
@@ -98,7 +98,7 @@ public:
 	// 作成
 	bool Create_DX11SRV(
 		ID3D11Device* _device,
-		ID3D11Texture2D* _resource,
+		ID3D11Texture2D& _resource,
 		const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc);
 
 	// ゲッター
@@ -116,7 +116,7 @@ public:
 // ==============================================
 // DSV データ クラス
 // ==============================================
-class DirectX11_DSVData
+class DirectX11_DSVData final
 {
 private:
 	// -----------------------------------
@@ -146,7 +146,7 @@ public:
 	// 作成
 	bool Create_DX11DSV(
 		ID3D11Device* _device,
-		ID3D11Texture2D* _resource,
+		ID3D11Texture2D& _resource,
 		const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc);
 
 	// ゲッター
