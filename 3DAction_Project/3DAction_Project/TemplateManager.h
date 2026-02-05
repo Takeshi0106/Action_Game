@@ -220,6 +220,12 @@ public:
 				m_Datas[handle.index].reset();
 				DebugLog::OutputToConsole(u8".restを実行");
 			}
+			if constexpr (requires(T a) { a.Clear(); })
+			{
+				// .Clear 関数がある場合
+				m_Datas[handle.index].Clear();
+				DebugLog::OutputToConsole(u8"Clear関数を実行");
+			}
 			else {
 				// デフォルト初期化
 				m_Datas[handle.index] = T{};
