@@ -10,14 +10,12 @@
 // ==============================================
 // ヘッダー
 // ==============================================
-// DirectXヘッダー
-#include <d3d11.h>
-// スマートポインタ
-#include <wrl/client.h>
+// Viewデータ
+#include "DirectX11_ViewData.h"
 // データ管理テンプレートヘッダー
 #include "../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../../UTF8_String.h"
+#include "../../Hashed_String.h"
 
 
 // ==============================================
@@ -30,11 +28,11 @@ private:
 	// メンバー変数
 	// ------------------------------------------
 	// レンダーターゲットビュー管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>> m_RenderTargetViews;
+	TemplateManager<DirectX11_RTVData> m_RenderTargetViews;
 	// シェーダーリソースビュー管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> m_ShaderResourceViews;
+	TemplateManager<DirectX11_SRVData> m_ShaderResourceViews;
 	// 深度ステンシルビュー管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11DepthStencilView>> m_DepthStencilViews;
+	TemplateManager<DirectX11_DSVData> m_DepthStencilViews;
 
 
 public:
@@ -52,22 +50,21 @@ public:
 	const Handle RenderTargetViewCreateOnGet(
 		ID3D11Device* _device,
 		ID3D11Texture2D* _resource,
-		UINT mmipSlice,
+		const D3D11_RENDER_TARGET_VIEW_DESC& _desc,
 		const Hashed_String& _name);
 
 	// シェーダーリソースビュー作成
 	const Handle ShaderResourceViewCreateOnGet(
 		ID3D11Device* _device,
 		ID3D11Texture2D* _resource,
-		UINT mostDetailedMip,
-		UINT mipLevels,
+		const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc,
 		const Hashed_String& _name);
 
 	// 深度ステンシルビュー作成
 	const Handle DepthStencilViewCreateOnGet(
 		ID3D11Device* _device,
 		ID3D11Texture2D* _resource,
-		UINT mipSlice,
+		const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc,
 		const Hashed_String& _name);
 
 

@@ -15,14 +15,28 @@
 const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
-	UINT mmipSlice,
+	const D3D11_RENDER_TARGET_VIEW_DESC& _desc,
 	const Hashed_String& _name)
 {
 	// 既に作成済みかチェック
-	if (m_RenderTargetViews.Exists(_name)) {
-		WarningLog::OutputToConsole(u8"同じ名前のレンダーターゲットビューが作成されようとしました: " + 
+	if (m_RenderTargetViews.Exists(_name)) 
+	{
+		// 取得
+		Handle handle = m_RenderTargetViews.GetHandle(_name);
+
+#if defined(DEBUG) || defined(_DEBUG)
+		// 同一確認
+		if (!m_RenderTargetViews.GetData(handle)->IsSame(_desc)) {
+			WarningLog::OutputToConsole(u8"同じ名前のレンダーターゲットビューが異なる設定で作成されようとしました: " +
+				_name.GetString());
+			return Handle();
+		}
+#endif
+		// 警告を出してハンドルを返す
+		WarningLog::OutputToConsole(u8"同じ名前のレンダーターゲットビューが作成されようとしました: " +
 			_name.GetString());
-		return m_RenderTargetViews.GetHandle(_name);
+
+		return handle;
 	}
 
 	// 無効チェック
@@ -32,33 +46,23 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 	}
 
 	// レンダーターゲットビュー作成
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> view;
-
-	// リソースの情報を取得
-	D3D11_TEXTURE2D_DESC resourceDesc{};
-	_resource->GetDesc(&resourceDesc);
-
-	// レンダーターゲットビュー作成情報設定
-	D3D11_RENDER_TARGET_VIEW_DESC desc{};
-	desc.Format = resourceDesc.Format;
-	desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	desc.Texture2D.MipSlice = mmipSlice;
-
-	// レンダーターゲットビュー作成
-	HRESULT hr = _device->CreateRenderTargetView(_resource, &desc, view.GetAddressOf());
-	if (FAILED(hr)) {
+	DirectX11_RTVData rtvData;
+	if (!rtvData.Create_DX11RTV(_device, _resource, _desc)) 
+	{
+		ErrorLog::OutputToConsole(u8"レンダーターゲットビューの作成に失敗しました: " +
+			_name.GetString());
 		return Handle();
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_RenderTargetViews.AddData(_name, view);
+	return m_RenderTargetViews.AddData(_name, rtvData);
 }
 
 // 取得
 ID3D11RenderTargetView* DirectX11_ViewManager::GetRenderTargetView(
 	const Handle& _handle)
 {
-	return m_RenderTargetViews.GetData(_handle)->Get();
+	return m_RenderTargetViews.GetData(_handle)->GetRTV();
 }
 
 // 削除
@@ -75,15 +79,27 @@ void DirectX11_ViewManager::ReleaseRTV(const Handle& _handle)
 const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
-	UINT mostDetailedMip,
-	UINT mipLevels,
+	const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc,
 	const Hashed_String& _name)
 {
 	// 既に作成済みかチェック
-	if (m_ShaderResourceViews.Exists(_name)) {
+	if (m_ShaderResourceViews.Exists(_name)) 
+	{
+		Handle handle = m_ShaderResourceViews.GetHandle(_name);
+
+#if defined(DEBUG) || defined(_DEBUG)
+		// 同一確認
+		if (!m_ShaderResourceViews.GetData(handle)->IsSame(_desc)) {
+			WarningLog::OutputToConsole(u8"同じ名前のシェーダーリソースビューが異なる設定で作成されようとしました: " +
+				_name.GetString());
+			return Handle();
+		}
+#endif
+
 		WarningLog::OutputToConsole(u8"同じ名前のシェーダーリソースビューが作成されようとしました: " +
 			_name.GetString());
-		return m_ShaderResourceViews.GetHandle(_name);
+
+		return handle;
 	}
 
 	// 無効チェック
@@ -93,34 +109,23 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	}
 
 	// シェーダーリソースビュー作成
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> view;
-
-	// リソースの情報を取得
-	D3D11_TEXTURE2D_DESC resourceDesc{};
-	_resource->GetDesc(&resourceDesc);
-
-	// シェーダーリソースビュー作成情報設定
-	D3D11_SHADER_RESOURCE_VIEW_DESC desc{};
-	desc.Format = resourceDesc.Format;
-	desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	desc.Texture2D.MostDetailedMip = mostDetailedMip;
-	desc.Texture2D.MipLevels = mipLevels;
-
-	// シェーダーリソースビュー作成
-	HRESULT hr = _device->CreateShaderResourceView(_resource, &desc, view.GetAddressOf());
-	if (FAILED(hr)) {
+	DirectX11_SRVData srvData;
+	if (!srvData.Create_DX11SRV(_device, _resource, _desc)) 
+	{
+		ErrorLog::OutputToConsole(u8"シェーダーリソースビューの作成に失敗しました: " +
+			_name.GetString());
 		return Handle();
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_ShaderResourceViews.AddData(_name, view);
+	return m_ShaderResourceViews.AddData(_name, srvData);
 }
 
 // 取得
 ID3D11ShaderResourceView* DirectX11_ViewManager::GetShaderResourceView(
 	const Handle& _handle)
 {
-	return m_ShaderResourceViews.GetData(_handle)->Get();
+	return m_ShaderResourceViews.GetData(_handle)->GetSRV();
 }
 
 // 削除
@@ -137,14 +142,27 @@ void DirectX11_ViewManager::ReleaseSRV(const Handle& _handle)
 const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
-	UINT mipSlice,
+	const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc,
 	const Hashed_String& _name)
 {
 	// 作成済みかチェック
-	if (m_DepthStencilViews.Exists(_name)) {
+	if (m_DepthStencilViews.Exists(_name)) 
+	{
+		Handle handle = m_DepthStencilViews.GetHandle(_name);
+
+#if defined(DEBUG) || defined(_DEBUG)
+		// 同一確認
+		if (!m_DepthStencilViews.GetData(handle)->IsSame(_desc)) {
+			WarningLog::OutputToConsole(u8"同じ名前の深度ステンシルビューが異なる設定で作成されようとしました: " +
+				_name.GetString());
+			return Handle();
+		}
+#endif
+
 		WarningLog::OutputToConsole(u8"同じ名前の深度ステンシルビューが作成されようとしました: " +
 			_name.GetString());
-		return m_DepthStencilViews.GetHandle(_name);
+
+		return handle;
 	}
 
 	// エラーチェック
@@ -154,32 +172,22 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 	}
 
 	// 深度ステンシルビュー作成
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> view;
-
-	// リソースの情報を取得
-	D3D11_TEXTURE2D_DESC resourceDesc{};
-	_resource->GetDesc(&resourceDesc);
-
-	// 深度ステンシルビュー作成情報設定
-	D3D11_DEPTH_STENCIL_VIEW_DESC desc{};
-	desc.Format = resourceDesc.Format;
-	desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	desc.Texture2D.MipSlice = mipSlice;
-
-	// 深度ステンシルビュー作成
-	HRESULT hr = _device->CreateDepthStencilView(_resource, &desc, view.GetAddressOf());
-	if (FAILED(hr)) {
+	DirectX11_DSVData dsvData;
+	if (!dsvData.Create_DX11DSV(_device, _resource, _desc)) 
+	{
+		ErrorLog::OutputToConsole(u8"深度ステンシルビューの作成に失敗しました: " +
+			_name.GetString());
 		return Handle();
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_DepthStencilViews.AddData(_name, view);
+	return m_DepthStencilViews.AddData(_name, dsvData);
 }
 
 // 取得
 ID3D11DepthStencilView* DirectX11_ViewManager::GetDepthStencilView(const Handle& _handle)
 {
-	return m_DepthStencilViews.GetData(_handle)->Get();
+	return m_DepthStencilViews.GetData(_handle)->GetDSV();
 }
 
 // 削除
