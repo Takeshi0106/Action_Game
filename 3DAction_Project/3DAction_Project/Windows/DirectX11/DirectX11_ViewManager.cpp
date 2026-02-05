@@ -12,12 +12,20 @@
 // レンダーターゲット
 // ===========================================================================
 // 作成
-const Handle DirectX11_ViewManager::RenderTargetViewCreate(
+const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
 	UINT mmipSlice,
-	const String& _name)
+	const Hashed_String& _name)
 {
+	// 既に作成済みかチェック
+	if (m_RenderTargetViews.Exists(_name)) {
+		WarningLog::OutputToConsole(u8"同じ名前のレンダーターゲットビューが作成されようとしました: " + 
+			_name.GetString());
+		return m_RenderTargetViews.GetHandle(_name);
+	}
+
+	// 無効チェック
 	if (!_device || !_resource) {
 		ErrorLog::OutputToConsole(u8"無効なレンダーターゲットビューが作成されそうになりました");
 		return Handle();
@@ -43,7 +51,7 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_RenderTargetViews.AddData((Hashed_String)_name, view);
+	return m_RenderTargetViews.AddData(_name, view);
 }
 
 // 取得
@@ -53,18 +61,32 @@ ID3D11RenderTargetView* DirectX11_ViewManager::GetRenderTargetView(
 	return m_RenderTargetViews.GetData(_handle)->Get();
 }
 
+// 削除
+void DirectX11_ViewManager::ReleaseRTV(const Handle& _handle)
+{
+	m_RenderTargetViews.Remove(_handle);
+}
+
 
 // ===========================================================================
 // シェーダーリソースビュー
 // ===========================================================================
 // 作成
-const Handle DirectX11_ViewManager::ShaderResourceViewCreate(
+const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
 	UINT mostDetailedMip,
 	UINT mipLevels,
-	const String& _name)
+	const Hashed_String& _name)
 {
+	// 既に作成済みかチェック
+	if (m_ShaderResourceViews.Exists(_name)) {
+		WarningLog::OutputToConsole(u8"同じ名前のシェーダーリソースビューが作成されようとしました: " +
+			_name.GetString());
+		return m_ShaderResourceViews.GetHandle(_name);
+	}
+
+	// 無効チェック
 	if (!_device || !_resource) {
 		ErrorLog::OutputToConsole(u8"無効なシェーダーリソースビューが作成されそうになりました");
 		return Handle();
@@ -91,7 +113,7 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_ShaderResourceViews.AddData((Hashed_String)_name, view);
+	return m_ShaderResourceViews.AddData(_name, view);
 }
 
 // 取得
@@ -101,17 +123,31 @@ ID3D11ShaderResourceView* DirectX11_ViewManager::GetShaderResourceView(
 	return m_ShaderResourceViews.GetData(_handle)->Get();
 }
 
+// 削除
+void DirectX11_ViewManager::ReleaseSRV(const Handle& _handle)
+{
+	m_ShaderResourceViews.Remove(_handle);
+}
+
 
 // ===========================================================================
 // 深度ステンシルビュー
 // ===========================================================================
 // 作成
-const Handle DirectX11_ViewManager::DepthStencilViewCreate(
+const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D* _resource,
 	UINT mipSlice,
-	const String& _name)
+	const Hashed_String& _name)
 {
+	// 作成済みかチェック
+	if (m_DepthStencilViews.Exists(_name)) {
+		WarningLog::OutputToConsole(u8"同じ名前の深度ステンシルビューが作成されようとしました: " +
+			_name.GetString());
+		return m_DepthStencilViews.GetHandle(_name);
+	}
+
+	// エラーチェック
 	if (!_device || !_resource) {
 		ErrorLog::OutputToConsole(u8"無効な深度ステンシルビューが作成されそうになりました");
 		return Handle();
@@ -137,7 +173,7 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_DepthStencilViews.AddData((Hashed_String)_name, view);
+	return m_DepthStencilViews.AddData(_name, view);
 }
 
 // 取得
@@ -146,3 +182,8 @@ ID3D11DepthStencilView* DirectX11_ViewManager::GetDepthStencilView(const Handle&
 	return m_DepthStencilViews.GetData(_handle)->Get();
 }
 
+// 削除
+void DirectX11_ViewManager::ReleaseDSV(const Handle& _handle)
+{
+	m_DepthStencilViews.Remove(_handle);
+}

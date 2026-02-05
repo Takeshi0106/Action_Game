@@ -56,14 +56,14 @@ public:
 	// ------------------------------------------
 	// インデックスバッファ作成関数
 	// ------------------------------------------
-	const Handle IndexBufferCreate(
+	const Handle IndexBufferCreateOnGet(
 		ID3D11Device* _device,
 		const void* _indices,
 		const size_t _size,
 		const uint32_t _indexCount,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
-		const String& _name);
+		const Hashed_String& _name);
 
 
 	// ------------------------------------------
@@ -73,18 +73,15 @@ public:
 
 
 	// ------------------------------------------
-	// インデックスバッファチェック
+	// インデックスバッファ削除関数
 	// ------------------------------------------
-	bool Exists(const String& _name) const {
-		return m_IndexBuffers.Exists((Hashed_String)_name);
-	}
+	void ReleaseIndexBuffer(const Handle& _handle);
 
 
 	// ------------------------------------------
-	// インデックスバッファハンドル取得
+	// 全てのインデックスバッファ削除関数
 	// ------------------------------------------
-	const Handle GetIndexBufferHandle(const String& _name) const {
-		return m_IndexBuffers.GetHandle((Hashed_String)_name);
-	}
+	void ReleaseAllIndexBuffer();
+
 };
 

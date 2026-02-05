@@ -11,10 +11,10 @@
 // ============================================================================
 // サンプラー作成
 // ============================================================================
-const Handle DirectX11_SamplerManager::SamplerStateCreate(
+const Handle DirectX11_SamplerManager::SamplerStateCreateOnGet(
 	ID3D11Device* _device,
 	D3D11_SAMPLER_DESC& desc,
-	const String& _name)
+	const Hashed_String& _name)
 {
 
 	if (!_device) {
@@ -32,7 +32,7 @@ const Handle DirectX11_SamplerManager::SamplerStateCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Samplers.AddData((Hashed_String)_name, sampler);
+	return m_Samplers.AddData(_name, sampler);
 }
 
 
@@ -42,4 +42,22 @@ const Handle DirectX11_SamplerManager::SamplerStateCreate(
 ID3D11SamplerState* DirectX11_SamplerManager::GetSamplerState(const Handle& _handle)
 {
 	return m_Samplers.GetData(_handle)->Get();
+}
+
+
+// ============================================================================
+// サンプラー削除
+// ============================================================================
+void DirectX11_SamplerManager::ReleaseSampler(const Handle& _handle)
+{
+	m_Samplers.Remove(_handle);
+}
+
+
+// ============================================================================
+// サンプラーすべて削除
+// ============================================================================
+void DirectX11_SamplerManager::ReleaseAllSampler()
+{
+	m_Samplers.ALLClear();
 }

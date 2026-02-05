@@ -43,6 +43,7 @@ public:
 	~ResourceViewManager() { m_Logger.WriteLog(); }
 
 	// 作成
+	// SRV
 	bool CreateSRV(
 		const Hashed_String& name,
 		ID3D11Device* device,
@@ -50,26 +51,18 @@ public:
 		Format format,
 		UINT mostDetailedMip = 0,
 		UINT mipLevels = -1);
-
+	// RTV
 	bool CreateRTV(
 		const Hashed_String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		UINT mmipSlice = 0);
-
+	// DSV
 	bool CreateDSV(
 		const Hashed_String& name,
 		ID3D11Device* device,
 		ID3D11Texture2D* resource,
 		Format format);
-
-	//bool CreateUAV(const std::string& name,
-	//	ID3D11Device* device,
-	//	ID3D11Resource* resource,
-	//	Format format,
-	//	UINT mmipSlice = 0);
-
-
 
 	// ゲッター  名前を入れて、返す
 	bool BindSRV(const Hashed_String& name, ID3D11DeviceContext* context, SETSHADERTYPE type);
@@ -77,9 +70,6 @@ public:
 	// RTVとDSVのゲッター
 	RTVData* GetRTV(const Hashed_String& name);
 	DSVData* GetDSV(const Hashed_String& name);
-
-	
-	//bool BindUAV(const std::string& name, ID3D11DeviceContext* context);
 
 	// View削除
 	void ReleaseAllView();

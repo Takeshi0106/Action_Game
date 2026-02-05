@@ -19,6 +19,8 @@
 #include "DirectX11_Texture2DBufferManager.h"
 // 文字列ヘッダー
 #include "../../UTF8_String.h"
+// ハッシュ文字列ヘッダー
+#include "../../Hashed_String.h"
 
 
 // =========================================
@@ -32,17 +34,6 @@ private:
 	// ----------------------------------
 	// テクスチャフォルダパス
 	const String& kPath;
-
-
-	// ----------------------------------
-	// メンバー関数
-	// ----------------------------------
-	const TextureHandle LoadTextureFromFile(
-		ID3D11Device* _device,
-		const String& _texturePath,
-		uint16_t _mipLevels,
-		DirectX11_Texture2DBufferManager& _textureManager,
-		DirectX11_ViewManager& _viewManager);
 
 
 public:
@@ -59,7 +50,7 @@ public:
 	// ----------------------------------
 	const TextureHandle LoadFaileTexture_TextureFolder(
 		ID3D11Device* _device,
-		const String& _textureName,
+		const Hashed_String& _textureName,
 		const String& _textureFolderName,
 		uint16_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,
@@ -72,6 +63,7 @@ public:
 	// ----------------------------------
 	const TextureHandle LoadFaileTexture(
 		ID3D11Device* _device,
+		const Hashed_String& _textureName,
 		const String& _texturePath,
 		uint16_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,

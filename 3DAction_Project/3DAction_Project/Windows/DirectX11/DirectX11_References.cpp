@@ -118,7 +118,7 @@ bool ShaderInfoAcquisition(
 		reflector->GetInputParameterDesc(k, &paramDesc);
 
 		// u8 に変換
-		String semanticName = String::FromASCII((char*)paramDesc.SemanticName);
+		String semanticName = String::FromASCII(paramDesc.SemanticName);
 
 		// 代入
 		_ilInfo[k].m_SemanticName = semanticName;

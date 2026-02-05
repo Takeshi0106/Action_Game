@@ -17,7 +17,7 @@
 // データ管理テンプレートヘッダー
 #include "../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../../UTF8_String.h"
+#include "../../Hashed_String.h"
 
 
 // ==============================================
@@ -44,10 +44,10 @@ public:
 	// ------------------------------------------
 	// サンプラー作成関数
 	// ------------------------------------------
-	const Handle SamplerStateCreate(
+	const Handle SamplerStateCreateOnGet(
 		ID3D11Device* _device,
 		D3D11_SAMPLER_DESC& desc,
-		const String& _name);
+		const Hashed_String& _name);
 
 
 	// ------------------------------------------
@@ -57,18 +57,14 @@ public:
 
 
 	// ------------------------------------------
-	// サンプラーチェック
+	// サンプラー削除
 	// ------------------------------------------
-	bool Exists(const String& _name) const {
-		return m_Samplers.Exists((Hashed_String)_name);
-	}
+	void ReleaseSampler(const Handle& _name);
 
 
 	// ------------------------------------------
-	// サンプラーハンドル取得
+	// サンプラーすべて削除
 	// ------------------------------------------
-	Handle GetHandle(const String& _name) const {
-		return m_Samplers.GetHandle((Hashed_String)_name);
-	}
+	void ReleaseAllSampler();
 };
 

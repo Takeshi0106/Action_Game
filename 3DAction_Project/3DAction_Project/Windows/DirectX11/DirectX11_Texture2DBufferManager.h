@@ -43,10 +43,10 @@ public:
 	// ------------------------------------------
 	// 2Dテクスチャバッファ作成関数
 	// ------------------------------------------
-	const Handle Texture2DBufferCreate(
+	const Handle Texture2DBufferCreateOnGet(
 		ID3D11Device* _device,
 		const D3D11_TEXTURE2D_DESC* _desc,
-		const String& _name,
+		const Hashed_String& _name,
 		const D3D11_SUBRESOURCE_DATA* _initialData = nullptr);
 
 
@@ -57,19 +57,13 @@ public:
 
 
 	// ------------------------------------------
-	// 2Dテクスチャバッファチェック
+	// 2Dテクスチャ削除
 	// ------------------------------------------
-	bool Exists(const String& _name) const
-	{
-		return m_Texture2DBuffers.Exists((Hashed_String)_name);
-	}
+	void ReleaseTexture2D(const Handle& _handle);
 
 
 	// ------------------------------------------
-	// ハンドル取得
+	// 全ての2Dテクスチャ削除
 	// ------------------------------------------
-	const Handle GetHandle(const String& _name) const
-	{
-		return m_Texture2DBuffers.GetHandle((Hashed_String)_name);
-	}
+	void ReleaseAllTexture2D();
 };

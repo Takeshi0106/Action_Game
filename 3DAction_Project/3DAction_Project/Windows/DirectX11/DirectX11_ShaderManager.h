@@ -3,6 +3,7 @@
 // ==============================================
 // 【クラス概要】
 // DirectX11用シェーダーマネージャー
+// すでにコンパイルしているものを探して管理する
 // APIObject を管理するマネージャー
 // ==============================================
 
@@ -88,16 +89,37 @@ public:
 	// ------------------------------------------
 	// シェーダー作成関数
 	// ------------------------------------------
-	const Handle VertexShaderCreate (ID3D11Device* _device, const String& _name);
-	const Handle PixelShaderCreate  (ID3D11Device* _device, const String& _name);
-	const Handle ComputeShaderCreate(ID3D11Device* _device, const String& _name);
+	const Handle VertexShaderCreateOnGet (ID3D11Device* _device, const Hashed_String& _name);
+	const Handle PixelShaderCreateOnGet  (ID3D11Device* _device, const Hashed_String& _name);
+	const Handle ComputeShaderCreateOnGet(ID3D11Device* _device, const Hashed_String& _name);
 
 
 	// ------------------------------------------
 	// シェーダー取得関数
 	// ------------------------------------------
-	ID3D11VertexShader* GetVertexShader(const Handle& _handle);
-	ID3D11PixelShader* GetPixelShader(const Handle& _handle);
-	ID3D11ComputeShader* GetComputeShader(const Handle& _handle);
+	const ID3D11VertexShader* GetVertexShader(const Handle& _handle);
+	const ID3D11PixelShader* GetPixelShader(const Handle& _handle);
+	const ID3D11ComputeShader* GetComputeShader(const Handle& _handle);
+
+
+	// ------------------------------------------
+	// シェーダーチェック関数
+	// ------------------------------------------
+	const bool ExistsVertexShader(const Hashed_String& _name) const;
+	const bool ExistsPixelShader(const Hashed_String& _name) const;
+	const bool ExistsComputeShader(const Hashed_String& _name) const;
+
+
+	// ------------------------------------------
+	// シェーダー削除
+	// ------------------------------------------
+	void ReleaseVertexShader(const Handle& _name);
+	void ReleasePixelShader(const Handle& _name);
+	void ReleaseComputeShader(const Handle& _name);
+
+	// ------------------------------------------
+	// シェーダー全て削除
+	// ------------------------------------------
+	void ReleaseAllShader();
 };
 

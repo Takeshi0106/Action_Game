@@ -14,12 +14,24 @@
 
 
 // =======================================
+// プロトタイプ宣言
+// =======================================
+const TextureHandle LoadTextureFromFile(
+	ID3D11Device* _device,
+	const std::filesystem::path& _texturePath,
+	uint16_t _mipLevels,
+	DirectX11_Texture2DBufferManager& _textureManager,
+	DirectX11_ViewManager& _viewManager,
+	const Hashed_String& _keyName);
+
+
+// =======================================
 // 画像ファイルをロードする
 // テクスチャフォルダーからロードする
 // =======================================
 const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	ID3D11Device* _device,
-	const String& _textureName,
+	const Hashed_String& _textureName,
 	const String& _textureFolderName,
 	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
@@ -35,13 +47,13 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 		// 相対パスを追加
 		filePath = kPath.GetU8String();
 		filePath /= _textureFolderName.GetU8String();
-		filePath /= _textureName.GetU8String();
+		filePath /= _textureName.GetString().GetU8String();
 	}
 	else
 	{
 		// そのまま使用
 		filePath = kPath.GetU8String();
-		filePath /= _textureName.GetU8String();
+		filePath /= _textureName.GetString().GetU8String();
 	}
 
 	// 区切り文字を統一する
@@ -50,10 +62,11 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	// 画像のロード
 	return LoadTextureFromFile(
 		_device,
-		filePath.u8string(),
+		filePath,
 		_mipLevels,
 		_textureManager,
-		_viewManager);
+		_viewManager,
+		_textureName);
 }
 
 
@@ -62,53 +75,42 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 // =======================================
 const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	ID3D11Device* _device,
+	const Hashed_String& _textureName,
 	const String& _texturePath,
 	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
+	std::filesystem::path filePath = _texturePath.GetU8String();
+
 	// 画像のロード
 	return LoadTextureFromFile(
 		_device,
-		_texturePath,
+		filePath,
 		_mipLevels,
 		_textureManager,
-		_viewManager);
+		_viewManager,
+		_textureName);
 }
 
 
 // =======================================
 // 画像ファイルをロードする
 // =======================================
-const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
+const TextureHandle LoadTextureFromFile(
 	ID3D11Device* _device,
-	const String& _texturePath,
+	const std::filesystem::path& _texturePath,
 	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
-	DirectX11_ViewManager& _viewManager)
+	DirectX11_ViewManager& _viewManager,
+	const Hashed_String& _keyName)
 {
-	// ファイルパス作成
-	std::filesystem::path filePath;
-	filePath = _texturePath.GetU8String();
-
-	// 登録名
-	String keyName = filePath.filename().u8string();
-
-	// すでにSRVが登録されているか確認
-	if (_viewManager.ExistsSRV(keyName))
-	{
-		TextureHandle handle;
-		handle.textureHandle = _textureManager.GetHandle(keyName);
-		handle.srvHandle = _viewManager.GetSRVHandle(keyName);
-		return handle;
-	}
-
 	// 画像のロード
 	DirectX::ScratchImage image;
 
 	// 画像のロード
 	HRESULT hr = DirectX::LoadFromWICFile(
-		filePath.wstring().c_str(),
+		_texturePath.wstring().c_str(),
 		DirectX::WIC_FLAGS_NONE,
 		nullptr,
 		image);
@@ -145,22 +147,22 @@ const TextureHandle DirectX11_TextureLoadModule::LoadTextureFromFile(
 	desc.MiscFlags = 0;
 
 	// TextureManagerに登録
-	Handle texHandle = _textureManager.Texture2DBufferCreate(
+	Handle texHandle = _textureManager.Texture2DBufferCreateOnGet(
 		_device,
 		&desc,
-		keyName,
+		_keyName,
 		&initData);
 
 	// テクスチャを取得
 	ID3D11Texture2D* data = _textureManager.GetTexture2DBuffer(texHandle);
 
 	// SRVを作成して ResourceViewManager に登録
-	Handle srvHandle = _viewManager.ShaderResourceViewCreate(
+	Handle srvHandle = _viewManager.ShaderResourceViewCreateOnGet(
 		_device,
 		data,
 		0,
 		static_cast<UINT>(meta.mipLevels),
-		keyName);
+		_keyName);
 
 	TextureHandle handle;
 	handle.textureHandle = texHandle;

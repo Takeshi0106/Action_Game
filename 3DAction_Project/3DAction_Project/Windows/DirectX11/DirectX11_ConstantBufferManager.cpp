@@ -11,14 +11,21 @@
 // ============================================================
 // 定数バッファ作成
 // ============================================================
-const Handle DirectX11_ConstantBufferManager::ConstantBufferCreate(
+const Handle DirectX11_ConstantBufferManager::ConstantBufferCreateOnGet(
 	ID3D11Device* _device,
 	size_t _size,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
-	const String& _name,
+	const Hashed_String& _name,
 	const void* _data)
 {
+	// すでに存在しているか確認
+	if (m_ConstantBuffers.Exists(_name)) {
+		WarningLog::OutputToConsole(u8"定数バッファ : " +
+			_name.GetString() + u8" はすでに存在しています");
+		return m_ConstantBuffers.GetHandle(_name);
+	}
+
 	if (!_device || _size == 0) {
 		ErrorLog::OutputToConsole(u8"無効な定数バッファが作成されそうになりました");
 		return Handle();
@@ -65,7 +72,7 @@ const Handle DirectX11_ConstantBufferManager::ConstantBufferCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_ConstantBuffers.AddData((Hashed_String)_name, buffer);
+	return m_ConstantBuffers.AddData(_name, buffer);
 }
 
 
@@ -75,4 +82,22 @@ const Handle DirectX11_ConstantBufferManager::ConstantBufferCreate(
 ID3D11Buffer* DirectX11_ConstantBufferManager::GetConstantBuffer(const Handle& _handle)
 {
 	return m_ConstantBuffers.GetData(_handle)->Get();
+}
+
+
+// ============================================================
+// 定数バッファ削除
+// ============================================================
+void DirectX11_ConstantBufferManager::ReleaseConstantBuffer(const Handle& _handle)
+{
+	m_ConstantBuffers.Remove(_handle);
+}
+
+
+// ============================================================
+// すべての定数バッファ削除
+// ============================================================
+void DirectX11_ConstantBufferManager::ReleaseAllConstantBuffer()
+{
+	m_ConstantBuffers.ALLClear();
 }

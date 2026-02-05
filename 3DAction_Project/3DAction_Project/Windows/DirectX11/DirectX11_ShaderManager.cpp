@@ -31,15 +31,24 @@ void LoadShaderBinaryData(
 // 頂点シェーダー関数
 // ===========================================
 // 頂点シェーダー作成
-const Handle DirectX11_ShaderManager::VertexShaderCreate(
+const Handle DirectX11_ShaderManager::VertexShaderCreateOnGet(
 	ID3D11Device* _device,  
-	const String& _name)
+	const Hashed_String& _name)
 {
+	// 既に存在する場合はハンドルを返す
+	if (m_Vertexs.Exists(_name))
+	{
+		return m_Vertexs.GetHandle(_name);
+		WarningLog::OutputToConsole(
+			u8"頂点シェーダーが既に作成されていました: " + 
+			_name.GetString());
+	}
+
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
 
 	// シェーダーバイナリーデータ読み込み
-	LoadShaderBinaryData(kCompileFilePath, _name, blob);
+	LoadShaderBinaryData(kCompileFilePath, _name.GetString(), blob);
 	
 	// 頂点シェーダー作成
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> shader;
@@ -57,14 +66,28 @@ const Handle DirectX11_ShaderManager::VertexShaderCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Vertexs.AddData((Hashed_String)_name, shader);
+	return m_Vertexs.AddData(_name, shader);
+}
+
+// 頂点シェーダーチェック
+const bool DirectX11_ShaderManager::ExistsVertexShader(
+	const Hashed_String& _name) const
+{
+	return m_Vertexs.Exists(_name);
 }
 
 // 頂点シェーダー返す
-ID3D11VertexShader* DirectX11_ShaderManager::GetVertexShader(
+const ID3D11VertexShader* DirectX11_ShaderManager::GetVertexShader(
 	const Handle& _handle)
 {
 	return m_Vertexs.GetData(_handle)->Get();
+}
+
+// 頂点シェーダー削除
+void DirectX11_ShaderManager::ReleaseVertexShader(
+	const Handle& _name)
+{
+	m_Vertexs.Remove(_name);
 }
 
 
@@ -72,15 +95,24 @@ ID3D11VertexShader* DirectX11_ShaderManager::GetVertexShader(
 // ピクセルシェーダー関数
 // ===========================================
 // ピクセルシェーダー作成
-const Handle DirectX11_ShaderManager::PixelShaderCreate(
+const Handle DirectX11_ShaderManager::PixelShaderCreateOnGet(
 	ID3D11Device* _device, 
-	const String& _name)
+	const Hashed_String& _name)
 {
+	// 既に存在する場合はハンドルを返す
+	if (m_Pixels.Exists(_name))
+	{
+		return m_Pixels.GetHandle(_name);
+		WarningLog::OutputToConsole(
+			u8"ピクセルシェーダーが既に作成されていました: " + 
+			_name.GetString());
+	}
+
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
 
 	// シェーダーバイナリーデータ読み込み
-	LoadShaderBinaryData(kCompileFilePath, _name, blob);
+	LoadShaderBinaryData(kCompileFilePath, _name.GetString(), blob);
 
 	// ピクセルシェーダー作成
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> shader;
@@ -98,29 +130,51 @@ const Handle DirectX11_ShaderManager::PixelShaderCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Pixels.AddData((Hashed_String)_name, shader);
+	return m_Pixels.AddData(_name, shader);
+}
+
+// ピクセルシェーダーチェック
+const bool DirectX11_ShaderManager::ExistsPixelShader(
+	const Hashed_String& _name) const
+{
+	return m_Pixels.Exists(_name);
 }
 
 // ピクセルシェーダー返す
-ID3D11PixelShader* DirectX11_ShaderManager::GetPixelShader(
+const ID3D11PixelShader* DirectX11_ShaderManager::GetPixelShader(
 	const Handle& _handle)
 {
 	return m_Pixels.GetData(_handle)->Get();
 }
 
+// ピクセルシェーダー削除
+void DirectX11_ShaderManager::ReleasePixelShader(
+	const Handle& _name)
+{
+	m_Pixels.Remove(_name);
+}
 
 // ===========================================
 // コンピュートシェーダー関数
 // ===========================================
 // コンピュートシェーダー作成
-const Handle DirectX11_ShaderManager::ComputeShaderCreate(
-	ID3D11Device* _device,  const String& _name)
+const Handle DirectX11_ShaderManager::ComputeShaderCreateOnGet(
+	ID3D11Device* _device,  const Hashed_String& _name)
 {
+	// 既に存在する場合はハンドルを返す
+	if (m_Computes.Exists(_name))
+	{
+		WarningLog::OutputToConsole(
+			u8"コンピュートシェーダーが既に作成されていました: " +
+			_name.GetString());
+		return m_Computes.GetHandle(_name);
+	}
+
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
 
 	// シェーダーバイナリーデータ読み込み
-	LoadShaderBinaryData(kCompileFilePath, _name, blob);
+	LoadShaderBinaryData(kCompileFilePath, _name.GetString(), blob);
 
 	// コンピュートシェーダー作成
 	Microsoft::WRL::ComPtr<ID3D11ComputeShader> shader;
@@ -137,16 +191,39 @@ const Handle DirectX11_ShaderManager::ComputeShaderCreate(
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Computes.AddData((Hashed_String)_name, shader);
+	return m_Computes.AddData(_name, shader);
 }
 
+// コンピュートシェーダーチェック
+const bool DirectX11_ShaderManager::ExistsComputeShader(
+	const Hashed_String& _name) const
+{
+	return m_Computes.Exists(_name);
+}
 
 // コンピュートシェーダー返す
-ID3D11ComputeShader* DirectX11_ShaderManager::GetComputeShader(const Handle& _handle)
+const ID3D11ComputeShader* DirectX11_ShaderManager::GetComputeShader(const Handle& _handle)
 {
 	return m_Computes.GetData(_handle)->Get();
 }
 
+// コンピュートシェーダー削除
+void DirectX11_ShaderManager::ReleaseComputeShader(
+	const Handle& _name)
+{
+	m_Computes.Remove(_name);
+}
+
+
+// ===========================================
+// シェーダー全て削除
+// ===========================================
+void DirectX11_ShaderManager::ReleaseAllShader()
+{
+	m_Vertexs.ALLClear();
+	m_Pixels.ALLClear();
+	m_Computes.ALLClear();
+}
 
 // ===========================================
 // シェーダーバイナリーデータ読み込み関数

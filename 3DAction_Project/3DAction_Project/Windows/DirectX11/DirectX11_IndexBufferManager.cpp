@@ -11,16 +11,23 @@
 // ===========================================================================
 // インデックスバッファ作成
 // ===========================================================================
-const Handle DirectX11_IndexBufferManager::IndexBufferCreate(
+const Handle DirectX11_IndexBufferManager::IndexBufferCreateOnGet(
 	ID3D11Device* _device,
 	const void* _indices,
 	const size_t _size,
 	const uint32_t _indexCount,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
-	const String& _name)
+	const Hashed_String& _name)
 {
+	// 既に存在しているか確認
+	if (m_IndexBuffers.Exists(_name)) {
+		WarningLog::OutputToConsole(u8"インデックスバッファ : " + 
+			_name.GetString() + u8" はすでに存在しています");
+		return m_IndexBuffers.GetHandle(_name);
+	}
 
+	// エラーチェック
 	if (!_device || !_indices || _size == 0) {
 		ErrorLog::OutputToConsole(u8"無効なインデックスバッファが作成されそうになりました");
 		return Handle();
@@ -62,4 +69,22 @@ const Handle DirectX11_IndexBufferManager::IndexBufferCreate(
 IndexBufferData* DirectX11_IndexBufferManager::GetIndexBuffer(const Handle& _handle)
 {
 	return m_IndexBuffers.GetData(_handle);
+}
+
+
+// ===========================================================================
+// インデックスバッファ削除
+// ===========================================================================
+void DirectX11_IndexBufferManager::ReleaseIndexBuffer(const Handle& _handle)
+{
+	m_IndexBuffers.Remove(_handle);
+}
+
+
+// ===========================================================================
+// 全てのインデックスバッファ削除
+// ===========================================================================
+void DirectX11_IndexBufferManager::ReleaseAllIndexBuffer()
+{
+	m_IndexBuffers.ALLClear();
 }

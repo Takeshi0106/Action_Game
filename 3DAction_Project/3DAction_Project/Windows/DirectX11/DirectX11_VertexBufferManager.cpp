@@ -11,15 +11,25 @@
 // ===========================================
 // 頂点バッファ作成
 // ===========================================
-const Handle DirectX11_VertexBufferManager::VertexBufferCreate(
+const Handle DirectX11_VertexBufferManager::VertexBufferCreateOnGet(
 	ID3D11Device* _device,
 	const void* _vertices,
 	const size_t _size,
 	const uint32_t _vertexCount,
 	D3D11_USAGE _usage,
 	D3D11_CPU_ACCESS_FLAG _flag,
-	const String& _name)
+	const Hashed_String& _name)
 {
+	// 同じ名前の頂点バッファが存在するか確認
+	if (m_VertexBuffers.Exists(_name)) 
+	{
+		WarningLog::OutputToConsole(
+			_name.GetString() + u8" 同じ名前の頂点バッファが再作成されました");
+		// 存在する場合はハンドルを返す
+		return m_VertexBuffers.GetHandle(_name);
+	}
+
+	// エラーチェック
 	if (!_device || !_vertices || _size == 0) {
 		ErrorLog::OutputToConsole(u8"無効な頂点バッファが作成されそうになりました");
 		return Handle();

@@ -56,14 +56,14 @@ public:
 	// ------------------------------------------
 	// 頂点バッファ作成関数
 	// ------------------------------------------
-	const Handle VertexBufferCreate(
+	const Handle VertexBufferCreateOnGet(
 		ID3D11Device* _device,
 		const void* _vertices,
 		const size_t _size,
 		const uint32_t _vertexCount,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
-		const String& _name);
+		const Hashed_String& _name);
 
 
 	// ------------------------------------------
@@ -82,21 +82,5 @@ public:
 	// 全頂点バッファ削除関数
 	// ------------------------------------------
 	void ReleaseAllVertexBuffers();
-
-
-	// ------------------------------------------
-	// 頂点バッファチェック
-	// ------------------------------------------
-	bool Exists(const String& _name) const {
-		return m_VertexBuffers.Exists((Hashed_String)_name);
-	}
-
-
-	// ------------------------------------------
-	// 頂点バッファハンドル取得関数
-	// ------------------------------------------
-	const Handle GetVertexBufferHandle(const String& _name) const {
-		return m_VertexBuffers.GetHandle((Hashed_String)_name);
-	}
 };
 

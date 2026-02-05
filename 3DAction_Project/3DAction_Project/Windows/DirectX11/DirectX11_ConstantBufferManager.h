@@ -43,12 +43,12 @@ public:
 	// ------------------------------------------
 	// 定数バッファ作成関数
 	// ------------------------------------------
-	const Handle ConstantBufferCreate(
+	const Handle ConstantBufferCreateOnGet(
 		ID3D11Device* _device,
 		size_t _size,
 		D3D11_USAGE _usage,
 		D3D11_CPU_ACCESS_FLAG _flag,
-		const String& _name,
+		const Hashed_String& _name,
 		const void* _data = nullptr);
 
 
@@ -59,20 +59,13 @@ public:
 
 
 	// ------------------------------------------
-	// 定数バッファチェック
+	// 定数バッファ削除
 	// ------------------------------------------
-	bool Exists(const String& _name) const
-	{
-		return m_ConstantBuffers.Exists((Hashed_String)_name);
-	}
+	void ReleaseConstantBuffer(const Handle& _handle);
 
 
 	// ------------------------------------------
-	// 定数バッファハンドル取得
+	// 全ての定数バッファ削除
 	// ------------------------------------------
-	const Handle GetConstantBufferHandle(const String& _name) const
-	{
-		return m_ConstantBuffers.GetHandle((Hashed_String)_name);
-	}
+	void ReleaseAllConstantBuffer();
 };
-
