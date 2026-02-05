@@ -38,10 +38,10 @@ const Handle DirectX11_ShaderManager::VertexShaderCreateOnGet(
 	// 既に存在する場合はハンドルを返す
 	if (m_Vertexs.Exists(_name))
 	{
-		return m_Vertexs.GetHandle(_name);
 		WarningLog::OutputToConsole(
-			u8"頂点シェーダーが既に作成されていました: " + 
+			u8"頂点シェーダーが既に作成されていました: " +
 			_name.GetString());
+		return m_Vertexs.GetHandle(_name);
 	}
 
 	// バイナリーデータ入れる
@@ -102,10 +102,10 @@ const Handle DirectX11_ShaderManager::PixelShaderCreateOnGet(
 	// 既に存在する場合はハンドルを返す
 	if (m_Pixels.Exists(_name))
 	{
-		return m_Pixels.GetHandle(_name);
 		WarningLog::OutputToConsole(
-			u8"ピクセルシェーダーが既に作成されていました: " + 
+			u8"ピクセルシェーダーが既に作成されていました: " +
 			_name.GetString());
+		return m_Pixels.GetHandle(_name);
 	}
 
 	// バイナリーデータ入れる
