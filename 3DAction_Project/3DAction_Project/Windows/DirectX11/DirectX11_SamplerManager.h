@@ -10,14 +10,12 @@
 // ==============================================
 // ヘッダー
 // ==============================================
-// DirectXヘッダー
-#include <d3d11.h>
-// スマートポインタ
-#include <wrl/client.h>
+// サンプラーデータ
+#include "DirectX11_SamplerData.h"
+// 自作サンプラーデーター
+#include "../../SamplerSetting.h"
 // データ管理テンプレートヘッダー
 #include "../../TemplateManager.h"
-// 文字列ヘッダー
-#include "../../Hashed_String.h"
 
 
 // ==============================================
@@ -30,7 +28,7 @@ private:
 	// メンバー変数
 	// ------------------------------------------
 	// サンプラー管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11SamplerState>> m_Samplers;
+	TemplateManager<DirectX11_SamplerData, SamplerDesc, SamplerDescHash> m_Samplers;
 
 
 public:
@@ -40,31 +38,34 @@ public:
 	DirectX11_SamplerManager() = default;
 	~DirectX11_SamplerManager() = default;
 
-
 	// ------------------------------------------
 	// サンプラー作成関数
 	// ------------------------------------------
-	const Handle SamplerStateCreateOnGet(
+	Handle SamplerStateCreateOnGet(
 		ID3D11Device* _device,
-		D3D11_SAMPLER_DESC& desc,
-		const Hashed_String& _name);
-
+		D3D11_SAMPLER_DESC& _dxDesc,
+		const SamplerDesc& _myDesc);
 
 	// ------------------------------------------
 	// サンプラー取得関数
 	// ------------------------------------------
-	ID3D11SamplerState* GetSamplerState(const Handle& _handle);
-
+	const DirectX11_SamplerData* GetSamplerState(const Handle& _handle) {
+		return m_Samplers.GetData(_handle);
+	}
 
 	// ------------------------------------------
 	// サンプラー削除
 	// ------------------------------------------
-	void ReleaseSampler(const Handle& _name);
-
+	void ReleaseSampler(const Handle& _handle) {
+		m_Samplers.Remove(_handle);
+	}
 
 	// ------------------------------------------
 	// サンプラーすべて削除
 	// ------------------------------------------
-	void ReleaseAllSampler();
+	void ReleaseAllSampler() {
+		m_Samplers.ALLClear();
+	}
+
 };
 

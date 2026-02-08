@@ -11,53 +11,43 @@
 // ============================================================================
 // サンプラー作成
 // ============================================================================
-const Handle DirectX11_SamplerManager::SamplerStateCreateOnGet(
+Handle DirectX11_SamplerManager::SamplerStateCreateOnGet(
 	ID3D11Device* _device,
-	D3D11_SAMPLER_DESC& desc,
-	const Hashed_String& _name)
+	D3D11_SAMPLER_DESC& _dxDesc,
+	const SamplerDesc& _myDesc)
 {
+	if (m_Samplers.Exists(_myDesc))
+	{
+		// 取得
+		Handle handle = m_Samplers.GetHandle(_myDesc);
 
+#if defined(DEBUG) || defined(_DEBUG)
+		// 同一確認
+		if (!m_Samplers.GetData(handle)->IsSame(_dxDesc)) {
+			WarningLog::OutputToConsole(u8"同じ設定のサンプラーが異なる設定で作成されようとしました");
+			return Handle();
+		}
+#endif
+		// ログ出力
+		WarningLog::OutputToConsole(u8"同じ設定のサンプラーが作成されようとしました");
+		return handle;
+	}
+
+	// 無効チェック
 	if (!_device) {
 		ErrorLog::OutputToConsole(u8"無効なサンプラーが作成されそうになりました");
 		return Handle();
 	}
 
 	// サンプラー作成
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> sampler;
+	DirectX11_SamplerData sampler;
 
 	// サンプラー作成
-	HRESULT hr = _device->CreateSamplerState(&desc, sampler.GetAddressOf());
-	if (FAILED(hr)) {
+	if (!sampler.Create_DX11SamplerState(_device, _dxDesc)) {
+		ErrorLog::OutputToConsole(u8"サンプラーの作成に失敗しました");
 		return Handle();
 	}
 
 	// 管理配列に追加してハンドルを返す
-	return m_Samplers.AddData(_name, sampler);
-}
-
-
-// ============================================================================
-// サンプラー取得
-// ============================================================================
-ID3D11SamplerState* DirectX11_SamplerManager::GetSamplerState(const Handle& _handle)
-{
-	return m_Samplers.GetData(_handle)->Get();
-}
-
-
-// ============================================================================
-// サンプラー削除
-// ============================================================================
-void DirectX11_SamplerManager::ReleaseSampler(const Handle& _handle)
-{
-	m_Samplers.Remove(_handle);
-}
-
-
-// ============================================================================
-// サンプラーすべて削除
-// ============================================================================
-void DirectX11_SamplerManager::ReleaseAllSampler()
-{
-	m_Samplers.ALLClear();
+	return m_Samplers.AddData(_myDesc, sampler);
 }
