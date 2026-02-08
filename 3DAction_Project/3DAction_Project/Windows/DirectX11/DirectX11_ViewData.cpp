@@ -11,7 +11,6 @@
 // ==========================================
 // レンダーターゲットビュー作成
 // ==========================================
-// 作成
 bool DirectX11_RTVData::Create_DX11RTV(
 	ID3D11Device* _device,
 	ID3D11Texture2D& _resource,
@@ -102,10 +101,9 @@ bool DirectX11_DSVData::Create_DX11DSV(
 
 #if defined(DEBUG) || defined(_DEBUG)
 // ==========================================
-// デバッグ時の同一確認
+// RTV デバッグ 同一確認
 // ==========================================
-// RTV 同一確認
-const bool DirectX11_RTVData::IsSame(
+bool DirectX11_RTVData::IsSame(
 	const D3D11_RENDER_TARGET_VIEW_DESC& _desc) const
 {
 	// フォーマットが異なる
@@ -124,8 +122,11 @@ const bool DirectX11_RTVData::IsSame(
 	return true;
 }
 
-// SRV 同一確認
-const bool DirectX11_SRVData::IsSame(
+
+// ==========================================
+// SRV デバッグ 同一確認
+// ==========================================
+bool DirectX11_SRVData::IsSame(
 	const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc) const
 {
 	// フォーマットが異なる
@@ -145,8 +146,11 @@ const bool DirectX11_SRVData::IsSame(
 	return true;
 }
 
-// DSV 同一確認
-const bool DirectX11_DSVData::IsSame(
+
+// ==========================================
+// DSV デバッグ 同一確認
+// ==========================================
+bool DirectX11_DSVData::IsSame(
 	const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc) const
 {
 	// フォーマットが異なる

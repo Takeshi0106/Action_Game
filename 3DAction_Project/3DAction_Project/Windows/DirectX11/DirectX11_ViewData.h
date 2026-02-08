@@ -25,12 +25,12 @@ private:
 	// メンバー変数
 	// -----------------------------------
 	// レンダーターゲットビュー本体
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_RTV;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_RTV = nullptr;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// -----------------------------------
 	// デバッグ用
-	// -----------------------------------
+	// -----------------------------------7t
 	D3D11_RENDER_TARGET_VIEW_DESC m_Desc {};
 #endif
 
@@ -60,7 +60,7 @@ public:
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 同一確認
-	const bool IsSame(const D3D11_RENDER_TARGET_VIEW_DESC& _desc) const;
+	bool IsSame(const D3D11_RENDER_TARGET_VIEW_DESC& _desc) const;
 #endif
 };
 
@@ -75,7 +75,7 @@ private:
 	// メンバー変数
 	// -----------------------------------
 	// シェーダーリソースビュー本体
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_SRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_SRV = nullptr;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// -----------------------------------
@@ -108,7 +108,7 @@ public:
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 同一確認
-	const bool IsSame(const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc) const;
+	bool IsSame(const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc) const;
 #endif
 };
 
@@ -123,13 +123,13 @@ private:
 	// メンバー変数
 	// -----------------------------------
 	// 深度ステンシルビュー本体
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_DSV {};
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_DSV = nullptr;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// -----------------------------------
 	// デバッグ用
 	// -----------------------------------
-	D3D11_DEPTH_STENCIL_VIEW_DESC m_Desc;
+	D3D11_DEPTH_STENCIL_VIEW_DESC m_Desc {};
 #endif
 
 
@@ -157,6 +157,6 @@ public:
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 同一確認
-	const bool IsSame(const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc) const;
+	bool IsSame(const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc) const;
 #endif
 };

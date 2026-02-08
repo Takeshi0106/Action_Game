@@ -14,7 +14,7 @@
 // 作成
 const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 	ID3D11Device* _device,
-	ID3D11Texture2D* _resource,
+	ID3D11Texture2D& _resource,
 	const D3D11_RENDER_TARGET_VIEW_DESC& _desc,
 	const Hashed_String& _name)
 {
@@ -40,8 +40,8 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 	}
 
 	// 無効チェック
-	if (!_device || !_resource) {
-		ErrorLog::OutputToConsole(u8"無効なレンダーターゲットビューが作成されそうになりました");
+	if (!_device) {
+		ErrorLog::OutputToConsole(u8"無効なデバイスが渡されました。");
 		return Handle();
 	}
 
@@ -78,7 +78,7 @@ void DirectX11_ViewManager::ReleaseRTV(const Handle& _handle)
 // 作成
 const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	ID3D11Device* _device,
-	ID3D11Texture2D* _resource,
+	ID3D11Texture2D& _resource,
 	const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc,
 	const Hashed_String& _name)
 {
@@ -103,8 +103,8 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	}
 
 	// 無効チェック
-	if (!_device || !_resource) {
-		ErrorLog::OutputToConsole(u8"無効なシェーダーリソースビューが作成されそうになりました");
+	if (!_device) {
+		ErrorLog::OutputToConsole(u8"無効なデバイスが渡されました。");
 		return Handle();
 	}
 
@@ -141,7 +141,7 @@ void DirectX11_ViewManager::ReleaseSRV(const Handle& _handle)
 // 作成
 const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 	ID3D11Device* _device,
-	ID3D11Texture2D* _resource,
+	ID3D11Texture2D& _resource,
 	const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc,
 	const Hashed_String& _name)
 {
@@ -166,8 +166,8 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 	}
 
 	// エラーチェック
-	if (!_device || !_resource) {
-		ErrorLog::OutputToConsole(u8"無効な深度ステンシルビューが作成されそうになりました");
+	if (!_device) {
+		ErrorLog::OutputToConsole(u8"無効なデバイスが渡されました。");
 		return Handle();
 	}
 
