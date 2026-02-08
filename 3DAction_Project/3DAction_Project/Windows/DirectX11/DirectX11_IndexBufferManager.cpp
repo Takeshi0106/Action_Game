@@ -11,80 +11,44 @@
 // ===========================================================================
 // インデックスバッファ作成
 // ===========================================================================
-const Handle DirectX11_IndexBufferManager::IndexBufferCreateOnGet(
+Handle DirectX11_IndexBufferManager::IndexBufferCreateOnGet(
 	ID3D11Device* _device,
-	const void* _indices,
-	const size_t _size,
-	const uint32_t _indexCount,
-	D3D11_USAGE _usage,
-	D3D11_CPU_ACCESS_FLAG _flag,
-	const Hashed_String& _name)
+	const Hashed_String& _ibName,
+	const D3D11_BUFFER_DESC& _bufferDesc,
+	const D3D11_SUBRESOURCE_DATA* _initData,
+	const uint32_t& _indexCount,
+	const DXGI_FORMAT& _format)
 {
 	// 既に存在しているか確認
-	if (m_IndexBuffers.Exists(_name)) {
+	if (m_IndexBuffers.Exists(_ibName)) 
+	{
+		// ログ出力
 		WarningLog::OutputToConsole(u8"インデックスバッファ : " + 
-			_name.GetString() + u8" はすでに存在しています");
-		return m_IndexBuffers.GetHandle(_name);
+			_ibName.GetString() + u8" はすでに存在しています");
+
+		// ハンドル返す
+		return m_IndexBuffers.GetHandle(_ibName);
 	}
 
-	// エラーチェック
-	if (!_device || !_indices || _size == 0) {
-		ErrorLog::OutputToConsole(u8"無効なインデックスバッファが作成されそうになりました");
-		return Handle();
-	}
+	// インデックスバッファ変数
+	DirectX11_IndexBufferData bufferData;
 
 	// インデックスバッファ作成
-	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
+	if (bufferData.Create_DX11IndexBuffer(
+		_device,
+		_bufferDesc,
+		_initData,
+		_indexCount,
+		_format))
+	{
+		// ログ出力
+		ErrorLog::OutputToConsole(u8"インデックスバッファ : " +
+			_ibName.GetString() + u8" の作成に失敗しました");
 
-	// インデックスバッファ作成情報設定
-	D3D11_BUFFER_DESC desc{};
-	desc.Usage = _usage;
-	desc.ByteWidth = static_cast<UINT>(_size);
-	desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	desc.CPUAccessFlags = _flag;
-
-	// 初期データ設定
-	D3D11_SUBRESOURCE_DATA initData{};
-	initData.pSysMem = _indices;
-	
-	// インデックスバッファ作成
-	HRESULT hr = _device->CreateBuffer(&desc, &initData, buffer.GetAddressOf());
-	if (FAILED(hr)) {
+		// 失敗したら空ハンドルを返す
 		return Handle();
 	}
-	
-	// インデックスバッファデータ作成
-	IndexBufferData bufferData{};
-	bufferData.indexBuffer = std::move(buffer);
-	bufferData.indexCount = _indexCount;
 
 	// 管理配列に追加してハンドルを返す
-	return m_IndexBuffers.AddData((Hashed_String)_name, bufferData);
-}
-
-
-// ===========================================================================
-// インデックスバッファ取得
-// ===========================================================================
-IndexBufferData* DirectX11_IndexBufferManager::GetIndexBuffer(const Handle& _handle)
-{
-	return m_IndexBuffers.GetData(_handle);
-}
-
-
-// ===========================================================================
-// インデックスバッファ削除
-// ===========================================================================
-void DirectX11_IndexBufferManager::ReleaseIndexBuffer(const Handle& _handle)
-{
-	m_IndexBuffers.Remove(_handle);
-}
-
-
-// ===========================================================================
-// 全てのインデックスバッファ削除
-// ===========================================================================
-void DirectX11_IndexBufferManager::ReleaseAllIndexBuffer()
-{
-	m_IndexBuffers.ALLClear();
+	return m_IndexBuffers.AddData(_ibName, bufferData);
 }

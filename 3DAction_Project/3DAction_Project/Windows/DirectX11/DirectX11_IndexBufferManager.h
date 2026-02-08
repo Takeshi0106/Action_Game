@@ -10,39 +10,25 @@
 // ==============================================
 // ヘッダー
 // ==============================================
-// DirectXヘッダー
-#include <d3d11.h>
-// スマートポインタ
-#include <wrl/client.h>
+// インデックスバッファデータ
+#include "DirectX11_IndexBufferData.h"
 // データ管理テンプレートヘッダー
 #include "../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../../UTF8_String.h"
-
-
-// ==============================================
-// 構造体宣言
-// ==============================================
-struct IndexBufferData
-{
-	// インデックスバッファ
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
-	// インデックス数
-	uint32_t indexCount = 0;
-};
+#include "../../Hashed_String.h"
 
 
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_IndexBufferManager
+class DirectX11_IndexBufferManager final
 {
 private:
 	// ------------------------------------------
 	// メンバー変数
 	// ------------------------------------------
 	// インデックスバッファ管理
-	TemplateManager<IndexBufferData> m_IndexBuffers;
+	TemplateManager<DirectX11_IndexBufferData> m_IndexBuffers;
 
 
 public:
@@ -56,32 +42,37 @@ public:
 	// ------------------------------------------
 	// インデックスバッファ作成関数
 	// ------------------------------------------
-	const Handle IndexBufferCreateOnGet(
+	Handle IndexBufferCreateOnGet(
 		ID3D11Device* _device,
-		const void* _indices,
-		const size_t _size,
-		const uint32_t _indexCount,
-		D3D11_USAGE _usage,
-		D3D11_CPU_ACCESS_FLAG _flag,
-		const Hashed_String& _name);
+		const Hashed_String& _ibName,
+		const D3D11_BUFFER_DESC& _bufferDesc,
+		const D3D11_SUBRESOURCE_DATA* _initData,
+		const uint32_t& _indexCount,
+		const DXGI_FORMAT& _format = DXGI_FORMAT_R32_UINT);
 
 
 	// ------------------------------------------
 	// インデックスバッファ取得関数
 	// ------------------------------------------
-	IndexBufferData* GetIndexBuffer(const Handle& _handle);
+	const DirectX11_IndexBufferData* GetIndexBuffer(const Handle& _handle) {
+		return m_IndexBuffers.GetData(_handle);
+	}
 
 
 	// ------------------------------------------
 	// インデックスバッファ削除関数
 	// ------------------------------------------
-	void ReleaseIndexBuffer(const Handle& _handle);
+	void ReleaseIndexBuffer(const Handle& _handle) {
+		m_IndexBuffers.Remove(_handle);
+	}
 
 
 	// ------------------------------------------
 	// 全てのインデックスバッファ削除関数
 	// ------------------------------------------
-	void ReleaseAllIndexBuffer();
+	void ReleaseAllIndexBuffer() {
+		m_IndexBuffers.ALLClear();
+	}
 
 };
 
