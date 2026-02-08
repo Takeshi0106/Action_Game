@@ -50,7 +50,7 @@ public:
 	// ------------------------------------------
 	// 定数バッファ取得関数
 	// ------------------------------------------
-	DirectX11_ConstantBufferData* GetConstantBuffer(const Handle& _handle) {
+	const DirectX11_ConstantBufferData* GetConstantBuffer(const Handle& _handle) {
 		return m_ConstantBuffers.GetData(_handle);
 	}
 

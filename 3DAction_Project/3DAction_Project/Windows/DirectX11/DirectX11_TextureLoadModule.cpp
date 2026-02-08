@@ -154,7 +154,7 @@ const TextureHandle LoadTextureFromFile(
 		&initData);
 
 	// テクスチャを取得
-	ID3D11Texture2D* data = _textureManager.GetTexture2DBuffer(texHandle);
+	const DirectX11_Texture2DData* data = _textureManager.GetTexture2DBuffer(texHandle);
 
 	// SRVを作成して ResourceViewManager に登録
 	//Handle srvHandle = _viewManager.ShaderResourceViewCreateOnGet(

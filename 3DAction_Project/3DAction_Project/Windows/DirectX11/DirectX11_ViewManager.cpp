@@ -12,7 +12,7 @@
 // レンダーターゲット
 // ===========================================================================
 // 作成
-const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
+Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D& _resource,
 	const D3D11_RENDER_TARGET_VIEW_DESC& _desc,
@@ -63,7 +63,7 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 // シェーダーリソースビュー
 // ===========================================================================
 // 作成
-const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
+Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D& _resource,
 	const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc,
@@ -114,7 +114,7 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 // 深度ステンシルビュー
 // ===========================================================================
 // 作成
-const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
+Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 	ID3D11Device* _device,
 	ID3D11Texture2D& _resource,
 	const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc,

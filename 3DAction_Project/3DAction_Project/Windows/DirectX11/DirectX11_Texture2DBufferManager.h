@@ -40,7 +40,7 @@ public:
 	// ------------------------------------------
 	// 2Dテクスチャバッファ作成関数
 	// ------------------------------------------
-	const Handle Texture2DBufferCreateOnGet(
+	Handle Texture2DBufferCreateOnGet(
 		ID3D11Device* _device,
 		const D3D11_TEXTURE2D_DESC& _desc,
 		const Hashed_String& _name,
@@ -49,7 +49,7 @@ public:
 	// ------------------------------------------
 	// 2Dテクスチャバッファ取得関数
 	// ------------------------------------------
-	DirectX11_Texture2DData* GetTexture2DBuffer(const Handle& _handle) {
+	const DirectX11_Texture2DData* GetTexture2DBuffer(const Handle& _handle) {
 		return m_Texture2DBuffers.GetData(_handle);
 	}
 

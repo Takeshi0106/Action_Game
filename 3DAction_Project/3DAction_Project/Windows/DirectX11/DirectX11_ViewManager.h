@@ -46,21 +46,21 @@ public:
 	// ビュー作成関数
 	// ------------------------------------------
 	// レンダーターゲットビュー作成
-	const Handle RenderTargetViewCreateOnGet(
+	Handle RenderTargetViewCreateOnGet(
 		ID3D11Device* _device,
 		ID3D11Texture2D& _resource,
 		const D3D11_RENDER_TARGET_VIEW_DESC& _desc,
 		const Hashed_String& _name);
 
 	// シェーダーリソースビュー作成
-	const Handle ShaderResourceViewCreateOnGet(
+	Handle ShaderResourceViewCreateOnGet(
 		ID3D11Device* _device,
 		ID3D11Texture2D& _resource,
 		const D3D11_SHADER_RESOURCE_VIEW_DESC& _desc,
 		const Hashed_String& _name);
 
 	// 深度ステンシルビュー作成
-	const Handle DepthStencilViewCreateOnGet(
+	Handle DepthStencilViewCreateOnGet(
 		ID3D11Device* _device,
 		ID3D11Texture2D& _resource,
 		const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc,
@@ -70,15 +70,15 @@ public:
 	// ビュー取得関数
 	// ------------------------------------------
 	// RTV取得
-	DirectX11_RTVData* GetRenderTargetView(const Handle& _handle) {
+	const DirectX11_RTVData* GetRenderTargetView(const Handle& _handle) {
 		return m_RenderTargetViews.GetData(_handle);
 	}
 	// SRV取得
-	ID3D11ShaderResourceView* GetShaderResourceView(const Handle& _handle) {
+	const ID3D11ShaderResourceView* GetShaderResourceView(const Handle& _handle) {
 		return m_ShaderResourceViews.GetData(_handle)->GetSRV();
 	}
 	// DSV取得
-	ID3D11DepthStencilView* GetDepthStencilView(const Handle& _handle) {
+	const ID3D11DepthStencilView* GetDepthStencilView(const Handle& _handle) {
 		return m_DepthStencilViews.GetData(_handle)->GetDSV();
 	}
 
