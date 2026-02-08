@@ -42,7 +42,7 @@ public:
 	~DirectX11_TextureHandleManager() = default;
 
 	// テクスチャハンドル追加
-	const Handle CreateTextures(
+	Handle CreateTextures(
 		ID3D11Device* _device,
 		const D3D11_TEXTURE2D_DESC* _desc,
 		const Hashed_String& _name,

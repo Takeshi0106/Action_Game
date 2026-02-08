@@ -4,8 +4,14 @@
 // =======================================
 // 必須ヘッダー
 #include "DirectX11_TextureLoadModule.h"
+// テクスチャ2Dバッファマネージャーヘッダー
+#include "DirectX11_Texture2DBufferManager.h"
+// ビューマネージャーヘッダー
+#include "DirectX11_ViewManager.h"
 // ファイルパスを取得
 #include <filesystem>
+// DirectXヘッダー
+#include <d3d11.h>
 // 画像読込みオープンソース(MITライセンス)
 #include <DirectXTex.h>
 #pragma comment(lib, "DirectXTex.lib")
@@ -16,24 +22,23 @@
 // =======================================
 // プロトタイプ宣言
 // =======================================
-const TextureHandle LoadTextureFromFile(
+// 画像ファイルをロードする
+TextureHandle LoadTextureFromFile(
 	ID3D11Device* _device,
+	const Hashed_String& _keyName,
 	const std::filesystem::path& _texturePath,
-	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
-	DirectX11_ViewManager& _viewManager,
-	const Hashed_String& _keyName);
+	DirectX11_ViewManager& _viewManager);
 
 
 // =======================================
 // 画像ファイルをロードする
 // テクスチャフォルダーからロードする
 // =======================================
-const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
+TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	ID3D11Device* _device,
 	const Hashed_String& _textureName,
 	const String& _textureFolderName,
-	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
@@ -62,48 +67,46 @@ const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	// 画像のロード
 	return LoadTextureFromFile(
 		_device,
+		_textureName,
 		filePath,
-		_mipLevels,
 		_textureManager,
-		_viewManager,
-		_textureName);
+		_viewManager);
 }
 
 
 // =======================================
 // 画像ファイルをロードする
+// モデルなどの直接パスからロードする
 // =======================================
-const TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
+TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	ID3D11Device* _device,
 	const Hashed_String& _textureName,
 	const String& _texturePath,
-	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
+	// ファイルパス作成
 	std::filesystem::path filePath = _texturePath.GetU8String();
 
 	// 画像のロード
 	return LoadTextureFromFile(
 		_device,
+		_textureName,
 		filePath,
-		_mipLevels,
 		_textureManager,
-		_viewManager,
-		_textureName);
+		_viewManager);
 }
 
 
 // =======================================
 // 画像ファイルをロードする
 // =======================================
-const TextureHandle LoadTextureFromFile(
+TextureHandle LoadTextureFromFile(
 	ID3D11Device* _device,
+	const Hashed_String& _keyName,
 	const std::filesystem::path& _texturePath,
-	uint16_t _mipLevels,
 	DirectX11_Texture2DBufferManager& _textureManager,
-	DirectX11_ViewManager& _viewManager,
-	const Hashed_String& _keyName)
+	DirectX11_ViewManager& _viewManager)
 {
 	// 画像のロード
 	DirectX::ScratchImage image;
@@ -137,7 +140,7 @@ const TextureHandle LoadTextureFromFile(
 	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width = static_cast<UINT>(meta.width);
 	desc.Height = static_cast<UINT>(meta.height);
-	desc.MipLevels = static_cast<UINT>(_mipLevels);
+	desc.MipLevels = 0;
 	desc.ArraySize = static_cast<UINT>(meta.arraySize);
 	desc.Format = meta.format;
 	desc.SampleDesc.Count = 1;
@@ -156,17 +159,23 @@ const TextureHandle LoadTextureFromFile(
 	// テクスチャを取得
 	const DirectX11_Texture2DData* data = _textureManager.GetTexture2DBuffer(texHandle);
 
-	// SRVを作成して ResourceViewManager に登録
-	//Handle srvHandle = _viewManager.ShaderResourceViewCreateOnGet(
-	//	_device,
-	//	data,
-	//	0,
-	//	static_cast<UINT>(meta.mipLevels),
-	//	_keyName);
+	// SRVDesc作成
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = desc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = desc.MipLevels;
+
+	// SRV登録
+	Handle srvHandle = _viewManager.ShaderResourceViewCreateOnGet(
+		_device,
+		*(data->GetTexture()),
+		srvDesc,
+		_keyName);
 
 	TextureHandle handle;
 	handle.textureHandle = texHandle;
-	handle.srvHandle = Handle();
+	handle.srvHandle = srvHandle;
 
 	return handle;
 }

@@ -9,18 +9,20 @@
 // =========================================
 // ヘッダー
 // =========================================
-// DirectXヘッダー
-#include <d3d11.h>
 // テクスチャハンドル
 #include "../../TextureHandleh.h"
-// SRVマネージャー
-#include "DirectX11_ViewManager.h"
-// テクスチャ作成ヘッダー
-#include "DirectX11_Texture2DBufferManager.h"
 // 文字列ヘッダー
 #include "../../UTF8_String.h"
 // ハッシュ文字列ヘッダー
 #include "../../Hashed_String.h"
+
+
+// =========================================
+// 前方宣言
+// =========================================
+struct DirectX11_Texture2DBufferManager;
+class DirectX11_ViewManager;
+class ID3D11Device;
 
 
 // =========================================
@@ -35,7 +37,6 @@ private:
 	// テクスチャフォルダパス
 	const String& kPath;
 
-
 public:
 	// ----------------------------------
 	// コンストラクタ・デストラクタ
@@ -48,25 +49,24 @@ public:
 	// テクスチャロード
 	// テクスチャフォルダーからロードする
 	// ----------------------------------
-	const TextureHandle LoadFaileTexture_TextureFolder(
+	TextureHandle LoadFaileTexture_TextureFolder(
 		ID3D11Device* _device,
 		const Hashed_String& _textureName,
 		const String& _textureFolderName,
-		uint16_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,
 		DirectX11_ViewManager& _viewManager);
 
 
 	// ----------------------------------
 	// テクスチャロード
-	// モデルなどで直接パスを指定してロードする
+	// モデルなどでプロジェクトからの相対パスを指定してロードする
 	// ----------------------------------
-	const TextureHandle LoadFaileTexture(
+	TextureHandle LoadFaileTexture(
 		ID3D11Device* _device,
 		const Hashed_String& _textureName,
 		const String& _texturePath,
-		uint16_t _mipLevels,
 		DirectX11_Texture2DBufferManager& _textureManager,
 		DirectX11_ViewManager& _viewManager);
+
 };
 
