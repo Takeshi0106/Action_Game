@@ -11,7 +11,7 @@
 // ========================================================================
 // 2Dテクスチャバッファ作成
 // ========================================================================
-const Handle DirectX11_Texture2DBufferManager::Texture2DBufferCreateOnGet(
+Handle DirectX11_Texture2DBufferManager::Texture2DBufferCreateOnGet(
 	ID3D11Device* _device,
 	const D3D11_TEXTURE2D_DESC& _desc,
 	const Hashed_String& _name,
