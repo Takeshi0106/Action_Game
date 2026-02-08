@@ -193,6 +193,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="ObjectSystem.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="ResourceViewData.cpp" />
     <ClCompile Include="ResultSceneState.cpp" />
     <ClCompile Include="SamplerData.cpp" />
     <ClCompile Include="SamplerManager.cpp" />
@@ -200,7 +201,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Square2D.cpp" />
     <ClCompile Include="SunLight.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
-    <ClCompile Include="ResourceViewData.cpp" />
     <ClCompile Include="TextureData.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -219,6 +219,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Windows\DirectX11\DirectX11_IndexBufferManager.cpp" />
     <ClCompile Include="Windows\DirectX11\DirectX11_References.cpp" />
     <ClCompile Include="Windows\DirectX11\DirectX11_ResourceManager.cpp" />
+    <ClCompile Include="Windows\DirectX11\DirectX11_SamplerData.cpp" />
     <ClCompile Include="Windows\DirectX11\DirectX11_SamplerManager.cpp" />
     <ClCompile Include="Windows\DirectX11\DirectX11_ShaderCompileModule.cpp" />
     <ClCompile Include="Windows\DirectX11\DirectX11_ShaderManager.cpp" />
@@ -275,6 +276,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="DrawComand.h" />
     <ClInclude Include="DrawPathConfig.h" />
     <ClInclude Include="Hashed_String.h" />
+    <ClInclude Include="ResourceViewData.h" />
     <ClInclude Include="UTF8_String.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="Matrix3x3.h" />
@@ -346,7 +348,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="SunLight.h" />
     <ClInclude Include="TextureHandleh.h" />
     <ClInclude Include="TextureLoader.h" />
-    <ClInclude Include="ResourceViewData.h" />
     <ClInclude Include="TextureData.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -383,6 +384,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="Windows\DirectX11\DirectX11_IndexBufferManager.h" />
     <ClInclude Include="Windows\DirectX11\DirectX11_References.h" />
     <ClInclude Include="Windows\DirectX11\DirectX11_ResourceManager.h" />
+    <ClInclude Include="Windows\DirectX11\DirectX11_SamplerData.h" />
     <ClInclude Include="Windows\DirectX11\DirectX11_SamplerManager.h" />
     <ClInclude Include="Windows\DirectX11\DirectX11_ShaderCompileModule.h" />
     <ClInclude Include="Windows\DirectX11\DirectX11_ShaderManager.h" />

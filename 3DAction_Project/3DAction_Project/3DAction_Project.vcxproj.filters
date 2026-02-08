@@ -379,6 +379,9 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData">
       <UniqueIdentifier>{ed359337-94e3-4612-a9af-c5d871a56d90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData">
+      <UniqueIdentifier>{eb277a86-4179-4291-8996-bc6a83147a49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -467,9 +470,6 @@
     </ClCompile>
     <ClCompile Include="TextureLoader.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceViewData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClCompile>
     <ClCompile Include="SamplerData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager\SamplerData</Filter>
@@ -666,6 +666,12 @@
     <ClCompile Include="Windows\DirectX11\DirectX11_ViewData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
     </ClCompile>
+    <ClCompile Include="Windows\DirectX11\DirectX11_SamplerData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceViewData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderData.h">
@@ -766,9 +772,6 @@
     </ClInclude>
     <ClInclude Include="TextureLoader.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceViewData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClInclude>
     <ClInclude Include="SamplerData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\3_SamplerManager\SamplerData</Filter>
@@ -1072,6 +1075,12 @@
     </ClInclude>
     <ClInclude Include="Windows\DirectX11\DirectX11_ViewData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\DirectX11\DirectX11_SamplerData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceViewData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
