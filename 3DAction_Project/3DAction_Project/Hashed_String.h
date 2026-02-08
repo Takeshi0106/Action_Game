@@ -24,14 +24,17 @@ private:
 	// メンバー変数
 	// --------------------------------
 	// 文字列
-	String m_String;
+	String m_String = u8"";
 	// ハッシュ値
-	size_t m_Hash;
+	size_t m_Hash = 0;
 
 public:
 	// --------------------------------
 	// コンストラクタ
 	// --------------------------------
+	// デフォルトコンストラクタ
+	Hashed_String() = default;
+
 	explicit Hashed_String(const char8_t* _str)
 		: m_String(_str), 
 		m_Hash(std::hash<std::u8string>{}(m_String.GetU8String())) {}
@@ -43,9 +46,6 @@ public:
 		m_Hash(std::hash<std::u8string>{}(m_String.GetU8String())) {}
 	Hashed_String(const Hashed_String&) = default;
 	Hashed_String(Hashed_String&&) noexcept = default;
-
-	// デフォルトコンストラクタ
-	Hashed_String() = default;
 
 	// --------------------------------
 	// コピー・ムーブ
