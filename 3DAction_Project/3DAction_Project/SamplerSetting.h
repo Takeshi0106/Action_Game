@@ -54,15 +54,35 @@ private:
 
 public:
 	// フィルター
-	const SamplerFilter filter;
+	SamplerFilter filter = SamplerFilter::Linear;
 
 	// アドレス
-	const SamplerAddressMode addressU;
-	const SamplerAddressMode addressV;
-	const SamplerAddressMode addressW; // 2Dの時は Clamp を設定してください。
+	SamplerAddressMode addressU = SamplerAddressMode::Wrap;
+	SamplerAddressMode addressV = SamplerAddressMode::Wrap;
+	// 2Dの時は Clamp を設定してください。
+	SamplerAddressMode addressW = SamplerAddressMode::Clamp;
 
 	// 比較
-	const SamplerComparisonFunc comparisonFunc;
+	SamplerComparisonFunc comparisonFunc = SamplerComparisonFunc::Never;
+
+	// デフォルトコンストラクタ
+	SamplerDesc()
+		: filter(SamplerFilter::Linear),
+		addressU(SamplerAddressMode::Wrap),
+		addressV(SamplerAddressMode::Wrap),
+		addressW(SamplerAddressMode::Clamp),
+		comparisonFunc(SamplerComparisonFunc::Never)
+	{
+		// 各メンバーを int にしてハッシュ値を作成する
+		size_t h1 = std::hash<int>()(static_cast<int>(filter));
+		size_t h2 = std::hash<int>()(static_cast<int>(addressU));
+		size_t h3 = std::hash<int>()(static_cast<int>(addressV));
+		size_t h4 = std::hash<int>()(static_cast<int>(addressW));
+		size_t h5 = std::hash<int>()(static_cast<int>(comparisonFunc));
+
+		// 全てのハッシュ値を混ぜる　(XORと左にビットをずらして簡単なハッシュ値を計算する)
+		m_Hash = ((((h1 ^ (h2 << 1)) ^ (h3 << 1)) ^ (h4 << 1)) ^ (h5 << 1));
+	}
 
 	// コンストラクタ
 	SamplerDesc(
