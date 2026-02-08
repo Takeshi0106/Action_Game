@@ -43,7 +43,7 @@ public:
 	// リソース作成
 	// --------------------------------
 	// 頂点バッファ作成
-	virtual const Handle CreateVertexBuffer(
+	virtual Handle CreateVertexBuffer(
 		const Hashed_String& _vbName,
 		const void* _data,
 		const size_t _size,
@@ -53,7 +53,7 @@ public:
 		const CPUAccess _access = CPUAccess::Write) = 0;
 
 	// インデックスバッファ作成
-	virtual const Handle CreateIndexBuffer(
+	virtual Handle CreateIndexBuffer(
 		const Hashed_String& _indexName,
 		const uint32_t* _indexData,
 		const size_t _indexSize,
@@ -62,7 +62,7 @@ public:
 		const CPUAccess _access) = 0;
 
 	// 定数バッファ作成
-	virtual const Handle CreateConstantBuffer(
+	virtual Handle CreateConstantBuffer(
 		const Hashed_String& _constantName,
 		const size_t _size,
 		const void* _data = nullptr,
@@ -70,7 +70,7 @@ public:
 		const CPUAccess _access = CPUAccess::Write) = 0;
 
 	// テクスチャ作成
-	virtual const Handle CreateTexture(
+	virtual Handle CreateTexture(
 		const Hashed_String& _name,
 		const uint16_t _width,
 		const uint16_t _height,
@@ -80,34 +80,34 @@ public:
 		const CPUAccess _cpu = CPUAccess::None) = 0;
 
 	// サンプラー作成_
-	virtual const Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) = 0;
+	virtual Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) = 0;
 
 	// View作成
 	// SRV
-	virtual void CreateSRV(
+	virtual Handle CreateSRV(
 		const Hashed_String& name,
 		const Format format, 
 		TextureHandle& _outTextureHandle,
 		const uint16_t mostDetailedMip = 0, 
 		const int16_t mipLevels = -1) = 0;
 	// RTV
-	virtual void CreateRTV(
+	virtual Handle CreateRTV(
 		const Hashed_String& name, 
 		const uint16_t mipSlice,
 		TextureHandle& _outputTextureHandle) = 0;
 	// DSV
-	virtual void CreateDSV(
+	virtual Handle CreateDSV(
 		const Hashed_String& name, 
 		const Format format,
 		TextureHandle& _outputTextureHandle) = 0;
 
 	// テクスチャのロード
-	virtual void LoadTexture(
+	virtual Handle LoadTexture(
 		const Hashed_String& textureName, 
 		TextureHandle& outTextureHandle,
 		const int16_t _mipLevels = -1, 
 		const String& textureFolderName = u8"") = 0;
 
 	// モデルのロード
-	virtual const Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") = 0;
+	virtual Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") = 0;
 };

@@ -124,7 +124,7 @@ public:
 	// リソース作成
 	// --------------------------------
 	// 頂点バッファ作成
-	const Handle CreateVertexBuffer(
+	Handle CreateVertexBuffer(
 		const Hashed_String& _vbName,
 		const void* _data,
 		const size_t _size,
@@ -134,7 +134,7 @@ public:
 		const CPUAccess _access = CPUAccess::Write) override;
 
 	// インデックスバッファ作成
-	const Handle CreateIndexBuffer(
+	Handle CreateIndexBuffer(
 		const Hashed_String& _indexName,
 		const uint32_t* _indexData,
 		const size_t _indexSize,
@@ -143,7 +143,7 @@ public:
 		const CPUAccess _access) override;
 	
 	// 定数バッファ作成
-	const Handle CreateConstantBuffer(
+	Handle CreateConstantBuffer(
 		const Hashed_String& _constantName,
 		const size_t _size,
 		const void* _data = nullptr,
@@ -151,7 +151,7 @@ public:
 		const CPUAccess _access = CPUAccess::Write) override;
 
 	// テクスチャ作成
-	const Handle CreateTexture(
+	Handle CreateTexture(
 		const Hashed_String& _name,
 		const uint16_t _width,
 		const uint16_t _height,
@@ -161,36 +161,36 @@ public:
 		const CPUAccess _cpu = CPUAccess::None) override;
 
 	// サンプラー作成
-	const Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) override;
+	Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) override;
 
 	// View作成
 	// SRV
-	void CreateSRV(
+	Handle CreateSRV(
 		const Hashed_String& name,
 		const Format format, 
 		TextureHandle& _outTextureHandle,
 		const uint16_t mostDetailedMip = 0, 
 		const int16_t mipLevels = -1) override;
 	// RTV
-	void CreateRTV(
+	Handle CreateRTV(
 		const Hashed_String& name, 
 		const uint16_t mipSlice,
 		TextureHandle& _outTextureHandle) override;
 	// DSV
-	void CreateDSV(
+	Handle CreateDSV(
 		const Hashed_String& name, 
 		const Format format,
 		TextureHandle& _outTextureHandle) override;
 
 	// テクスチャのロード
-	void LoadTexture(
+	Handle LoadTexture(
 		const Hashed_String& textureName,
 		TextureHandle& outTextureHandle,
 		const int16_t _mipLevels = -1, 
 		const String& textureFolderName = u8"") override;
 
 	// モデルのロード
-	const Handle LoadModel(
+	Handle LoadModel(
 		const Hashed_String& modelName, 
 		const String& modelFolderName = u8"") override;
 };
