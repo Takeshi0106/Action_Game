@@ -10,39 +10,27 @@
 // ==============================================
 // ヘッダー
 // ==============================================
-// DirectXヘッダー
-#include <d3d11.h>
-// スマートポインタ
-#include <wrl/client.h>
+// 頂点シェーダーデータ
+#include "DirectX11_VertexBufferData.h"
 // データ管理テンプレートヘッダー
 #include "../../TemplateManager.h"
-// 文字列ヘッダー
-#include "../../UTF8_String.h"
-
-
-// ==============================================
-// 構造体宣言
-// ==============================================
-struct VertexBufferData
-{
-	// 頂点バッファ
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
-	// 頂点数
-	uint32_t vertexCount = 0;
-};
+// ハッシュ文字列ヘッダー
+#include "../../Hashed_String.h"
+// ハンドルヘッダー
+#include "../../Handle.h"
 
 
 // ==============================================
 // クラス
 // ==============================================
-class DirectX11_VertexBufferManager
+class DirectX11_VertexBufferManager final
 {
 private:
 	// ------------------------------------------
 	// メンバー変数
 	// ------------------------------------------
 	// 頂点バッファ管理
-	TemplateManager<VertexBufferData> m_VertexBuffers;
+	TemplateManager<DirectX11_VertexBufferData> m_VertexBuffers;
 
 
 public:
@@ -56,31 +44,35 @@ public:
 	// ------------------------------------------
 	// 頂点バッファ作成関数
 	// ------------------------------------------
-	const Handle VertexBufferCreateOnGet(
+	Handle VertexBufferCreateOnGet(
 		ID3D11Device* _device,
-		const void* _vertices,
-		const size_t _size,
-		const uint32_t _vertexCount,
-		D3D11_USAGE _usage,
-		D3D11_CPU_ACCESS_FLAG _flag,
-		const Hashed_String& _name);
+		const Hashed_String& _vbName,
+		const D3D11_BUFFER_DESC& _bufferDesc,
+		const D3D11_SUBRESOURCE_DATA* _initData,
+		const uint32_t& _vertexCount,
+		const uint32_t& _stride);
 
 
 	// ------------------------------------------
 	// 頂点バッファ取得関数
 	// ------------------------------------------
-	VertexBufferData* GetVertexBuffer(const Handle& _handle);
-	
+	const DirectX11_VertexBufferData* GetVertexBuffer(const Handle& _handle) {
+		return m_VertexBuffers.GetData(_handle);
+	}
+
 
 	// ------------------------------------------
 	// 頂点バッファ削除関数
 	// ------------------------------------------
-	void ReleaseVertexBuffer(const Handle& _handle);
+	void ReleaseVertexBuffer(const Handle& _handle) {
+		m_VertexBuffers.Remove(_handle);
+	}
 
 
 	// ------------------------------------------
 	// 全頂点バッファ削除関数
 	// ------------------------------------------
-	void ReleaseAllVertexBuffers();
+	void ReleaseAllVertexBuffers() {
+		m_VertexBuffers.ALLClear();
+	}
 };
-

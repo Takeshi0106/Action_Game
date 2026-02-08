@@ -11,84 +11,45 @@
 // ===========================================
 // 頂点バッファ作成
 // ===========================================
-const Handle DirectX11_VertexBufferManager::VertexBufferCreateOnGet(
+Handle DirectX11_VertexBufferManager::VertexBufferCreateOnGet(
 	ID3D11Device* _device,
-	const void* _vertices,
-	const size_t _size,
-	const uint32_t _vertexCount,
-	D3D11_USAGE _usage,
-	D3D11_CPU_ACCESS_FLAG _flag,
-	const Hashed_String& _name)
+	const Hashed_String& _name,
+	const D3D11_BUFFER_DESC& _bufferDesc,
+	const D3D11_SUBRESOURCE_DATA* _initData,
+	const uint32_t& _vertexCount,
+	const uint32_t& _stride)
 {
 	// 同じ名前の頂点バッファが存在するか確認
 	if (m_VertexBuffers.Exists(_name)) 
 	{
+		// ログ出力
 		WarningLog::OutputToConsole(
 			_name.GetString() + u8" 同じ名前の頂点バッファが再作成されました");
+
 		// 存在する場合はハンドルを返す
 		return m_VertexBuffers.GetHandle(_name);
 	}
 
-	// エラーチェック
-	if (!_device || !_vertices || _size == 0) {
-		ErrorLog::OutputToConsole(u8"無効な頂点バッファが作成されそうになりました");
-		return Handle();
-	}
+	// 頂点バッファデータ
+	DirectX11_VertexBufferData bufferData;
 
 	// 頂点バッファ作成
-	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
+	if (!bufferData.Create_DX11VertexBuffer(
+		_device,
+		_bufferDesc,
+		_initData,
+		_vertexCount,
+		_stride))
+	{
+		// ログ出力
+		ErrorLog::OutputToConsole(
+			u8"頂点バッファの作成に失敗しました: " +
+			_name.GetString());
 
-	// 頂点バッファ作成情報設定
-	D3D11_BUFFER_DESC desc{};
-	desc.Usage = _usage;
-	desc.ByteWidth = static_cast<UINT>(_size);
-	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	desc.CPUAccessFlags = _flag;
-	
-	// 初期データ設定
-	D3D11_SUBRESOURCE_DATA initData{};
-	initData.pSysMem = _vertices;
-
-	// 頂点バッファ作成
-	HRESULT hr = _device->CreateBuffer(&desc, &initData, buffer.GetAddressOf());
-	if (FAILED(hr)) {
+		// 失敗したら空ハンドルを返す
 		return Handle();
 	}
-
-	// 頂点バッファデータ作成
-	VertexBufferData bufferData{};
-	bufferData.vertexBuffer = std::move(buffer);
-	bufferData.vertexCount = _vertexCount;
 
 	// 管理配列に追加してハンドルを返す
 	return m_VertexBuffers.AddData((Hashed_String)_name, bufferData);
-}
-
-
-// ===========================================
-// 頂点バッファ取得
-// ===========================================
-VertexBufferData* DirectX11_VertexBufferManager::GetVertexBuffer(
-	const Handle& _handle)
-{
-	return m_VertexBuffers.GetData(_handle);
-}
-
-
-// ------------------------------------------
-// 頂点バッファ削除
-// ------------------------------------------
-void DirectX11_VertexBufferManager::ReleaseVertexBuffer(
-	const Handle& _handle)
-{
-	m_VertexBuffers.Remove(_handle);
-}
-
-
-// ------------------------------------------
-// 全頂点バッファ削除
-// ------------------------------------------
-void DirectX11_VertexBufferManager::ReleaseAllVertexBuffers()
-{
-	m_VertexBuffers.ALLClear();
 }
