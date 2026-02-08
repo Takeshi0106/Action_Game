@@ -32,7 +32,6 @@ class ResourceViewManager
 private:
 	// 配列
 	std::unordered_map<Hashed_String, std::unique_ptr<SRVData>> m_SRVs;
-	//std::unordered_map<std::string, std::unique_ptr<UAVData>> m_UAVs;
 	std::unordered_map<Hashed_String, std::unique_ptr<RTVData>> m_RTVs;
 	std::unordered_map<Hashed_String, std::unique_ptr<DSVData>> m_DSVs;
 
