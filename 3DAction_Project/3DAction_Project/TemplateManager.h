@@ -141,10 +141,14 @@ public:
 	T* GetData(const Handle& handle)
 	{
 		// 添え字をチェック
-		if (handle.index >= (uint32_t)m_Datas.size()) { return nullptr; }
+		if (handle.index >= (uint32_t)m_Datas.size()) { 
+			ErrorLog::OutputToConsole(u8"TemplateManager::GetData - 無効な添え字です");
+			return nullptr; }
 
 		// 世代をチェック
-		if (handle.generation != m_Generations[handle.index]) { return nullptr; }
+		if (handle.generation != m_Generations[handle.index]) { 
+			ErrorLog::OutputToConsole(u8"TemplateManager::GetData - 無効な世代です");
+			return nullptr; }
 
 		return &m_Datas[handle.index];
 	}
