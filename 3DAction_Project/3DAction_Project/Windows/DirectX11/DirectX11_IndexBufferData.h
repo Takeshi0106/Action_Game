@@ -41,7 +41,6 @@ public:
 	DirectX11_IndexBufferData() = default;
 	~DirectX11_IndexBufferData() = default;
 
-
 	// -----------------------------------
 	// インデックスバッファ作成関数
 	// -----------------------------------
@@ -52,7 +51,6 @@ public:
 		const uint32_t& _indexCount,
 		const DXGI_FORMAT& _format);
 
-
 	// -----------------------------------
 	// ゲッター
 	// -----------------------------------
@@ -62,5 +60,14 @@ public:
 	uint32_t GetIndexCount() const { return m_IndexCount; }
 	// フォーマット取得
 	DXGI_FORMAT GetFormat() const { return m_Format; }
+
+	// -----------------------------------
+	// 削除
+	// -----------------------------------
+	void Reset() {
+		m_IndexBuffer.Reset();
+		m_IndexCount = 0;
+		m_Format = DXGI_FORMAT_R32_UINT;
+	}
 };
 

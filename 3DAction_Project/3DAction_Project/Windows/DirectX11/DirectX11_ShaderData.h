@@ -15,8 +15,6 @@
 #include <wrl/client.h>
 // 配列ヘッダー
 #include <vector>
-// ハンドルヘッダー
-#include "../../Handle.h"
 // 整数ヘッダー
 #include <cstdint>
 // バイナリーデータ
@@ -52,7 +50,6 @@ public:
 	DirectX11_VertexShaderData() = default;
 	~DirectX11_VertexShaderData() = default;
 
-
 	// ---------------------------------------------
 	// シェーダー作成
 	// ---------------------------------------------
@@ -61,7 +58,6 @@ public:
 		const BinaryView& _shaderData,
 		const std::vector<D3D11_INPUT_ELEMENT_DESC>& _inputDescs,
 		const std::vector<ShaderConstantInfo>& _constantInfo);
-
 
 	// ---------------------------------------------
 	// ゲッター
@@ -72,6 +68,15 @@ public:
 	ID3D11InputLayout* GetInputLayout() const { return m_InputLayout.Get(); }
 	// 定数バッファ情報取得
 	const std::vector<ShaderConstantInfo>& GetConstantInfo() const { return m_ShaderConstantInfo; }
+
+	// ---------------------------------------------
+	// 削除
+	// ---------------------------------------------
+	void Release() {
+		m_VertexShader.Reset();
+		m_InputLayout.Reset();
+		m_ShaderConstantInfo.clear();
+	}
 };
 
 
@@ -115,6 +120,14 @@ public:
 	ID3D11PixelShader* GetPixelShader() const { return m_PixelShader.Get(); }
 	// 定数バッファ情報取得
 	const std::vector<ShaderConstantInfo>& GetConstantInfo() const { return m_ShaderConstantInfo; }
+
+	// ---------------------------------------------
+	// 削除
+	// ---------------------------------------------
+	void Release() {
+		m_PixelShader.Reset();
+		m_ShaderConstantInfo.clear();
+	}
 };
 
 
@@ -157,4 +170,12 @@ public:
 	ID3D11ComputeShader* GetComputeShader() const { return m_ComputeShader.Get(); }
 	// 定数バッファ情報取得
 	const std::vector<ShaderConstantInfo>& GetConstantInfo() const { return m_ShaderConstantInfo; }
+
+	// ---------------------------------------------
+	// 削除
+	// ---------------------------------------------
+	void Release() {
+		m_ComputeShader.Reset();
+		m_ShaderConstantInfo.clear();
+	}
 };

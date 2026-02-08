@@ -30,7 +30,7 @@ private:
 #if defined(DEBUG) || defined(_DEBUG)
 	// -----------------------------------
 	// デバッグ用
-	// -----------------------------------7t
+	// -----------------------------------
 	D3D11_RENDER_TARGET_VIEW_DESC m_Desc {};
 #endif
 
@@ -56,7 +56,12 @@ public:
 	ID3D11RenderTargetView* GetRTV() const { return m_RTV.Get(); }
 
 	// 削除
-	void Reset() { m_RTV.Reset(); }
+	void Reset() { 
+		m_RTV.Reset(); 
+#if defined(DEBUG) || defined(_DEBUG)
+		m_Desc = {};
+#endif
+	}
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 同一確認
@@ -104,7 +109,12 @@ public:
 	// ゲッター
 	ID3D11ShaderResourceView* GetSRV() const { return m_SRV.Get(); }
 	// 削除
-	void Reset() { m_SRV.Reset(); }
+	void Reset() { 
+		m_SRV.Reset(); 
+#if defined(DEBUG) || defined(_DEBUG)
+		m_Desc = {};
+#endif
+	}
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 同一確認
@@ -153,7 +163,12 @@ public:
 	ID3D11DepthStencilView* GetDSV() const { return m_DSV.Get(); }
 	
 	// 削除
-	void Reset() { m_DSV.Reset(); }
+	void Reset() { 
+		m_DSV.Reset();
+#if defined(DEBUG) || defined(_DEBUG)
+		m_Desc = {};
+#endif
+	}
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 同一確認
