@@ -24,6 +24,7 @@
 void LoadShaderBinaryData(
 	const String& _filePath,
 	const String& _shaderName,
+	const String& _fileExt,
 	Microsoft::WRL::ComPtr<ID3DBlob>& _outBlob);
 
 
@@ -31,37 +32,58 @@ void LoadShaderBinaryData(
 // 頂点シェーダー関数
 // ===========================================
 // 頂点シェーダー作成
-const Handle DirectX11_ShaderManager::VertexShaderCreateOnGet(
+Handle DirectX11_ShaderManager::VertexShaderCreateOnGet(
 	ID3D11Device* _device,  
 	const Hashed_String& _name)
 {
 	// 既に存在する場合はハンドルを返す
 	if (m_Vertexs.Exists(_name))
 	{
+		// ログ出力
 		WarningLog::OutputToConsole(
 			u8"頂点シェーダーが既に作成されていました: " +
 			_name.GetString());
+
+		// ハンドル返す
 		return m_Vertexs.GetHandle(_name);
 	}
 
+	// 変数作成
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
+	// 入力レイアウト作成用データ入れる
+	std::vector<D3D11_INPUT_ELEMENT_DESC> layoutDesc;
+	// 定数バッファ情報入れる
+	std::vector<ShaderConstantInfo> constantInfos;
 
 	// シェーダーバイナリーデータ読み込み
-	LoadShaderBinaryData(kCompileFilePath, _name.GetString(), blob);
+	LoadShaderBinaryData(
+		kCompileFilePath, 
+		_name.GetString(),
+		kCompileFileExt,
+		blob);
+
+	// 自作バイナリーデータ作成
+	BinaryView bv(
+		blob.Get()->GetBufferPointer(),
+		blob.Get()->GetBufferSize());
 	
 	// 頂点シェーダー作成
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> shader;
+	DirectX11_VertexShaderData shader;
 
 	// シェーダー作成
-	HRESULT hr = _device->CreateVertexShader(
-		blob.Get()->GetBufferPointer(), 
-		blob.Get()->GetBufferSize(), 
-		nullptr, 
-		shader.GetAddressOf());
+	if(shader.Create_DX11VertexShader(
+		_device,
+		bv,
+		layoutDesc,
+		constantInfos))
+	{
+		// ログ出力
+		ErrorLog::OutputToConsole(
+			u8"頂点シェーダーの作成に失敗しました: " +
+			_name.GetString());
 
-	// 失敗したら空ハンドルを返す
-	if (FAILED(hr)) {
+		// 失敗したら空ハンドルを返す
 		return Handle();
 	}
 
@@ -69,63 +91,58 @@ const Handle DirectX11_ShaderManager::VertexShaderCreateOnGet(
 	return m_Vertexs.AddData(_name, shader);
 }
 
-// 頂点シェーダーチェック
-const bool DirectX11_ShaderManager::ExistsVertexShader(
-	const Hashed_String& _name) const
-{
-	return m_Vertexs.Exists(_name);
-}
-
-// 頂点シェーダー返す
-const ID3D11VertexShader* DirectX11_ShaderManager::GetVertexShader(
-	const Handle& _handle)
-{
-	return m_Vertexs.GetData(_handle)->Get();
-}
-
-// 頂点シェーダー削除
-void DirectX11_ShaderManager::ReleaseVertexShader(
-	const Handle& _name)
-{
-	m_Vertexs.Remove(_name);
-}
-
 
 // ===========================================
-// ピクセルシェーダー関数
+// ピクセルシェーダー作成関数
 // ===========================================
-// ピクセルシェーダー作成
-const Handle DirectX11_ShaderManager::PixelShaderCreateOnGet(
+Handle DirectX11_ShaderManager::PixelShaderCreateOnGet(
 	ID3D11Device* _device, 
 	const Hashed_String& _name)
 {
 	// 既に存在する場合はハンドルを返す
 	if (m_Pixels.Exists(_name))
 	{
+		// ログ出力
 		WarningLog::OutputToConsole(
 			u8"ピクセルシェーダーが既に作成されていました: " +
 			_name.GetString());
+
+		// ハンドル返す
 		return m_Pixels.GetHandle(_name);
 	}
 
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
+	// 定数バッファ情報
+	std::vector<ShaderConstantInfo> constantInfos;
 
 	// シェーダーバイナリーデータ読み込み
-	LoadShaderBinaryData(kCompileFilePath, _name.GetString(), blob);
+	LoadShaderBinaryData(
+		kCompileFilePath, 
+		_name.GetString(),
+		kCompileFileExt,
+		blob);
+
+	// 自作バイナリーデータ作成
+	BinaryView bv(
+		blob.Get()->GetBufferPointer(),
+		blob.Get()->GetBufferSize());
 
 	// ピクセルシェーダー作成
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> shader;
+	DirectX11_PixelShaderData shader;
 
 	// シェーダー作成
-	HRESULT hr = _device->CreatePixelShader(
-		blob.Get()->GetBufferPointer(), 
-		blob.Get()->GetBufferSize(), 
-		nullptr, 
-		shader.GetAddressOf());
+	if(shader.Create_DX11PixelShader(
+		_device,
+		bv,
+		constantInfos))
+	{
+		// ログ出力
+		ErrorLog::OutputToConsole(
+			u8"ピクセルシェーダーの作成に失敗しました: " +
+			_name.GetString());
 
-	// 失敗したら空ハンドルを返す
-	if (FAILED(hr)) {
+		// 失敗したら空ハンドルを返す
 		return Handle();
 	}
 
@@ -133,32 +150,11 @@ const Handle DirectX11_ShaderManager::PixelShaderCreateOnGet(
 	return m_Pixels.AddData(_name, shader);
 }
 
-// ピクセルシェーダーチェック
-const bool DirectX11_ShaderManager::ExistsPixelShader(
-	const Hashed_String& _name) const
-{
-	return m_Pixels.Exists(_name);
-}
-
-// ピクセルシェーダー返す
-const ID3D11PixelShader* DirectX11_ShaderManager::GetPixelShader(
-	const Handle& _handle)
-{
-	return m_Pixels.GetData(_handle)->Get();
-}
-
-// ピクセルシェーダー削除
-void DirectX11_ShaderManager::ReleasePixelShader(
-	const Handle& _name)
-{
-	m_Pixels.Remove(_name);
-}
 
 // ===========================================
-// コンピュートシェーダー関数
+// コンピュートシェーダー作成関数
 // ===========================================
-// コンピュートシェーダー作成
-const Handle DirectX11_ShaderManager::ComputeShaderCreateOnGet(
+Handle DirectX11_ShaderManager::ComputeShaderCreateOnGet(
 	ID3D11Device* _device,  const Hashed_String& _name)
 {
 	// 既に存在する場合はハンドルを返す
@@ -172,21 +168,36 @@ const Handle DirectX11_ShaderManager::ComputeShaderCreateOnGet(
 
 	// バイナリーデータ入れる
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
+	// 定数バッファ情報
+	std::vector<ShaderConstantInfo> constantInfos;
 
 	// シェーダーバイナリーデータ読み込み
-	LoadShaderBinaryData(kCompileFilePath, _name.GetString(), blob);
+	LoadShaderBinaryData(
+		kCompileFilePath, 
+		_name.GetString(), 
+		kCompileFileExt,
+		blob);
+
+	// 自作バイナリーデータ作成
+	BinaryView bv(
+		blob.Get()->GetBufferPointer(),
+		blob.Get()->GetBufferSize());
 
 	// コンピュートシェーダー作成
-	Microsoft::WRL::ComPtr<ID3D11ComputeShader> shader;
+	DirectX11_ComputeShaderData shader;
 
 	// シェーダー作成
-	HRESULT hr = _device->CreateComputeShader(blob.Get()->GetBufferPointer(), 
-		blob.Get()->GetBufferSize(), 
-		nullptr, 
-		shader.GetAddressOf());
+	if(shader.Create_DX11ComputeShader(
+		_device,
+		bv,
+		constantInfos))
+	{
+		// ログ出力
+		ErrorLog::OutputToConsole(
+			u8"コンピュートシェーダーの作成に失敗しました: " +
+			_name.GetString());
 
-	// 失敗したら空ハンドルを返す
-	if (FAILED(hr)) {
+		// 失敗したら空ハンドルを返す
 		return Handle();
 	}
 
@@ -194,36 +205,6 @@ const Handle DirectX11_ShaderManager::ComputeShaderCreateOnGet(
 	return m_Computes.AddData(_name, shader);
 }
 
-// コンピュートシェーダーチェック
-const bool DirectX11_ShaderManager::ExistsComputeShader(
-	const Hashed_String& _name) const
-{
-	return m_Computes.Exists(_name);
-}
-
-// コンピュートシェーダー返す
-const ID3D11ComputeShader* DirectX11_ShaderManager::GetComputeShader(const Handle& _handle)
-{
-	return m_Computes.GetData(_handle)->Get();
-}
-
-// コンピュートシェーダー削除
-void DirectX11_ShaderManager::ReleaseComputeShader(
-	const Handle& _name)
-{
-	m_Computes.Remove(_name);
-}
-
-
-// ===========================================
-// シェーダー全て削除
-// ===========================================
-void DirectX11_ShaderManager::ReleaseAllShader()
-{
-	m_Vertexs.ALLClear();
-	m_Pixels.ALLClear();
-	m_Computes.ALLClear();
-}
 
 // ===========================================
 // シェーダーバイナリーデータ読み込み関数
@@ -231,12 +212,13 @@ void DirectX11_ShaderManager::ReleaseAllShader()
 void LoadShaderBinaryData(
 	const String& _filePath,
 	const String& _shaderName,
+	const String& _fileExt,
 	Microsoft::WRL::ComPtr<ID3DBlob>& _outBlob)
 {
 	// フルパス作成
 	std::filesystem::path fullPath = _filePath.GetU8String();
 	fullPath /= _shaderName.GetU8String();
-	fullPath += ".cso";
+	fullPath += _fileExt.GetU8String();
 
 	// 区切り文字を統一する
 	fullPath.make_preferred();
