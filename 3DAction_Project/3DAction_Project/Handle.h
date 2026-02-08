@@ -23,3 +23,12 @@ struct Handle
 	// 世代
 	uint32_t generation = UINT32_MAX;
 };
+
+
+// ===================================
+// 比較演算子オーバーロード
+// ===================================
+inline bool operator==(const Handle& lhs, const Handle& rhs)
+{
+	return (lhs.index == rhs.index) && (lhs.generation == rhs.generation);
+}
