@@ -31,9 +31,9 @@ bool DirectX11_Texture2DData::Create_DX11Texture2D(
 			return false;
 		}
 	}
+	// 初期データなし
 	else
 	{
-		// 初期データなし
 		HRESULT hr = _device->CreateTexture2D(
 			&_desc,
 			nullptr,

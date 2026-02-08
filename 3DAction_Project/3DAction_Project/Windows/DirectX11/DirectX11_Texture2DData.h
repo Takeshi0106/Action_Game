@@ -25,14 +25,14 @@ private:
 	// メンバー変数
 	// -----------------------------------
 	// テクスチャ本体
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> m_Texture2D;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> m_Texture2D = nullptr;
 
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// -----------------------------------
     // デバッグ用
     // -----------------------------------
-	D3D11_TEXTURE2D_DESC m_Desc{};
+	D3D11_TEXTURE2D_DESC m_Desc {};
 #endif
 
 
@@ -57,11 +57,16 @@ public:
 	ID3D11Texture2D* GetTexture() const { return m_Texture2D.Get(); }
 
 	// 削除
-	void Reset() { m_Texture2D.Reset(); }
+	void Reset() { 
+		m_Texture2D.Reset();
+#if defined(DEBUG) || defined(_DEBUG)
+		m_Desc = {};
+#endif
+	}
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// デバッグ用: テクスチャ記述が同じか確認
 	bool IsSame(const D3D11_TEXTURE2D_DESC& desc) const;
 #endif
-};
 
+};

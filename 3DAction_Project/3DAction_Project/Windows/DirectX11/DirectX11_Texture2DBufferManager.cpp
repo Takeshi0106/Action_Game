@@ -49,29 +49,3 @@ const Handle DirectX11_Texture2DBufferManager::Texture2DBufferCreateOnGet(
 	return m_Texture2DBuffers.AddData(_name, texture2DData);
 }
 
-
-// ========================================================================
-// 2Dテクスチャバッファ取得
-// ========================================================================
-ID3D11Texture2D* DirectX11_Texture2DBufferManager::GetTexture2DBuffer(const Handle& _handle)
-{
-	return m_Texture2DBuffers.GetData(_handle)->GetTexture();
-}
-
-
-// ========================================================================
-// 2Dテクスチャ削除
-// ========================================================================
-void DirectX11_Texture2DBufferManager::ReleaseTexture2D(const Handle& _handle)
-{
-	return m_Texture2DBuffers.Remove(_handle);
-}
-
-
-// =========================================================================
-// 全てのテクスチャ2D削除
-// =========================================================================
-void DirectX11_Texture2DBufferManager::ReleaseAllTexture2D()
-{
-	m_Texture2DBuffers.ALLClear();
-}

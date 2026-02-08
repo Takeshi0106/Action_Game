@@ -37,7 +37,6 @@ public:
 	DirectX11_Texture2DBufferManager() = default;
 	~DirectX11_Texture2DBufferManager() = default;
 
-
 	// ------------------------------------------
 	// 2Dテクスチャバッファ作成関数
 	// ------------------------------------------
@@ -47,21 +46,25 @@ public:
 		const Hashed_String& _name,
 		const D3D11_SUBRESOURCE_DATA* _initialData = nullptr);
 
-
 	// ------------------------------------------
 	// 2Dテクスチャバッファ取得関数
 	// ------------------------------------------
-	ID3D11Texture2D* GetTexture2DBuffer(const Handle& _handle);
-
+	DirectX11_Texture2DData* GetTexture2DBuffer(const Handle& _handle) {
+		return m_Texture2DBuffers.GetData(_handle);
+	}
 
 	// ------------------------------------------
 	// 2Dテクスチャ削除
 	// ------------------------------------------
-	void ReleaseTexture2D(const Handle& _handle);
-
+	void ReleaseTexture2D(const Handle& _handle) {
+		m_Texture2DBuffers.Remove(_handle);
+	}
 
 	// ------------------------------------------
 	// 全ての2Dテクスチャ削除
 	// ------------------------------------------
-	void ReleaseAllTexture2D();
+	void ReleaseAllTexture2D() {
+		m_Texture2DBuffers.ALLClear();
+	}
+
 };
