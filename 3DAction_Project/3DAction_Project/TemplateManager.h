@@ -224,6 +224,12 @@ public:
 				m_Datas[handle.index].reset();
 				DebugLog::OutputToConsole(u8".restを実行");
 			}
+			if constexpr (requires(T a) { a.Release(); })
+			{
+				// .Release 関数がある場合
+				m_Datas[handle.index].Release();
+				DebugLog::OutputToConsole(u8"Release関数を実行");
+			}
 			if constexpr (requires(T a) { a.Clear(); })
 			{
 				// .Clear 関数がある場合
