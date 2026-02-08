@@ -32,7 +32,7 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 			return Handle();
 		}
 #endif
-		// 警告を出してハンドルを返す
+		// ログ出力
 		WarningLog::OutputToConsole(u8"同じ名前のレンダーターゲットビューが作成されようとしました: " +
 			_name.GetString());
 
@@ -58,19 +58,6 @@ const Handle DirectX11_ViewManager::RenderTargetViewCreateOnGet(
 	return m_RenderTargetViews.AddData(_name, rtvData);
 }
 
-// 取得
-ID3D11RenderTargetView* DirectX11_ViewManager::GetRenderTargetView(
-	const Handle& _handle)
-{
-	return m_RenderTargetViews.GetData(_handle)->GetRTV();
-}
-
-// 削除
-void DirectX11_ViewManager::ReleaseRTV(const Handle& _handle)
-{
-	m_RenderTargetViews.Remove(_handle);
-}
-
 
 // ===========================================================================
 // シェーダーリソースビュー
@@ -85,6 +72,7 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	// 既に作成済みかチェック
 	if (m_ShaderResourceViews.Exists(_name)) 
 	{
+		// 取得
 		Handle handle = m_ShaderResourceViews.GetHandle(_name);
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -95,7 +83,7 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 			return Handle();
 		}
 #endif
-
+		// ログ出力
 		WarningLog::OutputToConsole(u8"同じ名前のシェーダーリソースビューが作成されようとしました: " +
 			_name.GetString());
 
@@ -121,19 +109,6 @@ const Handle DirectX11_ViewManager::ShaderResourceViewCreateOnGet(
 	return m_ShaderResourceViews.AddData(_name, srvData);
 }
 
-// 取得
-ID3D11ShaderResourceView* DirectX11_ViewManager::GetShaderResourceView(
-	const Handle& _handle)
-{
-	return m_ShaderResourceViews.GetData(_handle)->GetSRV();
-}
-
-// 削除
-void DirectX11_ViewManager::ReleaseSRV(const Handle& _handle)
-{
-	m_ShaderResourceViews.Remove(_handle);
-}
-
 
 // ===========================================================================
 // 深度ステンシルビュー
@@ -148,6 +123,7 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 	// 作成済みかチェック
 	if (m_DepthStencilViews.Exists(_name)) 
 	{
+		// 取得
 		Handle handle = m_DepthStencilViews.GetHandle(_name);
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -159,6 +135,7 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 		}
 #endif
 
+		// ログ出力
 		WarningLog::OutputToConsole(u8"同じ名前の深度ステンシルビューが作成されようとしました: " +
 			_name.GetString());
 
@@ -182,16 +159,4 @@ const Handle DirectX11_ViewManager::DepthStencilViewCreateOnGet(
 
 	// 管理配列に追加してハンドルを返す
 	return m_DepthStencilViews.AddData(_name, dsvData);
-}
-
-// 取得
-ID3D11DepthStencilView* DirectX11_ViewManager::GetDepthStencilView(const Handle& _handle)
-{
-	return m_DepthStencilViews.GetData(_handle)->GetDSV();
-}
-
-// 削除
-void DirectX11_ViewManager::ReleaseDSV(const Handle& _handle)
-{
-	m_DepthStencilViews.Remove(_handle);
 }

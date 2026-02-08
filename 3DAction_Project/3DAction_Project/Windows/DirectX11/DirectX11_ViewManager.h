@@ -42,7 +42,6 @@ public:
 	DirectX11_ViewManager() = default;
 	~DirectX11_ViewManager() = default;
 
-
 	// ------------------------------------------
 	// ビュー作成関数
 	// ------------------------------------------
@@ -67,26 +66,49 @@ public:
 		const D3D11_DEPTH_STENCIL_VIEW_DESC& _desc,
 		const Hashed_String& _name);
 
-
 	// ------------------------------------------
 	// ビュー取得関数
 	// ------------------------------------------
-	ID3D11RenderTargetView* GetRenderTargetView(const Handle& _handle);
-	ID3D11ShaderResourceView* GetShaderResourceView(const Handle& _handle);
-	ID3D11DepthStencilView* GetDepthStencilView(const Handle& _handle);
-
+	// RTV取得
+	DirectX11_RTVData* GetRenderTargetView(const Handle& _handle) {
+		return m_RenderTargetViews.GetData(_handle);
+	}
+	// SRV取得
+	ID3D11ShaderResourceView* GetShaderResourceView(const Handle& _handle) {
+		return m_ShaderResourceViews.GetData(_handle)->GetSRV();
+	}
+	// DSV取得
+	ID3D11DepthStencilView* GetDepthStencilView(const Handle& _handle) {
+		return m_DepthStencilViews.GetData(_handle)->GetDSV();
+	}
 
 	// ------------------------------------------
 	// ビュー削除関数
 	// ------------------------------------------
-	void ReleaseRTV(const Handle& _handle);
-	void ReleaseSRV(const Handle& _handle);
-	void ReleaseDSV(const Handle& _handle);
-
+	// RTV削除
+	void ReleaseRTV(const Handle& _handle) {
+		m_RenderTargetViews.Remove(_handle);
+	}
+	// SRV削除
+	void ReleaseSRV(const Handle& _handle) {
+		m_ShaderResourceViews.Remove(_handle);
+	}
+	// DSV削除
+	void ReleaseDSV(const Handle& _handle) {
+		m_DepthStencilViews.Remove(_handle);
+	}
 
 	// ------------------------------------------
 	// 全てのビュー削除関数
 	// ------------------------------------------
-	void ReleaseAllView();
+	void ReleaseAllView() {
+		// RTV全削除
+		m_RenderTargetViews.ALLClear();
+		// SRV全削除
+		m_ShaderResourceViews.ALLClear();
+		// DSV全削除
+		m_DepthStencilViews.ALLClear();
+	}
+
 };
 
