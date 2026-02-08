@@ -10,14 +10,12 @@
 // ==============================================
 // ヘッダー
 // ==============================================
-// DirectXヘッダー
-#include <d3d11.h>
-// スマートポインタ
-#include <wrl/client.h>
+// 定数バッファデータ
+#include "DirectX11_ConstantBufferData.h"
 // データ管理テンプレートヘッダー
 #include "../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../../UTF8_String.h"
+#include "../../Hashed_String.h"
 
 
 // ==============================================
@@ -30,7 +28,7 @@ private:
 	// メンバー変数
 	// ------------------------------------------
 	// 定数バッファ管理
-	TemplateManager<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_ConstantBuffers;
+	TemplateManager<DirectX11_ConstantBufferData> m_ConstantBuffers;
 
 public:
 	// ------------------------------------------
@@ -43,29 +41,30 @@ public:
 	// ------------------------------------------
 	// 定数バッファ作成関数
 	// ------------------------------------------
-	const Handle ConstantBufferCreateOnGet(
+	Handle ConstantBufferCreateOnGet(
 		ID3D11Device* _device,
-		size_t _size,
-		D3D11_USAGE _usage,
-		D3D11_CPU_ACCESS_FLAG _flag,
-		const Hashed_String& _name,
-		const void* _data = nullptr);
-
+		const Hashed_String& _cbName,
+		const D3D11_BUFFER_DESC& _desc,
+		const D3D11_SUBRESOURCE_DATA* _initData);
 
 	// ------------------------------------------
 	// 定数バッファ取得関数
 	// ------------------------------------------
-	ID3D11Buffer* GetConstantBuffer(const Handle& _handle);
-
+	DirectX11_ConstantBufferData* GetConstantBuffer(const Handle& _handle) {
+		return m_ConstantBuffers.GetData(_handle);
+	}
 
 	// ------------------------------------------
 	// 定数バッファ削除
 	// ------------------------------------------
-	void ReleaseConstantBuffer(const Handle& _handle);
-
+	void ReleaseConstantBuffer(const Handle& _handle) {
+		m_ConstantBuffers.Remove(_handle);
+	}
 
 	// ------------------------------------------
 	// 全ての定数バッファ削除
 	// ------------------------------------------
-	void ReleaseAllConstantBuffer();
+	void ReleaseAllConstantBuffer() {
+		m_ConstantBuffers.ALLClear();
+	}
 };
