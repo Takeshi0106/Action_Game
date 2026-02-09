@@ -9,16 +9,17 @@
 // =======================================
 // ヘッダー
 // =======================================
-// DirectXヘッダー
-#include <d3d11.h>
 // リソース管理ヘッダー
+// シェーダーマネージャー
 #include "DirectX11_ShaderManager.h"
+// 頂点バッファマネージャー
 #include "DirectX11_VertexBufferManager.h"
+// インデックスバッファマネージャー
 #include "DirectX11_IndexBufferManager.h"
+// 定数バッファマネージャー
 #include "DirectX11_ConstantBufferManager.h"
-#include "DirectX11_Texture2DBufferManager.h"
-#include "DirectX11_SamplerManager.h"
-#include "DirectX11_ViewManager.h"
+// テクスチャマネージャー (Texture2D,View,Sampler)
+#include "DirectX11_TextureHandleManager.h"
 #include "../../ModelLoadManager.h"
 #include "../../MeshMaterialManager.h"
 // 作成クラスヘッダー
@@ -27,6 +28,12 @@
 #include <memory>
 // 設定パスヘッダー
 #include "../../DrawPathConfig.h"
+
+
+// =======================================
+// 前方宣言
+// =======================================
+struct ID3D11Device;
 
 
 // =======================================
@@ -46,12 +53,8 @@ private:
 	DirectX11_IndexBufferManager m_IndexBufferManager;
 	// 定数バッファ
 	DirectX11_ConstantBufferManager m_ConstantBufferManager;
-	// テクスチャ2Dバッファ
-	DirectX11_Texture2DBufferManager m_Texture2DBufferManager;
-	// サンプラー
-	DirectX11_SamplerManager m_SamplerManager;
-	// ビュー
-	DirectX11_ViewManager m_ViewManager;
+	// テクスチャマネージャー
+	DirectX11_TextureHandleManager m_TextureHandleManager;
 	// モデル
 	ModelLoadManager m_ModelLoadManager;
 	// マテリアル
@@ -70,15 +73,18 @@ public:
 	// --------------------------------
 	// コンストラクタ・デストラクタ
 	// --------------------------------
-	DirectX11_ResourceManager() = default;
+	DirectX11_ResourceManager(
+		const DrawPathConfig& _config) : 
+		m_ShaderManager(_config.shaderBinaryPath),
+		m_TextureHandleManager(_config.texturePath) {
+	}
 	~DirectX11_ResourceManager() = default;
 
 
 	// --------------------------------
 	// 初期化
 	// --------------------------------
-	bool Init(ID3D11Device* device,
-		DrawPathConfig& _config);
+	bool Init(ID3D11Device* device);
 
 	// --------------------------------
 	// ゲッター
