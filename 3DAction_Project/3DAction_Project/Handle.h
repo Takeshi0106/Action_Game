@@ -22,6 +22,15 @@ struct Handle
 	uint32_t index = UINT32_MAX;
 	// 世代
 	uint32_t generation = UINT32_MAX;
+
+
+	// ===================================
+	// 有効チェック
+	// ===================================
+	bool IsValid() const
+	{
+		return (index != UINT32_MAX) && (generation != UINT32_MAX);
+	}
 };
 
 
