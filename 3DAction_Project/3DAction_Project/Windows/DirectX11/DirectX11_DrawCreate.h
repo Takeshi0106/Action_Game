@@ -30,9 +30,7 @@ class DirectX11_ShaderManager;
 class DirectX11_VertexBufferManager;
 class DirectX11_IndexBufferManager;
 class DirectX11_ConstantBufferManager;
-class DirectX11_Texture2DBufferManager;
-class DirectX11_SamplerManager;
-class DirectX11_ViewManager;
+class DirectX11_TextureHandleManager;
 class ModelLoadManager;
 class MeshMaterialManager;
 
@@ -50,12 +48,8 @@ struct DirectX11_ResourceReference
 	DirectX11_IndexBufferManager& indexBufferManager;
 	// 定数バッファ
 	DirectX11_ConstantBufferManager& constantBufferManager;
-	// テクスチャ2Dバッファ
-	DirectX11_Texture2DBufferManager& texture2DBufferManager;
-	// サンプラー
-	DirectX11_SamplerManager& samplerManager;
-	// ビュー
-	DirectX11_ViewManager& viewManager;
+	// テクスチャマネージャー
+	DirectX11_TextureHandleManager& textureManager;
 	// モデル
 	ModelLoadManager& modelLoadManager;
 	// マテリアル
@@ -74,21 +68,8 @@ private:
 	// -------------------------------------------
 	// コンテキスト
 	ID3D11Device* m_Device;
-
 	// 各リソースマネージャーの参照
-	DirectX11_ShaderManager& m_ShaderManager;
-	DirectX11_VertexBufferManager& m_VertexBufferManager;
-	DirectX11_IndexBufferManager& m_IndexBufferManager;
-	DirectX11_ConstantBufferManager& m_ConstantBufferManager;
-	DirectX11_Texture2DBufferManager& m_Texture2DBufferManager;
-	DirectX11_SamplerManager& m_SamplerManager;
-	DirectX11_ViewManager& m_ViewManager;
-	ModelLoadManager& m_ModelManager;
-	MeshMaterialManager& m_MaterialManager;
-
-	// モジュール
-	DirectX11_TextureLoadModule m_TextureLoad;
-	ModelLoadeModule m_ModelLoad;
+	DirectX11_ResourceReference m_Managers;
 
 
 public:
@@ -97,26 +78,7 @@ public:
 	// --------------------------------
 	DirectX11_DrawCreate(
 		ID3D11Device* _device,
-		DirectX11_ResourceReference& _managers,
-		const String& _texturePath,
-		const String& _modelPath) :
-		// デバイス
-		m_Device(_device),
-		// マネージャー参照
-		m_ShaderManager(_managers.shaderManager),
-		m_VertexBufferManager(_managers.vertexBufferManager),
-		m_IndexBufferManager(_managers.indexBufferManager),
-		m_ConstantBufferManager(_managers.constantBufferManager),
-		m_Texture2DBufferManager(_managers.texture2DBufferManager),
-		m_SamplerManager(_managers.samplerManager),
-		m_ViewManager(_managers.viewManager),
-		m_ModelManager(_managers.modelLoadManager),
-		m_MaterialManager(_managers.meshMaterialManager),
-		// パス
-		m_TextureLoad(_texturePath),
-		m_ModelLoad(_modelPath)
-	{}
-
+		DirectX11_ResourceReference _managers);
 	~DirectX11_DrawCreate() override = default;
 
 
@@ -126,8 +88,7 @@ public:
 	// 頂点バッファ作成
 	Handle CreateVertexBuffer(
 		const Hashed_String& _vbName,
-		const void* _data,
-		const size_t _size,
+		const BinaryView& _data,
 		const uint32_t _vertexNumber,
 		const PrimitiveType _type = PrimitiveType::TriangleStrip,
 		const BufferUsage _usage = BufferUsage::Dynamic,
@@ -145,8 +106,7 @@ public:
 	// 定数バッファ作成
 	Handle CreateConstantBuffer(
 		const Hashed_String& _constantName,
-		const size_t _size,
-		const void* _data = nullptr,
+		const BinaryView& _data,
 		const BufferUsage _usage = BufferUsage::Dynamic,
 		const CPUAccess _access = CPUAccess::Write) override;
 

@@ -24,6 +24,8 @@
 // 文字列ヘッダー
 #include "UTF8_String.h"
 #include "Hashed_String.h"
+// バイナリービューヘッダー
+#include "BinaryView.h"
 
 
 // ===============================================
@@ -45,8 +47,7 @@ public:
 	// 頂点バッファ作成
 	virtual Handle CreateVertexBuffer(
 		const Hashed_String& _vbName,
-		const void* _data,
-		const size_t _size,
+		const BinaryView& _vertexData,
 		const uint32_t _vertexNumber,
 		const PrimitiveType _type = PrimitiveType::TriangleStrip,
 		const BufferUsage _usage = BufferUsage::Dynamic,
@@ -64,8 +65,7 @@ public:
 	// 定数バッファ作成
 	virtual Handle CreateConstantBuffer(
 		const Hashed_String& _constantName,
-		const size_t _size,
-		const void* _data = nullptr,
+		const BinaryView& _data,
 		const BufferUsage _usage = BufferUsage::Dynamic,
 		const CPUAccess _access = CPUAccess::Write) = 0;
 
