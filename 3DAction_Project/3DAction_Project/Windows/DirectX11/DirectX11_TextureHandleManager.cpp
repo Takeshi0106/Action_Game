@@ -16,7 +16,9 @@
 Handle DirectX11_TextureHandleManager::CreateTextures(
 	ID3D11Device* _device,
 	const Hashed_String& _name,
-	const D3D11_TEXTURE2D_DESC* _desc,
+	const D3D11_TEXTURE2D_DESC& _desc,
+	const D3D11_SAMPLER_DESC& _dxDesc,
+	const SamplerDesc& _myDesc,
 	const D3D11_SHADER_RESOURCE_VIEW_DESC* _srvDesc,
 	const D3D11_RENDER_TARGET_VIEW_DESC* _rtvDesc,
 	const D3D11_DEPTH_STENCIL_VIEW_DESC* _dsvDesc)
@@ -94,11 +96,30 @@ Handle DirectX11_TextureHandleManager::CreateTextures(
 
 	// テクスチャ作成
 	TextureHandle textureHandle;
+
 	// テクスチャバッファ作成
 	textureHandle.textureHandle = m_Texture2DBufferManager.Texture2DBufferCreateOnGet(
 		_device,
-		*_desc,
+		_desc,
 		_name);
+
+	// サンプラーステート作成済みかチェック
+	if (m_SamplerManager.Exists(_myDesc))
+	{
+		WarningLog::OutputToConsole(
+			u8"同じ設定のサンプラーが作成されようとしました");
+
+		// 取得
+		textureHandle.samplerHandle = m_SamplerManager.GetHandle(_myDesc);
+	}
+	else
+	{
+		// サンプラーステート作成
+		textureHandle.samplerHandle = m_SamplerManager.SamplerStateCreateOnGet(
+			_device,
+			_dxDesc,
+			_myDesc);
+	}
 
 	// シェーダーリソースビュー作成
 	if (_srvDesc)

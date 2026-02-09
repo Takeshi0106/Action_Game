@@ -58,7 +58,9 @@ public:
 	Handle CreateTextures(
 		ID3D11Device* _device,
 		const Hashed_String& _name,
-		const D3D11_TEXTURE2D_DESC* _desc,
+		const D3D11_TEXTURE2D_DESC& _desc,
+		const D3D11_SAMPLER_DESC& _dxDesc,
+		const SamplerDesc& _myDesc,
 		const D3D11_SHADER_RESOURCE_VIEW_DESC* _srvDesc = nullptr,
 		const D3D11_RENDER_TARGET_VIEW_DESC* _rtvDesc = nullptr,
 		const D3D11_DEPTH_STENCIL_VIEW_DESC* _dsvDesc = nullptr);
