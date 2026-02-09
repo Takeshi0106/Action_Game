@@ -46,7 +46,7 @@ public:
 	// -----------------------------------
 	bool Create_DX11SamplerState(
 		ID3D11Device* _device,
-		D3D11_SAMPLER_DESC& _desc);
+		const D3D11_SAMPLER_DESC& _desc);
 
 	// -----------------------------------
 	// ゲッター

@@ -43,8 +43,22 @@ public:
 	// ------------------------------------------
 	Handle SamplerStateCreateOnGet(
 		ID3D11Device* _device,
-		D3D11_SAMPLER_DESC& _dxDesc,
+		const D3D11_SAMPLER_DESC& _dxDesc,
 		const SamplerDesc& _myDesc);
+
+	// ------------------------------------------
+	// サンプラーチェック
+	// ------------------------------------------
+	bool Exists(const SamplerDesc& _myDesc) {
+		return m_Samplers.Exists(_myDesc);
+	}
+
+	// ------------------------------------------
+	// ハンドル取得
+	// ------------------------------------------
+	Handle GetHandle(const SamplerDesc& _myDesc) {
+		return m_Samplers.GetHandle(_myDesc);
+	}
 
 	// ------------------------------------------
 	// サンプラー取得関数

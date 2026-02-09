@@ -13,7 +13,7 @@
 // ===========================================
 bool DirectX11_SamplerData::Create_DX11SamplerState(
 	ID3D11Device* _device,
-	D3D11_SAMPLER_DESC& _desc)
+	const D3D11_SAMPLER_DESC& _desc)
 {
 	// サンプラーステート作成
 	HRESULT hr = _device->CreateSamplerState(

@@ -13,7 +13,7 @@
 // ============================================================================
 Handle DirectX11_SamplerManager::SamplerStateCreateOnGet(
 	ID3D11Device* _device,
-	D3D11_SAMPLER_DESC& _dxDesc,
+	const D3D11_SAMPLER_DESC& _dxDesc,
 	const SamplerDesc& _myDesc)
 {
 	if (m_Samplers.Exists(_myDesc))
