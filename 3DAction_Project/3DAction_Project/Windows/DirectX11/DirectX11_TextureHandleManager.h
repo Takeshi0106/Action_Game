@@ -49,7 +49,9 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	DirectX11_TextureHandleManager() = default;
+	DirectX11_TextureHandleManager(
+		const String& _texturePath) : m_TextureLoadModule(_texturePath) {
+	}
 	~DirectX11_TextureHandleManager() = default;
 
 	// ------------------------------------------
