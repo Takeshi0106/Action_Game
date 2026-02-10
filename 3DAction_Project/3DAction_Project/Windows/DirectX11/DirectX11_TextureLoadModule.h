@@ -20,9 +20,11 @@
 // =========================================
 // 前方宣言
 // =========================================
-struct DirectX11_Texture2DBufferManager;
+// DirectX11デバイス
+struct ID3D11Device;
+// DirectX11各リソースマネージャー
+class DirectX11_Texture2DBufferManager;
 class DirectX11_ViewManager;
-class ID3D11Device;
 
 
 // =========================================
