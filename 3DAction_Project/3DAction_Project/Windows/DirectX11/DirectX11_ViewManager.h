@@ -74,12 +74,12 @@ public:
 		return m_RenderTargetViews.GetData(_handle);
 	}
 	// SRV取得
-	const ID3D11ShaderResourceView* GetShaderResourceView(const Handle& _handle) {
-		return m_ShaderResourceViews.GetData(_handle)->GetSRV();
+	const DirectX11_SRVData* GetShaderResourceView(const Handle& _handle) {
+		return m_ShaderResourceViews.GetData(_handle);
 	}
 	// DSV取得
-	const ID3D11DepthStencilView* GetDepthStencilView(const Handle& _handle) {
-		return m_DepthStencilViews.GetData(_handle)->GetDSV();
+	const DirectX11_DSVData* GetDepthStencilView(const Handle& _handle) {
+		return m_DepthStencilViews.GetData(_handle);
 	}
 
 	// ------------------------------------------
