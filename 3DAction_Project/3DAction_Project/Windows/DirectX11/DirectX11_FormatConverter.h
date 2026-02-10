@@ -43,5 +43,8 @@ public:
     static D3D11_FILTER ConvertFilter(SamplerFilter filter);
     static D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SamplerAddressMode mode);
     static D3D11_COMPARISON_FUNC ConvertComparisonFunc(SamplerComparisonFunc func);
+
+    // バインドフラグを変換
+    static UINT ConvertBindFlag(BindFlag flags);
 };
 

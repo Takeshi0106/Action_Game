@@ -11,9 +11,9 @@
 // ==========================
 // 使用用途変換
 // ==========================
-D3D11_USAGE DirectX11_FormatConverter::ToDXUsage(BufferUsage usage)
+D3D11_USAGE DirectX11_FormatConverter::ToDXUsage(BufferUsage _usage)
 {
-    switch (usage)
+    switch (_usage)
     {
     case BufferUsage::Default:
         return D3D11_USAGE_DEFAULT;
@@ -21,6 +21,9 @@ D3D11_USAGE DirectX11_FormatConverter::ToDXUsage(BufferUsage usage)
     case BufferUsage::Dynamic:
         return D3D11_USAGE_DYNAMIC;
         break;
+	case BufferUsage::Staging:
+        return D3D11_USAGE_STAGING;
+		break;
     default:
         ErrorLog::OutputToConsole(u8"BufferUsageに変換できませんでした");
         return D3D11_USAGE_DEFAULT;
@@ -32,9 +35,9 @@ D3D11_USAGE DirectX11_FormatConverter::ToDXUsage(BufferUsage usage)
 // ============================
 // アクセス制限に変換
 // ============================
-UINT DirectX11_FormatConverter::ToDXCPUAccess(CPUAccess access)
+UINT DirectX11_FormatConverter::ToDXCPUAccess(CPUAccess _access)
 {
-    switch (access)
+    switch (_access)
     {
     case CPUAccess::None:
         return static_cast<D3D11_CPU_ACCESS_FLAG>(0);
@@ -53,9 +56,9 @@ UINT DirectX11_FormatConverter::ToDXCPUAccess(CPUAccess access)
 // ===========================
 // 自作Format から DXGI_FORMAT に変換
 // ===========================
-DXGI_FORMAT DirectX11_FormatConverter::ToDXFormat(Format format)
+DXGI_FORMAT DirectX11_FormatConverter::ToDXFormat(Format _format)
 {
-    switch (format)
+    switch (_format)
     {
     case Format::Format_Unknown:
         return DXGI_FORMAT_UNKNOWN;
@@ -89,9 +92,9 @@ DXGI_FORMAT DirectX11_FormatConverter::ToDXFormat(Format format)
 // ===========================
 // DXGI_FORMAT から 自作Format に変換
 // ===========================
-Format DirectX11_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
+Format DirectX11_FormatConverter::ToSelfFormat(DXGI_FORMAT _format)
 {
-    switch (format)
+    switch (_format)
     {
     case DXGI_FORMAT_UNKNOWN:
         return Format::Format_Unknown;
@@ -122,9 +125,9 @@ Format DirectX11_FormatConverter::ToSelfFormat(DXGI_FORMAT format)
 }
 
 
-D3D11_FILTER DirectX11_FormatConverter::ConvertFilter(SamplerFilter filter)
+D3D11_FILTER DirectX11_FormatConverter::ConvertFilter(SamplerFilter _filter)
 {
-    switch (filter)
+    switch (_filter)
     {
     case SamplerFilter::Point: 
         return D3D11_FILTER_MIN_MAG_MIP_POINT;
@@ -142,9 +145,9 @@ D3D11_FILTER DirectX11_FormatConverter::ConvertFilter(SamplerFilter filter)
     }
 }
 
-D3D11_TEXTURE_ADDRESS_MODE DirectX11_FormatConverter::ConvertAddressMode(SamplerAddressMode mode)
+D3D11_TEXTURE_ADDRESS_MODE DirectX11_FormatConverter::ConvertAddressMode(SamplerAddressMode _mode)
 {
-    switch (mode)
+    switch (_mode)
     {
     case SamplerAddressMode::Wrap: 
         return D3D11_TEXTURE_ADDRESS_WRAP;
@@ -165,9 +168,9 @@ D3D11_TEXTURE_ADDRESS_MODE DirectX11_FormatConverter::ConvertAddressMode(Sampler
     }
 }
 
-D3D11_COMPARISON_FUNC DirectX11_FormatConverter::ConvertComparisonFunc(SamplerComparisonFunc func)
+D3D11_COMPARISON_FUNC DirectX11_FormatConverter::ConvertComparisonFunc(SamplerComparisonFunc _func)
 {
-    switch (func)
+    switch (_func)
     {
     case SamplerComparisonFunc::Never: 
         return D3D11_COMPARISON_NEVER;
@@ -198,4 +201,35 @@ D3D11_COMPARISON_FUNC DirectX11_FormatConverter::ConvertComparisonFunc(SamplerCo
         return D3D11_COMPARISON_ALWAYS;
         break;
     }
+}
+
+// =========================================
+// バインドフラグ変換
+// =========================================
+UINT DirectX11_FormatConverter::ConvertBindFlag(BindFlag _flags)
+{
+    UINT result = 0;
+
+    // SRV
+    if (static_cast<unsigned int>(_flags) & static_cast<unsigned int>(BindFlag::Bind_ShaderResource))
+    {
+        result |= D3D11_BIND_SHADER_RESOURCE;
+    }
+    // RTV
+    if (static_cast<unsigned int>(_flags) & static_cast<unsigned int>(BindFlag::Bind_RenderTarget))
+    {
+        result |= D3D11_BIND_RENDER_TARGET;
+    }
+    // DSV
+    if (static_cast<unsigned int>(_flags) & static_cast<unsigned int>(BindFlag::Bind_DepthStencil))
+    {
+        result |= D3D11_BIND_DEPTH_STENCIL;
+    }
+    // UAV
+    if (static_cast<unsigned int>(_flags) & static_cast<unsigned int>(BindFlag::Bind_UnorderedAccess))
+    {
+        result |= D3D11_BIND_UNORDERED_ACCESS;
+    }
+
+    return result;
 }
