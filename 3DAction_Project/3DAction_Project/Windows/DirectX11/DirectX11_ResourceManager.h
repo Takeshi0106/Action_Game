@@ -93,7 +93,7 @@ public:
 	// --------------------------------
 	// 初期化
 	// --------------------------------
-	bool Init(ID3D11Device* device);
+	bool Init(ID3D11Device* device,ID3D11DeviceContext* _deviceContext);
 
 	// --------------------------------
 	// ゲッター

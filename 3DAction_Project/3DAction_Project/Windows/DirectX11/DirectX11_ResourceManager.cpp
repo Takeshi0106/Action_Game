@@ -10,13 +10,14 @@
 // =========================================
 // 初期化
 // =========================================
-bool DirectX11_ResourceManager::Init(ID3D11Device* _device)
+bool DirectX11_ResourceManager::Init(ID3D11Device* _device, ID3D11DeviceContext* _deviceContext)
 {
 	// リソース作成クラス作成
 	m_DrawCreate = std::make_unique<DirectX11_DrawCreate>(
 		m_ScreenWidth,
 		m_ScreenHeight,
 		_device,
+		_deviceContext,
 		DirectX11_ResourceReference(
 			m_ShaderManager,
 			m_VertexBufferManager,
