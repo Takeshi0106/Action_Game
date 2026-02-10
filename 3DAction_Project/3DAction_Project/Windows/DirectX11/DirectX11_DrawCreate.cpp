@@ -144,8 +144,115 @@ Handle DirectX11_DrawCreate::CreateTexture(
 	const Hashed_String& _name,
 	const TextureCreateDesc& _desc)
 {
+	// サイズ
+	uint32_t width = 0;
+	uint32_t height = 0;
 
-	return Handle();
+	// テクスチャデスク
+	D3D11_TEXTURE2D_DESC textureDesc{};
+	// サンプラーデスク
+	D3D11_SAMPLER_DESC sampDesc{};
+	// SRVデスク
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDescTemp{};
+	// SRV作成デスクポインタ
+	D3D11_SHADER_RESOURCE_VIEW_DESC* srvDesc = nullptr;
+	// RTVデスク
+	D3D11_RENDER_TARGET_VIEW_DESC rtvDescTemp{};
+	// RTV作成デスクポインタ
+	D3D11_RENDER_TARGET_VIEW_DESC* rtvDesc = nullptr;
+	// DSVデスク
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDescTemp{};
+	// DSV作成デスクポインタ
+	D3D11_DEPTH_STENCIL_VIEW_DESC* dsvDesc = nullptr;
+
+	// サイズ計算
+	if (_desc.sizeType == TextureSizeType::Relative)
+	{
+		// 相対サイズの場合、ウィンドウサイズから計算
+		width = static_cast<uint32_t>(_desc.width * m_ScreenWidth);
+		height = static_cast<uint32_t>(_desc.height * m_ScreenHeight);
+	}
+	else if(_desc.sizeType == TextureSizeType::Absolute)
+	{
+		// 絶対サイズの場合、そのまま使用
+		width = static_cast<uint32_t>(_desc.width);
+		height = static_cast<uint32_t>(_desc.height);
+	}
+
+	// テクスチャデスク作成
+	textureDesc.Width = width;
+	textureDesc.Height = height;
+	textureDesc.MipLevels = (_desc.mipMapType == MipMapType::Manual) ? _desc.mipLevels : 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DirectX11_FormatConverter::ToDXFormat(_desc.format);
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Usage = DirectX11_FormatConverter::ToDXUsage(_desc.usage);
+	textureDesc.BindFlags = DirectX11_FormatConverter::ConvertBindFlag(_desc.bindFlags);
+	textureDesc.CPUAccessFlags = DirectX11_FormatConverter::ToDXCPUAccess(_desc.cpuAccess);
+	textureDesc.MiscFlags = 0;
+	// ミップマップ自動生成設定
+	if (_desc.mipMapType == MipMapType::Auto)
+	{
+		textureDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+		// ミップマップレベルをフルに設定
+		textureDesc.MipLevels = 0;
+	}
+
+	// サンプラーデスク作成
+	sampDesc.Filter = DirectX11_FormatConverter::ConvertFilter(_desc.sampler.filter);
+	sampDesc.AddressU = DirectX11_FormatConverter::ConvertAddressMode(_desc.sampler.addressU);
+	sampDesc.AddressV = DirectX11_FormatConverter::ConvertAddressMode(_desc.sampler.addressV);
+	sampDesc.AddressW = DirectX11_FormatConverter::ConvertAddressMode(_desc.sampler.addressW);
+	sampDesc.MipLODBias = 0.0f;
+	sampDesc.MaxAnisotropy = (_desc.sampler.filter == SamplerFilter::Anisotropic) ? 16 : 1;
+	sampDesc.ComparisonFunc = DirectX11_FormatConverter::ConvertComparisonFunc(_desc.sampler.comparisonFunc);
+	sampDesc.BorderColor[0] = 0.0f;
+	sampDesc.BorderColor[1] = 0.0f;
+	sampDesc.BorderColor[2] = 0.0f;
+	sampDesc.BorderColor[3] = 0.0f;
+	sampDesc.MinLOD = 0.0f;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	// SRVデスク作成
+	if (_desc.bindFlags & BindFlag::Bind_ShaderResource)
+	{
+		srvDescTemp.Format = textureDesc.Format;
+		srvDescTemp.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDescTemp.Texture2D.MostDetailedMip = 0;
+		srvDescTemp.Texture2D.MipLevels = textureDesc.MipLevels;
+		// ポインターに代入
+		srvDesc = &srvDescTemp;
+	}
+	// RTVデスク作成
+	if (_desc.bindFlags & BindFlag::Bind_RenderTarget)
+	{
+		rtvDescTemp.Format = textureDesc.Format;
+		rtvDescTemp.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+		rtvDescTemp.Texture2D.MipSlice = 0;
+		// ポインターに代入
+		rtvDesc = &rtvDescTemp;
+	}
+	// DSVデスク作成
+	if (_desc.bindFlags & BindFlag::Bind_DepthStencil)
+	{
+		dsvDescTemp.Format = textureDesc.Format;
+		dsvDescTemp.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDescTemp.Texture2D.MipSlice = 0;
+		// ポインターに代入
+		dsvDesc = &dsvDescTemp;
+	}
+
+	// マネージャー登録
+	return m_Managers.textureManager.CreateTextures(
+		m_Device,
+		_name,
+		textureDesc,
+		sampDesc,
+		_desc.sampler,
+		srvDesc,
+		rtvDesc,
+		dsvDesc);
 }
 
 
