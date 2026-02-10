@@ -14,6 +14,8 @@ bool DirectX11_ResourceManager::Init(ID3D11Device* _device)
 {
 	// リソース作成クラス作成
 	m_DrawCreate = std::make_unique<DirectX11_DrawCreate>(
+		m_ScreenWidth,
+		m_ScreenHeight,
 		_device,
 		DirectX11_ResourceReference(
 			m_ShaderManager,

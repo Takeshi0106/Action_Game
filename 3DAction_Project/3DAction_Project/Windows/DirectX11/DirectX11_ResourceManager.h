@@ -26,6 +26,8 @@
 #include "DirectX11_DrawCreate.h"
 // 動的確保
 #include <memory>
+// 整数ヘッダー
+#include <cstdint>
 // 設定パスヘッダー
 #include "../../DrawPathConfig.h"
 
@@ -45,6 +47,10 @@ private:
 	// --------------------------------
 	// メンバー変数
 	// --------------------------------
+	// スクリーンサイズ
+	uint32_t m_ScreenWidth = 0;
+	uint32_t m_ScreenHeight = 0;
+
 	// シェーダー
 	DirectX11_ShaderManager m_ShaderManager;
 	// 頂点バッファ
@@ -60,7 +66,6 @@ private:
 	// マテリアル
 	MeshMaterialManager m_MeshMaterialManager;
 
-
 	// --------------------------------
 	// ゲーム層とプラットフォーム層をつなぐ
 	// インターフェイスとしての役割があるクラス
@@ -74,7 +79,11 @@ public:
 	// コンストラクタ・デストラクタ
 	// --------------------------------
 	DirectX11_ResourceManager(
+		const uint32_t& _screenWidth,
+		const uint32_t& _screenHeight,
 		const DrawPathConfig& _config) : 
+		m_ScreenWidth(_screenWidth),
+		m_ScreenHeight(_screenHeight),
 		m_ShaderManager(_config.shaderBinaryPath),
 		m_TextureHandleManager(_config.texturePath) {
 	}
