@@ -25,8 +25,10 @@
 // 画像ファイルをロードする
 TextureHandle LoadTextureFromFile(
 	ID3D11Device* _device,
+	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _keyName,
 	const std::filesystem::path& _texturePath,
+	const TextureLoadDesc& _loadDesc,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager);
 
@@ -37,8 +39,10 @@ TextureHandle LoadTextureFromFile(
 // =======================================
 TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	ID3D11Device* _device,
+	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _textureName,
 	const String& _textureFolderName,
+	const TextureLoadDesc& _loadDesc,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
@@ -67,8 +71,10 @@ TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 	// 画像のロード
 	return LoadTextureFromFile(
 		_device,
+		_deviceContext,
 		_textureName,
 		filePath,
+		_loadDesc,
 		_textureManager,
 		_viewManager);
 }
@@ -80,6 +86,7 @@ TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture_TextureFolder(
 // =======================================
 TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	ID3D11Device* _device,
+	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _textureName,
 	const String& _texturePath,
 	DirectX11_Texture2DBufferManager& _textureManager,
@@ -88,11 +95,20 @@ TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 	// ファイルパス作成
 	std::filesystem::path filePath = _texturePath.GetU8String();
 
+	// 区切り文字を統一する
+	filePath.make_preferred();
+
+	// テクスチャのロードを作成
+	TextureLoadDesc loadDesc = {};
+	loadDesc.generateMip = true;
+
 	// 画像のロード
 	return LoadTextureFromFile(
 		_device,
+		_deviceContext,
 		_textureName,
 		filePath,
+		loadDesc,
 		_textureManager,
 		_viewManager);
 }
@@ -103,8 +119,10 @@ TextureHandle DirectX11_TextureLoadModule::LoadFaileTexture(
 // =======================================
 TextureHandle LoadTextureFromFile(
 	ID3D11Device* _device,
+	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _keyName,
 	const std::filesystem::path& _texturePath,
+	const TextureLoadDesc& _loadDesc,
 	DirectX11_Texture2DBufferManager& _textureManager,
 	DirectX11_ViewManager& _viewManager)
 {
@@ -140,7 +158,9 @@ TextureHandle LoadTextureFromFile(
 	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width = static_cast<UINT>(meta.width);
 	desc.Height = static_cast<UINT>(meta.height);
-	desc.MipLevels = 0;
+
+	// generateMipがtrueなら自動生成、falseなら1
+	desc.MipLevels = (_loadDesc.generateMip) ? 0 : 1;
 	desc.ArraySize = static_cast<UINT>(meta.arraySize);
 	desc.Format = meta.format;
 	desc.SampleDesc.Count = 1;
@@ -148,6 +168,13 @@ TextureHandle LoadTextureFromFile(
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags = 0;
 	desc.MiscFlags = 0;
+	if (_loadDesc.generateMip)
+	{
+		// 自動生成する場合、レンダーターゲットも必要
+		desc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+		// ミップマップ自動生成フラグを立てる
+		desc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+	}
 
 	// TextureManagerに登録
 	Handle texHandle = _textureManager.Texture2DBufferCreateOnGet(
@@ -172,6 +199,15 @@ TextureHandle LoadTextureFromFile(
 		*(data->GetTexture()),
 		srvDesc,
 		_keyName);
+
+	// ミップマップ自動生成
+	if (_loadDesc.generateMip)
+	{
+		const DirectX11_SRVData* srv = _viewManager.GetShaderResourceView(srvHandle);
+
+		// ミップマップ自動生成
+		_deviceContext->GenerateMips(srv->GetSRV());
+	}
 
 	TextureHandle handle;
 	handle.textureHandle = texHandle;

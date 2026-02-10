@@ -81,6 +81,7 @@ public:
 	// テクスチャのロード
 	virtual Handle LoadTexture(
 		const Hashed_String& textureName, 
+		const TextureLoadDesc& loadDesc,
 		const String& textureFolderName = u8"") = 0;
 
 	// モデルのロード

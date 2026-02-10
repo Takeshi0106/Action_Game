@@ -159,7 +159,10 @@ Handle DirectX11_TextureHandleManager::CreateTextures(
 // ===============================
 Handle DirectX11_TextureHandleManager::LoadFaileTexture_TextureFolder(
 	ID3D11Device* _device,
+	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _name,
+	const TextureLoadDesc& _desc,
+	const D3D11_SAMPLER_DESC& _samplerDesc,
 	const String& _filePath)
 {
 	// 既に存在する場合はハンドルを返す
@@ -186,10 +189,29 @@ Handle DirectX11_TextureHandleManager::LoadFaileTexture_TextureFolder(
 	// テクスチャロードモジュールに処理を任せる
 	textureHandle = m_TextureLoadModule.LoadFaileTexture_TextureFolder(
 		_device,
+		_deviceContext,
 		_name,
 		_filePath,
+		_desc,
 		m_Texture2DBufferManager,
 		m_ViewManager);
+
+	// サンプラーステート作成済みかチェック
+	if (m_SamplerManager.Exists(_desc.sampler))
+	{
+		WarningLog::OutputToConsole(
+			u8"同じ設定のサンプラーが作成されようとしました");
+		// 取得
+		textureHandle.samplerHandle = m_SamplerManager.GetHandle(_desc.sampler);
+	}
+	else
+	{
+		// サンプラーステート作成
+		textureHandle.samplerHandle = m_SamplerManager.SamplerStateCreateOnGet(
+			_device,
+			_samplerDesc,
+			_desc.sampler);
+	}
 
 	// 管理配列に追加してハンドルを返す
 	return m_TextureHandles.AddData(_name, textureHandle);
@@ -201,7 +223,10 @@ Handle DirectX11_TextureHandleManager::LoadFaileTexture_TextureFolder(
 // ===============================
 Handle DirectX11_TextureHandleManager::LoadFaileTexture(
 	ID3D11Device* _device,
+	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _name,
+	const D3D11_SAMPLER_DESC& _samplerDesc,
+	const SamplerDesc& _mySamplerDesc,
 	const String& _filePath)
 {
 	// 既に存在する場合はハンドルを返す
@@ -228,10 +253,28 @@ Handle DirectX11_TextureHandleManager::LoadFaileTexture(
 	// テクスチャロードモジュールに処理を任せる
 	textureHandle = m_TextureLoadModule.LoadFaileTexture(
 		_device,
+		_deviceContext,
 		_name,
 		_filePath,
 		m_Texture2DBufferManager,
 		m_ViewManager);
+
+	// サンプラーステート作成済みかチェック
+	if (m_SamplerManager.Exists(_mySamplerDesc))
+	{
+		WarningLog::OutputToConsole(
+			u8"同じ設定のサンプラーが作成されようとしました");
+		// 取得
+		textureHandle.samplerHandle = m_SamplerManager.GetHandle(_mySamplerDesc);
+	}
+	else
+	{
+		// サンプラーステート作成
+		textureHandle.samplerHandle = m_SamplerManager.SamplerStateCreateOnGet(
+			_device,
+			_samplerDesc,
+			_mySamplerDesc);
+	}
 
 	// 管理配列に追加してハンドルを返す
 	return m_TextureHandles.AddData(_name, textureHandle);

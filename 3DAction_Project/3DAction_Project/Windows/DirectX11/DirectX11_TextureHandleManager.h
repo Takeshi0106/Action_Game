@@ -22,6 +22,8 @@
 #include "DirectX11_SamplerManager.h"
 // テクスチャ関連構造体
 #include "DirectX11_TextureStruct.h"
+// ロードテクスチャデスク
+#include "../../GraphicsEnums.h"
 // モジュールヘッダー
 #include "DirectX11_TextureLoadModule.h"
 
@@ -30,6 +32,7 @@
 // 前方宣言
 // ==========================================
 struct ID3D11Device;
+struct ID3D11DeviceContext;
 
 
 // ==========================================
@@ -74,7 +77,10 @@ public:
 	// ------------------------------------------
 	Handle LoadFaileTexture_TextureFolder(
 		ID3D11Device* _device,
+		ID3D11DeviceContext* _deviceContext,
 		const Hashed_String& _textureName,
+		const TextureLoadDesc& _loadType,
+		const D3D11_SAMPLER_DESC& _samplerDesc,
 		const String& _textureFolderName);
 
 	// ------------------------------------------
@@ -82,7 +88,10 @@ public:
 	// ------------------------------------------	
 	Handle LoadFaileTexture(
 		ID3D11Device* _device,
+		ID3D11DeviceContext* _deviceContext,
 		const Hashed_String& _textureName,
+		const D3D11_SAMPLER_DESC& _samplerDesc,
+		const SamplerDesc& _mySamplerDesc,
 		const String& _texturePath);
 
 	// ------------------------------------------

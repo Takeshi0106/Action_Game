@@ -15,6 +15,8 @@
 #include "../../UTF8_String.h"
 // ハッシュ文字列ヘッダー
 #include "../../Hashed_String.h"
+// テクスチャロードデスクヘッダー
+#include "../../GraphicsEnums.h"
 
 
 // =========================================
@@ -22,6 +24,7 @@
 // =========================================
 // DirectX11デバイス
 struct ID3D11Device;
+struct ID3D11DeviceContext;
 // DirectX11各リソースマネージャー
 class DirectX11_Texture2DBufferManager;
 class DirectX11_ViewManager;
@@ -53,8 +56,10 @@ public:
 	// ----------------------------------
 	TextureHandle LoadFaileTexture_TextureFolder(
 		ID3D11Device* _device,
+		ID3D11DeviceContext* _deviceContext,
 		const Hashed_String& _textureName,
 		const String& _textureFolderName,
+		const TextureLoadDesc& _loadDesc,
 		DirectX11_Texture2DBufferManager& _textureManager,
 		DirectX11_ViewManager& _viewManager);
 
@@ -65,6 +70,7 @@ public:
 	// ----------------------------------
 	TextureHandle LoadFaileTexture(
 		ID3D11Device* _device,
+		ID3D11DeviceContext* _deviceContext,
 		const Hashed_String& _textureName,
 		const String& _texturePath,
 		DirectX11_Texture2DBufferManager& _textureManager,

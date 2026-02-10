@@ -299,9 +299,36 @@ Handle DirectX11_DrawCreate::CreateTexture(
 // =======================================
 Handle DirectX11_DrawCreate::LoadTexture(
 	const Hashed_String& _textureName, 
+	const TextureLoadDesc& _loadDesc,
 	const String& _textureFolderName)
 {
-	return Handle();
+	D3D11_SAMPLER_DESC samp{};
+
+	// サンプラーデスク作成
+	samp.Filter = DirectX11_FormatConverter::ConvertFilter(_loadDesc.sampler.filter);
+	samp.AddressU = DirectX11_FormatConverter::ConvertAddressMode(_loadDesc.sampler.addressU);
+	samp.AddressV = DirectX11_FormatConverter::ConvertAddressMode(_loadDesc.sampler.addressV);
+	samp.AddressW = DirectX11_FormatConverter::ConvertAddressMode(_loadDesc.sampler.addressW);
+	samp.MipLODBias = 0.0f;
+	samp.MaxAnisotropy = (_loadDesc.sampler.filter == SamplerFilter::Anisotropic) ? 16 : 1;
+	samp.ComparisonFunc = DirectX11_FormatConverter::ConvertComparisonFunc(_loadDesc.sampler.comparisonFunc);
+	samp.BorderColor[0] = 0.0f;
+	samp.BorderColor[1] = 0.0f;
+	samp.BorderColor[2] = 0.0f;
+	samp.BorderColor[3] = 0.0f;
+	samp.MinLOD = 0.0f;
+	samp.MaxLOD = D3D11_FLOAT32_MAX;
+
+	// ファイルからテクスチャをロード
+	Handle handle = m_Managers.textureManager.LoadFaileTexture_TextureFolder(
+		m_Device,
+		m_DeviceContext,
+		_textureName,
+		_loadDesc,
+		samp,
+		_textureFolderName);
+
+	return handle;
 }
 
 

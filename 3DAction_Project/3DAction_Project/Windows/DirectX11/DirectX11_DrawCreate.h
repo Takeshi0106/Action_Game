@@ -122,6 +122,7 @@ public:
 	// テクスチャのロード
 	Handle LoadTexture(
 		const Hashed_String& textureName,
+		const TextureLoadDesc& _lodeDesc,
 		const String& textureFolderName = u8"") override;
 
 	// モデルのロード
