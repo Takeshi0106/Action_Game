@@ -227,8 +227,21 @@ public:
 		// 参照カウントが0なら削除
 		if (m_RefHandleCounts[handle.index] == 0)
 		{
+			// 現在の世代を取得
+			uint32_t gen = m_Generations[handle.index];
+
+			// 世代が上限に達している場合は0に戻す
+			if (gen == UINT32_MAX - 1)
+			{
+				gen = 0;
+			}
+			else {
+				// 世代をインクリメント
+				gen++;
+			}
+
 			// 世代を更新
-			m_Generations[handle.index]++;
+			m_Generations[handle.index] = gen;
 
 			// 空き添え字に追加
 			m_FreeIndexs.push_back(handle.index);
