@@ -54,7 +54,6 @@ public:
 		const Hashed_String& _vbName,
 		const BinaryView& _vertexData,
 		const uint32_t _vertexNumber,
-		const PrimitiveType _type = PrimitiveType::TriangleStrip,
 		const BufferUsage _usage = BufferUsage::Dynamic,
 		const CPUAccess _access = CPUAccess::Write) = 0;
 
