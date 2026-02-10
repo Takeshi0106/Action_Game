@@ -397,6 +397,9 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\99_TextureLoadModule">
       <UniqueIdentifier>{a24ae7e6-1d9d-462b-b51e-b7a698e6e38a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\99_TextureStruct">
+      <UniqueIdentifier>{f055f1f6-df8d-402f-93a3-43f0695d5258}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -1123,6 +1126,9 @@
     </ClInclude>
     <ClInclude Include="Windows\DirectX11\DirectX11_ConstantBufferData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer\DirectX11_ConstantBufferData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\DirectX11\DirectX11_TextureStruct.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\99_TextureStruct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

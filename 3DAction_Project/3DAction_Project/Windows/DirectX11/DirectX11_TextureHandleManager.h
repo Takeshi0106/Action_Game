@@ -20,6 +20,8 @@
 #include "DirectX11_Texture2DBufferManager.h"
 #include "DirectX11_ViewManager.h"
 #include "DirectX11_SamplerManager.h"
+// テクスチャ関連構造体
+#include "DirectX11_TextureStruct.h"
 // モジュールヘッダー
 #include "DirectX11_TextureLoadModule.h"
 
@@ -86,8 +88,29 @@ public:
 	// ------------------------------------------
 	// テクスチャハンドル取得
 	// ------------------------------------------
-	const TextureHandle* GetTextureHandle(const Handle& _handle) {
-		return m_TextureHandles.GetData(_handle);
+	const DirectX11_TextureStruct GetTextureHandle(const Handle& _handle) {
+		// テクスチャハンドル取得
+		TextureHandle* handle = m_TextureHandles.GetData(_handle);
+
+		// 保持しているデータをまとめて返す
+		DirectX11_TextureStruct structData{};
+
+		if (handle != nullptr) {
+			structData.texture2DData = m_Texture2DBufferManager.GetTexture2DBuffer(handle->textureHandle);
+			structData.srvData = m_ViewManager.GetShaderResourceView(handle->srvHandle);
+			structData.rtvData = m_ViewManager.GetRenderTargetView(handle->rtvHandle);
+			structData.dsvData = m_ViewManager.GetDepthStencilView(handle->dsvHandle);
+			structData.samplerData = m_SamplerManager.GetSamplerState(handle->samplerHandle);
+		}
+
+#if defined(DEBUG) || defined(_DEBUG)
+		else {
+			WarningLog::OutputToConsole(
+				u8"無効なテクスチャハンドルが渡されました。");
+		}
+#endif
+
+		return structData;
 	}
 
 	// ------------------------------------------
