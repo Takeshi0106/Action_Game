@@ -201,30 +201,22 @@ UINT ToDXBindFlag(BindFlag flags)
 {
     UINT result = 0;
 
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_VertexBuffer))
-    {
-        result |= D3D11_BIND_VERTEX_BUFFER;
-    }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_IndexBuffer))
-    {
-        result |= D3D11_BIND_INDEX_BUFFER;
-    }
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_ConstantBuffer))
-    {
-        result |= D3D11_BIND_CONSTANT_BUFFER;
-    }
+    // SRV
     if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_ShaderResource))
     {
         result |= D3D11_BIND_SHADER_RESOURCE;
     }
+    // RTV
     if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_RenderTarget))
     {
         result |= D3D11_BIND_RENDER_TARGET;
     }
+    // DSV
     if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_DepthStencil))
     {
         result |= D3D11_BIND_DEPTH_STENCIL;
     }
+    // UAV
     if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_UnorderedAccess))
     {
         result |= D3D11_BIND_UNORDERED_ACCESS;

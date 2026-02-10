@@ -1,11 +1,18 @@
 ﻿#pragma once
+// ==========================================
+// ヘッダー
+// ==========================================
+// 整数ヘッダー
+#include <cstdint>
+// サンプラーヘッダー
+#include "SamplerSetting.h"
 
 
 // ==============================
 // アクセス設定
 // ==============================
 // 自作のプリミティブタイプ
-enum PrimitiveType
+enum PrimitiveType : uint32_t
 {
 	TriangleList,
 	TriangleStrip,
@@ -13,22 +20,29 @@ enum PrimitiveType
 	LineStrip
 };
 
+
 // 自作の使用タイプ
-enum BufferUsage
+enum BufferUsage : uint32_t
 {
+	// GPUのみアクセス
 	Default,
-	Dynamic
+	// CPUからも書き込み可能
+	Dynamic,
+	// CPUからも読み書き可能
+	Staging
 };
 
+
 // 自作のCPUアクセス
-enum CPUAccess
+enum CPUAccess : uint32_t
 {
 	None,
 	Write
 };
 
+
 // 自作のフォーマット
-enum Format
+enum Format : uint32_t
 {
 	Format_Unknown,
 
@@ -49,26 +63,79 @@ enum Format
 
 
 // ==========================================
-// View 関連
+// View バインドフラグ
 // ==========================================
-// バインドフラグ(Viewやテクスチャ用)
-enum  BindFlag : unsigned int
+enum  BindFlag : uint32_t
 {
+	// バインドなし
 	Bind_None = 0,
-	Bind_VertexBuffer = 1 << 0,
-	Bind_IndexBuffer = 1 << 1,
-	Bind_ConstantBuffer = 1 << 2,
-	Bind_ShaderResource = 1 << 3,
-	Bind_RenderTarget = 1 << 4,
-	Bind_DepthStencil = 1 << 5,
-	Bind_UnorderedAccess = 1 << 6,
+	// SRV
+	Bind_ShaderResource = 1 << 0,
+	// RTV
+	Bind_RenderTarget = 1 << 1,
+	// DSV
+	Bind_DepthStencil = 1 << 2,
+	// UAV (今は実装されていません)
+	Bind_UnorderedAccess = 1 << 3,
 };
 
 // OR演算子
 inline BindFlag operator|(BindFlag a, BindFlag b)
 {
 	return static_cast<BindFlag>(
-		static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+		static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
 }
 
 
+// ===========================================
+// ミップマップ設定
+// ===========================================
+enum class MipMapType
+{
+	// ミップマップなし
+	None,
+	// 自動生成
+	Auto,
+	// 手動設定
+	Manual
+};
+
+
+// ===========================================
+// テクスチャ作成デスク
+// ===========================================
+// テクスチャサイズタイプ
+enum class TextureSizeType
+{
+	// ピクセル指定
+	Absolute,
+	// 0〜1.0 比率
+	Relative
+};
+
+// テクスチャ作成デスク
+struct TextureCreateDesc
+{
+	// サイズタイプ
+	TextureSizeType sizeType = TextureSizeType::Relative;
+
+	// サイズ
+	float width;
+	float height;
+
+	// フォーマット
+	Format format;
+	BindFlag bindFlags;
+	// CPU,GPUどちらが触るかのフラグ
+	BufferUsage usage = BufferUsage::Default;
+	// CPU から更新可能かフラグ
+	CPUAccess cpuAccess = CPUAccess::None;
+
+	// ミップマップ設定
+	MipMapType mipMapType = MipMapType::None;
+	// ミップマップレベル (手動設定時のみ有効)
+	uint16_t mipLevels = 1;
+
+	// サンプラー設定
+	SamplerDesc sampler = SamplerDesc::NormalSampler();
+};
