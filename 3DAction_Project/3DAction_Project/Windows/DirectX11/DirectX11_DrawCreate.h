@@ -24,6 +24,7 @@
 // 前方宣言
 // ===============================================
 struct ID3D11Device;
+struct ID3D11DeviceContext;
 // DirectX11各リソースマネージャー
 class DirectX11_ShaderManager;
 class DirectX11_VertexBufferManager;
@@ -66,6 +67,9 @@ private:
 	// -------------------------------------------
 	// コンテキスト
 	ID3D11Device* m_Device;
+	// デバイスコンテキスト
+	ID3D11DeviceContext* m_DeviceContext;
+
 	// 各リソースマネージャーの参照
 	DirectX11_ResourceReference m_Managers;
 
@@ -78,6 +82,7 @@ public:
 		uint32_t _windowWidth,
 		uint32_t _windowHeight,
 		ID3D11Device* _device,
+		ID3D11DeviceContext* _deviceContext,
 		DirectX11_ResourceReference _managers);
 	~DirectX11_DrawCreate() override = default;
 
@@ -90,7 +95,6 @@ public:
 		const Hashed_String& _vbName,
 		const BinaryView& _data,
 		const uint32_t _vertexNumber,
-		const PrimitiveType _type = PrimitiveType::TriangleStrip,
 		const BufferUsage _usage = BufferUsage::Dynamic,
 		const CPUAccess _access = CPUAccess::Write) override;
 

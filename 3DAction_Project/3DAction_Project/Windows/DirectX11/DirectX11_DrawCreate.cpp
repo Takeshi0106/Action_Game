@@ -27,9 +27,11 @@ DirectX11_DrawCreate::DirectX11_DrawCreate(
 	uint32_t _windowWidth,
 	uint32_t _windowHeight,
 	ID3D11Device* _device,
+	ID3D11DeviceContext* _deviceContext,
 	DirectX11_ResourceReference _managers)
 	: BaseDrawCreate(_windowWidth, _windowHeight),
 	m_Device(_device),
+	m_DeviceContext(_deviceContext),
 	m_Managers(_managers)
 {
 
@@ -43,7 +45,6 @@ Handle DirectX11_DrawCreate::CreateVertexBuffer(
 	const Hashed_String& _vbName,
 	const BinaryView& _data,
 	const uint32_t _vertexNumber,
-	const PrimitiveType _type,
 	const BufferUsage _usage,
 	const CPUAccess _access)
 {
@@ -144,6 +145,14 @@ Handle DirectX11_DrawCreate::CreateTexture(
 	const Hashed_String& _name,
 	const TextureCreateDesc& _desc)
 {
+#if defined(DEBUG) || defined(_DEBUG)
+	if (_desc.width == 0 || _desc.height == 0)
+	{
+		ErrorLog::OutputToConsole(
+			u8"テクスチャ作成サイズに0が使用されています");
+	}
+#endif
+
 	// サイズ
 	uint32_t width = 0;
 	uint32_t height = 0;
@@ -182,7 +191,6 @@ Handle DirectX11_DrawCreate::CreateTexture(
 	// テクスチャデスク作成
 	textureDesc.Width = width;
 	textureDesc.Height = height;
-	textureDesc.MipLevels = (_desc.mipMapType == MipMapType::Manual) ? _desc.mipLevels : 1;
 	textureDesc.ArraySize = 1;
 	textureDesc.Format = DirectX11_FormatConverter::ToDXFormat(_desc.format);
 	textureDesc.SampleDesc.Count = 1;
@@ -191,12 +199,30 @@ Handle DirectX11_DrawCreate::CreateTexture(
 	textureDesc.BindFlags = DirectX11_FormatConverter::ConvertBindFlag(_desc.bindFlags);
 	textureDesc.CPUAccessFlags = DirectX11_FormatConverter::ToDXCPUAccess(_desc.cpuAccess);
 	textureDesc.MiscFlags = 0;
-	// ミップマップ自動生成設定
-	if (_desc.mipMapType == MipMapType::Auto)
+
+	// ミップ処理切り替え
+	switch (_desc.mipMapType)
 	{
-		textureDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
-		// ミップマップレベルをフルに設定
-		textureDesc.MipLevels = 0;
+		case MipMapType::None:
+			textureDesc.MipLevels = 1;
+			break;
+
+		case MipMapType::Auto:
+#if defined(DEBUG) || defined(_DEBUG)
+			if (!(_desc.bindFlags & BindFlag::Bind_ShaderResource) || !(_desc.bindFlags & BindFlag::Bind_RenderTarget))
+			{
+				ErrorLog::OutputToConsole(u8"自動ミップ生成したいならSRV と RTV の両方が必要");
+			}
+#endif
+			textureDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+			// ミップマップレベルをフルに設定
+			textureDesc.MipLevels = 0;
+			break;
+
+		case MipMapType::Manual:
+			// 手動設定の場合、ミップマップレベルを指定
+			textureDesc.MipLevels = _desc.mipLevels;
+			break;
 	}
 
 	// サンプラーデスク作成
@@ -220,7 +246,8 @@ Handle DirectX11_DrawCreate::CreateTexture(
 		srvDescTemp.Format = textureDesc.Format;
 		srvDescTemp.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		srvDescTemp.Texture2D.MostDetailedMip = 0;
-		srvDescTemp.Texture2D.MipLevels = textureDesc.MipLevels;
+		srvDescTemp.Texture2D.MipLevels =
+			(textureDesc.MipLevels == 0) ? -1 : textureDesc.MipLevels;
 		// ポインターに代入
 		srvDesc = &srvDescTemp;
 	}
@@ -244,7 +271,7 @@ Handle DirectX11_DrawCreate::CreateTexture(
 	}
 
 	// マネージャー登録
-	return m_Managers.textureManager.CreateTextures(
+	Handle handle = m_Managers.textureManager.CreateTextures(
 		m_Device,
 		_name,
 		textureDesc,
@@ -253,6 +280,17 @@ Handle DirectX11_DrawCreate::CreateTexture(
 		srvDesc,
 		rtvDesc,
 		dsvDesc);
+
+	// ミップマップ自動生成
+	if (_desc.mipMapType == MipMapType::Auto && handle.IsValid())
+	{
+		// テクスチャ関連情報取得
+		DirectX11_TextureStruct texture = m_Managers.textureManager.GetTextureHandle(handle);
+		// デバイスコンテキストを使ってミップマップ自動生成
+		m_DeviceContext->GenerateMips(texture.srvData->GetSRV());
+	}
+
+	return handle;
 }
 
 
