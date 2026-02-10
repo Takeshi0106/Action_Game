@@ -76,7 +76,7 @@ enum  BindFlag : uint32_t
 	// DSV
 	Bind_DepthStencil = 1 << 2,
 	// UAV (今は実装されていません)
-	Bind_UnorderedAccess = 1 << 3,
+	// Bind_UnorderedAccess = 1 << 3,
 };
 
 // OR演算子
