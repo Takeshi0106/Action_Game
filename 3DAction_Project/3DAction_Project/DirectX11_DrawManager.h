@@ -56,7 +56,6 @@ private:
 	// --------------------------------
 	// メンバー変数
 	// --------------------------------
-
 	// 最終描画に使用するRTの名前
 	const Hashed_String kFinalRTName = Hashed_String(u8"FinalRT");
 	const Hashed_String kFInalDSName = Hashed_String(u8"FinalDS");
