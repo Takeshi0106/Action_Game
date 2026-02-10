@@ -88,6 +88,13 @@ public:
 
 		if (it != m_KeyToHandleMap.end()) 
 		{
+#if defined(DEBUG) || defined(_DEBUG)
+			if (m_RefHandleCounts[it->second.index] == UINT32_MAX - 1)
+			{
+				ErrorLog::OutputToConsole(u8"TemplateManager::AddData - 参照カウントが上限を超えました");
+				return Handle();
+			}
+#endif
 			// 参照カウントを増やす
 			m_RefHandleCounts[it->second.index]++;
 			return it->second;
@@ -117,6 +124,14 @@ public:
 			// 添え字を作成
 			handle.index = (uint32_t)m_Datas.size();
 
+#if defined(DEBUG) || defined(_DEBUG)
+			// 添え字の上限チェック
+			if (handle.index > UINT32_MAX - 1)
+			{
+				ErrorLog::OutputToConsole(u8"TemplateManager::AddData - 添え字の上限を超えました");
+				return Handle();
+			}
+#endif
 			// データを更新
 			m_Datas.push_back(data);
 			// 名前を更新
@@ -140,6 +155,12 @@ public:
 	// ================================
 	T* GetData(const Handle& handle)
 	{
+		// 無効チェック
+		if (!handle.IsValid()) {
+			WarningLog::OutputToConsole(u8"TemplateManager::GetData - 無効なハンドルです");
+			return nullptr; }
+
+#if defined(DEBUG) || defined(_DEBUG)
 		// 添え字をチェック
 		if (handle.index >= (uint32_t)m_Datas.size()) { 
 			ErrorLog::OutputToConsole(u8"TemplateManager::GetData - 無効な添え字です");
@@ -149,6 +170,7 @@ public:
 		if (handle.generation != m_Generations[handle.index]) { 
 			ErrorLog::OutputToConsole(u8"TemplateManager::GetData - 無効な世代です");
 			return nullptr; }
+#endif
 
 		return &m_Datas[handle.index];
 	}
