@@ -139,3 +139,21 @@ struct TextureCreateDesc
 	// サンプラー設定
 	SamplerDesc sampler = SamplerDesc::NormalSampler();
 };
+
+
+// ===========================================
+// テクスチャロード時の作成デスク
+// のちに.DDSなどの特殊なフォーマットに対応させたい
+// ===========================================
+struct TextureLoadDesc
+{
+	// ミップを自動生成するかフラグ
+	bool generateMip = false;
+	// どのミップからロードするか 
+	uint16_t firstMip = 0;
+	// 読み込むミップ数
+	int16_t mipCount = -1;
+	
+	// サンプラー設定
+	SamplerDesc sampler = SamplerDesc::NormalSampler();
+};
