@@ -11,14 +11,10 @@
 // ===============================================
 // 設定用ヘッダー
 #include "GraphicsEnums.h"
-// サンプラー設定ヘッダー
-#include "SamplerSetting.h"
+// グラフィックス列挙型
+#include "../../GraphicsEnums.h"
 // ハンドル設定
 #include "Handle.h"
-// テクスチャハンドル設定
-#include "TextureHandleh.h"
-// モデルハンドル設定
-#include "ModelHandle.h"
 // 固定長整数ヘッダー
 #include <cstdint>
 // 文字列ヘッダー
@@ -33,11 +29,20 @@
 // ===============================================
 class BaseDrawCreate
 {
+private:
+	// --------------------------------
+	// メンバー変数
+	// --------------------------------
+	uint32_t m_ScreenWidth = 0;
+	uint32_t m_ScreenHeight = 0;
+
 public:
 	// --------------------------------
 	// コンストラクタ・デストラクタ
 	// --------------------------------
-	BaseDrawCreate() = default;
+	BaseDrawCreate(uint32_t& _width,uint32_t& _height) :
+		m_ScreenWidth(_width), m_ScreenHeight(_height) {
+	}
 	virtual ~BaseDrawCreate() = default;
 
 
@@ -69,43 +74,14 @@ public:
 		const BufferUsage _usage = BufferUsage::Dynamic,
 		const CPUAccess _access = CPUAccess::Write) = 0;
 
-	// テクスチャ作成
+	// テクスチャの作成
 	virtual Handle CreateTexture(
-		const Hashed_String& _name,
-		const uint16_t _width,
-		const uint16_t _height,
-		const Format _format,
-		const BindFlag _bindFlag,
-		const BufferUsage _usage = BufferUsage::Default,
-		const CPUAccess _cpu = CPUAccess::None) = 0;
-
-	// サンプラー作成_
-	virtual Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) = 0;
-
-	// View作成
-	// SRV
-	virtual Handle CreateSRV(
-		const Hashed_String& name,
-		const Format format, 
-		TextureHandle& _outTextureHandle,
-		const uint16_t mostDetailedMip = 0, 
-		const int16_t mipLevels = -1) = 0;
-	// RTV
-	virtual Handle CreateRTV(
-		const Hashed_String& name, 
-		const uint16_t mipSlice,
-		TextureHandle& _outputTextureHandle) = 0;
-	// DSV
-	virtual Handle CreateDSV(
-		const Hashed_String& name, 
-		const Format format,
-		TextureHandle& _outputTextureHandle) = 0;
+		const Hashed_String& textureName,
+		const TextureCreateDesc& textureDesc) = 0;
 
 	// テクスチャのロード
 	virtual Handle LoadTexture(
 		const Hashed_String& textureName, 
-		TextureHandle& outTextureHandle,
-		const int16_t _mipLevels = -1, 
 		const String& textureFolderName = u8"") = 0;
 
 	// モデルのロード

@@ -4,6 +4,8 @@
 // =======================================
 // 必須ヘッダー
 #include "DirectX11_DrawCreate.h"
+// DirectX11ヘッダー
+#include <d3d11.h>
 // DirectX11リソース管理ヘッダー
 #include "DirectX11_ShaderManager.h"
 #include "DirectX11_VertexBufferManager.h"
@@ -22,10 +24,13 @@
 // コンストラクタ
 // =======================================
 DirectX11_DrawCreate::DirectX11_DrawCreate(
+	uint32_t _windowWidth,
+	uint32_t _windowHeight,
 	ID3D11Device* _device,
 	DirectX11_ResourceReference _managers)
-	: m_Device(_device),
-	  m_Managers(_managers)
+	: BaseDrawCreate(_windowWidth, _windowHeight),
+	m_Device(_device),
+	m_Managers(_managers)
 {
 
 }
@@ -137,58 +142,7 @@ Handle DirectX11_DrawCreate::CreateConstantBuffer(
 // =======================================
 Handle DirectX11_DrawCreate::CreateTexture(
 	const Hashed_String& _name,
-	const uint16_t _width,
-	const uint16_t _height,
-	const Format _format,
-	const BindFlag _bindFlag,
-	const BufferUsage _usage,
-	const CPUAccess _cpu)
-{
-	return Handle();
-}
-
-
-// =======================================
-// サンプラー作成
-// =======================================
-Handle DirectX11_DrawCreate::CreateSampler(
-	const Hashed_String& _samplerName, 
-	const SamplerDesc& _desc)
-{
-
-	return Handle();
-}
-
-// =======================================
-// View作成
-// =======================================
-// SRV作成
-Handle DirectX11_DrawCreate::CreateSRV(
-	const Hashed_String& _name,
-	const Format _format, 
-	TextureHandle& _outTextureHandle,
-	const uint16_t _mostDetailedMip, 
-	const int16_t _mipLevels)
-{
-
-	return Handle();
-}
-
-// RTV作成
-Handle DirectX11_DrawCreate::CreateRTV(
-	const Hashed_String& name, 
-	const uint16_t mipSlice,
-	TextureHandle& _textureHandle)
-{
-
-	return Handle();
-}
-
-// DSV作成
-Handle DirectX11_DrawCreate::CreateDSV(
-	const Hashed_String& name, 
-	const Format format,
-	TextureHandle& _textureHandle)
+	const TextureCreateDesc& _desc)
 {
 
 	return Handle();
@@ -200,8 +154,6 @@ Handle DirectX11_DrawCreate::CreateDSV(
 // =======================================
 Handle DirectX11_DrawCreate::LoadTexture(
 	const Hashed_String& _textureName, 
-	TextureHandle& _outTextureHandle,
-	const int16_t _mipLevel, 
 	const String& _textureFolderName)
 {
 	return Handle();

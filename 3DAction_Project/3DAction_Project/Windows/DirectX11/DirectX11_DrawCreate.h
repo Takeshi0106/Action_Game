@@ -14,9 +14,6 @@
 // ===============================================
 // 共通リソース管理ヘッダー
 #include "../../ModelLoadManager.h"
-// モジュール
-#include "DirectX11_TextureLoadModule.h"
-#include "../../ModelLoadeModule.h"
 // 基底ヘッダー
 #include "../../BaseDrawCreate.h"
 // キー文字列
@@ -26,12 +23,13 @@
 // ===============================================
 // 前方宣言
 // ===============================================
+struct ID3D11Device;
+// DirectX11各リソースマネージャー
 class DirectX11_ShaderManager;
 class DirectX11_VertexBufferManager;
 class DirectX11_IndexBufferManager;
 class DirectX11_ConstantBufferManager;
 class DirectX11_TextureHandleManager;
-class ModelLoadManager;
 class MeshMaterialManager;
 
 
@@ -77,6 +75,8 @@ public:
 	// コンストラクタ・デストラクタ
 	// --------------------------------
 	DirectX11_DrawCreate(
+		uint32_t _windowWidth,
+		uint32_t _windowHeight,
 		ID3D11Device* _device,
 		DirectX11_ResourceReference _managers);
 	~DirectX11_DrawCreate() override = default;
@@ -112,41 +112,12 @@ public:
 
 	// テクスチャ作成
 	Handle CreateTexture(
-		const Hashed_String& _name,
-		const uint16_t _width,
-		const uint16_t _height,
-		const Format _format,
-		const BindFlag _bindFlag,
-		const BufferUsage _usage = BufferUsage::Default,
-		const CPUAccess _cpu = CPUAccess::None) override;
-
-	// サンプラー作成
-	Handle CreateSampler(const Hashed_String& _name, const SamplerDesc& _desc) override;
-
-	// View作成
-	// SRV
-	Handle CreateSRV(
-		const Hashed_String& name,
-		const Format format, 
-		TextureHandle& _outTextureHandle,
-		const uint16_t mostDetailedMip = 0, 
-		const int16_t mipLevels = -1) override;
-	// RTV
-	Handle CreateRTV(
-		const Hashed_String& name, 
-		const uint16_t mipSlice,
-		TextureHandle& _outTextureHandle) override;
-	// DSV
-	Handle CreateDSV(
-		const Hashed_String& name, 
-		const Format format,
-		TextureHandle& _outTextureHandle) override;
+		const Hashed_String& _textureName,
+		const TextureCreateDesc& _textureDesc) override;
 
 	// テクスチャのロード
 	Handle LoadTexture(
 		const Hashed_String& textureName,
-		TextureHandle& outTextureHandle,
-		const int16_t _mipLevels = -1, 
 		const String& textureFolderName = u8"") override;
 
 	// モデルのロード
