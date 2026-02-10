@@ -217,10 +217,10 @@ UINT ToDXBindFlag(BindFlag flags)
         result |= D3D11_BIND_DEPTH_STENCIL;
     }
     // UAV
-    if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_UnorderedAccess))
-    {
-        result |= D3D11_BIND_UNORDERED_ACCESS;
-    }
+    //if (static_cast<unsigned int>(flags) & static_cast<unsigned int>(BindFlag::Bind_UnorderedAccess))
+    //{
+    //    result |= D3D11_BIND_UNORDERED_ACCESS;
+    //}
 
     return result;
 }
