@@ -23,7 +23,6 @@
 // サンプラーマネージャー
 #include "DirectX11_SamplerManager.h"
 // モデルロードマネージャーヘッダー
-#include "../../ModelLoadManager.h"
 #include "../../MeshMaterialManager.h"
 // 作成クラスヘッダー
 #include "DirectX11_DrawCreate.h"
@@ -67,7 +66,7 @@ private:
 	// サンプラーマネージャー
 	DirectX11_SamplerManager m_SamplerManager;
 	// モデル
-	ModelLoadManager m_ModelLoadManager;
+	// ModelLoadManager m_ModelLoadManager;
 	// マテリアル
 	MeshMaterialManager m_MeshMaterialManager;
 

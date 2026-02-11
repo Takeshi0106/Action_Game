@@ -630,9 +630,6 @@
     <ClCompile Include="MeshMaterialManager.cpp">
       <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
     </ClCompile>
-    <ClCompile Include="ModelLoadManager.cpp">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
-    </ClCompile>
     <ClCompile Include="ModelLoadeModule.cpp">
       <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
     </ClCompile>
@@ -1016,9 +1013,6 @@
     <ClInclude Include="MeshMaterialManager.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
     </ClInclude>
-    <ClInclude Include="ModelLoadManager.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
-    </ClInclude>
     <ClInclude Include="ModelLoadeModule.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
     </ClInclude>
@@ -1027,9 +1021,6 @@
     </ClInclude>
     <ClInclude Include="MeshMaterialColor.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelHandle.h">
-      <Filter>2_Core\1_Handle</Filter>
     </ClInclude>
     <ClInclude Include="Handle.h">
       <Filter>2_Core\1_Handle</Filter>
@@ -1156,6 +1147,9 @@
     </ClInclude>
     <ClInclude Include="SRT.h">
       <Filter>2_Core\4_GameLibrary\3_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelHandleStruct.h">
+      <Filter>2_Core\1_Handle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

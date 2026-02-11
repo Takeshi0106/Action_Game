@@ -12,8 +12,6 @@
 // ===============================================
 // ヘッダー
 // ===============================================
-// 共通リソース管理ヘッダー
-#include "../../ModelLoadManager.h"
 // 基底ヘッダー
 #include "../../BaseDrawCreate.h"
 // キー文字列
@@ -59,8 +57,6 @@ struct DirectX11_ResourceReference
 	DirectX11_TextureResourceManager& textureManager;
 	// サンプラーマネージャー
 	DirectX11_SamplerManager& samplerManager;
-	// モデル
-	ModelLoadManager& modelLoadManager;
 	// マテリアル
 	MeshMaterialManager& meshMaterialManager;
 };
