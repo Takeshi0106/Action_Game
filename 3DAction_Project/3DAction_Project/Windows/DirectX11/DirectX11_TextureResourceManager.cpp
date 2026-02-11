@@ -3,7 +3,7 @@
 // ヘッダー
 // ======================================
 // 必須ヘッダー
-#include "DirectX11_TextureHandleManager.h"
+#include "DirectX11_TextureResourceManager.h"
 // DirectX11ヘッダー
 #include <d3d11.h>
 // ログ出力用ヘッダー
@@ -13,12 +13,10 @@
 // ===============================
 // テクスチャ作成
 // ===============================
-Handle DirectX11_TextureHandleManager::CreateTextures(
+Handle DirectX11_TextureResourceManager::CreateTextures(
 	ID3D11Device* _device,
 	const Hashed_String& _name,
 	const D3D11_TEXTURE2D_DESC& _desc,
-	const D3D11_SAMPLER_DESC& _dxDesc,
-	const SamplerDesc& _myDesc,
 	const D3D11_SHADER_RESOURCE_VIEW_DESC* _srvDesc,
 	const D3D11_RENDER_TARGET_VIEW_DESC* _rtvDesc,
 	const D3D11_DEPTH_STENCIL_VIEW_DESC* _dsvDesc)
@@ -103,24 +101,6 @@ Handle DirectX11_TextureHandleManager::CreateTextures(
 		_desc,
 		_name);
 
-	// サンプラーステート作成済みかチェック
-	if (m_SamplerManager.Exists(_myDesc))
-	{
-		WarningLog::OutputToConsole(
-			u8"同じ設定のサンプラーが作成されようとしました");
-
-		// 取得
-		textureHandle.samplerHandle = m_SamplerManager.GetHandle(_myDesc);
-	}
-	else
-	{
-		// サンプラーステート作成
-		textureHandle.samplerHandle = m_SamplerManager.SamplerStateCreateOnGet(
-			_device,
-			_dxDesc,
-			_myDesc);
-	}
-
 	// シェーダーリソースビュー作成
 	if (_srvDesc)
 	{
@@ -157,12 +137,11 @@ Handle DirectX11_TextureHandleManager::CreateTextures(
 // ===============================
 // テクスチャロード (ファイルから)
 // ===============================
-Handle DirectX11_TextureHandleManager::LoadFaileTexture_TextureFolder(
+Handle DirectX11_TextureResourceManager::LoadFaileTexture_TextureFolder(
 	ID3D11Device* _device,
 	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _name,
 	const TextureLoadDesc& _desc,
-	const D3D11_SAMPLER_DESC& _samplerDesc,
 	const String& _filePath)
 {
 	// 既に存在する場合はハンドルを返す
@@ -196,23 +175,6 @@ Handle DirectX11_TextureHandleManager::LoadFaileTexture_TextureFolder(
 		m_Texture2DBufferManager,
 		m_ViewManager);
 
-	// サンプラーステート作成済みかチェック
-	if (m_SamplerManager.Exists(_desc.sampler))
-	{
-		WarningLog::OutputToConsole(
-			u8"同じ設定のサンプラーが作成されようとしました");
-		// 取得
-		textureHandle.samplerHandle = m_SamplerManager.GetHandle(_desc.sampler);
-	}
-	else
-	{
-		// サンプラーステート作成
-		textureHandle.samplerHandle = m_SamplerManager.SamplerStateCreateOnGet(
-			_device,
-			_samplerDesc,
-			_desc.sampler);
-	}
-
 	// 管理配列に追加してハンドルを返す
 	return m_TextureHandles.AddData(_name, textureHandle);
 }
@@ -221,12 +183,10 @@ Handle DirectX11_TextureHandleManager::LoadFaileTexture_TextureFolder(
 // ===============================
 // テクスチャロード (プロジェクトの相対パスから)
 // ===============================
-Handle DirectX11_TextureHandleManager::LoadFaileTexture(
+Handle DirectX11_TextureResourceManager::LoadFaileTexture(
 	ID3D11Device* _device,
 	ID3D11DeviceContext* _deviceContext,
 	const Hashed_String& _name,
-	const D3D11_SAMPLER_DESC& _samplerDesc,
-	const SamplerDesc& _mySamplerDesc,
 	const String& _filePath)
 {
 	// 既に存在する場合はハンドルを返す
@@ -258,23 +218,6 @@ Handle DirectX11_TextureHandleManager::LoadFaileTexture(
 		_filePath,
 		m_Texture2DBufferManager,
 		m_ViewManager);
-
-	// サンプラーステート作成済みかチェック
-	if (m_SamplerManager.Exists(_mySamplerDesc))
-	{
-		WarningLog::OutputToConsole(
-			u8"同じ設定のサンプラーが作成されようとしました");
-		// 取得
-		textureHandle.samplerHandle = m_SamplerManager.GetHandle(_mySamplerDesc);
-	}
-	else
-	{
-		// サンプラーステート作成
-		textureHandle.samplerHandle = m_SamplerManager.SamplerStateCreateOnGet(
-			_device,
-			_samplerDesc,
-			_mySamplerDesc);
-	}
 
 	// 管理配列に追加してハンドルを返す
 	return m_TextureHandles.AddData(_name, textureHandle);

@@ -27,7 +27,4 @@ struct TextureHandle
 	Handle rtvHandle = {};
 	// 深度ステンシルビューのハンドル
 	Handle dsvHandle = {};
-
-	// サンプラーステートのハンドル
-	Handle samplerHandle = {};
 };

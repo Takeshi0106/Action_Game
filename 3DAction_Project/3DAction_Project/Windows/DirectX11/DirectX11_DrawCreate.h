@@ -26,11 +26,19 @@
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 // DirectX11各リソースマネージャー
+// シェーダー
 class DirectX11_ShaderManager;
+// 頂点バッファ
 class DirectX11_VertexBufferManager;
+// インデックスバッファ
 class DirectX11_IndexBufferManager;
+// 定数バッファ
 class DirectX11_ConstantBufferManager;
-class DirectX11_TextureHandleManager;
+// テクスチャ関連マネージャー
+class DirectX11_TextureResourceManager;
+// サンプラーマネージャー
+class DirectX11_SamplerManager;
+// メッシュマテリアルマネージャー
 class MeshMaterialManager;
 
 
@@ -48,7 +56,9 @@ struct DirectX11_ResourceReference
 	// 定数バッファ
 	DirectX11_ConstantBufferManager& constantBufferManager;
 	// テクスチャマネージャー
-	DirectX11_TextureHandleManager& textureManager;
+	DirectX11_TextureResourceManager& textureManager;
+	// サンプラーマネージャー
+	DirectX11_SamplerManager& samplerManager;
 	// モデル
 	ModelLoadManager& modelLoadManager;
 	// マテリアル
@@ -125,8 +135,18 @@ public:
 		const TextureLoadDesc& _lodeDesc,
 		const String& textureFolderName = u8"") override;
 
+	// サンプラー作成
+	Handle CreateSampler(
+		const SamplerDesc& samplerDesc) override;
+
 	// モデルのロード
 	Handle LoadModel(
 		const Hashed_String& modelName, 
 		const String& modelFolderName = u8"") override;
+
+
+	// --------------------------------
+	// マテリアル作成
+	// --------------------------------
+
 };

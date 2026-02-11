@@ -84,6 +84,10 @@ public:
 		const TextureLoadDesc& loadDesc,
 		const String& textureFolderName = u8"") = 0;
 
+	// サンプラー作成
+	virtual Handle CreateSampler(
+		const SamplerDesc& desc) = 0;
+
 	// モデルのロード
 	virtual Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") = 0;
 };

@@ -11,7 +11,7 @@
 #include "DirectX11_VertexBufferManager.h"
 #include "DirectX11_IndexBufferManager.h"
 #include "DirectX11_ConstantBufferManager.h"
-#include "DirectX11_TextureHandleManager.h"
+#include "DirectX11_TextureResourceManager.h"
 // モデル管理ヘッダー
 #include "../../MeshMaterialManager.h"
 // 変換ヘッダー
@@ -159,8 +159,6 @@ Handle DirectX11_DrawCreate::CreateTexture(
 
 	// テクスチャデスク
 	D3D11_TEXTURE2D_DESC textureDesc{};
-	// サンプラーデスク
-	D3D11_SAMPLER_DESC sampDesc{};
 	// SRVデスク
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDescTemp{};
 	// SRV作成デスクポインタ
@@ -225,21 +223,6 @@ Handle DirectX11_DrawCreate::CreateTexture(
 			break;
 	}
 
-	// サンプラーデスク作成
-	sampDesc.Filter = DirectX11_FormatConverter::ConvertFilter(_desc.sampler.filter);
-	sampDesc.AddressU = DirectX11_FormatConverter::ConvertAddressMode(_desc.sampler.addressU);
-	sampDesc.AddressV = DirectX11_FormatConverter::ConvertAddressMode(_desc.sampler.addressV);
-	sampDesc.AddressW = DirectX11_FormatConverter::ConvertAddressMode(_desc.sampler.addressW);
-	sampDesc.MipLODBias = 0.0f;
-	sampDesc.MaxAnisotropy = (_desc.sampler.filter == SamplerFilter::Anisotropic) ? 16 : 1;
-	sampDesc.ComparisonFunc = DirectX11_FormatConverter::ConvertComparisonFunc(_desc.sampler.comparisonFunc);
-	sampDesc.BorderColor[0] = 0.0f;
-	sampDesc.BorderColor[1] = 0.0f;
-	sampDesc.BorderColor[2] = 0.0f;
-	sampDesc.BorderColor[3] = 0.0f;
-	sampDesc.MinLOD = 0.0f;
-	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
 	// SRVデスク作成
 	if (_desc.bindFlags & BindFlag::Bind_ShaderResource)
 	{
@@ -275,8 +258,6 @@ Handle DirectX11_DrawCreate::CreateTexture(
 		m_Device,
 		_name,
 		textureDesc,
-		sampDesc,
-		_desc.sampler,
 		srvDesc,
 		rtvDesc,
 		dsvDesc);
@@ -302,35 +283,46 @@ Handle DirectX11_DrawCreate::LoadTexture(
 	const TextureLoadDesc& _loadDesc,
 	const String& _textureFolderName)
 {
-	D3D11_SAMPLER_DESC samp{};
-
-	// サンプラーデスク作成
-	samp.Filter = DirectX11_FormatConverter::ConvertFilter(_loadDesc.sampler.filter);
-	samp.AddressU = DirectX11_FormatConverter::ConvertAddressMode(_loadDesc.sampler.addressU);
-	samp.AddressV = DirectX11_FormatConverter::ConvertAddressMode(_loadDesc.sampler.addressV);
-	samp.AddressW = DirectX11_FormatConverter::ConvertAddressMode(_loadDesc.sampler.addressW);
-	samp.MipLODBias = 0.0f;
-	samp.MaxAnisotropy = (_loadDesc.sampler.filter == SamplerFilter::Anisotropic) ? 16 : 1;
-	samp.ComparisonFunc = DirectX11_FormatConverter::ConvertComparisonFunc(_loadDesc.sampler.comparisonFunc);
-	samp.BorderColor[0] = 0.0f;
-	samp.BorderColor[1] = 0.0f;
-	samp.BorderColor[2] = 0.0f;
-	samp.BorderColor[3] = 0.0f;
-	samp.MinLOD = 0.0f;
-	samp.MaxLOD = D3D11_FLOAT32_MAX;
-
 	// ファイルからテクスチャをロード
 	Handle handle = m_Managers.textureManager.LoadFaileTexture_TextureFolder(
 		m_Device,
 		m_DeviceContext,
 		_textureName,
 		_loadDesc,
-		samp,
 		_textureFolderName);
 
 	return handle;
 }
 
+
+// =======================================
+// サンプラー作成
+// =======================================
+Handle DirectX11_DrawCreate::CreateSampler(
+	const SamplerDesc& _desc)
+{
+	// サンプラーデスク作成
+	D3D11_SAMPLER_DESC sampDesc{};
+	sampDesc.Filter = DirectX11_FormatConverter::ConvertFilter(_desc.filter);
+	sampDesc.AddressU = DirectX11_FormatConverter::ConvertAddressMode(_desc.addressU);
+	sampDesc.AddressV = DirectX11_FormatConverter::ConvertAddressMode(_desc.addressV);
+	sampDesc.AddressW = DirectX11_FormatConverter::ConvertAddressMode(_desc.addressW);
+	sampDesc.MipLODBias = 0.0f;
+	sampDesc.MaxAnisotropy = (_desc.filter == SamplerFilter::Anisotropic) ? 16 : 1;
+	sampDesc.ComparisonFunc = DirectX11_FormatConverter::ConvertComparisonFunc(_desc.comparisonFunc);
+	sampDesc.BorderColor[0] = 0.0f;
+	sampDesc.BorderColor[1] = 0.0f;
+	sampDesc.BorderColor[2] = 0.0f;
+	sampDesc.BorderColor[3] = 0.0f;
+	sampDesc.MinLOD = 0.0f;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	
+	// マネージャー登録
+	return m_Managers.samplerManager.SamplerStateCreateOnGet(
+		m_Device,
+		sampDesc,
+		_desc);
+}
 
 // =======================================
 // モデルのロード

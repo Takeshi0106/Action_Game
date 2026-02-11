@@ -12,8 +12,6 @@
 #include "DirectX11_Texture2DData.h"
 // View関連ヘッダー
 #include "DirectX11_ViewData.h"
-// サンプラーデータヘッダー
-#include "DirectX11_SamplerData.h"
 
 
 // ==========================================
@@ -29,6 +27,4 @@ struct DirectX11_TextureStruct
 	const DirectX11_RTVData* rtvData = nullptr;
 	// 深度ステンシルビュー
 	const DirectX11_DSVData* dsvData = nullptr;
-	// サンプラーデータ
-	const DirectX11_SamplerData* samplerData = nullptr;
 };

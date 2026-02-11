@@ -18,8 +18,11 @@
 #include "DirectX11_IndexBufferManager.h"
 // 定数バッファマネージャー
 #include "DirectX11_ConstantBufferManager.h"
-// テクスチャマネージャー (Texture2D,View,Sampler)
-#include "DirectX11_TextureHandleManager.h"
+// テクスチャマネージャー (Texture2D,View)
+#include "DirectX11_TextureResourceManager.h"
+// サンプラーマネージャー
+#include "DirectX11_SamplerManager.h"
+// モデルロードマネージャーヘッダー
 #include "../../ModelLoadManager.h"
 #include "../../MeshMaterialManager.h"
 // 作成クラスヘッダー
@@ -59,8 +62,10 @@ private:
 	DirectX11_IndexBufferManager m_IndexBufferManager;
 	// 定数バッファ
 	DirectX11_ConstantBufferManager m_ConstantBufferManager;
-	// テクスチャマネージャー
-	DirectX11_TextureHandleManager m_TextureHandleManager;
+	// テクスチャ関連マネージャー
+	DirectX11_TextureResourceManager m_TextureResourceManager;
+	// サンプラーマネージャー
+	DirectX11_SamplerManager m_SamplerManager;
 	// モデル
 	ModelLoadManager m_ModelLoadManager;
 	// マテリアル
@@ -85,7 +90,7 @@ public:
 		m_ScreenWidth(_screenWidth),
 		m_ScreenHeight(_screenHeight),
 		m_ShaderManager(_config.shaderBinaryPath),
-		m_TextureHandleManager(_config.texturePath) {
+		m_TextureResourceManager(_config.texturePath) {
 	}
 	~DirectX11_ResourceManager() = default;
 
@@ -100,6 +105,24 @@ public:
 	// --------------------------------
 	DirectX11_DrawCreate* GetDrawCreate() const {
 		return m_DrawCreate.get();
+	}
+
+	// --------------------------------
+	// リソースマネージャー全削除
+	// --------------------------------
+	void ReleaseAllResource() {
+		// シェーダー全削除
+		m_ShaderManager.ReleaseAllShader();
+		// 頂点バッファ全削除
+		m_VertexBufferManager.ReleaseAllVertexBuffers();
+		// インデックスバッファ全削除
+		m_IndexBufferManager.ReleaseAllIndexBuffer();
+		// 定数バッファ全削除
+		m_ConstantBufferManager.ReleaseAllConstantBuffer();
+		// テクスチャ全削除
+		m_TextureResourceManager.ReleaseAllTexture();
+		// サンプラー全削除
+		m_SamplerManager.ReleaseAllSampler();
 	}
 
 };

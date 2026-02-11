@@ -38,7 +38,7 @@ struct ID3D11DeviceContext;
 // ==========================================
 // クラス
 // ==========================================
-class DirectX11_TextureHandleManager final
+class DirectX11_TextureResourceManager final
 {
 private:
 	// メンバー変数
@@ -47,17 +47,16 @@ private:
 	// 各リソースマネージャー
 	DirectX11_Texture2DBufferManager m_Texture2DBufferManager;
 	DirectX11_ViewManager m_ViewManager;
-	DirectX11_SamplerManager m_SamplerManager;
 
 	// テクスチャロードモジュール
 	DirectX11_TextureLoadModule m_TextureLoadModule;
 
 public:
 	// コンストラクタ・デストラクタ
-	DirectX11_TextureHandleManager(
+	DirectX11_TextureResourceManager(
 		const String& _texturePath) : m_TextureLoadModule(_texturePath) {
 	}
-	~DirectX11_TextureHandleManager() = default;
+	~DirectX11_TextureResourceManager() = default;
 
 	// ------------------------------------------
 	// テクスチャハンドル追加
@@ -66,8 +65,6 @@ public:
 		ID3D11Device* _device,
 		const Hashed_String& _name,
 		const D3D11_TEXTURE2D_DESC& _desc,
-		const D3D11_SAMPLER_DESC& _dxDesc,
-		const SamplerDesc& _myDesc,
 		const D3D11_SHADER_RESOURCE_VIEW_DESC* _srvDesc = nullptr,
 		const D3D11_RENDER_TARGET_VIEW_DESC* _rtvDesc = nullptr,
 		const D3D11_DEPTH_STENCIL_VIEW_DESC* _dsvDesc = nullptr);
@@ -80,7 +77,6 @@ public:
 		ID3D11DeviceContext* _deviceContext,
 		const Hashed_String& _textureName,
 		const TextureLoadDesc& _loadType,
-		const D3D11_SAMPLER_DESC& _samplerDesc,
 		const String& _textureFolderName);
 
 	// ------------------------------------------
@@ -90,8 +86,6 @@ public:
 		ID3D11Device* _device,
 		ID3D11DeviceContext* _deviceContext,
 		const Hashed_String& _textureName,
-		const D3D11_SAMPLER_DESC& _samplerDesc,
-		const SamplerDesc& _mySamplerDesc,
 		const String& _texturePath);
 
 	// ------------------------------------------
@@ -109,7 +103,6 @@ public:
 			structData.srvData = m_ViewManager.GetShaderResourceView(handle->srvHandle);
 			structData.rtvData = m_ViewManager.GetRenderTargetView(handle->rtvHandle);
 			structData.dsvData = m_ViewManager.GetDepthStencilView(handle->dsvHandle);
-			structData.samplerData = m_SamplerManager.GetSamplerState(handle->samplerHandle);
 		}
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -137,7 +130,6 @@ public:
 		m_ViewManager.ReleaseRTV(textureHandle->rtvHandle);
 		m_ViewManager.ReleaseDSV(textureHandle->dsvHandle);
 		m_ViewManager.ReleaseSRV(textureHandle->srvHandle);
-		m_SamplerManager.ReleaseSampler(textureHandle->samplerHandle);
 
 		// テクスチャハンドル削除
 		m_TextureHandles.Remove(_handle);
@@ -150,7 +142,6 @@ public:
 		// 各リソース削除
 		m_Texture2DBufferManager.ReleaseAllTexture2D();
 		m_ViewManager.ReleaseAllView();
-		m_SamplerManager.ReleaseAllSampler();
 
 		// テクスチャハンドル全削除
 		m_TextureHandles.ALLClear();
