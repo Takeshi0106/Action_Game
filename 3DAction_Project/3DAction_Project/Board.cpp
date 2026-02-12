@@ -63,7 +63,7 @@ bool Board::Init(BaseDrawManager* _drawManager)
 void Board::Draw(BaseDrawManager* drawManager, const Color& color)
 {
 	MeshMaterialData material;
-	material.diffuse = color;
+	material.materialCBData.diffuse = color;
 
 	// マテリアル設定
 	drawManager->UpdateShaderConstants(

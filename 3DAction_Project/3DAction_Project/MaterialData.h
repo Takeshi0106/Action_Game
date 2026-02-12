@@ -18,16 +18,22 @@
 // ==========================
 // 構造体
 // ==========================
+// 定数用情報
+struct MeshMaterialCBData
+{
+	// 反射光
+	Color diffuse{};
+	// 環境光
+	Color ambient{};
+	// 鏡面光
+	Color specular{};
+};
+
 // メッシュのマテリアル情報
 struct MeshMaterialData
 {
-	// 反射光
-	Color diffuse;
-	// 環境光
-	Color ambient;
-	// 鏡面光
-	Color specular;
+	// 定数バッファ用情報
+	MeshMaterialCBData materialCBData;
 	// テクスチャの名前(テクスチャマネージャーに登録する名前)
 	Hashed_String textureName = Hashed_String(u8"");
 };
-

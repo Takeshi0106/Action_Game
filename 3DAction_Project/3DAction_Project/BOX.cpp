@@ -133,7 +133,7 @@ bool BOX::Init(BaseDrawManager* drawManager)
 void BOX::Draw(BaseDrawManager* drawManager, const Color& color)
 {
 	MeshMaterialData material;
-	material.diffuse = color;
+	material.materialCBData.diffuse = color;
 
 	// マテリアル設定
 	drawManager->UpdateShaderConstants(
@@ -166,7 +166,7 @@ void BOX::DrawAABB(BaseDrawManager* drawManager, const AABBCollider& aabb, const
 	
 	// マテリアル設定
 	MeshMaterialData material;
-	material.diffuse = color;
+	material.materialCBData.diffuse = color;
 
 	// マテリアル更新
 	drawManager->UpdateShaderConstants(

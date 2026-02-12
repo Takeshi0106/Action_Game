@@ -15,8 +15,10 @@
 // ==========================================
 // ハンドル構造体
 #include "Handle.h"
+// マテリアル情報
+#include "MaterialData.h"
 // 配列保持ヘッダー
-#include <array>
+#include <vector>
 
 
 // ==========================================
@@ -34,8 +36,8 @@ struct MaterialHandle
 	// サンプラーハンドル
 	Handle samplerHandle = {};
 
-	// マテリアルハンドル (Diffuse など)
-	Handle materialHandle = {};
+	// マテリアルデータ
+	MeshMaterialCBData materialCBData = {};
 	// マテリアル定数バッファハンドル
 	Handle materialCBHandle = {};
 };

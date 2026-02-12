@@ -157,9 +157,9 @@ ModelData ModelLoadeModule::ModelLoad(
 		scene->mMaterials[i]->Get(AI_MATKEY_OPACITY, opacity);
 
 		// MeshMaterialData にセット
-		materialData.diffuse = Color(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, opacity);
-		materialData.ambient = Color(aiAmbient.r, aiAmbient.g, aiAmbient.b, aiAmbient.a);
-		materialData.specular = Color(aiSpecular.r, aiSpecular.g, aiSpecular.b, aiSpecular.a);
+		materialData.materialCBData.diffuse = Color(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, opacity);
+		materialData.materialCBData.ambient = Color(aiAmbient.r, aiAmbient.g, aiAmbient.b, aiAmbient.a);
+		materialData.materialCBData.specular = Color(aiSpecular.r, aiSpecular.g, aiSpecular.b, aiSpecular.a);
 
 		// テクスチャ名をセット
 		materialData.textureName = Hashed_String(fullPath.u8string());

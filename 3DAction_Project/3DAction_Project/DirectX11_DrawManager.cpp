@@ -684,9 +684,9 @@ bool DirectX_DrawManager::DrawModelObject(
 
 		// マテリアル情報取得
 		Color color[3] = {
-			data->materialData[data->meshMaterialIDs[i]].diffuse,
-			data->materialData[data->meshMaterialIDs[i]].ambient,
-			data->materialData[data->meshMaterialIDs[i]].specular};
+			data->materialData[data->meshMaterialIDs[i]].materialCBData.diffuse,
+			data->materialData[data->meshMaterialIDs[i]].materialCBData.ambient,
+			data->materialData[data->meshMaterialIDs[i]].materialCBData.specular};
 
 		// マテリアル用定数バッファを更新
 		UpdateShaderConstants(materialCBName,
