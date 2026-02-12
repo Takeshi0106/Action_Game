@@ -31,9 +31,6 @@
     <Filter Include="1_Platform\Base\0_PlatformSystem">
       <UniqueIdentifier>{65ac5411-2b6d-42b4-8d0e-eb197d4e8193}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Base\1_ReportMessage">
-      <UniqueIdentifier>{f310d8f3-b1f4-442a-99b8-8925988e5413}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\4_PlatformTime">
       <UniqueIdentifier>{984b64ae-e14c-4800-a73d-5cc57574cea7}</UniqueIdentifier>
     </Filter>
@@ -316,27 +313,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\FormatConverter">
       <UniqueIdentifier>{864e4258-9d38-448b-b781-677dd8522521}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle">
-      <UniqueIdentifier>{64071f8d-7992-4ad3-ae4a-f9c36ed3b160}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D">
-      <UniqueIdentifier>{bce94434-1c60-4a60-91ae-bf3b2fd02793}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View">
-      <UniqueIdentifier>{87d80a44-99a7-4896-8435-7e57c0edefde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler">
-      <UniqueIdentifier>{728e918e-d190-411c-b952-f72493b0f71b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData">
-      <UniqueIdentifier>{4403e059-254a-4a7c-a691-1e669381713a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData">
-      <UniqueIdentifier>{ed359337-94e3-4612-a9af-c5d871a56d90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData">
-      <UniqueIdentifier>{eb277a86-4179-4291-8996-bc6a83147a49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader\DirectX11_ShaderData">
       <UniqueIdentifier>{3e66acd5-664b-49f6-9ffd-d8cd69ae3134}</UniqueIdentifier>
     </Filter>
@@ -351,12 +327,6 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer\DirectX11_ConstantBufferData">
       <UniqueIdentifier>{37acab00-a095-41bb-8d35-963b1146b6b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\99_TextureStruct">
-      <UniqueIdentifier>{f055f1f6-df8d-402f-93a3-43f0695d5258}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\4_TextureLoadModule">
-      <UniqueIdentifier>{a24ae7e6-1d9d-462b-b51e-b7a698e6e38a}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Base\5_PlatformDrawManager\1_ModelManager">
       <UniqueIdentifier>{1d5bad41-8578-4e6f-b894-f64bc9dcb5f9}</UniqueIdentifier>
@@ -408,6 +378,36 @@
     </Filter>
     <Filter Include="1_Platform\OpenGL ES">
       <UniqueIdentifier>{e7533114-91ac-4827-aaf7-c32c4798d722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\4_Library\4_ReportMessage">
+      <UniqueIdentifier>{f310d8f3-b1f4-442a-99b8-8925988e5413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource">
+      <UniqueIdentifier>{64071f8d-7992-4ad3-ae4a-f9c36ed3b160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\1_Texture2D">
+      <UniqueIdentifier>{bce94434-1c60-4a60-91ae-bf3b2fd02793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\1_Texture2D\Texture2DData">
+      <UniqueIdentifier>{4403e059-254a-4a7c-a691-1e669381713a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\2_View">
+      <UniqueIdentifier>{87d80a44-99a7-4896-8435-7e57c0edefde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\2_View\ViewData">
+      <UniqueIdentifier>{ed359337-94e3-4612-a9af-c5d871a56d90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\3_Sampler">
+      <UniqueIdentifier>{728e918e-d190-411c-b952-f72493b0f71b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\3_Sampler\SamplerData">
+      <UniqueIdentifier>{eb277a86-4179-4291-8996-bc6a83147a49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\99_TextureStruct">
+      <UniqueIdentifier>{f055f1f6-df8d-402f-93a3-43f0695d5258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\4_TextureLoadModule">
+      <UniqueIdentifier>{a24ae7e6-1d9d-462b-b51e-b7a698e6e38a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -673,28 +673,28 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_Texture2DData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\1_Texture2D\Texture2DData</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_Texture2DBufferManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\1_Texture2D</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_ViewData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\2_View\ViewData</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_ViewManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\2_View</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_SamplerData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\3_Sampler\SamplerData</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_SamplerManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\3_Sampler</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_TextureLoadModule.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\4_TextureLoadModule</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\4_TextureLoadModule</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_TextureResourceManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource</Filter>
     </ClCompile>
     <ClCompile Include="Windows\1_DirectX11\DirectX11_ShaderCompileModule.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
@@ -732,7 +732,7 @@
       <Filter>1_Platform\Base\0_PlatformSystem</Filter>
     </ClInclude>
     <ClInclude Include="ReportMessage.h">
-      <Filter>1_Platform\Base\1_ReportMessage</Filter>
+      <Filter>2_Core\4_Library\4_ReportMessage</Filter>
     </ClInclude>
     <ClInclude Include="PlatformWindowsSystem.h">
       <Filter>1_Platform\Windows\0_System</Filter>
@@ -1107,31 +1107,31 @@
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_Texture2DData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\1_Texture2D\Texture2DData</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_Texture2DBufferManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\1_Texture2D</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_ViewData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\2_View\ViewData</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_ViewManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\2_View</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_SamplerData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\3_Sampler\SamplerData</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_SamplerManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\3_Sampler</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_TextureLoadModule.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\4_TextureLoadModule</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\4_TextureLoadModule</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_TextureStruct.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\99_TextureStruct</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\99_TextureStruct</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_TextureResourceManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle</Filter>
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource</Filter>
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_ShaderCompileModule.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
