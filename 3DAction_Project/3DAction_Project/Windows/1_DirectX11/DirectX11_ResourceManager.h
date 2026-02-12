@@ -9,7 +9,16 @@
 // =======================================
 // ヘッダー
 // =======================================
+// 設定パスヘッダー
+#include "../../DrawPathConfig.h"
+// 動的確保
+#include <memory>
+// 整数ヘッダー
+#include <cstdint>
+
+// ---------------------------------------
 // リソース管理ヘッダー
+// ---------------------------------------
 // シェーダーマネージャー
 #include "DirectX11_ShaderManager.h"
 // 頂点バッファマネージャー
@@ -22,14 +31,15 @@
 #include "DirectX11_TextureResourceManager.h"
 // サンプラーマネージャー
 #include "DirectX11_SamplerManager.h"
+// マテリアルマネージャー
+#include "../../MaterialHandleManager.h"
+// モデルハンドルマネージャー
+#include "../../ModelHandleManager.h"
+
+// -----------------------------------
 // 作成クラスヘッダー
+// ------------------------------------
 #include "DirectX11_DrawCreate.h"
-// 動的確保
-#include <memory>
-// 整数ヘッダー
-#include <cstdint>
-// 設定パスヘッダー
-#include "../../DrawPathConfig.h"
 
 
 // =======================================
@@ -41,7 +51,7 @@ struct ID3D11Device;
 // =======================================
 // クラス
 // =======================================
-class DirectX11_ResourceManager
+class DirectX11_ResourceManager final
 {
 private:
 	// --------------------------------
@@ -50,6 +60,9 @@ private:
 	// スクリーンサイズ
 	uint32_t m_ScreenWidth = 0;
 	uint32_t m_ScreenHeight = 0;
+
+	// モデルフォルダパス
+	const String& m_ModelFolderPath;
 
 	// シェーダー
 	DirectX11_ShaderManager m_ShaderManager;
@@ -63,6 +76,11 @@ private:
 	DirectX11_TextureResourceManager m_TextureResourceManager;
 	// サンプラーマネージャー
 	DirectX11_SamplerManager m_SamplerManager;
+
+	// マテリアルマネージャー
+	MaterialHandleManager m_MaterialManager;
+	// モデルハンドルマネージャー
+	ModelHandleManager m_ModelHandleManager;
 
 
 	// --------------------------------
@@ -80,11 +98,12 @@ public:
 	DirectX11_ResourceManager(
 		const uint32_t& _screenWidth,
 		const uint32_t& _screenHeight,
-		const DrawPathConfig& _config) : 
+		const DrawPathConfig& _config) :
 		m_ScreenWidth(_screenWidth),
 		m_ScreenHeight(_screenHeight),
 		m_ShaderManager(_config.shaderBinaryPath),
-		m_TextureResourceManager(_config.texturePath) {
+		m_TextureResourceManager(_config.texturePath),
+		m_ModelFolderPath(_config.objModelPath) {
 	}
 	~DirectX11_ResourceManager() = default;
 
