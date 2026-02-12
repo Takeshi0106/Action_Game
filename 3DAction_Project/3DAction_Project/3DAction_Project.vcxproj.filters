@@ -1001,9 +1001,6 @@
     <ClInclude Include="BaseDrawManager.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
     </ClInclude>
-    <ClInclude Include="MeshMaterialColor.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
-    </ClInclude>
     <ClInclude Include="Handle.h">
       <Filter>2_Core\1_Handle</Filter>
     </ClInclude>

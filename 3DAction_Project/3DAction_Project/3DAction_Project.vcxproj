@@ -285,7 +285,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="UTF8_String.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="Matrix3x3.h" />
-    <ClInclude Include="MeshMaterialColor.h" />
     <ClInclude Include="ModelDrawModule.h" />
     <ClInclude Include="ModelLoadeModule.h" />
     <ClInclude Include="MouseConvert.h" />
