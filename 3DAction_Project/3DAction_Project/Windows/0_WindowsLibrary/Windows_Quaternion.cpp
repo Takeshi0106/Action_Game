@@ -8,12 +8,12 @@
 // ヘッダー
 // =================================
 // 必須ヘッダー
-#include "Quaternionh.h" // 自分のヘッダー
+#include "../../Quaternionh.h" // 自分のヘッダー
 // 計算ヘッダー
 #include <DirectXMath.h> // DirectXの計算
 // 計算構造体ヘッダー
-#include "Matrix4x4.h"
-#include "Vector3.h"
+#include "../../Matrix4x4.h"
+#include "../../Vector3.h"
 
 
 // ==================================

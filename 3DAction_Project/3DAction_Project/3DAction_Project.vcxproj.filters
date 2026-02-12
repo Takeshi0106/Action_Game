@@ -34,9 +34,6 @@
     <Filter Include="1_Platform\Base\1_ReportMessage">
       <UniqueIdentifier>{f310d8f3-b1f4-442a-99b8-8925988e5413}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Base\2_PlatformMath">
-      <UniqueIdentifier>{1d64735a-8e37-4399-b5b1-95fd596d47b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\4_PlatformTime">
       <UniqueIdentifier>{984b64ae-e14c-4800-a73d-5cc57574cea7}</UniqueIdentifier>
     </Filter>
@@ -66,15 +63,6 @@
     </Filter>
     <Filter Include="1_Platform\Windows\2_Math\MathStrut\Vector">
       <UniqueIdentifier>{6b79a4e8-aeb3-4901-9ec6-290ca9652917}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Base\2_PlatformMath\MathStruct">
-      <UniqueIdentifier>{a128bb6e-d326-4a4f-8f13-b0bf6c49598d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Base\2_PlatformMath\MathStruct\Matrix">
-      <UniqueIdentifier>{9592bf7c-e241-4a70-92af-9cfbb0354756}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Base\2_PlatformMath\MathStruct\Vector">
-      <UniqueIdentifier>{72a4ab21-548f-4bff-8e34-5a09e6b41c9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Base\5_PlatformDrawManager">
       <UniqueIdentifier>{13834c66-6084-4a99-95fe-1be67916659f}</UniqueIdentifier>
@@ -343,9 +331,6 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler">
       <UniqueIdentifier>{728e918e-d190-411c-b952-f72493b0f71b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\5_ModelHandle">
-      <UniqueIdentifier>{37da0b57-aef4-43e3-b35a-508f84fa2a9b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData">
       <UniqueIdentifier>{4403e059-254a-4a7c-a691-1e669381713a}</UniqueIdentifier>
     </Filter>
@@ -394,31 +379,40 @@
     <Filter Include="2_Core\3_DrawPath">
       <UniqueIdentifier>{d115a5e1-1b1d-4c0a-9dde-1eb1d0665bf8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2_Core\4_GameLibrary">
-      <UniqueIdentifier>{f0727845-4505-4a86-8d0e-a4058f69c002}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2_Core\4_GameLibrary\1_String">
-      <UniqueIdentifier>{94826396-d489-4e20-ac30-503ee1d198d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2_Core\4_GameLibrary\2_Binary">
-      <UniqueIdentifier>{2499d4a3-d53d-436c-8b09-5973bced7fc2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2_Core\4_GameLibrary\3_Math">
-      <UniqueIdentifier>{02800bd7-b0d2-40c1-b2ee-c3b8092ef2c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2_Core\99_Imgui">
       <UniqueIdentifier>{d7b83e73-9eca-4246-a3da-008cebcd0e8c}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_MaterialManager">
       <UniqueIdentifier>{c25be7c6-777d-48b9-a03e-96153f32932a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\5_ModelHandleManager">
+      <UniqueIdentifier>{37da0b57-aef4-43e3-b35a-508f84fa2a9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\4_Library">
+      <UniqueIdentifier>{f0727845-4505-4a86-8d0e-a4058f69c002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\4_Library\1_String">
+      <UniqueIdentifier>{94826396-d489-4e20-ac30-503ee1d198d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\4_Library\2_Binary">
+      <UniqueIdentifier>{2499d4a3-d53d-436c-8b09-5973bced7fc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\4_Library\3_Math">
+      <UniqueIdentifier>{02800bd7-b0d2-40c1-b2ee-c3b8092ef2c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\4_Library\3_Math\Matrix">
+      <UniqueIdentifier>{9592bf7c-e241-4a70-92af-9cfbb0354756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\4_Library\3_Math\Vector">
+      <UniqueIdentifier>{72a4ab21-548f-4bff-8e34-5a09e6b41c9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References\ReferencesData">
+      <UniqueIdentifier>{8eede957-d93b-4ec3-9f94-58b299a9dc59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows_Timer.cpp">
-      <Filter>1_Platform\Windows\4_Timer</Filter>
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager</Filter>
@@ -438,9 +432,6 @@
     <ClCompile Include="PlatformWindowsSystem.cpp">
       <Filter>1_Platform\Windows\0_System</Filter>
     </ClCompile>
-    <ClCompile Include="Windows_ReportMessage.cpp">
-      <Filter>1_Platform\Windows\1_ReportMessage</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX.cpp">
       <Filter>1_Platform\Windows\6_DirectX11_Core</Filter>
     </ClCompile>
@@ -458,27 +449,6 @@
     </ClCompile>
     <ClCompile Include="FileUtils.cpp">
       <Filter>2_Core\Faile</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowsMath_Utiles.cpp">
-      <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows_Vector4.cpp">
-      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows_Vector2.cpp">
-      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows_Vector3.cpp">
-      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows_Matrix4x4.cpp">
-      <Filter>1_Platform\Windows\2_Math\MathStrut\Matrix</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows_Quaternion.cpp">
-      <Filter>1_Platform\Windows\2_Math\MathStrut</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows_Color.cpp">
-      <Filter>1_Platform\Windows\2_Math\MathStrut</Filter>
     </ClCompile>
     <ClCompile Include="VertexBufferManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
@@ -606,9 +576,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>4_Game\6_Object\1_ColliderObject\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Windows_Matrix3x3.cpp">
-      <Filter>1_Platform\Windows\2_Math\MathStrut\Matrix</Filter>
-    </ClCompile>
     <ClCompile Include="AABBTree.cpp">
       <Filter>4_Game\8_Core\Collider\AABBTree</Filter>
     </ClCompile>
@@ -627,9 +594,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>0_Main</Filter>
     </ClCompile>
-    <ClCompile Include="MeshMaterialManager.cpp">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
-    </ClCompile>
     <ClCompile Include="ModelLoadeModule.cpp">
       <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
     </ClCompile>
@@ -642,77 +606,107 @@
     <ClCompile Include="MovePlanet.cpp">
       <Filter>4_Game\6_Object\0_Object\Planet</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ConstantBufferManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_DrawCreate.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_FormatConverter.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\FormatConverter</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_IndexBufferManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_References.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ShaderCompileModule.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ShaderManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_Texture2DBufferManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_TextureLoadModule.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\4_TextureLoadModule</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_VertexBufferManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ViewManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ResourceManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_SamplerManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_Texture2DData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ViewData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_SamplerData.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceViewData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ShaderData.cpp">
+    <ClCompile Include="UTF8_String.cpp">
+      <Filter>2_Core\4_Library\1_String</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Timer.cpp">
+      <Filter>1_Platform\Windows\4_Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Color.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Quaternion.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Vector2.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Vector3.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Vector4.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Matrix3x3.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_Matrix4x4.cpp">
+      <Filter>1_Platform\Windows\2_Math\MathStrut\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\WindowsMath_Utiles.cpp">
+      <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_ReportMessage.cpp">
+      <Filter>1_Platform\Windows\1_ReportMessage</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_DrawCreate.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ResourceManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ShaderData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader\DirectX11_ShaderData</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_VertexBufferData.cpp">
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ShaderManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_VertexBufferData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer\DirectX11_VertexBufferData</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_IndexBufferData.cpp">
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_VertexBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_IndexBufferData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer\DirectX11_IndexBufferData</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ConstantBufferData.cpp">
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_IndexBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ConstantBufferData.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer\DirectX11_ConstantBufferData</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_TextureResourceManager.cpp">
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ConstantBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_Texture2DData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_Texture2DBufferManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ViewData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ViewManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_SamplerData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_SamplerManager.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_TextureLoadModule.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\4_TextureLoadModule</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_TextureResourceManager.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DirectX11\DirectX11_ModelHandleManager.cpp">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\5_ModelHandle</Filter>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ShaderCompileModule.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
     </ClCompile>
-    <ClCompile Include="UTF8_String.cpp">
-      <Filter>2_Core\4_GameLibrary\1_String</Filter>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_References.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_FormatConverter.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\FormatConverter</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\1_DirectX11\DirectX11_ReferenceData.cpp">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References\ReferencesData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -770,26 +764,17 @@
     <ClInclude Include="DirectX11_DrawManager.h">
       <Filter>1_Platform\Windows\5_DrawManager</Filter>
     </ClInclude>
-    <ClInclude Include="WindowsMath_Utiles.h">
-      <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
-    </ClInclude>
     <ClInclude Include="Vector4.h">
-      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Vector</Filter>
+      <Filter>2_Core\4_Library\3_Math\Vector</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
-      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Vector</Filter>
+      <Filter>2_Core\4_Library\3_Math\Vector</Filter>
     </ClInclude>
     <ClInclude Include="Vector3.h">
-      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Vector</Filter>
+      <Filter>2_Core\4_Library\3_Math\Vector</Filter>
     </ClInclude>
     <ClInclude Include="Matrix4x4.h">
-      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>1_Platform\Base\2_PlatformMath\MathStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Quaternionh.h">
-      <Filter>1_Platform\Base\2_PlatformMath\MathStruct</Filter>
+      <Filter>2_Core\4_Library\3_Math\Matrix</Filter>
     </ClInclude>
     <ClInclude Include="VertexBufferManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\2_VertexBufferManager</Filter>
@@ -981,7 +966,7 @@
       <Filter>4_Game\6_Object\1_ColliderObject</Filter>
     </ClInclude>
     <ClInclude Include="Matrix3x3.h">
-      <Filter>1_Platform\Base\2_PlatformMath\MathStruct\Matrix</Filter>
+      <Filter>2_Core\4_Library\3_Math\Matrix</Filter>
     </ClInclude>
     <ClInclude Include="AABBNode.h">
       <Filter>4_Game\8_Core\Collider\AABBTree\Node</Filter>
@@ -1009,9 +994,6 @@
     </ClInclude>
     <ClInclude Include="BaseDrawCreate.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshMaterialManager.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
     </ClInclude>
     <ClInclude Include="ModelLoadeModule.h">
       <Filter>1_Platform\Base\5_PlatformDrawManager\1_ModelManager</Filter>
@@ -1046,83 +1028,14 @@
     <ClInclude Include="Core.h">
       <Filter>0_Main</Filter>
     </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ConstantBufferManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_DrawCreate.h">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_FormatConverter.h">
-      <Filter>1_Platform\Windows\5_DrawManager\FormatConverter</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_IndexBufferManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_References.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ShaderCompileModule.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ShaderManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_Texture2DBufferManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_TextureLoadModule.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\4_TextureLoadModule</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_VertexBufferManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ViewManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ResourceManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_SamplerManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_TextureResourceManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_Texture2DData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData</Filter>
-    </ClInclude>
     <ClInclude Include="TemplateManager.h">
       <Filter>2_Core\0_TemplateManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ViewData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_SamplerData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
     </ClInclude>
     <ClInclude Include="ResourceViewData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\4_ResourceManager\2_ViewManager\ViewData</Filter>
     </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ShaderData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader\DirectX11_ShaderData</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderConstantInfo.h">
       <Filter>1_Platform\Base\7_PlatformCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_VertexBufferData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer\DirectX11_VertexBufferData</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_IndexBufferData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer\DirectX11_IndexBufferData</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ConstantBufferData.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer\DirectX11_ConstantBufferData</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_TextureStruct.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\99_TextureStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DirectX11\DirectX11_ModelHandleManager.h">
-      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\5_ModelHandle</Filter>
     </ClInclude>
     <ClInclude Include="ModelInfo.h">
       <Filter>1_Platform\Base\7_PlatformCommon</Filter>
@@ -1134,22 +1047,103 @@
       <Filter>1_Platform\Base\5_PlatformDrawManager\0_MaterialManager</Filter>
     </ClInclude>
     <ClInclude Include="Hashed_String.h">
-      <Filter>2_Core\4_GameLibrary\1_String</Filter>
+      <Filter>2_Core\4_Library\1_String</Filter>
     </ClInclude>
     <ClInclude Include="UTF8_String.h">
-      <Filter>2_Core\4_GameLibrary\1_String</Filter>
+      <Filter>2_Core\4_Library\1_String</Filter>
     </ClInclude>
     <ClInclude Include="UTF8_StringView.h">
-      <Filter>2_Core\4_GameLibrary\1_String</Filter>
+      <Filter>2_Core\4_Library\1_String</Filter>
     </ClInclude>
     <ClInclude Include="BinaryView.h">
-      <Filter>2_Core\4_GameLibrary\2_Binary</Filter>
+      <Filter>2_Core\4_Library\2_Binary</Filter>
     </ClInclude>
     <ClInclude Include="SRT.h">
-      <Filter>2_Core\4_GameLibrary\3_Math</Filter>
+      <Filter>2_Core\4_Library\3_Math</Filter>
     </ClInclude>
-    <ClInclude Include="ModelHandleStruct.h">
+    <ClInclude Include="ModelHandle.h">
       <Filter>2_Core\1_Handle</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelHandleManager.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\5_ModelHandleManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternionh.h">
+      <Filter>2_Core\4_Library\3_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>2_Core\4_Library\3_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\0_WindowsLibrary\WindowsMath_Utiles.h">
+      <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_DrawCreate.h">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ResourceManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ShaderData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader\DirectX11_ShaderData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ShaderManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\0_Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_VertexBufferData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer\DirectX11_VertexBufferData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_VertexBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\1_VertexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_IndexBufferData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer\DirectX11_IndexBufferData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_IndexBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\2_IndexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ConstantBufferData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer\DirectX11_ConstantBufferData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ConstantBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\3_ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_Texture2DData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D\Texture2DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_Texture2DBufferManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\1_Texture2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ViewData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View\ViewData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ViewManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\2_View</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_SamplerData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler\SamplerData</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_SamplerManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\3_Sampler</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_TextureLoadModule.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\4_TextureLoadModule</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_TextureStruct.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle\99_TextureStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_TextureResourceManager.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureHandle</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ShaderCompileModule.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\8_Compil</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_References.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_FormatConverter.h">
+      <Filter>1_Platform\Windows\5_DrawManager\FormatConverter</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\1_DirectX11\DirectX11_ReferenceData.h">
+      <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References\ReferencesData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

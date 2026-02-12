@@ -8,7 +8,7 @@
 // ============================
 // ヘッダー
 // ============================
-#include "Color.h"
+#include "../../Color.h"
 #include <DirectXMath.h>
 #include "WindowsMath_Utiles.h"
 

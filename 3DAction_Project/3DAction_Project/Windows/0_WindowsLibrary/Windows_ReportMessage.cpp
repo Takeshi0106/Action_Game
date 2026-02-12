@@ -9,7 +9,7 @@
 // ヘッダー
 // ======================================
 // 必須ヘッダー
-#include "ReportMessage.h"
+#include "../../ReportMessage.h"
 // メッセージボックス用ヘッダー
 #include <Windows.h> // メッセージボックス出力
 // コンソール出力用ヘッダー

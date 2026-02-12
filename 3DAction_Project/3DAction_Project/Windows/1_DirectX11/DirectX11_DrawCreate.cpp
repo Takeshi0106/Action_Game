@@ -12,8 +12,6 @@
 #include "DirectX11_IndexBufferManager.h"
 #include "DirectX11_ConstantBufferManager.h"
 #include "DirectX11_TextureResourceManager.h"
-// モデル管理ヘッダー
-#include "../../MeshMaterialManager.h"
 // 変換ヘッダー
 #include "DirectX11_FormatConverter.h"
 // ファイルシステムヘッダー

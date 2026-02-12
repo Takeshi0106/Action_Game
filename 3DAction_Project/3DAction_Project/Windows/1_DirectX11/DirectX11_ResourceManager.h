@@ -22,8 +22,6 @@
 #include "DirectX11_TextureResourceManager.h"
 // サンプラーマネージャー
 #include "DirectX11_SamplerManager.h"
-// モデルロードマネージャーヘッダー
-#include "../../MeshMaterialManager.h"
 // 作成クラスヘッダー
 #include "DirectX11_DrawCreate.h"
 // 動的確保
@@ -65,10 +63,7 @@ private:
 	DirectX11_TextureResourceManager m_TextureResourceManager;
 	// サンプラーマネージャー
 	DirectX11_SamplerManager m_SamplerManager;
-	// モデル
-	// ModelLoadManager m_ModelLoadManager;
-	// マテリアル
-	MeshMaterialManager m_MeshMaterialManager;
+
 
 	// --------------------------------
 	// ゲーム層とプラットフォーム層をつなぐ

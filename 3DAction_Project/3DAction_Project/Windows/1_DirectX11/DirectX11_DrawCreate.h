@@ -36,8 +36,6 @@ class DirectX11_ConstantBufferManager;
 class DirectX11_TextureResourceManager;
 // サンプラーマネージャー
 class DirectX11_SamplerManager;
-// メッシュマテリアルマネージャー
-class MeshMaterialManager;
 
 
 // ===============================================
@@ -57,8 +55,6 @@ struct DirectX11_ResourceReference
 	DirectX11_TextureResourceManager& textureManager;
 	// サンプラーマネージャー
 	DirectX11_SamplerManager& samplerManager;
-	// マテリアル
-	MeshMaterialManager& meshMaterialManager;
 };
 
 

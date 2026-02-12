@@ -24,8 +24,7 @@ bool DirectX11_ResourceManager::Init(ID3D11Device* _device, ID3D11DeviceContext*
 			m_IndexBufferManager,
 			m_ConstantBufferManager,
 			m_TextureResourceManager,
-			m_SamplerManager,
-			m_MeshMaterialManager));
+			m_SamplerManager));
 
 	return true;
 }

@@ -9,16 +9,16 @@
 // ヘッダー
 // ====================================================
 // 必須ヘッダー
-#include "Timer.h" // 自分のヘッダー
+#include "../../Timer.h" // 自分のヘッダー
 // 周波数や時間を取得するヘッダー
 #include <Windows.h>
 // 配列ヘッダー
 #include <unordered_map>
 // 名前検索用ヘッダー
-#include "UTF8_String.h"
-#include "Hashed_String.h"
+#include "../../UTF8_String.h"
+#include "../../Hashed_String.h"
 // デバッグ出力用ヘッダー
-#include "ReportMessage.h"
+#include "../../ReportMessage.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #include <cassert> // プロジェクトを停止するヘッダー
