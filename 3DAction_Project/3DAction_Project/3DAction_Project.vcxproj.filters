@@ -160,9 +160,6 @@
     <Filter Include="2_Core\0_TemplateManager">
       <UniqueIdentifier>{7537375e-20b5-49e1-bcb6-ffb072bca813}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\OpenGL">
-      <UniqueIdentifier>{e7533114-91ac-4827-aaf7-c32c4798d722}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource">
       <UniqueIdentifier>{181b17aa-0a1a-475e-9dff-731274e87e58}</UniqueIdentifier>
     </Filter>
@@ -408,6 +405,9 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References\ReferencesData">
       <UniqueIdentifier>{8eede957-d93b-4ec3-9f94-58b299a9dc59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\OpenGL ES">
+      <UniqueIdentifier>{e7533114-91ac-4827-aaf7-c32c4798d722}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
