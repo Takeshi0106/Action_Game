@@ -16,13 +16,17 @@
 #include "../../BaseDrawCreate.h"
 // キー文字列
 #include "../../Hashed_String.h"
+// モデルロードモジュール
+#include "../../ModelLoadeModule.h"
 
 
 // ===============================================
 // 前方宣言
 // ===============================================
+// DirectX11デバイス
 struct ID3D11Device;
 struct ID3D11DeviceContext;
+
 // DirectX11各リソースマネージャー
 // シェーダー
 class DirectX11_ShaderManager;
@@ -36,6 +40,10 @@ class DirectX11_ConstantBufferManager;
 class DirectX11_TextureResourceManager;
 // サンプラーマネージャー
 class DirectX11_SamplerManager;
+// マテリアルハンドルマネージャー
+class MaterialHandleManager;
+// モデルハンドルマネージャー
+class ModelHandleManager;
 
 
 // ===============================================
@@ -55,6 +63,10 @@ struct DirectX11_ResourceReference
 	DirectX11_TextureResourceManager& textureManager;
 	// サンプラーマネージャー
 	DirectX11_SamplerManager& samplerManager;
+	// マテリアルハンドルマネージャー
+	MaterialHandleManager& materialHandleManager;
+	// モデルハンドルマネージャー
+	ModelHandleManager& modelHandleManager;
 };
 
 
@@ -75,6 +87,9 @@ private:
 	// 各リソースマネージャーの参照
 	DirectX11_ResourceReference m_Managers;
 
+	// モデルロードモジュール
+	ModelLoadeModule m_ModelLoadModule;
+
 
 public:
 	// --------------------------------
@@ -85,7 +100,8 @@ public:
 		uint32_t _windowHeight,
 		ID3D11Device* _device,
 		ID3D11DeviceContext* _deviceContext,
-		DirectX11_ResourceReference _managers);
+		DirectX11_ResourceReference _managers,
+		const String& _modelFolderPath);
 	~DirectX11_DrawCreate() override = default;
 
 

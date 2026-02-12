@@ -37,11 +37,13 @@ DirectX11_DrawCreate::DirectX11_DrawCreate(
 	uint32_t _windowHeight,
 	ID3D11Device* _device,
 	ID3D11DeviceContext* _deviceContext,
-	DirectX11_ResourceReference _managers)
+	DirectX11_ResourceReference _managers,
+	const String& _modelFolderPath)
 	: BaseDrawCreate(_windowWidth, _windowHeight),
 	m_Device(_device),
 	m_DeviceContext(_deviceContext),
-	m_Managers(_managers)
+	m_Managers(_managers),
+	m_ModelLoadModule(_modelFolderPath)
 {
 
 }
@@ -340,6 +342,11 @@ Handle DirectX11_DrawCreate::LoadModel(
 	const Hashed_String& _modelName, 
 	const String& _modelFolderName)
 {
+	// モデルをロード
+	ModelData data= m_ModelLoadModule.ModelLoad(
+		_modelName.GetString(),
+		_modelFolderName);
+
 
 
 	return Handle();
