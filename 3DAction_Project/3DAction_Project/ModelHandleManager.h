@@ -19,7 +19,7 @@
 // =========================================
 // クラス
 // =========================================
-class DirectX11_ModelHandleManager final
+class ModelHandleManager final
 {
 private:
 	// --------------------------------
@@ -32,8 +32,8 @@ public:
 	// --------------------------------
 	// コンストラクタ・デストラクタ
 	// --------------------------------
-	DirectX11_ModelHandleManager() = default;
-	~DirectX11_ModelHandleManager() = default;
+	ModelHandleManager() = default;
+	ModelHandleManager() = default;
 
 
 	// --------------------------------
