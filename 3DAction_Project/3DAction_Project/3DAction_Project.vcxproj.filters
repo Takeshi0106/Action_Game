@@ -349,9 +349,6 @@
     <Filter Include="2_Core\99_Imgui">
       <UniqueIdentifier>{d7b83e73-9eca-4246-a3da-008cebcd0e8c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Base\5_PlatformDrawManager\0_MaterialManager">
-      <UniqueIdentifier>{c25be7c6-777d-48b9-a03e-96153f32932a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\5_PlatformDrawManager\5_ModelHandleManager">
       <UniqueIdentifier>{37da0b57-aef4-43e3-b35a-508f84fa2a9b}</UniqueIdentifier>
     </Filter>
@@ -408,6 +405,9 @@
     </Filter>
     <Filter Include="1_Platform\Windows\5_DrawManager\DirectX11_Resource\4_TextureResource\4_TextureLoadModule">
       <UniqueIdentifier>{a24ae7e6-1d9d-462b-b51e-b7a698e6e38a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\5_PlatformDrawManager\4_MaterialHandleManager">
+      <UniqueIdentifier>{b9dc78c3-6a2e-475d-94f3-84ec57090e07}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1043,9 +1043,6 @@
     <ClInclude Include="MaterialHandle.h">
       <Filter>2_Core\1_Handle</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialManager.h">
-      <Filter>1_Platform\Base\5_PlatformDrawManager\0_MaterialManager</Filter>
-    </ClInclude>
     <ClInclude Include="Hashed_String.h">
       <Filter>2_Core\4_Library\1_String</Filter>
     </ClInclude>
@@ -1144,6 +1141,9 @@
     </ClInclude>
     <ClInclude Include="Windows\1_DirectX11\DirectX11_ReferenceData.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_Resource\9_References\ReferencesData</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialHandleManager.h">
+      <Filter>1_Platform\Base\5_PlatformDrawManager\4_MaterialHandleManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
