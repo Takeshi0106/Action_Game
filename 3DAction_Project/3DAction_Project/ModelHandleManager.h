@@ -45,27 +45,37 @@ public:
 		return m_ModelHandles.AddData(name, modelHandle);
 	}
 
+	// --------------------------------
 	// モデルハンドル取得
+	// --------------------------------
 	ModelHandle* GetModelHandle(const Handle& handle) {
 		return m_ModelHandles.GetData(handle);
 	}
 
+	// --------------------------------
 	// モデルハンドル存在確認
+	// --------------------------------
 	bool ExistsModelHandle(const Hashed_String& name) {
 		return m_ModelHandles.Exists(name);
 	}
 
+	// --------------------------------
 	// モデルハンドル取得（名前から）
+	// --------------------------------
 	Handle GetModelHandleByName(const Hashed_String& name) {
 		return m_ModelHandles.GetHandle(name);
 	}
 
+	// --------------------------------
 	// モデルハンドル削除
+	// --------------------------------
 	void ReleaseModelHandle(const Handle& handle) {
 		m_ModelHandles.Remove(handle);
 	}
 
+	// --------------------------------
 	// モデルハンドル全削除
+	// --------------------------------
 	void ReleaseAllModelHandle() {
 		m_ModelHandles.ALLClear();
 	}

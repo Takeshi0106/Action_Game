@@ -44,27 +44,37 @@ public:
 		return m_MaterialHandles.AddData(name, materialHandle);
 	}
 
+	// --------------------------------
 	// マテリアルハンドル取得
+	// --------------------------------
 	MaterialHandle* GetMaterialHandle(const Handle& handle) {
 		return m_MaterialHandles.GetData(handle);
 	}
 
+	// --------------------------------
 	// マテリアルハンドル存在確認
+	// --------------------------------
 	bool ExistsMaterialHandle(const Hashed_String& name) {
 		return m_MaterialHandles.Exists(name);
 	}
 
+	// --------------------------------
 	// マテリアルハンドル取得（名前から）
+	// --------------------------------
 	Handle GetMaterialHandleByName(const Hashed_String& name) {
 		return m_MaterialHandles.GetHandle(name);
 	}
 
+	// --------------------------------
 	// マテリアルハンドル削除
+	// --------------------------------
 	void ReleaseMaterialHandle(const Handle& handle) {
 		m_MaterialHandles.Remove(handle);
 	}
 
+	// --------------------------------
 	// マテリアルハンドル全削除
+	// --------------------------------
 	void ReleaseAllMaterialHandles() {
 		m_MaterialHandles.ALLClear();
 	}
