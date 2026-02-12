@@ -2,9 +2,8 @@
 
 // ===============================================
 // クラス概要
-// モデルローダーモジュール
+// モデルロードモジュール
 // モデルをロードしてモデルデータを返す
-// 今は.obj形式のみ対応
 // ===============================================
 
 
@@ -20,7 +19,7 @@
 // ===============================================
 // クラス
 // ===============================================
-class ModelLoadeModule
+class ModelLoadeModule final
 {
 private:
 	// --------------------------------
@@ -28,8 +27,6 @@ private:
 	// --------------------------------
 	// モデル読み込みパス
 	const String& kModelPath;
-	// 対応拡張子
-	const String kObjExtension = u8".obj";
 
 
 public:
@@ -47,8 +44,5 @@ public:
 	// --------------------------------
 	// モデル読み込み内部関数
 	ModelData ModelLoad(const String& modelPath, const String& modelFile = u8"");
-
-	// モデル読込パスを返す
-	const String& GetModelLoadPath() const { return kModelPath; }
 };
 

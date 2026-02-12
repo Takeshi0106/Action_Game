@@ -22,26 +22,22 @@ ModelData ModelLoadeModule::ModelLoad(
 	const String& _modelPath, 
 	const String& _modelFile)
 {
-	// String型に変換
-	String modelPathStr = _modelPath;
 	// モデルが入っているパスを作成
 	std::filesystem::path modelPath;
 
 	ModelData modelData = {};
 
 	// パスを作成
-	if (!_modelPath.GetU8String().empty())
+	if (!_modelFile.GetU8String().empty())
 	{
-		modelPath = std::filesystem::path(kModelPath.GetU8String()) / 
-			modelPathStr.GetU8String()/ 
-			((_modelPath.GetU8String() 
-				+ kObjExtension.GetU8String()));
+		modelPath = std::filesystem::path(kModelPath.GetU8String()) /
+			_modelFile.GetU8String() /
+			_modelPath.GetU8String();
 	}
 	else
 	{
 		modelPath = std::filesystem::path(kModelPath.GetU8String()) / 
-			(_modelPath.GetU8String() + 
-				kObjExtension.GetU8String());
+			_modelPath.GetU8String();
 	}
 
 	// 区切り文字統一
