@@ -22,11 +22,21 @@
 #include "DirectX11_TextureResourceManager.h"
 // サンプラーマネージャー
 #include "DirectX11_SamplerManager.h"
+// マテリアルハンドルマネージャー
+#include "../../MaterialHandleManager.h"
+// モデルハンドルマネージャー
+#include "../../ModelHandleManager.h"
+
+// モデルハンドル
+#include "../../ModelHandle.h"
 
 // 変換ヘッダー
 #include "DirectX11_FormatConverter.h"
 // ファイルシステムヘッダー
 #include <filesystem>
+
+// レポートヘッダー
+#include "../../ReportMessage.h"
 
 
 // =======================================
@@ -46,6 +56,31 @@ DirectX11_DrawCreate::DirectX11_DrawCreate(
 	m_ModelLoadModule(_modelFolderPath)
 {
 
+}
+
+
+// =======================================
+// 初期化
+// =======================================
+bool DirectX11_DrawCreate::Init()
+{
+	MeshMaterialCBData materialCBData{};
+
+	// マテリアル用定数バッファ作成
+	m_MaterialCBHandle = CreateConstantBuffer(
+		m_MaterialCBName,
+		BinaryView(&materialCBData, sizeof(materialCBData)),
+		BufferUsage::Dynamic,
+		CPUAccess::Write);
+
+	// 作成失敗チェック
+	if (!m_MaterialCBHandle.IsValid())
+	{
+		ErrorLog::OutputToConsole(
+			u8"マテリアル用定数バッファの作成に失敗しました");
+		return false;
+	}
+	return true;
 }
 
 
@@ -339,15 +374,90 @@ Handle DirectX11_DrawCreate::CreateSampler(
 // モデルのロード
 // =======================================
 Handle DirectX11_DrawCreate::LoadModel(
-	const Hashed_String& _modelName, 
+	const Hashed_String& _modelName,
+	const Handle& _psHandle,
+	const Handle& _vsHandle,
 	const String& _modelFolderName)
 {
+	// すでにモデルハンドルが存在する場合はそれを返す
+	if (m_Managers.modelHandleManager.ExistsModelHandle(_modelName))
+	{
+		return m_Managers.modelHandleManager.GetModelHandleByName(_modelName);
+	}
+
+	// マテリアルデータを登録
+	Handle sampler = CreateSampler(SamplerDesc());
+
 	// モデルをロード
 	ModelData data= m_ModelLoadModule.ModelLoad(
 		_modelName.GetString(),
 		_modelFolderName);
 
+	// メッシュハンドル配列作成
+	ModelHandle meshHandles;
+	meshHandles.meshHandles.resize(data.meshDataArray.size());
 
+	// モデルをメッシュごとにループ
+	for(size_t i=0;data.meshDataArray.size();i++)
+	{
+		// このメッシュとマテリアルのデータを取得
+		const MeshData& meshData = data.meshDataArray[i];
+		const MeshMaterialData& materialData = data.materialDataArray[meshData.materialID];
 
-	return Handle();
+		// テクスチャハンドル
+		Handle texHandle = Handle();
+
+		// バイナリーデータ作成
+		BinaryView binaryView = { meshData.vertices.data(),
+		size_t(meshData.vertices.size() * sizeof(Vertex)) };
+
+		// 頂点バッファ作成
+		Handle vbHandle = CreateVertexBuffer(
+			Hashed_String(_modelName.GetString() + u8"_vb_" + String::to_u8string(i)),
+			binaryView,
+			(uint32_t)meshData.vertices.size(),
+			BufferUsage::Default,
+			CPUAccess::None);
+
+		// インデックスバッファ作成
+		Handle ibHandle = CreateIndexBuffer(
+			Hashed_String(_modelName.GetString() + u8"_ib_" + String::to_u8string(i)),
+			meshData.indices.data(),
+			meshData.indices.size() * sizeof(uint32_t),
+			static_cast<uint32_t>(meshData.indices.size()),
+			BufferUsage::Default,
+			CPUAccess::None);
+
+		// マテリアルのテクスチャをロード
+		if(materialData.textureName.GetString().IsEmpty())
+		{
+			TextureLoadDesc loadDesc{};
+			// ミップマップ自動生成
+			loadDesc.generateMip = true;
+			// テクスチャロード
+			texHandle = LoadTexture(materialData.textureName, loadDesc);
+		}
+
+		// マテリアルハンドルをマネージャーに登録
+		Handle materialHandle = m_Managers.materialHandleManager.AddMaterialHandle(
+			Hashed_String(_modelName.GetString() + u8"_mat_" + String::to_u8string(i)),
+			MaterialHandle{
+				_psHandle,
+				_vsHandle,
+				texHandle,
+				sampler,
+				materialData.materialCBData,
+				m_MaterialCBHandle });
+
+		// メッシュハンドルに設定
+		meshHandles.meshHandles[i] = MeshHandle{
+			vbHandle,
+			ibHandle,
+			materialHandle };
+	}
+
+	// モデルハンドルをマネージャーに登録
+	return m_Managers.modelHandleManager.AddModelHandle(
+		_modelName,
+		meshHandles);
 }

@@ -26,6 +26,8 @@ struct MeshHandle
 	Handle meshVertexBufferHandles = {};
 	// インデックスバッファハンドル
 	Handle meshIndexBufferHandles = {};
+	// マテリアルハンドル
+	Handle materialHandle = {};
 };
 
 

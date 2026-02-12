@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\pdb\Debug;C:\0_DXLibs\0_Assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;C:\0_DXLibs\0_DXC\0_include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\pdb\Debug;C:\0_DXLibs\0_Assimp\5.2.5\lib;C:\0_DXLibs\0_DXC\1_lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;$(IncludePath)</IncludePath>
@@ -217,6 +217,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClCompile Include="Windows\0_WindowsLibrary\Windows_Matrix4x4.cpp" />
     <ClCompile Include="Windows\0_WindowsLibrary\Windows_Quaternion.cpp" />
     <ClCompile Include="Windows\0_WindowsLibrary\Windows_ReportMessage.cpp" />
+    <ClCompile Include="Windows\0_WindowsLibrary\Windows_SPIRVCompileModule.cpp" />
     <ClCompile Include="Windows\0_WindowsLibrary\Windows_Timer.cpp" />
     <ClCompile Include="Windows\0_WindowsLibrary\Windows_Vector2.cpp" />
     <ClCompile Include="Windows\0_WindowsLibrary\Windows_Vector3.cpp" />
@@ -275,7 +276,6 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="ModelHandleManager.h" />
     <ClInclude Include="MaterialHandle.h" />
     <ClInclude Include="ModelHandle.h" />
-    <ClInclude Include="ModelInfo.h" />
     <ClInclude Include="ShaderConstantInfo.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DrawComand.h" />
@@ -379,6 +379,7 @@ xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
     <ClInclude Include="VertexBufferData.h" />
     <ClInclude Include="VertexBufferManager.h" />
     <ClInclude Include="Windows\0_WindowsLibrary\WindowsMath_Utiles.h" />
+    <ClInclude Include="Windows\0_WindowsLibrary\Windows_SPIRVCompileModule.h" />
     <ClInclude Include="Windows\1_DirectX11\DirectX11_ConstantBufferData.h" />
     <ClInclude Include="Windows\1_DirectX11\DirectX11_ConstantBufferManager.h" />
     <ClInclude Include="Windows\1_DirectX11\DirectX11_DrawCreate.h" />

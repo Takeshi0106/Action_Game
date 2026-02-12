@@ -33,7 +33,7 @@ public:
 	// コンストラクタ・デストラクタ
 	// --------------------------------
 	ModelHandleManager() = default;
-	ModelHandleManager() = default;
+	~ModelHandleManager() = default;
 
 
 	// --------------------------------
@@ -48,7 +48,7 @@ public:
 	// --------------------------------
 	// モデルハンドル取得
 	// --------------------------------
-	ModelHandle* GetModelHandle(const Handle& handle) {
+	const ModelHandle* GetModelHandle(const Handle& handle) {
 		return m_ModelHandles.GetData(handle);
 	}
 

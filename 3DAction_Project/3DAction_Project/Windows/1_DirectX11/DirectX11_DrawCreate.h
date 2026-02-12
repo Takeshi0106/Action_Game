@@ -90,6 +90,11 @@ private:
 	// モデルロードモジュール
 	ModelLoadeModule m_ModelLoadModule;
 
+	// 定数バッファ名
+	Hashed_String m_MaterialCBName = Hashed_String(u8"Material");
+	// マテリアル定数バッファハンドル
+	Handle m_MaterialCBHandle = Handle();
+
 
 public:
 	// --------------------------------
@@ -103,6 +108,12 @@ public:
 		DirectX11_ResourceReference _managers,
 		const String& _modelFolderPath);
 	~DirectX11_DrawCreate() override = default;
+
+
+	// --------------------------------
+	// 初期化
+	// --------------------------------
+	bool Init();
 
 
 	// --------------------------------
@@ -150,11 +161,7 @@ public:
 	// モデルのロード
 	Handle LoadModel(
 		const Hashed_String& modelName, 
+		const Handle& _psShader,
+		const Handle& _vsShader,
 		const String& modelFolderName = u8"") override;
-
-
-	// --------------------------------
-	// マテリアル作成
-	// --------------------------------
-
 };

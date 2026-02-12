@@ -89,5 +89,9 @@ public:
 		const SamplerDesc& desc) = 0;
 
 	// モデルのロード
-	virtual Handle LoadModel(const Hashed_String& modelName, const String& modelFolderName = u8"") = 0;
+	virtual Handle LoadModel(
+		const Hashed_String& modelName,
+		const Handle & _psHandle,
+		const Handle& _vsHandle,
+		const String& modelFolderName = u8"") = 0;
 };
