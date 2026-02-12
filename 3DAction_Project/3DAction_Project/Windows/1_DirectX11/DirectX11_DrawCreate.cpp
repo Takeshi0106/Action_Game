@@ -6,12 +6,23 @@
 #include "DirectX11_DrawCreate.h"
 // DirectX11ヘッダー
 #include <d3d11.h>
+
+// --------------------------------------
 // DirectX11リソース管理ヘッダー
+// --------------------------------------
+// シェーダーマネージャー
 #include "DirectX11_ShaderManager.h"
+// 頂点バッファマネージャー
 #include "DirectX11_VertexBufferManager.h"
+// インデックスバッファマネージャー
 #include "DirectX11_IndexBufferManager.h"
+// 定数バッファマネージャー
 #include "DirectX11_ConstantBufferManager.h"
+// テクスチャリソースマネージャー
 #include "DirectX11_TextureResourceManager.h"
+// サンプラーマネージャー
+#include "DirectX11_SamplerManager.h"
+
 // 変換ヘッダー
 #include "DirectX11_FormatConverter.h"
 // ファイルシステムヘッダー
