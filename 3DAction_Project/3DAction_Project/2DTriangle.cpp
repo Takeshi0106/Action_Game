@@ -44,25 +44,25 @@ void Triangle2D::DerivationInit()
 // =====================================
 void Triangle2D::Update()
 {
-	// デルタタイム取得
-	float time = Timer::GetDeltaTime();
+	//// デルタタイム取得
+	//float time = Timer::GetDeltaTime();
 
-	// Y軸周りに回転させるとします 
-	float speed = 3.14159265f * 4;
+	//// Y軸周りに回転させるとします 
+	//float speed = 3.14159265f * 4;
 
-	// 経過時間に応じて角度を増加 
-	g_angle += speed * time;
+	//// 経過時間に応じて角度を増加 
+	//g_angle += speed * time;
 
-	// ワールド行列（回転のみ）
-	Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), g_angle);
-	m_SRT.rotation = m_SRT.rotation * rotQuat;
+	//// ワールド行列（回転のみ）
+	//Quaternion rotQuat = Quaternion::CreateQuaternionFromAxisAngle(Vector3(1, 0, 0), g_angle);
+	//m_SRT.rotation = m_SRT.rotation * rotQuat;
 
-	// 移動
-	static float offset = 0.0f;
-	offset += 1.0f * time; // 時間経過で移動
+	//// 移動
+	//static float offset = 0.0f;
+	//offset += 1.0f * time; // 時間経過で移動
 
-	Matrix4x4 translationMatrix = Matrix4x4::CreateTranslationMatrix_LH(Vector3(offset, 0.0f, 0.0f));
-	m_SRT.position.x = offset;
+	//Matrix4x4 translationMatrix = Matrix4x4::CreateTranslationMatrix_LH(Vector3(offset, 0.0f, 0.0f));
+	//m_SRT.position.x = offset;
 
 	// ワールド行列更新
 	m_SRT.UpdateWorldMatrix();

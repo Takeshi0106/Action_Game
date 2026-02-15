@@ -83,15 +83,15 @@ bool DebugSceneState::DerivativeInit()
 	// ツリー再ビルド
 	m_AABBTree.RebuildTree();
 
+#if defined(DEBUG) || defined(_DEBUG)
 	// 深度情報取得
 	TreeBalance  balance = m_AABBTree.CalculateBalance();
 
-#if defined(DEBUG) || defined(_DEBUG)
 	// 時間出力
 	float outputTime = Timer::GetDeltaTime() - time;
 	DebugLog::OutputToConsole(String::to_u8string(outputTime) + u8"秒 : AABB登録時間");
 	DebugLog::OutputToConsole(String::to_u8string(balance.averageDepth) + u8" : 平均深度");
-	DebugLog::OutputToConsole(String::to_u8string((uint64_t)balance.maxDepth) + u8" : 最大深度");
+	DebugLog::OutputToConsole(String::to_u8string(balance.maxDepth) + u8" : 最大深度");
 #endif
 
 	// デバッグ初期化

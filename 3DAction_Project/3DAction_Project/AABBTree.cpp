@@ -214,14 +214,14 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 
 	std::stack<uint32_t> stack;
 	stack.push(m_RootNodeIndex);
-	uint32_t count = 0;
-	uint32_t downCount = 0;
+	// uint32_t count = 0;
+	// uint32_t downCount = 0;
 
 	while (!stack.empty())
 	{
 		uint32_t index = stack.top();
 		stack.pop();
-		count++;
+		// count++;
 
 		const AABBNode& node = m_Nodes[index];
 
@@ -241,7 +241,7 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 			stack.push(node.leftIndex);
 			stack.push(node.rightIndex);
 
-			downCount++;
+			// downCount++;
 		}
 	}
 }
