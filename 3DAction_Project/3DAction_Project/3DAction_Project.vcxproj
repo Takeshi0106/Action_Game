@@ -120,9 +120,9 @@
     <PostBuildEvent>
       <Message>
       </Message>
-      <Command>if not exist "$(ProjectDir)Asset\Shader\Hlsl" mkdir "$(ProjectDir)Asset\Shader\Hlsl"
-xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)Asset\Shader\Hlsl\"
-xcopy /Y /E /D "$(ProjectDir)Asset\*" "$(TargetDir)Asset\"
+      <Command>if not exist "$(ProjectDir)0_Asset\Shader\Hlsl" mkdir "$(ProjectDir)0_Asset\Shader\Hlsl"
+xcopy /Y/D "$(ProjectDir)*.hlsl" "$(ProjectDir)0_Asset\Shader\Hlsl\"
+xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
