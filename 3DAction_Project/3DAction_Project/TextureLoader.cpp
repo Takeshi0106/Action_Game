@@ -11,7 +11,7 @@
 // ログ表示ヘッダー
 #include "ReportMessage.h"
 // 自作列挙型をDirectXように変換する関数
-#include "Windows/1_DirectX11/DirectX11_FormatConverter.h"
+#include "1_Platform/Windows/1_DirectX11/DirectX11_FormatConverter.h"
 
 
 // ============================
