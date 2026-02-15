@@ -672,7 +672,7 @@ bool DirectX_DrawManager::DrawModelObject(
 	const ModelManagerData* data = m_ModelManager.GetModelData(_modelName);
 	const Hashed_String& materialCBName = m_ModelManager.GetMaterialCBName();
 
-	for (int i = 0; i < data->meshMaterialIDs.size(); i++)
+	for (size_t i = 0; i < data->meshMaterialIDs.size(); i++)
 	{
 		Hashed_String meshName = Hashed_String(_modelName.GetString() + String::to_u8string(i));
 

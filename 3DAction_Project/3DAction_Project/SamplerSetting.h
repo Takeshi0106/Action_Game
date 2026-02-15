@@ -4,16 +4,18 @@
 // ヘッダー
 // ==============================
 #include <functional>
+// 固定整数型
+#include <cstdint>
 
 
 // ==============================
 // サンプラー設定用
 // ==============================
 // フィルター
-enum class SamplerFilter
+enum class SamplerFilter : uint8_t
 {
 	// そのまま
-	Point,
+	Point = 0,
 
 	// 補間
 	Linear,
@@ -21,18 +23,18 @@ enum class SamplerFilter
 };
 
 // 範囲を超えた時の処理
-enum class SamplerAddressMode
+enum class SamplerAddressMode : uint8_t
 {
-	Wrap, // 繰り返す
+	Wrap = 0, // 繰り返す
 	Mirror, // 折り返し
 	Clamp,  // 端の色を伸ばす
 	Border  // 境界線を使用
 };
 
 // 比較
-enum class SamplerComparisonFunc
+enum class SamplerComparisonFunc : uint8_t
 {
-	Never,
+	Never = 0,
 	Less,
 	Equal,
 	LessEqual,

@@ -81,15 +81,15 @@ public:
 	// シェーダーチェック関数
 	// ------------------------------------------
 	// 頂点シェーダーチェック
-	const bool ExistsVertexShader(const Hashed_String& _name) const {
+	bool ExistsVertexShader(const Hashed_String& _name) const {
 		return m_Vertexs.Exists(_name);
 	}
 	// ピクセルシェーダーチェック
-	const bool ExistsPixelShader(const Hashed_String& _name) const {
+	bool ExistsPixelShader(const Hashed_String& _name) const {
 		return m_Pixels.Exists(_name);
 	}
 	// コンピュートシェーダーチェック
-	const bool ExistsComputeShader(const Hashed_String& _name) const {
+	bool ExistsComputeShader(const Hashed_String& _name) const {
 		return m_Computes.Exists(_name);
 	}
 

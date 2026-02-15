@@ -59,7 +59,7 @@ bool VertexShaderData::CreateVertexShader(ID3D11Device* device, void* binary, si
     // 入力レイアウトを作成
     std::vector<D3D11_INPUT_ELEMENT_DESC> descArray(_ILInfo.size());
 
-    for (int i = 0; i < _ILInfo.size(); i++)
+    for (size_t i = 0; i < _ILInfo.size(); i++)
     {
         descArray[i].SemanticName = reinterpret_cast<const char*>(_ILInfo[i].GetSemanticName().GetU8Char());
         descArray[i].SemanticIndex = _ILInfo[i].GetSemanticIndex();
@@ -193,7 +193,7 @@ void OutputILname(const std::vector<InputLayoutInfo>& ILInfo)
         ErrorLog::OutputToConsole(u8"入力レイアウトがありません");
     }
 
-    for (int i = 0; i < ILInfo.size(); i++)
+    for (size_t i = 0; i < ILInfo.size(); i++)
     {
         DebugLog::OutputToConsole(u8" " + ILInfo[i].GetSemanticName());
     }
@@ -210,7 +210,7 @@ void OutputCBname(const std::vector<ConstantBufferInfo> &_CBInfo)
         DebugLog::OutputToConsole(u8"定数バッファがありませんでした");
     }
 
-    for (int i = 0; i < _CBInfo.size(); i++)
+    for (size_t i = 0; i < _CBInfo.size(); i++)
     {
         DebugLog::OutputToConsole(u8"  " + _CBInfo[i].GetName());
     }

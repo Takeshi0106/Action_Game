@@ -102,7 +102,7 @@ bool ShaderInfo::Deserialize(const StringView& data)
     }
     m_ILInfo.resize(ILStringData.size()); // サイズを決める
 
-    for (int i = 0; i < ILStringData.size(); i++)
+    for (size_t i = 0; i < ILStringData.size(); i++)
     {
         if (!m_ILInfo[i].Deserialize(ILStringData[i])) {
             ErrorLog::OutputToConsole(u8"入力レイアウト : 文字列を読み込むことが出来ませんでした");
@@ -118,7 +118,7 @@ bool ShaderInfo::Deserialize(const StringView& data)
     }
     m_CBInfo.resize(CBStringData.size()); // サイズを決める
 
-    for (int i = 0; i < CBStringData.size(); i++)
+    for (size_t i = 0; i < CBStringData.size(); i++)
     {
         if (!m_CBInfo[i].Deserialize(CBStringData[i])) {
             ErrorLog::OutputToConsole(u8"定数バッファ : 文字列を読み込むことが出来ませんでした");

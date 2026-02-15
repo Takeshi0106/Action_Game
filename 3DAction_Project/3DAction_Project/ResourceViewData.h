@@ -90,8 +90,8 @@ public:
 	// ゲッター
 	ID3D11RenderTargetView* GetRTV() const { return m_RTV.Get(); }
 	ID3D11RenderTargetView** GetRTVAddress() { return m_RTV.GetAddressOf(); }
-	const uint32_t GetWidth() const { return m_Width; }
-	const uint32_t GetHeight() const { return m_Height; }
+	uint32_t GetWidth() const { return m_Width; }
+	uint32_t GetHeight() const { return m_Height; }
 };
 
 

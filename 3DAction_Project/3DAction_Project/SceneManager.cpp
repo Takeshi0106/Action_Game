@@ -105,6 +105,14 @@ bool SceneManager::ChangeScene(SceneEventID event)
 	case SceneEventID::TITLESCENE:
 		m_CurrentSceneState = std::make_unique<TitleSceneState>();
 		break;
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+		// エラーログ
+	default:
+		ErrorLog::OutputToConsole(u8"シーンイベントが不正です" + String::to_u8string((uint64_t)event));
+		break;
+#endif
 	}
 
 	// 新しいシーンの初期化

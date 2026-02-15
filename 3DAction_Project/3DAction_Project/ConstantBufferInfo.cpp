@@ -33,7 +33,7 @@ String ConstantBufferInfo::Serialize(int spaceNumber) const
 
     // セーブする情報を作成
     saveData += SaveUtils::MakeTypeInfo(kCBufferName, m_Name, spaceNumber);
-    saveData += SaveUtils::MakeTypeInfo(kRegisterNumber, String::to_u8string(m_RegisterNumber), spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kRegisterNumber, String::to_u8string((uint64_t)m_RegisterNumber), spaceNumber);
     saveData += SaveUtils::MakeTypeInfo(kSize, String::to_u8string((uint64_t)m_Size), spaceNumber);
 
     return saveData;

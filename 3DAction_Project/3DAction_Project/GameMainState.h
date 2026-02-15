@@ -26,11 +26,11 @@ private:
 public:
 	// コンストラクタ・デストラクタ
 	GameMainState() = default;
-	~GameMainState() = default;
+	~GameMainState() override final = default;
 
 	// シーンの描画
-	void Draw();
+	void Draw() override final;
 	// シーンの終了処理
-	void Uninit();
+	void Uninit() override final;
 };
 

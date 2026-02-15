@@ -68,7 +68,7 @@ public:
 	// --------------------------------
 	// 空文字列かどうか
 	// --------------------------------
-	const bool IsEmpty() const noexcept;
+	bool IsEmpty() const noexcept;
 
 	// --------------------------------
 	// ASCII を UTF-8 に変換する関数
@@ -78,9 +78,27 @@ public:
 	// ---------------------------------- 
 	// 数字をStringに変換
 	// ----------------------------------
-	static String to_u8string(int n);
-	static String to_u8string(uint64_t n);
-	static String to_u8string(float n);
+	template<typename T>
+	// 算術型または列挙型であることを要求
+		requires std::is_arithmetic_v<T> || std::is_enum_v<T>
+	static String to_u8string(T value)
+	{
+		// 列挙型の場合
+		if constexpr (std::is_enum_v<T>)
+		{
+			// 元となる整数型を取得
+			using UT = std::underlying_type_t<T>;
+			// 整数型にキャストしてから文字列に変換
+			std::string temp = std::to_string(static_cast<UT>(value));
+			return String(reinterpret_cast<const char8_t*>(temp.c_str()));
+		}
+		// 算術型の場合
+		else
+		{
+			std::string temp = std::to_string(value);
+			return String(reinterpret_cast<const char8_t*>(temp.c_str()));
+		}
+	}
 
 	// --------------------------------
 	// ゲッター
@@ -88,10 +106,12 @@ public:
 	const std::u8string& GetU8String() const noexcept;
 	// char8_t* を返す
 	const char8_t* GetU8Char() const noexcept;
+	// char* を返す
+	const char* GetChar() const noexcept;
 	// バイナリデータとして取得
 	BinaryView GetBinaryView() const noexcept;
 	// サイズ
-	const size_t GetSize() const noexcept;
+	size_t GetSize() const noexcept;
 };
 
 

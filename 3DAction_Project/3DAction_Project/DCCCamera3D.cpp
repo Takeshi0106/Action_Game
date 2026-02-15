@@ -8,6 +8,8 @@
 #include "Quaternionh.h"
 // ログ出力ヘッダー
 #include "ReportMessage.h"
+// 入力情報ヘッダー
+#include "input.h"
 // 時間取得
 #include "Timer.h"
 

@@ -71,7 +71,7 @@ public:
 
 	// ゲッター
 	const AABBCollider& GetAABBCollider() const { return m_AABBCol; }
-	const bool GetIsHit() const { return m_IsHit; }
+	bool GetIsHit() const { return m_IsHit; }
 	const ObjectInfo& GetObjectInfo() const { return m_ObjectInfo; }
 
 	// セッター

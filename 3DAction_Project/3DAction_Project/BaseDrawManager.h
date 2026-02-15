@@ -48,6 +48,7 @@ public:
 	// 描画
 	virtual void BegingDraw() = 0;
 	virtual void EndDraw() = 0;
+
 	virtual void ModelDraw(
 		const Hashed_String& _vsShaderName,
 		const Hashed_String& _psShaderName,
@@ -150,7 +151,7 @@ public:
 	// ---------------------------------------
 	// ゲッター
 	// ---------------------------------------
-	const uint32_t GetScreenWidth() { return m_ScreenWidth; }
-	const uint32_t GetScreenHeight() { return m_ScreenHeight; }
+	uint32_t GetScreenWidth() { return m_ScreenWidth; }
+	uint32_t GetScreenHeight() { return m_ScreenHeight; }
 };
 

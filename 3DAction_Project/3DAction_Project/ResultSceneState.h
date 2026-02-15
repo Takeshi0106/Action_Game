@@ -26,12 +26,12 @@ private:
 public:
 	// コンストラクタ・デストラクタ
 	ResultSceneState() = default;
-	~ResultSceneState() = default;
+	~ResultSceneState() override final = default;
 
 	// シーンの描画
-	void Draw();
+	void Draw() override final;
 	// シーンの終了処理
-	void Uninit();
+	void Uninit() override final;
 
 };
 

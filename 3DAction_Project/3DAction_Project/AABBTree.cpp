@@ -210,7 +210,7 @@ void AABBTree::Remove(const AABBTreeHandle& _handle)
 // ==================================
 void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 {
-	if (m_RootNodeIndex == -1) return;
+	if (m_RootNodeIndex == UINT32_MAX) return;
 
 	std::stack<uint32_t> stack;
 	stack.push(m_RootNodeIndex);

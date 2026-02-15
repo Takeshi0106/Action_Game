@@ -51,6 +51,8 @@ public:
     StringView(const class String& str) noexcept
         : m_View(str.GetU8String()) {
     }
+	// コピーコンストラクタ
+	StringView(const StringView&) = default;
 
     // --------------------------------
     // セット

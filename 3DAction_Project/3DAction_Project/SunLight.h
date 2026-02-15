@@ -28,7 +28,7 @@ private:
 	const Hashed_String m_CBName = Hashed_String(u8"SunLight");
 
 	// 派生初期化
-	bool DerivativeInit();
+	bool DerivativeInit() override final;
 
 	// デバッグ用imgui関数
 	void DebugImgui();

@@ -129,8 +129,8 @@ public:
 	void Uninit();
 
 	// 描画
-	void BegingDraw();
-	void EndDraw();
+	void BegingDraw() override final;
+	void EndDraw() override final;
 
 	// モデル描画
 	void ModelDraw(

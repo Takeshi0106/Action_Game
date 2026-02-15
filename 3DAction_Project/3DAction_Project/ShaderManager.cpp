@@ -256,10 +256,8 @@ bool JudgeCompileShader(
 // ====================================================================
 bool ShaderManager::DebugInit(ID3D11Device* device)
 {
-	// このソースコードのパスを取得
-	std::filesystem::path currentFilePath = __FILE__;
-	// パスから自分の階層だけを抜き取る
-	std::filesystem::path currentDirectory = currentFilePath.parent_path();
+	// パスから自分の階層を取得
+	std::filesystem::path currentDirectory = std::filesystem::current_path();
 
 	// 全てのシェーダーのリファレンスした情報を入れる
 	std::vector<ShaderInfo> allShaderInfo;
@@ -275,7 +273,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 	// 見積もった数でメモリサイズを決める
 	allShaderInfo.resize(shaderFileCount);
 	// allShaderInfoのインデックス
-	int index = 0;
+	size_t index = 0;
 
 	// .hlslファイルを探す処理
 	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory))

@@ -19,7 +19,7 @@
 // ===========================================
 // クラス
 // ===========================================
-class ConstantBufferInfo : public BaseSaveLoadObject
+class ConstantBufferInfo final : public BaseSaveLoadObject
 {
 private:
 	// ---------------------------------
@@ -57,7 +57,7 @@ public:
 	// ゲッター
 	// ---------------------------------
 	const String& GetName() const { return m_Name; }
-	const uint16_t GetRegisterNumber() const { return m_RegisterNumber; }
-	const size_t GetSize() const { return m_Size; }
+	uint16_t GetRegisterNumber() const { return m_RegisterNumber; }
+	size_t GetSize() const { return m_Size; }
 };
 

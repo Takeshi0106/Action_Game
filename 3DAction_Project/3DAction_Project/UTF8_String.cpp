@@ -64,7 +64,7 @@ String& String::operator+=(const char8_t* rhs) noexcept
 // ==================================
 // 文字列が空かどうか
 // ==================================
-const bool String::IsEmpty() const noexcept
+bool String::IsEmpty() const noexcept
 {
 	return m_String.empty();
 }
@@ -90,67 +90,6 @@ String String::FromASCII(const char* ascii)
 }
 
 
-// ---------------------------------- 
-// 数字をStringに変換
-// ----------------------------------
-String String::to_u8string(int n)
-{
-	// ASCII に変換
-	std::string s = std::to_string(n);
-
-	// 文字数を予約
-	std::u8string u8;
-	u8.reserve(s.size());
-
-	// 1文字ずつ変換
-	for (char c : s)
-	{
-		u8.push_back(static_cast<char8_t>(c));
-	}
-
-	// U8 に変換
-	return String(u8);
-}
-
-String String::to_u8string(uint64_t n)
-{
-	// ASCII に変換
-	std::string s = std::to_string(n);
-
-	// 文字数を予約
-	std::u8string u8;
-	u8.reserve(s.size());
-
-	// 1文字ずつ変換
-	for (char c : s)
-	{
-		u8.push_back(static_cast<char8_t>(c));
-	}
-
-	// U8 に変換
-	return String(u8);
-}
-
-String String::to_u8string(float n)
-{
-	// ASCII に変換
-	std::string s = std::to_string(n);
-
-	// 文字数を予約
-	std::u8string u8;
-	u8.reserve(s.size());
-
-	// 1文字ずつ変換
-	for (char c : s)
-	{
-		u8.push_back(static_cast<char8_t>(c));
-	}
-
-	// U8 に変換
-	return String(u8);
-}
-
-
 // --------------------------------
 // ゲッター
 // --------------------------------
@@ -163,6 +102,11 @@ const char8_t* String::GetU8Char() const noexcept
 {
 	return m_String.c_str();
 }
+// char* を返す
+const char* String::GetChar() const noexcept
+{
+	return reinterpret_cast<const char*>(m_String.c_str());
+}
 // バイナリデータとして取得
 BinaryView String::GetBinaryView() const noexcept
 {
@@ -171,7 +115,7 @@ BinaryView String::GetBinaryView() const noexcept
 		m_String.size() * sizeof(char8_t));
 }
 // サイズを返す
-const size_t String::GetSize() const noexcept
+size_t String::GetSize() const noexcept
 {
 	return m_String.size();
 }

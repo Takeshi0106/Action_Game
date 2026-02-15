@@ -77,7 +77,8 @@ namespace ShaderReflectionUtils
 		// バイナリーデータを解析
 		HRESULT hr = D3DReflect(blob, blobSize, IID_PPV_ARGS(&reflector));
 		if (FAILED(hr)) {
-			ErrorLog::OutputToConsole(u8"リファレンス失敗 :" + hr);
+			ErrorLog::OutputToConsole(u8"リファレンス失敗 :" + 
+				String::to_u8string((int64_t)hr));
 			return false;
 		}
 

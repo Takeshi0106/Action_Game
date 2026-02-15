@@ -87,7 +87,10 @@ Matrix3x3 Matrix3x3::Inverse() const noexcept
 float Matrix3x3::Determinant() const noexcept
 {
     DirectX::XMMATRIX xmMat = CreateXMMATRIXFromMatrix3x3(*this);
-    return DirectX::XMMatrixDeterminant(xmMat).m128_f32[0];
+
+    return DirectX::XMVectorGetX(
+        DirectX::XMMatrixDeterminant(xmMat)
+    );
 }
 
 Matrix3x3 Matrix3x3::Abs() const noexcept

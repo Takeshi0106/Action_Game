@@ -11,8 +11,6 @@
 // ===============================================
 // 設定用ヘッダー
 #include "GraphicsEnums.h"
-// グラフィックス列挙型
-#include "../../GraphicsEnums.h"
 // ハンドル設定
 #include "Handle.h"
 // 固定長整数ヘッダー

@@ -37,9 +37,12 @@ String InputLayoutInfo::Serialize(int spaceNumber) const
 
     // セーブする情報を作成
     saveData += SaveUtils::MakeTypeInfo(kInputLayoutSemanticName.GetString(), m_SemanticName, spaceNumber);
-    saveData += SaveUtils::MakeTypeInfo(kInputLayoutSemanticIndex.GetString(), String::to_u8string(m_SemanticIndex), spaceNumber);
-    saveData += SaveUtils::MakeTypeInfo(kInputLayoutInputSlot.GetString(), String::to_u8string(m_InputSlot), spaceNumber);
-    saveData += SaveUtils::MakeTypeInfo(kInputLayoutFormat.GetString(), String::to_u8string(m_Format), spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kInputLayoutSemanticIndex.GetString(), 
+        String::to_u8string(static_cast<uint64_t>(m_SemanticIndex)), spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kInputLayoutInputSlot.GetString(), 
+        String::to_u8string(static_cast<uint64_t>(m_InputSlot)), spaceNumber);
+    saveData += SaveUtils::MakeTypeInfo(kInputLayoutFormat.GetString(), 
+        String::to_u8string(static_cast<uint64_t>(m_Format)), spaceNumber);
 
     return saveData;
 }

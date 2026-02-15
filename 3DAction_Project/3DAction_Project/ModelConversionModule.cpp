@@ -68,12 +68,13 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 	}
 
 	// 各バッファ作成
-	for (int i = 0; i < modelData.meshDataArray.size(); i++)
+	for (size_t i = 0; i < modelData.meshDataArray.size(); i++)
 	{
 		// メッシュデータ取得
 		MeshData& mesh = modelData.meshDataArray[i];
 		// 登録名
-		Hashed_String keyName = Hashed_String(modelName.GetString() + String::to_u8string(i));
+		Hashed_String keyName = Hashed_String(modelName.GetString() + 
+			String::to_u8string(i));
 
 		// 頂点バッファ作成
 		if (!drawManager.CreateVertexBuffer(
@@ -100,7 +101,7 @@ bool ModelConversionModule::LoadAndRegisterModelResources(
 	}
 
 	// テクスチャ読込み
-	for (int i = 0; i < modelData.materialDataArray.size(); i++)
+	for (size_t i = 0; i < modelData.materialDataArray.size(); i++)
 	{
 		// メッシュマテリアル情報取得
 		MeshMaterialData materialData = modelData.materialDataArray[i];

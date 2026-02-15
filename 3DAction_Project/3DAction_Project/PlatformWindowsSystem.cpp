@@ -81,10 +81,10 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 // コンストラクタ・デストラクタ
 // ===================================================== 
 // コンストラクタ
-PlatformWindowsSystem::PlatformWindowsSystem(uint16_t _width, uint16_t _height, 
+PlatformWindowsSystem::PlatformWindowsSystem(uint16_t _width, uint16_t _height,
     const wchar_t* WindowClassName, const wchar_t* WindowName,
     const DrawPathConfig& _config)
-    :m_Width(_width), m_Height(_height), m_WindowClassName(WindowClassName), m_WindowName(WindowName),m_PathConfig(_config)
+    :m_Width(_width), m_Height(_height), m_WindowName(WindowName), m_WindowClassName(WindowClassName), m_PathConfig(_config)
 {
 
 }

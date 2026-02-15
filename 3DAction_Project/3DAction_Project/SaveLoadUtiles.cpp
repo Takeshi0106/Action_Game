@@ -63,7 +63,7 @@ namespace SaveUtils {
         String space(std::u8string(spaceNumber, ' '));
 
         block += space + blockName + u8" " + kBlockStart;      // ブロック開始
-        block += space + kBlockNumber + String::to_u8string(blockNumber) + u8"\n\n"; // 要素数
+        block += space + kBlockNumber + String::to_u8string((int64_t)blockNumber) + u8"\n\n"; // 要素数
         block += data;                                      // ブロック内データ
         block += space + kBlockEnd;                         // ブロック終了
 

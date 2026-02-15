@@ -30,11 +30,11 @@ bool SamplerManager::CreateSampler(
     {
         // ログ出力
         WarningLog::OutputToConsole(
-            String::to_u8string(static_cast<int>(_desc.filter)) + u8"\n" +
-            String::to_u8string(static_cast<int>(_desc.addressU)) + u8"\n" +
-            String::to_u8string(static_cast<int>(_desc.addressV)) + u8"\n" +
-            String::to_u8string(static_cast<int>(_desc.addressW)) + u8"\n" +
-            String::to_u8string(static_cast<int>(_desc.comparisonFunc)) + u8"\n" +
+            String::to_u8string(_desc.filter) + u8"\n" +
+            String::to_u8string(_desc.addressU) + u8"\n" +
+            String::to_u8string(_desc.addressV) + u8"\n" +
+            String::to_u8string(_desc.addressW) + u8"\n" +
+            String::to_u8string(_desc.comparisonFunc) + u8"\n" +
             u8" サンプラーが既に存在します");
 
         return true;
@@ -110,11 +110,11 @@ String SamplerDescToString(const SamplerDesc* _desc)
     String data;
 
     data = (
-        String::to_u8string(static_cast<int>(_desc->filter)) + u8"\n" +
-        String::to_u8string(static_cast<int>(_desc->addressU)) + u8"\n" +
-        String::to_u8string(static_cast<int>(_desc->addressV)) + u8"\n" +
-        String::to_u8string(static_cast<int>(_desc->addressW)) + u8"\n" +
-        String::to_u8string(static_cast<int>(_desc->comparisonFunc)) + u8"\n");
+        String::to_u8string(_desc->filter) + u8"\n" +
+        String::to_u8string(_desc->addressU) + u8"\n" +
+        String::to_u8string(_desc->addressV) + u8"\n" +
+        String::to_u8string(_desc->addressW) + u8"\n" +
+        String::to_u8string(_desc->comparisonFunc) + u8"\n");
 
     return data;
 }

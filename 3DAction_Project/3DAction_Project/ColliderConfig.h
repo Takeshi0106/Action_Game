@@ -19,7 +19,7 @@
 // 列挙型
 // ===================================
 // コライダー形状タイプ
-enum ColliderShapeType
+enum ColliderShapeType : uint8_t
 {
 	AABB = 0,
 
