@@ -67,7 +67,8 @@ message(STATUS "SRC_FILES = ${SRC_FILES}")
 
 # Windows専用のDirectXソースを追加
 if (WIN32)
-    file(GLOB_RECURSE DX_SRC "${CMAKE_SOURCE_DIR}/DirectX11/*.cpp" "${CMAKE_SOURCE_DIR}/DirectX11/*.h")
+    file(GLOB_RECURSE DX_SRC "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/0_WindowsLibrary/*.cpp" "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/0_WindowsLibrary/*.h")
+    file(GLOB_RECURSE DX_SRC "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/1_DirectX11/*.cpp" "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/1_DirectX11/*.h")
     list(APPEND SRC_FILES ${DX_SRC})
     message(STATUS "SRC_FILES (with DirectX) = ${SRC_FILES}")
 endif()
