@@ -38,14 +38,6 @@ set(SRC_DIR "${DEVELOPMENT_DIR}")
 
 
 # --------------------------------------
-# インクルードディレクトリの設定
-# --------------------------------------
-# インクルードディレクトリを変数に設定
-include_directories(
-    "C:/0_DXLibs/0_Spirv/include")
-
-
-# --------------------------------------
 # Windows 用ライブラリのパス
 # --------------------------------------
 if(WIN32)
@@ -101,15 +93,23 @@ else(WIN32)
 # Windows では実行ファイルを生成
     add_executable(${PROJECT_NAME} ${SRC_FILES} ${SPIRV_REF_SRC})
 
-    # Windows ではライブラリをリンク
+# その後で include と define を追加
+    target_include_directories(${PROJECT_NAME} PRIVATE
+    "C:/0_DXLibs/0_Spirv/include"
+    "C:/0_DXLibs/0_Assimp/5.2.5/include"
+    "C:/0_DXLibs/0_DirectXTex_2019/include")
+
+# Windows ではライブラリをリンク
     target_link_libraries(${PROJECT_NAME} 
         debug ${ASSIMP_LIB_DEBUG} 
         optimized ${ASSIMP_LIB_RELEASE}
         debug ${DXTEXTURE_LIB_DEBUG}
-        optimized ${DXTEXTURE_LIB_RELEASE}
-    )
+        optimized ${DXTEXTURE_LIB_RELEASE})
 
-    target_compile_definitions(${PROJECT_NAME} PRIVATE UNICODE _UNICODE)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE 
+    UNICODE 
+    _UNICODE
+    SPIRV_REFLECT_USE_SYSTEM_SPIRV_H)
 endif()
 
 
