@@ -165,6 +165,8 @@ bool DirectX11_DSVData::IsSame(
 	if (m_Desc.Texture2D.MipSlice != _desc.Texture2D.MipSlice) {
 		return false;
 	}
+
+	return true;
 }
 
 #endif
