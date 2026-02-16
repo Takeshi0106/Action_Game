@@ -47,7 +47,7 @@ void ModelManager::RegisterModel(const Hashed_String& modelName, const ModelData
     modelManagerData.meshMaterialIDs.resize(modelData.meshDataArray.size());
 
     // メッシュのマテリアル番号を登録
-	for (int i = 0; i < modelData.meshDataArray.size(); i++)
+	for (size_t i = 0; i < modelData.meshDataArray.size(); i++)
     {
         modelManagerData.meshMaterialIDs[i] = modelData.meshDataArray[i].materialID;
     }

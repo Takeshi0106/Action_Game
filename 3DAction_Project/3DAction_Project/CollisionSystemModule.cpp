@@ -21,7 +21,7 @@
 // ======================================
 // 衝突判定関数テーブル初期化
 CollisionSystemModule::CollisionFunc
-CollisionSystemModule::collisionFuncTable[MAX_SHAPE_TYPE][MAX_SHAPE_TYPE] = { nullptr };
+CollisionSystemModule::collisionFuncTable[MAX_SHAPE_TYPE][MAX_SHAPE_TYPE] = {};
 
 
 // ======================================

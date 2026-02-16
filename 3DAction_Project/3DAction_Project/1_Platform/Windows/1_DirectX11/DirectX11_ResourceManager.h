@@ -101,9 +101,9 @@ public:
 		const DrawPathConfig& _config) :
 		m_ScreenWidth(_screenWidth),
 		m_ScreenHeight(_screenHeight),
+		m_ModelFolderPath(_config.objModelPath),
 		m_ShaderManager(_config.shaderBinaryPath),
-		m_TextureResourceManager(_config.texturePath),
-		m_ModelFolderPath(_config.objModelPath) {
+		m_TextureResourceManager(_config.texturePath) {
 	}
 	~DirectX11_ResourceManager() = default;
 

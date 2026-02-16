@@ -315,7 +315,6 @@ Matrix4x4 operator*(const Matrix4x4& mat1, float scalar) noexcept
 {
 	// XMMATRIX作成
 	DirectX::XMMATRIX m = CreateXMMATRIXFromMatrix4x4(mat1);
-	DirectX::XMVECTOR s = DirectX::XMVectorReplicate(scalar);
 
 	// 行ベクトルにスカラーを掛ける
 	DirectX::XMMATRIX result = {};
@@ -334,7 +333,6 @@ Matrix4x4 operator/(const Matrix4x4& mat1, float scalar) noexcept
 
 	// XMMATRIX作成
 	DirectX::XMMATRIX m = CreateXMMATRIXFromMatrix4x4(mat1);
-	DirectX::XMVECTOR s = DirectX::XMVectorReplicate(inv);
 
 	// 乗算
 	DirectX::XMMATRIX result = {};

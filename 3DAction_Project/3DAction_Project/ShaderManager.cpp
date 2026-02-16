@@ -429,7 +429,7 @@ bool ShaderManager::ReleaseInit(ID3D11Device* device)
 	}
 
 	// シェーダーを作成
-	for (int i = 0; i < allShaderInfo.size(); i++)
+	for (size_t i = 0; i < allShaderInfo.size(); i++)
 	{
 		// シェーダーパスを作成
 		std::filesystem::path hlslPath = 
