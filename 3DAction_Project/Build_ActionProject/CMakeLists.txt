@@ -110,6 +110,7 @@ if(WIN32)
     )
 endif()
 
+
 # --------------------------------------
 # Windows 専用リンク
 # --------------------------------------
@@ -120,4 +121,14 @@ if(WIN32)
         debug ${DXTEXTURE_LIB_DEBUG}
         optimized ${DXTEXTURE_LIB_RELEASE}
     )
+endif()
+
+
+# --------------------------------------
+# 警告レベル設定
+# --------------------------------------
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /permissive-)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
