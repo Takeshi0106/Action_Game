@@ -6,8 +6,23 @@
 // 
 // 増やしたら、定数、VIewも修正してください
 // =================================
-enum SETSHADERTYPE {
-	VERTEXSHADER = 0,
+
+
+// =================================
+// ヘッダー
+// =================================
+#include <cstdint>
+
+
+// =================================
+// 列挙型
+// =================================
+enum class SETSHADERTYPE : uint8_t
+{
+	NONETYPE = 0,
+
+	// シェーダーの種類
+	VERTEXSHADER,
 	PIXSELSHADER,
 	CONPUTESHADER
 };

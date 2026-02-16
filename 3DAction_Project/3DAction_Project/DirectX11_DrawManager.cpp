@@ -588,14 +588,14 @@ bool DirectX_DrawManager::DrawPrimitiveObject(
 	}
 
 	// シェーダーの定数バッファ情報をバインド
-	m_CBManager.BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
-	m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
+	m_CBManager.BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), SETSHADERTYPE::VERTEXSHADER);
+	m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), SETSHADERTYPE::PIXSELSHADER);
 
 	// テクスチャバインド
 	if (!_textureName.GetString().IsEmpty())
 	{
 		// テクスチャ・サンプラー バインド
-		m_ViewManager.BindSRV(_textureName, DirectX11::Get::GetContext(), PIXSELSHADER);
+		m_ViewManager.BindSRV(_textureName, DirectX11::Get::GetContext(), SETSHADERTYPE::PIXSELSHADER);
 		m_SamplerManager.BindSampler(_sampler, DirectX11::Get::GetContext());
 	}
 
@@ -635,14 +635,14 @@ bool DirectX_DrawManager::DrawIndexObject(
 	}
 
 	// シェーダーの定数バッファ情報をバインド
-	m_CBManager.BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
-	m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
+	m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), SETSHADERTYPE::PIXSELSHADER);
+	m_CBManager.BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), SETSHADERTYPE::VERTEXSHADER);
 
 	// テクスチャバインド
 	if (!_textureName.GetString().IsEmpty())
 	{
 		// テクスチャ・サンプラー バインド
-		m_ViewManager.BindSRV(_textureName, DirectX11::Get::GetContext(), PIXSELSHADER);
+		m_ViewManager.BindSRV(_textureName, DirectX11::Get::GetContext(), SETSHADERTYPE::PIXSELSHADER);
 		m_SamplerManager.BindSampler(_sampler, DirectX11::Get::GetContext());
 	}
 
@@ -666,7 +666,7 @@ bool DirectX_DrawManager::DrawModelObject(
 	const std::vector<ConstantBufferInfo>* psCB = m_ShaderManager.BindPixelShader(_psShaderName, DirectX11::Get::GetContext());
 
 	// 頂点シェーダーの定数バッファ情報をバインド
-	m_CBManager.BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), VERTEXSHADER);
+	m_CBManager.BindConstantBuffer(vsCB, DirectX11::Get::GetContext(), SETSHADERTYPE::VERTEXSHADER);
 
 	// モデル情報を取得
 	const ModelManagerData* data = m_ModelManager.GetModelData(_modelName);
@@ -694,7 +694,7 @@ bool DirectX_DrawManager::DrawModelObject(
 			sizeof(Color) * 3);
 
 		// ピクセルシェーダー更新
-		m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), PIXSELSHADER);
+		m_CBManager.BindConstantBuffer(psCB, DirectX11::Get::GetContext(), SETSHADERTYPE::PIXSELSHADER);
 
 		// テクスチャバインド
 		if (!data->materialData[data->meshMaterialIDs[i]].textureName.GetString().IsEmpty())
@@ -703,7 +703,7 @@ bool DirectX_DrawManager::DrawModelObject(
 			m_ViewManager.BindSRV(
 				data->materialData[data->meshMaterialIDs[i]].textureName,
 				DirectX11::Get::GetContext(),
-				PIXSELSHADER);
+				SETSHADERTYPE::PIXSELSHADER);
 			// サンプラー バインド
 			m_SamplerManager.BindSampler(SamplerDesc::NormalSampler(), DirectX11::Get::GetContext());
 		}

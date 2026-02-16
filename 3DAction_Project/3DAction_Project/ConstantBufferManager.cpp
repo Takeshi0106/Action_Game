@@ -140,19 +140,19 @@ bool ConstantBufferManager::BindConstantBuffer(
 	// 定数バッファをまとめてバインド
 	switch (type)
 	{
-	case VERTEXSHADER:
+	case SETSHADERTYPE::VERTEXSHADER:
 		context->VSSetConstantBuffers(
 			0,
 			static_cast<UINT>(buffers.size()),
 			buffers.data());
 		break;
-	case PIXSELSHADER:
+	case SETSHADERTYPE::PIXSELSHADER:
 		context->PSSetConstantBuffers(
 			0,
 			static_cast<UINT>(buffers.size()),
 			buffers.data());
 		break;
-	case CONPUTESHADER:
+	case SETSHADERTYPE::CONPUTESHADER:
 		context->CSSetConstantBuffers(
 			0,
 			static_cast<UINT>(buffers.size()),

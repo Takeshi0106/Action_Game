@@ -418,6 +418,9 @@
     <Filter Include="1_Platform\Windows\6_ShaderCompile\0_SPIR-VCompile">
       <UniqueIdentifier>{7e67f413-2355-41ba-8b50-a26ac2733e3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Windows\6_ShaderCompile\ShadeerUtility">
+      <UniqueIdentifier>{245856c6-aa09-4eca-b3ce-edd87e8de9dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -719,6 +722,9 @@
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\0_WindowsLibrary\Windows_Timer.cpp">
       <Filter>1_Platform\Windows\4_Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderUtility.cpp">
+      <Filter>1_Platform\Windows\6_ShaderCompile\ShadeerUtility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1153,6 +1159,9 @@
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_TextureResourceManager.h">
       <Filter>1_Platform\Windows\5_DrawManager\0_DirectX11\DirectX11_Resource\4_TextureResource</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderUtility.h">
+      <Filter>1_Platform\Windows\6_ShaderCompile\ShadeerUtility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

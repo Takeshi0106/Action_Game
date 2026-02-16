@@ -72,13 +72,13 @@ bool ResourceViewManager::BindSRV(
 		// バインド
 		switch (type)
 		{
-		case VERTEXSHADER:
+		case SETSHADERTYPE::VERTEXSHADER:
 			context->VSSetShaderResources(0, 1, &srv);
 			break;
-		case PIXSELSHADER:
+		case SETSHADERTYPE::PIXSELSHADER:
 			context->PSSetShaderResources(0, 1, &srv);
 			break;
-		case CONPUTESHADER:
+		case SETSHADERTYPE::CONPUTESHADER:
 			context->CSSetShaderResources(0, 1, &srv);
 			break;
 		default:
