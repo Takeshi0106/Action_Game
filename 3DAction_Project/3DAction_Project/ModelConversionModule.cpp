@@ -145,7 +145,8 @@ bool ModelConversionModule::ModelLoad(
 	// パスを作成
 	if (!modelFile.IsEmpty())
 	{
-		modelPath = std::filesystem::path(m_ModelPath.GetU8String()) / 
+		modelPath = std::filesystem::path(
+			m_ModelPath.GetU8String()) / 
 			modelFile.GetU8String() /
 			(_modelPath + kObjExtension).GetU8String();
 	}
@@ -166,7 +167,9 @@ bool ModelConversionModule::ModelLoad(
 
 	// ロードチェック
 	if (!scene) {
-		ErrorLog::OutputToConsole(u8"モデルロード失敗");
+		ErrorLog::OutputToConsole(
+			modelPath.filename().u8string() +
+			u8"モデルロード失敗");
 		return false;
 	}
 
