@@ -58,29 +58,6 @@ bool ShaderInfoAcquisition(
 
 
 // ==============================================
-// シェーダーリファレンス出力
-// ==============================================
-void DirectX11_References::OutputShaderReferences(
-	const String& _shaderPath, 
-	const void* _blob, 
-	const size_t size)
-{
-	// 取得する情報を格納する配列
-	std::vector<DX11_CBInfo> cbInfos;
-	std::vector<DX11_ILInfo> ilInfos;
-
-	// リファレンス
-	if (!ShaderInfoAcquisition(_blob, size, cbInfos, ilInfos)) {
-		ErrorLog::OutputToMessageBox(u8"シェーダーリファレンスに失敗しました");
-		return;
-	}
-
-	// 外部ファイルに書き出し
-
-}
-
-
-// ==============================================
 // シェーダー情報取得関数
 // ==============================================
 bool ShaderInfoAcquisition(

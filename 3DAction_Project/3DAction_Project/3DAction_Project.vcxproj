@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;C:\0_DXLibs\0_DXC\0_include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;C:\0_DXLibs\0_DXC\0_include;C:\0_DXLibs\0_Spirv\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\pdb\Debug;C:\0_DXLibs\0_Assimp\5.2.5\lib;C:\0_DXLibs\0_DXC\1_lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\0_DXLibs\0_DirectXTex_2019\include;C:\0_DXLibs\0_Assimp\5.2.5\include;C:\0_DXLibs\0_Spirv\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\0_DXLibs\0_DirectXTex_2019\pdb\Relese;C:\0_DXLibs\0_Assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -108,7 +108,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;SPIRV_REFLECT_USE_SYSTEM_SPIRV_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -138,7 +138,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;SPIRV_REFLECT_USE_SYSTEM_SPIRV_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -230,6 +230,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClCompile Include="SamplerManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderUtility.cpp" />
+    <ClCompile Include="SPIRVReferences.cpp" />
     <ClCompile Include="Square2D.cpp" />
     <ClCompile Include="SunLight.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
@@ -317,6 +318,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClInclude Include="Hashed_String.h" />
     <ClInclude Include="ResourceViewData.h" />
     <ClInclude Include="ShaderUtility.h" />
+    <ClInclude Include="SPIRVReferences.h" />
     <ClInclude Include="UTF8_String.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="Matrix3x3.h" />

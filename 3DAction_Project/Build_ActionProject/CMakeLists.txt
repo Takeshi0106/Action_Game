@@ -35,8 +35,14 @@ endif()
 set(DEVELOPMENT_DIR "${CMAKE_CURRENT_LIST_DIR}/../3DAction_Project")
 # CPP のあるフォルダーをソースフォルダーとして設定
 set(SRC_DIR "${DEVELOPMENT_DIR}")
-# .h  のあるフォルダーをインクルードフォルダーとして設定
-set(INCLUDE_DIR "${DEVELOPMENT_DIR}")
+
+
+# --------------------------------------
+# インクルードディレクトリの設定
+# --------------------------------------
+# インクルードディレクトリを変数に設定
+include_directories(
+    "C:/0_DXLibs/0_Spirv/include")
 
 
 # --------------------------------------
@@ -46,8 +52,7 @@ if(WIN32)
 # インクルードパス設定 グローバルに設定
     include_directories(
         "C:/0_DXLibs/0_Assimp/5.2.5/include"
-        "C:/0_DXLibs/0_DirectXTex_2019/include"
-    )
+        "C:/0_DXLibs/0_DirectXTex_2019/include")
 
     # デバッグ時ライブラリパス設定
     set(ASSIMP_LIB_DEBUG "C:/0_DXLibs/0_Assimp/5.2.5/lib/assimp-vc143-mtd.lib")
@@ -62,14 +67,21 @@ endif()
 # --------------------------------------
 # ソースファイル
 # --------------------------------------
+# ソースファイルを再帰的に取得
 file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp")
+# SIRV-V リファレンスソースを追加
+file(GLOB_RECURSE SPIRV_REF_SRC "${CMAKE_SOURCE_DIR}/3_SPIRV/*.c")
+
 message(STATUS "SRC_FILES = ${SRC_FILES}")
 
 # Windows専用のDirectXソースを追加
 if (WIN32)
-    file(GLOB_RECURSE DX_SRC "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/0_WindowsLibrary/*.cpp" "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/0_WindowsLibrary/*.h")
-    file(GLOB_RECURSE DX_SRC "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/1_DirectX11/*.cpp" "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/1_DirectX11/*.h")
-    list(APPEND SRC_FILES ${DX_SRC})
+# Windows ライブラリソースを追加
+    file(GLOB_RECURSE DX_LIB_SRC "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/0_WindowsLibrary/*.cpp")
+# Windows DirectX11 APIソースを追加
+    file(GLOB_RECURSE DX_API_SRC "${CMAKE_SOURCE_DIR}/1_Platform/Widndows/1_DirectX11/*.cpp")
+# ビルド対象に含める
+    list(APPEND SRC_FILES ${DX_LIB_SRC} ${DX_API_SRC})
     message(STATUS "SRC_FILES (with DirectX) = ${SRC_FILES}")
 endif()
 
@@ -82,10 +94,14 @@ if (WIN32)
 endif()
 
 if(ANDROID)
-    add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
-else()
-    add_executable(${PROJECT_NAME} ${SRC_FILES})
+    add_library(${PROJECT_NAME} SHARED ${SRC_FILES} ${SPIRV_REF_SRC})
 
+else(WIN32)
+
+# Windows では実行ファイルを生成
+    add_executable(${PROJECT_NAME} ${SRC_FILES} ${SPIRV_REF_SRC})
+
+    # Windows ではライブラリをリンク
     target_link_libraries(${PROJECT_NAME} 
         debug ${ASSIMP_LIB_DEBUG} 
         optimized ${ASSIMP_LIB_RELEASE}
@@ -95,6 +111,7 @@ else()
 
     target_compile_definitions(${PROJECT_NAME} PRIVATE UNICODE _UNICODE)
 endif()
+
 
 # --------------------------------------
 # ターゲット設定（共通）

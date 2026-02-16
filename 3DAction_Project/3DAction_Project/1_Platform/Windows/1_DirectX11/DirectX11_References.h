@@ -29,8 +29,5 @@ public:
 	~DirectX11_References() = default;
 
 
-	// --------------------------------
-	// シェーダーを解析して情報出力
-	// --------------------------------
-	void OutputShaderReferences(const String& _shaderPath, const void* blob, const size_t _size);
+
 };

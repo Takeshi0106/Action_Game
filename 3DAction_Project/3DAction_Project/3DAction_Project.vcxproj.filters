@@ -406,12 +406,6 @@
     <Filter Include="1_Platform\Windows\7_DirectX11_Core">
       <UniqueIdentifier>{ba54c2db-b7b6-4d96-b01a-e999173877ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\6_ShaderCompile\1_SPIR-V_References">
-      <UniqueIdentifier>{aadbda8c-4698-458f-970f-2c563d2e8245}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\6_ShaderCompile\1_SPIR-V_References\ReferencesData">
-      <UniqueIdentifier>{8eede957-d93b-4ec3-9f94-58b299a9dc59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Windows\6_ShaderCompile\2_DXBC_fxcCompile">
       <UniqueIdentifier>{13a23049-d97e-4dd1-8617-054b2ab6bf5a}</UniqueIdentifier>
     </Filter>
@@ -420,6 +414,15 @@
     </Filter>
     <Filter Include="1_Platform\Windows\6_ShaderCompile\ShadeerUtility">
       <UniqueIdentifier>{245856c6-aa09-4eca-b3ce-edd87e8de9dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_ShaderCompile\1_SPIR-VReferences">
+      <UniqueIdentifier>{aadbda8c-4698-458f-970f-2c563d2e8245}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_ShaderCompile\1_SPIR-VReferences\ReferencesData">
+      <UniqueIdentifier>{8eede957-d93b-4ec3-9f94-58b299a9dc59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2_Core\5_SPIRVReferences">
+      <UniqueIdentifier>{b2748fd1-0ece-404a-9d37-c7efc835fedf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -655,10 +658,10 @@
       <Filter>1_Platform\Windows\6_ShaderCompile\0_SPIR-VCompile</Filter>
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ReferenceData.cpp">
-      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-V_References\ReferencesData</Filter>
+      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-VReferences\ReferencesData</Filter>
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_References.cpp">
-      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-V_References</Filter>
+      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-VReferences</Filter>
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderCompileModule.cpp">
       <Filter>1_Platform\Windows\6_ShaderCompile\2_DXBC_fxcCompile</Filter>
@@ -725,6 +728,9 @@
     </ClCompile>
     <ClCompile Include="ShaderUtility.cpp">
       <Filter>1_Platform\Windows\6_ShaderCompile\ShadeerUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="SPIRVReferences.cpp">
+      <Filter>2_Core\5_SPIRVReferences</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1092,10 +1098,10 @@
       <Filter>1_Platform\Windows\6_ShaderCompile\0_SPIR-VCompile</Filter>
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ReferenceData.h">
-      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-V_References\ReferencesData</Filter>
+      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-VReferences\ReferencesData</Filter>
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_References.h">
-      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-V_References</Filter>
+      <Filter>1_Platform\Windows\6_ShaderCompile\1_SPIR-VReferences</Filter>
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderCompileModule.h">
       <Filter>1_Platform\Windows\6_ShaderCompile\2_DXBC_fxcCompile</Filter>
@@ -1162,6 +1168,9 @@
     </ClInclude>
     <ClInclude Include="ShaderUtility.h">
       <Filter>1_Platform\Windows\6_ShaderCompile\ShadeerUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="SPIRVReferences.h">
+      <Filter>2_Core\5_SPIRVReferences</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
