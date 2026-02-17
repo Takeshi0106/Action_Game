@@ -27,16 +27,16 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 // Imgui用ヘッダー
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_win32.h"
-#include "imgui/imgui_impl_dx11.h"
+#include "4_Imgui/imgui.h"
+#include "4_Imgui/imgui_impl_win32.h"
+#include "4_Imgui/imgui_impl_dx11.h"
 #endif
 
 
 // =====================================================
 // 前方宣言を構造体として定義 　（ラッパー構造体）
 // =====================================================
-struct APPLICATIONHANDLE {
+struct APPLICATIONHANDLE { 
 private: // 直接アクセス不可
     HINSTANCE hInstance; // アプリケーションハンドル
 

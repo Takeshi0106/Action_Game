@@ -83,16 +83,33 @@ target_link_libraries(
 # Imgui 設定
 # --------------------------------------
 # Imgui のソースファイルをビルド対象に追加
-file(GLOB IMGUI_DIR "${SRC_DIR}/imgui/*.cpp")
+set(IMGUI_SOURCES
+    "${DEVELOPMENT_DIR}/4_Imgui/imgui.cpp"
+    "${DEVELOPMENT_DIR}/4_Imgui/imgui_demo.cpp"
+    "${DEVELOPMENT_DIR}/4_Imgui/imgui_draw.cpp"
+    "${DEVELOPMENT_DIR}/4_Imgui/imgui_tables.cpp"
+    "${DEVELOPMENT_DIR}/4_Imgui/imgui_widgets.cpp")
+
 # Imgui のソースファイルをビルド対象に追加
-target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_DIR})
+target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_SOURCES})
+
+# Windows でビルドする場合、Imgui のインクルードパスを追加
+if(WIN32)
+    # Win32 DX11 で追加
+    set(IMGUI_Win32DX11
+        "${DEVELOPMENT_DIR}/4_Imgui/imgui_impl_win32.cpp"
+        "${DEVELOPMENT_DIR}/4_Imgui/imgui_impl_dx11.cpp")
+
+    # Imgui のソースファイルをビルド対象に追加
+    target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_Win32DX11})
+endif()
 
 
 # --------------------------------------
 # SIPRV-Reflect 設定
 # --------------------------------------
 # SIRV-V のパスを設定
-set(SPIRV_REF_SRC "${SRC_DIR}/3_SPIRV/spirv_reflect.c")
+set(SPIRV_REF_SRC "${DEVELOPMENT_DIR}/3_SPIRV/spirv_reflect.c")
 # SPIR-V Reflect のソースファイルをビルド対象に追加
 add_library(SPIRV_REF_C STATIC "${SPIRV_REF_SRC}")  
 
@@ -109,6 +126,14 @@ endif()
 
 # SPIR-V Reflect ライブラリをプロジェクトにリンク
 target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_C)
+
+# --------------------------------
+# リファレンス実装の追加
+# --------------------------------
+# SPIR-V Reflect のソースファイルをビルド対象に追加
+set(SPIRV_REF "${DEVELOPMENT_DIR}/3_SPIRV/SPIRVReferences.cpp")
+# 既存ターゲットにソースを追加
+target_sources(${PROJECT_NAME} PRIVATE ${SPIRV_REF})
 
 
 # --------------------------------------

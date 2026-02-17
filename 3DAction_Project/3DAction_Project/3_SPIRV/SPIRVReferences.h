@@ -11,9 +11,9 @@
 // ヘッダー
 // =========================================
 // 文字列ヘッダー
-#include "UTF8_String.h"
+#include "../UTF8_String.h"
 // バイナリーデータヘッダー
-#include "BinaryView.h"
+#include "../BinaryView.h"
 
 
 // =========================================
@@ -34,11 +34,13 @@ private:
 	const String kShaderName = u8"ShaderName : ";
 
 	// 入力レイアウト
+	const String kIL = u8"InputLayout : ";
 	const String kILName = u8"ILName : ";
 	const String kILIndex = u8"ILIndex : ";
 	const String kILFormat = u8"ILFormat : ";
 
 	// 定数バッファ
+	const String kCBuffer = u8"ConstantBuffer : ";
 	const String kCBName = u8"CBName : ";
 	const String kRegisterNumber = u8"RegisterNumber : ";
 	const String kCBSize = u8"CBSize : ";
