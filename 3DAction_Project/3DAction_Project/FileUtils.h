@@ -24,7 +24,7 @@
 namespace FileUtis {
 	// 書き出すファイル
 	bool WriteStringFile(const String& filePath, const BinaryView& data);
-	// 読み込むファイル
+	// 読み込むファイル (文字列として読み込む)
 	bool ReadStringFile(const String& path, String& data);
 }
 
