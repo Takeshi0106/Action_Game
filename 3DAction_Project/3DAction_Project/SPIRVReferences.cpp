@@ -44,6 +44,5 @@ bool SPIRVReferences::WriteSPIRVReflectionInfo(const String& _shaderName, const 
 
 	// SPIR-Vリフレクション情報をファイルに書き出す
 
-
 	return true;
 }

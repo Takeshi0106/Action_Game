@@ -80,6 +80,15 @@ target_link_libraries(
 
 
 # --------------------------------------
+# Imgui 設定
+# --------------------------------------
+# Imgui のソースファイルをビルド対象に追加
+file(GLOB IMGUI_DIR "${SRC_DIR}/imgui/*.cpp")
+# Imgui のソースファイルをビルド対象に追加
+target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_DIR})
+
+
+# --------------------------------------
 # SIPRV-Reflect 設定
 # --------------------------------------
 # SIRV-V のパスを設定
