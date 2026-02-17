@@ -424,6 +424,9 @@
     <Filter Include="2_Core\5_SPIRVReferences">
       <UniqueIdentifier>{b2748fd1-0ece-404a-9d37-c7efc835fedf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2_Core\5_SPIRVReferences\spirv_reflect">
+      <UniqueIdentifier>{19ca4d23-f7dc-4148-9baf-88433e08d753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -731,6 +734,9 @@
     </ClCompile>
     <ClCompile Include="SPIRVReferences.cpp">
       <Filter>2_Core\5_SPIRVReferences</Filter>
+    </ClCompile>
+    <ClCompile Include="3_SPIRV\spirv_reflect.c">
+      <Filter>2_Core\5_SPIRVReferences\spirv_reflect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1171,6 +1177,9 @@
     </ClInclude>
     <ClInclude Include="SPIRVReferences.h">
       <Filter>2_Core\5_SPIRVReferences</Filter>
+    </ClInclude>
+    <ClInclude Include="3_SPIRV\spirv_reflect.h">
+      <Filter>2_Core\5_SPIRVReferences\spirv_reflect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

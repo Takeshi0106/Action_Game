@@ -182,6 +182,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_VertexBufferManager.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewData.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewManager.cpp" />
+    <ClCompile Include="3_SPIRV\spirv_reflect.c" />
     <ClCompile Include="AABBTree.cpp" />
     <ClCompile Include="AssetLogger.cpp" />
     <ClCompile Include="BaseCamera.cpp" />
@@ -282,6 +283,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_VertexBufferManager.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewData.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewManager.h" />
+    <ClInclude Include="3_SPIRV\spirv_reflect.h" />
     <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="AABBNode.h" />
     <ClInclude Include="AABBTree.h" />
