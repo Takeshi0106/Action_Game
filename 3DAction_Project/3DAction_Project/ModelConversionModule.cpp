@@ -187,27 +187,36 @@ bool ModelConversionModule::ModelLoad(
 		// 領域確保
 		vtx.resize(scene->mMeshes[i]->mNumVertices);
 
+		// メッシュへの参照を作成 (コードを短くするため)
+		const auto& meshRef = *scene->mMeshes[i];
+
 		// 頂点情報の作成
 		for (unsigned int j = 0; j < vtx.size(); j++)
 		{
 			// 位置
-			aiVector3D pos = scene->mMeshes[i]->mVertices[j];
+			Vector3 pos{ meshRef.mVertices[j].x,meshRef.mVertices[j].y,meshRef.mVertices[j].z };
+
 			// 法線　情報がなければ0.0f
-			aiVector3D normal = scene->mMeshes[i]->HasNormals() ?
-				scene->mMeshes[i]->mNormals[j] : aiVector3D(0.0f, 0.0f, 0.0f);
+			Vector3 normal = meshRef.HasNormals() ?
+				Vector3(meshRef.mNormals[j].x, meshRef.mNormals[j].y, meshRef.mNormals[j].z)
+				: Vector3(0.0f, 0.0f, 0.0f);
+
 			// UV　情報がなければ0.0f
-			aiVector3D uv = scene->mMeshes[i]->HasTextureCoords(0) ?
-				scene->mMeshes[i]->mTextureCoords[0][j] : aiVector3D(0.0f, 0.0f, 0.0f);
+			Vector2 uv = meshRef.HasTextureCoords(0) ?
+				Vector2(meshRef.mTextureCoords[0][j].x, meshRef.mTextureCoords[0][j].y)
+				: Vector2(0.0f, 0.0f);
+			
 			// 頂点カラー 情報がなければ白
-			aiColor4D color = scene->mMeshes[i]->HasVertexColors(0) ?
-				scene->mMeshes[i]->mColors[0][j] : aiColor4D(1.0f, 1.0f, 1.0f, 1.0f);
+			Color color = meshRef.HasVertexColors(0) ?
+				Color(meshRef.mColors[0][j].r, meshRef.mColors[0][j].g, meshRef.mColors[0][j].b, meshRef.mColors[0][j].a)
+				: Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 			// 値を設定
 			vtx[j] = {
-				Vector3(pos.x, pos.y, pos.z),
-				Vector3(normal.x, normal.y, normal.z),
-				Vector2(uv.x, uv.y),
-				Color(color.r,color.g,color.b,color.a) };
+				pos,
+				normal,
+				uv,
+				color };
 		}
 
 		// メッシュデータに設定
