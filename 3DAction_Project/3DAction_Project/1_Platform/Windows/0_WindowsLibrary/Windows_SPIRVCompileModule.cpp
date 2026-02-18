@@ -22,7 +22,7 @@
 // ==============================================
 // HLSL を SPIR-V に変換する
 // ==============================================
-bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslPath)
+bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
 {
 	// DXCユーティリティ
 	Microsoft::WRL::ComPtr<IDxcUtils> utils;
@@ -34,7 +34,11 @@ bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslPath)
 	Microsoft::WRL::ComPtr<IDxcResult> result;
 
 	// ファイルシステムパス取得
-    std::filesystem::path shaderPath = _hlslPath.GetU8String();
+    std::filesystem::path shaderPath = 
+		std::filesystem::path(kHlslFolderPath.GetU8String()) /
+        (_hlslName.GetU8String() + kHlslExtension.GetU8String());
+
+    shaderPath = shaderPath.generic_string();
 
     // DXCインスタンス作成
     HRESULT hr = DxcCreateInstance(
@@ -103,6 +107,9 @@ bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslPath)
     std::filesystem::path outputPath =
         std::filesystem::path(kSPIRVFolderPath.GetU8String()) /
 		(shaderPath.stem().u8string() + kSPIRVExtension.GetU8String());
+
+	// 区切り文字を統一
+	outputPath = outputPath.generic_string();
 
     // 念のため変数に代入
     std::wstring outputPathW = outputPath.wstring();

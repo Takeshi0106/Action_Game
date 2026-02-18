@@ -16,8 +16,6 @@
 // =========================================
 // 文字列ヘッダー
 #include "../UTF8_String.h"
-// バイナリーデータヘッダー
-#include "../BinaryView.h"
 
 
 // =========================================
@@ -26,10 +24,16 @@
 class SPIRVReferenctModule final
 {
 private:
+	// SPIR-V保存先フォルダー名
+	const String& kSPIRVFolderPath;
 	// SPIR-Vリフレクション情報の保存先パス
 	const String& kSPIRVReflectionInfoFolderPath;
+
+
 	// SPIR-Vリフレクション情報の拡張子
 	const String kSPIRVReflectionInfoExtension = u8".txt";
+	// SPIR-Vの拡張子
+	const String kSPIRVExtension = u8".spv";
 
 	// -----------------------------------
 	// 書き出し用
@@ -54,16 +58,19 @@ public:
 	// ----------------------------------------
 	// コンストラクタ・デストラクタ
 	// ----------------------------------------
-	SPIRVReferenctModule(const String& _path) 
-		: kSPIRVReflectionInfoFolderPath(_path) {
+	SPIRVReferenctModule(
+		const String& _spirvPath,
+		const String& _refPath)
+		:kSPIRVFolderPath(_spirvPath),
+		kSPIRVReflectionInfoFolderPath(_refPath) {
 	}
+
 	~SPIRVReferenctModule() = default;
 
 	// ----------------------------------------
 	// SPIR-Vのリフレクション情報を書き出すクラス
 	// ----------------------------------------
 	bool WriteSPIRVReflectionInfo(
-		const String& _shaderName,
-		const BinaryView& _binaly);
+		const String& _shaderName);
 };
 

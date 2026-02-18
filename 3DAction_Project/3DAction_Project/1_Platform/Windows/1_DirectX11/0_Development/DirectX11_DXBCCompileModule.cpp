@@ -45,86 +45,66 @@ bool OutputCompileShader(
 // =====================================
 // コンパイルチェック
 // =====================================
-void DirectX11_DXBCCompileModule::ShaderCompil(
-	const String& _hlslFolderPath,
+bool DirectX11_DXBCCompileModule::ShaderCompil(
+	const String& _hlslName,
 	const DX11_CompileMode _mode)
 {
 	// ファイルシステムのパスを取得
-	std::filesystem::path currentDirectory = _hlslFolderPath.GetU8String();
+	std::filesystem::path hlslPath =
+		std::filesystem::path(khlslPath.GetU8String()) /
+		(_hlslName.GetU8String() + kHlslExtension.GetU8String());
 
-	// .hlslファイル数を見積もる
-	size_t shaderFileCount = std::count_if(
-		std::filesystem::directory_iterator(currentDirectory),
-		std::filesystem::directory_iterator{},
-		[this](const auto& entry) {
-			return entry.is_regular_file() && entry.path().extension() == (std::filesystem::path)kHlslExtension.GetU8String(); 
-		});
+	// コンパイルパスを作成
+	std::filesystem::path compilePath =
+		std::filesystem::path(kCompilPath.GetU8String()) /
+		(hlslPath.filename().stem().u8string() +
+			kCompilExtension.GetU8String());
 
-	// インデックス
-	int hlslCount = 0;
+	// 区切り文字を統一
+	hlslPath = hlslPath.generic_string();
+	compilePath = compilePath.generic_string();
 
-	// .hlslファイルを探す処理
-	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory))
-	{
-		// 階層内の全てのファイルをを所得して、ファイルでなかったり、拡張子が違ったりすれば次のループへ
-		if (!entry.is_regular_file() || entry.path().extension() != (std::filesystem::path)khlslPath.GetU8String()) { continue; }
-
-		// 念のためチェック
-		if ((int)shaderFileCount < hlslCount) {
-			ErrorLog::OutputToConsole(u8".hlslファイルの数が一致しません");
-		}
-
-		// .hlslのパスをを取得
-		std::filesystem::path hlslPath = entry.path();
-		// コンパイルパスを作成
-		std::filesystem::path compilePath =
-			std::filesystem::path(kCompilPath.GetU8String()) /
-			(hlslPath.filename().stem().u8string() +
-				kCompilExtension.GetU8String());
-
-		// 区切り文字を統一
-		hlslPath = hlslPath.generic_string();
-		compilePath = compilePath.generic_string();
-
-		// シェーダーのコンパイルする必要があるかのチェック
-		if (!IsCompileCheck(hlslPath, compilePath)) {
-			continue;
-		}
-
-		// シェーダーの種類を判定
-		SETSHADERTYPE type = ShaderUtility::GetShaderTypeFromFileName(hlslPath.filename().u8string());
-
-		switch (type)
-		{
-			case SETSHADERTYPE::VERTEXSHADER:		
-				// 頂点シェーダーとしてコンパイル
-				if (!OutputCompileShader(hlslPath, compilePath, "main", "vs_5_0", _mode)) {
-					ErrorLog::OutputToConsole(u8"頂点シェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
-				}
-				break;
-
-			case SETSHADERTYPE::PIXSELSHADER:
-				// ピクセルシェーダーとしてコンパイル
-				if (!OutputCompileShader(hlslPath, compilePath, "main", "ps_5_0", _mode)) {
-					ErrorLog::OutputToConsole(u8"ピクセルシェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
-				}
-				break;
-
-			case SETSHADERTYPE::CONPUTESHADER:
-				// コンピュートシェーダーとしてコンパイル
-				if (!OutputCompileShader(hlslPath, compilePath, "main", "cs_5_0", _mode)) {
-					ErrorLog::OutputToConsole(u8"コンピュートシェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
-				}
-				break;
-
-			default:
-				ErrorLog::OutputToConsole(hlslPath.u8string() + u8" : シェーダーの種類が判定できませんでした");
-				break;
-		}
-
-		// カウントを増やす
-		hlslCount++;
+	// シェーダーのコンパイルする必要があるかのチェック
+	if (!IsCompileCheck(hlslPath, compilePath)) {
+		return false;
 	}
+
+	// シェーダーの種類を判定
+	SETSHADERTYPE type = ShaderUtility::GetShaderTypeFromFileName(hlslPath.filename().u8string());
+
+	switch (type)
+	{
+	case SETSHADERTYPE::VERTEXSHADER:
+		// 頂点シェーダーとしてコンパイル
+		if (!OutputCompileShader(hlslPath, compilePath, "main", "vs_5_0", _mode)) {
+			ErrorLog::OutputToConsole(u8"頂点シェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
+			return false;
+		}
+		break;
+
+	case SETSHADERTYPE::PIXSELSHADER:
+		// ピクセルシェーダーとしてコンパイル
+		if (!OutputCompileShader(hlslPath, compilePath, "main", "ps_5_0", _mode)) {
+			ErrorLog::OutputToConsole(u8"ピクセルシェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
+			return false;
+		}
+		break;
+
+	case SETSHADERTYPE::CONPUTESHADER:
+		// コンピュートシェーダーとしてコンパイル
+		if (!OutputCompileShader(hlslPath, compilePath, "main", "cs_5_0", _mode)) {
+			ErrorLog::OutputToConsole(u8"コンピュートシェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
+			return false;
+		}
+		break;
+
+	default:
+		ErrorLog::OutputToConsole(hlslPath.u8string() + u8" : シェーダーの種類が判定できませんでした");
+		return false;
+		break;
+	}
+
+	return true;
 }
 
 

@@ -12,6 +12,8 @@
 #include "../FileUtils.h"
 // セーブロード補助関数
 #include "../SaveLoadUtils.h"
+// バイナリーデータ
+#include "../BinaryData.h"
 // エラーログ出力関数
 #include "../ReportMessage.h"
 // リファレンスヘッダー
@@ -23,19 +25,32 @@ extern "C"{
 // =========================================
 // SPIR-Vリファレンス書き出し関数
 // =========================================
-bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName, const BinaryView& _binaly)
+bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 {
 	// SPIR-Vリフレクション情報の保存先パスを作成
 	std::filesystem::path savePath = std::filesystem::path(kSPIRVReflectionInfoFolderPath.GetU8String()) /
 		(_shaderName + kSPIRVReflectionInfoExtension).GetU8String();
+
+	// SPIR-V 保存先パスを作成
+	std::filesystem::path spirvPath = std::filesystem::path(kSPIRVFolderPath.GetU8String()) /
+		(_shaderName + kSPIRVExtension).GetU8String();
+
+	// バイナリーデータ取得
+	BinaryData binaryData;
+
+	// SPIR-V を取得する
+	if (!FileUtis::Binary::ReadBinaryFile(spirvPath.u8string(), binaryData)) {
+		ErrorLog::OutputToConsole(u8"SPIR-Vファイルの読み込みに失敗しました。");
+		return false;
+	}
 
 	// SPIR-Vリフレクション情報を取得
 	SpvReflectShaderModule module;
 
 	// SPIR-Vリフレクション情報の取得
 	SpvReflectResult result = spvReflectCreateShaderModule(
-		_binaly.GetSize(),
-		_binaly.GetData(),
+		binaryData.GetSize(),
+		binaryData.GetData(),
 		&module);
 
 	// エラーチェック

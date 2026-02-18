@@ -62,7 +62,7 @@ public:
 	// --------------------------------
 	// メンバー関数
 	// --------------------------------
-	void ShaderCompil(
-		const String& _hlslFolderPath,
+	bool ShaderCompil(
+		const String& _hlslName,
 		const DX11_CompileMode _mode);
 };
