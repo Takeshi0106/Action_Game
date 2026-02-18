@@ -23,7 +23,7 @@
 // =========================================
 // クラス
 // =========================================
-class SPIRVReferences final
+class SPIRVReferenctModule final
 {
 private:
 	// SPIR-Vリフレクション情報の保存先パス
@@ -54,10 +54,10 @@ public:
 	// ----------------------------------------
 	// コンストラクタ・デストラクタ
 	// ----------------------------------------
-	SPIRVReferences(const String& _path) 
+	SPIRVReferenctModule(const String& _path) 
 		: kSPIRVReflectionInfoFolderPath(_path) {
 	}
-	~SPIRVReferences() = default;
+	~SPIRVReferenctModule() = default;
 
 	// ----------------------------------------
 	// SPIR-Vのリフレクション情報を書き出すクラス

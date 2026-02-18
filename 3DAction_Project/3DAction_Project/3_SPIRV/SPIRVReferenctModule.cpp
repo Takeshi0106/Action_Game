@@ -3,7 +3,7 @@
 // ヘッダー
 // =========================================
 // 必須ヘッダー
-#include "SPIRVReferences.h"
+#include "SPIRVReferenctModule.h"
 // ファイルシステム
 #include <filesystem>
 // ログ出力
@@ -23,7 +23,7 @@ extern "C"{
 // =========================================
 // SPIR-Vリファレンス書き出し関数
 // =========================================
-bool SPIRVReferences::WriteSPIRVReflectionInfo(const String& _shaderName, const BinaryView& _binaly)
+bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName, const BinaryView& _binaly)
 {
 	// SPIR-Vリフレクション情報の保存先パスを作成
 	std::filesystem::path savePath = std::filesystem::path(kSPIRVReflectionInfoFolderPath.GetU8String()) /

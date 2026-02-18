@@ -160,6 +160,8 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClCompile Include="1_Platform\Windows\0_WindowsLibrary\Windows_Vector2.cpp" />
     <ClCompile Include="1_Platform\Windows\0_WindowsLibrary\Windows_Vector3.cpp" />
     <ClCompile Include="1_Platform\Windows\0_WindowsLibrary\Windows_Vector4.cpp" />
+    <ClCompile Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DevelopmentCompileModule.cpp" />
+    <ClCompile Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DXBCCompileModule.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ConstantBufferData.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ConstantBufferManager.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_DrawCreate.cpp" />
@@ -171,7 +173,6 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ResourceManager.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerData.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerManager.cpp" />
-    <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderCompileModule.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderData.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderManager.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_Texture2DBufferManager.cpp" />
@@ -182,7 +183,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_VertexBufferManager.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewData.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewManager.cpp" />
-    <ClCompile Include="3_SPIRV\SPIRVReferences.cpp" />
+    <ClCompile Include="3_SPIRV\SPIRVReferenctModule.cpp" />
     <ClCompile Include="3_SPIRV\spirv_reflect.c" />
     <ClCompile Include="4_Imgui\imgui.cpp" />
     <ClCompile Include="4_Imgui\imgui_demo.cpp" />
@@ -260,6 +261,8 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
   <ItemGroup>
     <ClInclude Include="1_Platform\Windows\0_WindowsLibrary\WindowsMath_Utiles.h" />
     <ClInclude Include="1_Platform\Windows\0_WindowsLibrary\Windows_SPIRVCompileModule.h" />
+    <ClInclude Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DevelopmentCompileModule.h" />
+    <ClInclude Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DXBCCompileModule.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ConstantBufferData.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ConstantBufferManager.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_DrawCreate.h" />
@@ -271,7 +274,6 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ResourceManager.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerData.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerManager.h" />
-    <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderCompileModule.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderData.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ShaderManager.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_Texture2DBufferManager.h" />
@@ -283,7 +285,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_VertexBufferManager.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewData.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ViewManager.h" />
-    <ClInclude Include="3_SPIRV\SPIRVReferences.h" />
+    <ClInclude Include="3_SPIRV\SPIRVReferenctModule.h" />
     <ClInclude Include="3_SPIRV\spirv_reflect.h" />
     <ClInclude Include="4_Imgui\imconfig.h" />
     <ClInclude Include="4_Imgui\imgui.h" />

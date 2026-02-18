@@ -131,7 +131,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_C)
 # リファレンス実装の追加
 # --------------------------------
 # SPIR-V Reflect のソースファイルをビルド対象に追加
-set(SPIRV_REF "${DEVELOPMENT_DIR}/3_SPIRV/SPIRVReferences.cpp")
+set(SPIRV_REF "${DEVELOPMENT_DIR}/3_SPIRV/SPIRVReferenctModule.cpp")
 # 既存ターゲットにソースを追加
 target_sources(${PROJECT_NAME} PRIVATE ${SPIRV_REF})
 
@@ -162,16 +162,20 @@ endif()
 # Windows専用のDirectXソースを追加
 if (WIN32)
     # Windows ライブラリソースを追加
-    file(GLOB DX_LIB_SRC "${SRC_DIR}/1_Platform/Windows/0_WindowsLibrary/*.cpp")
+    file(GLOB DX_LIB_SRC "${DEVELOPMENT_DIR}/1_Platform/Windows/0_WindowsLibrary/*.cpp")
     # Windows DirectX11 APIソースを追加
-    file(GLOB DX_API_SRC "${SRC_DIR}/1_Platform/Windows/1_DirectX11/*.cpp")
+    file(GLOB DX_API_SRC "${DEVELOPMENT_DIR}/1_Platform/Windows/1_DirectX11/*.cpp")
 
     # 既存ターゲットにソースを追加
     target_sources(${PROJECT_NAME} PRIVATE ${DX_LIB_SRC} ${DX_API_SRC})
 
+ # 開発時(Debug時のみに使用する)ソース追加
+    file(GLOB DX_DEV_SRC "${DEVELOPMENT_DIR}/1_Platform/Windows/1_DirectX11/0_Development/*.cpp")
+
     # デバッグ用に、追加したソースファイルを表示
     message(STATUS "DX_LIB_SRC = ${DX_LIB_SRC}")
     message(STATUS "DX_API_SRC = ${DX_API_SRC}")
+    message(STATUS "DX_DEV_SRC = ${DX_DEV_SRC}")
 endif()
 
 

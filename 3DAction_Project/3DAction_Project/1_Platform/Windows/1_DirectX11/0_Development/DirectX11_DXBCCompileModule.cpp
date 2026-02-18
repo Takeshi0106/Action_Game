@@ -3,7 +3,9 @@
 // ヘッダー
 // =====================================
 // 必須ヘッダー
-#include "DirectX11_ShaderCompileModule.h"
+#include "DirectX11_DXBCCompileModule.h"
+// シェーダー補助関数
+#include "../../../../ShaderUtility.h"
 // シェイダーコンパイル用ヘッダー
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
@@ -14,9 +16,9 @@
 // ファイルシステムヘッダー
 #include <filesystem>
 // 文字列
-#include "../../../UTF8_String.h"
+#include "../../../../UTF8_String.h"
 // デバッグ情報ややエラー出力用
-#include "../../../ReportMessage.h"
+#include "../../../../ReportMessage.h"
 
 
 // =====================================
@@ -27,31 +29,24 @@ bool IsCompileCheck(
 	const std::filesystem::path& _hlslPath, 
 	const std::filesystem::path& _compilePath);
 
-// シェーダーを判定してコンパイル依頼する関数
-bool Chacke_ShaderCompaile(
-	const std::filesystem::path _hlslPath, 
-	const std::filesystem::path _compilePath, 
-	Microsoft::WRL::ComPtr<ID3DBlob>& blob);
-
 // シェーダーをコンパイルして出力する関数
 bool OutputCompileShader(
 	const std::filesystem::path _hlslPath,
 	const std::filesystem::path _compilePath,
-	const String& entryPoint,
-	const String& shaderTypeModel,
-	Microsoft::WRL::ComPtr<ID3DBlob>& blob);
+	const char* entryPoint,
+	const char* shaderTypeModel,
+	const DX11_CompileMode& mode);
 
 
 // =====================================
 // コンパイルチェック
 // =====================================
-#if defined(_DEBUG) || defined(DEBUG)
-void DirectX11_ShaderCompileModule::ShaderCompil()
+void DirectX11_DXBCCompileModule::ShaderCompil(
+	const String& _hlslFolderPath,
+	const DX11_CompileMode _mode)
 {
-	// このソースコードのパスを取得
-	std::filesystem::path currentFilePath = __FILE__;
-	// パスから自分の階層だけを抜き取る
-	std::filesystem::path currentDirectory = currentFilePath.parent_path();
+	// ファイルシステムのパスを取得
+	std::filesystem::path currentDirectory = _hlslFolderPath.GetU8String();
 
 	// .hlslファイル数を見積もる
 	size_t shaderFileCount = std::count_if(
@@ -62,7 +57,7 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 		});
 
 	// インデックス
-	uint16_t hlslCount = 0;
+	int hlslCount = 0;
 
 	// .hlslファイルを探す処理
 	for (const auto& entry : std::filesystem::directory_iterator(currentDirectory))
@@ -71,51 +66,62 @@ void DirectX11_ShaderCompileModule::ShaderCompil()
 		if (!entry.is_regular_file() || entry.path().extension() != (std::filesystem::path)khlslPath.GetU8String()) { continue; }
 
 		// 念のためチェック
-		if ((uint16_t)shaderFileCount < hlslCount) {
+		if ((int)shaderFileCount < hlslCount) {
 			ErrorLog::OutputToConsole(u8".hlslファイルの数が一致しません");
 		}
 
 		// .hlslのパスをを取得
 		std::filesystem::path hlslPath = entry.path();
 		// コンパイルパスを作成
-		std::filesystem::path compilePath = 
-			std::filesystem::path(kCompilPath.GetU8String()) / 
-			(hlslPath.filename().stem().u8string() + 
-			kCompilExtension.GetU8String());
+		std::filesystem::path compilePath =
+			std::filesystem::path(kCompilPath.GetU8String()) /
+			(hlslPath.filename().stem().u8string() +
+				kCompilExtension.GetU8String());
 
 		// 区切り文字を統一
 		hlslPath = hlslPath.generic_string();
 		compilePath = compilePath.generic_string();
 
 		// シェーダーのコンパイルする必要があるかのチェック
-		if (!IsCompileCheck(hlslPath, compilePath)) { 
-			continue; 
+		if (!IsCompileCheck(hlslPath, compilePath)) {
+			continue;
 		}
 
-		// シェーダーコンパイル　解析(リファレンス)を行うため、Blobを用意
-		Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
+		// シェーダーの種類を判定
+		SETSHADERTYPE type = ShaderUtility::GetShaderTypeFromFileName(hlslPath.filename().u8string());
 
-		// シェーダーの種類を判定してコンパイル依頼
-		if (!Chacke_ShaderCompaile(hlslPath, compilePath, shaderBlob)) {
-			ErrorLog::OutputToConsole(u8"シェーダーのコンパイルに失敗しました: " + hlslPath.u8string());
-			continue;
+		switch (type)
+		{
+			case SETSHADERTYPE::VERTEXSHADER:		
+				// 頂点シェーダーとしてコンパイル
+				if (!OutputCompileShader(hlslPath, compilePath, "main", "vs_5_0", _mode)) {
+					ErrorLog::OutputToConsole(u8"頂点シェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
+				}
+				break;
+
+			case SETSHADERTYPE::PIXSELSHADER:
+				// ピクセルシェーダーとしてコンパイル
+				if (!OutputCompileShader(hlslPath, compilePath, "main", "ps_5_0", _mode)) {
+					ErrorLog::OutputToConsole(u8"ピクセルシェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
+				}
+				break;
+
+			case SETSHADERTYPE::CONPUTESHADER:
+				// コンピュートシェーダーとしてコンパイル
+				if (!OutputCompileShader(hlslPath, compilePath, "main", "cs_5_0", _mode)) {
+					ErrorLog::OutputToConsole(u8"コンピュートシェーダー " + hlslPath.u8string() + u8" のコンパイル失敗");
+				}
+				break;
+
+			default:
+				ErrorLog::OutputToConsole(hlslPath.u8string() + u8" : シェーダーの種類が判定できませんでした");
+				break;
 		}
 
 		// カウントを増やす
 		hlslCount++;
-
-		// 解放
-		shaderBlob.Reset();
 	}
 }
-
-#else
-void DirectX11_ShaderCompileModule::ShaderCompil()
-{
-	// リリースビルドでは何もしない
-}
-
-#endif
 
 
 // =====================================
@@ -142,59 +148,17 @@ bool IsCompileCheck(
 
 
 // =====================================
-// シェーダーコンパイル判定関数
-// =====================================
-bool Chacke_ShaderCompaile(
-	const std::filesystem::path _hlslPath,
-	const std::filesystem::path _compilePath, 
-	Microsoft::WRL::ComPtr<ID3DBlob>& blob)
-{
-
-	// ファイルの最初の名前でシェーダー判定
-	if (_hlslPath.stem().u8string().rfind(u8"PS_", 0) == 0)
-	{
-		// コンパイルして書き出す
-		if (!OutputCompileShader(_hlslPath, _compilePath, u8"main", u8"ps_5_0", blob)) {
-			ErrorLog::OutputToConsole(u8"ピクセルシェーダー " + _hlslPath.u8string() + u8" のコンパイル失敗");
-			return false;
-		}
-	}
-	else if (_hlslPath.stem().u8string().rfind(u8"VS_", 0) == 0)
-	{
-		// コンパイルして書き出す
-		if (!OutputCompileShader(_hlslPath, _compilePath, u8"main", u8"vs_5_0", blob)) {
-			ErrorLog::OutputToConsole(u8"頂点シェーダー " + _hlslPath.u8string() + u8" のコンパイル失敗");
-			return false;
-		}
-	}
-	else if (_hlslPath.stem().string().rfind("CS_", 0) == 0)
-	{
-		// コンパイルして書き出す
-		if (!OutputCompileShader(_hlslPath, _compilePath, u8"main", u8"cs_5_0", blob)) {
-			ErrorLog::OutputToConsole(u8"コンピュートシェーダ " + _hlslPath.u8string() + u8" のコンパイル失敗");
-			return false;
-		}
-	}
-	else
-	{
-		ErrorLog::OutputToConsole(_hlslPath.u8string() + u8" : 先頭にシェーダーの種類が記載されていません");
-		return  false;
-	}
-
-	return true;
-}
-
-
-// =====================================
 // シェーダーをコンパイルして出力する関数
 // =====================================
 bool OutputCompileShader(
 	const std::filesystem::path _hlslPath,
 	const std::filesystem::path _compilepath,
-	const String& entryPoint,
-	const String& shaderTypeModel,
-	Microsoft::WRL::ComPtr<ID3DBlob>& blob)
+	const char* _entryPoint,
+	const char* _shaderTypeModel,
+	const DX11_CompileMode& _mode)
 {
+	// コンパイルしたシェーダーを取得する
+	Microsoft::WRL::ComPtr<ID3DBlob> blob = nullptr;
 	// エラーを取得する
 	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;
 
@@ -202,21 +166,25 @@ bool OutputCompileShader(
 	// コンパイル時に厳しくチェックするフラグ
 	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 
-#if defined(DEBUG) || defined(_DEBUG)
-	// デバッグ情報を付けるフラグ
-	dwShaderFlags |= D3DCOMPILE_DEBUG;
-#else
-	// 最適化フラグ
-	dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
-#endif
+	// コンパイルモードによってフラグを切り替える
+	if (_mode == DX11_CompileMode::Debug)
+	{
+		// デバッグ情報を付けるフラグ
+		dwShaderFlags |= D3DCOMPILE_DEBUG;
+	}
+	else
+	{
+		// 最適化フラグ
+		dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+	}
 
 	// コンパイル
 	HRESULT hr = D3DCompileFromFile(
 		_hlslPath.wstring().c_str(),            // シェーダーのパス
 		nullptr,                                // GPUで使用するマクロ定義（ない場合nullptr）
 		D3D_COMPILE_STANDARD_FILE_INCLUDE,      // HLSLで他のHLSLを読み込むフラグ
-		reinterpret_cast<const char*>(entryPoint.GetU8Char()),                     // シェーダーないで最初に実行される関数の名前
-		reinterpret_cast<const char*>(shaderTypeModel.GetU8Char()),                // シェーダーの種類とバージョン
+		_entryPoint,                     // シェーダーないで最初に実行される関数の名前
+		_shaderTypeModel,                // シェーダーの種類とバージョン
 		dwShaderFlags,                          // コンパイルのフラグ
 		0,                                      // 今は何もないフラグ
 		blob.GetAddressOf(),                    // コンパイルしたシェーダーを取得する

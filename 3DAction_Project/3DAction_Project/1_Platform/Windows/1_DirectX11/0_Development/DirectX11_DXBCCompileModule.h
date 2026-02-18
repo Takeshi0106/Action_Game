@@ -3,8 +3,7 @@
 // =============================
 // クラス概要
 // DirectX11用シェーダーコンパイルモジュール
-// Debug : 同じ階層のシェーダーをコンパイルチェック
-// Release : hlslフォルダからコンパイルチェック
+// HLSLを入れているフォルダを指定して、シェーダーをコンパイルするクラス
 // fxc を使用してコンパイルしています。
 // =============================
 
@@ -13,13 +12,25 @@
 // ヘッダー
 // =============================
 // 文字列ヘッダー
-#include "../../../UTF8_String.h"
+#include "../../../../UTF8_String.h"
+// 固定整数ヘッダー
+#include <cstdint>
+
+
+// ============================
+// 列挙型定義
+// ============================
+enum class DX11_CompileMode : uint8_t
+{
+	Debug,
+	Release
+};
 
 
 // ============================
 // クラス
 // ============================
-class DirectX11_ShaderCompileModule final
+class DirectX11_DXBCCompileModule final
 {
 private:
 	// --------------------------------
@@ -38,18 +49,20 @@ public:
 	// --------------------------------
 	// コンストラクタ・デストラクタ
 	// --------------------------------
-	DirectX11_ShaderCompileModule(
+	DirectX11_DXBCCompileModule(
 		const String& _hlslPath,
 		const String& _compilPath) :
 		khlslPath(_hlslPath),
 		kCompilPath(_compilPath)
 	{
 	}
-	~DirectX11_ShaderCompileModule() = default;
+	~DirectX11_DXBCCompileModule() = default;
 
 
 	// --------------------------------
 	// メンバー関数
 	// --------------------------------
-	void ShaderCompil();
+	void ShaderCompil(
+		const String& _hlslFolderPath,
+		const DX11_CompileMode _mode);
 };
