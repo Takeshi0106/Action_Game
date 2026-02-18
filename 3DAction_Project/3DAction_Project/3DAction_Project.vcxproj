@@ -299,6 +299,7 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClInclude Include="AABBNode.h" />
     <ClInclude Include="AABBTree.h" />
     <ClInclude Include="BaseDrawCreate.h" />
+    <ClInclude Include="BinaryData.h" />
     <ClInclude Include="BinaryView.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="ColliderConfig.h" />

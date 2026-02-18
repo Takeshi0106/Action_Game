@@ -17,6 +17,10 @@
 #include <filesystem>
 // 文字列
 #include "../../../../UTF8_String.h"
+// バイナリーView
+#include "../../../../BinaryView.h"
+// 外部ファイルに書き出し読込関数
+#include "../../../../FileUtils.h"
 // デバッグ情報ややエラー出力用
 #include "../../../../ReportMessage.h"
 
@@ -196,40 +200,14 @@ bool OutputCompileShader(
 	}
 
 	// 書き出す内容を作成
-	std::string_view blobData(
-		static_cast<const char*>(blob->GetBufferPointer()),
+	BinaryView blobData(
+		blob->GetBufferPointer(),
 		blob->GetBufferSize()
 	);
 
-	// フォルダがない場合作成
-	if (!std::filesystem::exists(_compilepath.parent_path())) 
-	{
-		if (!std::filesystem::create_directories(_compilepath.parent_path())) 
-		{
-			ErrorLog::OutputToConsole(u8"ファイルが作成できませんでした");
-			return false;
-		}
-	}
+	// ファイルに書き出す
+	FileUtis::Binary::WriteBinaryFile(_compilepath.u8string(), blobData);
 
-	// バイナリモードで書き出し
-	// ファイルを開く
-	std::ofstream ofs(_compilepath, std::ios::binary | std::ios::out);
-	if (!ofs)
-	{
-		ErrorLog::OutputToConsole(u8"ファイルを開けませんでした: " + _compilepath.u8string());
-		return false;
-	}
-
-	// データを書き出す
-	ofs.write(blobData.data(), blobData.size());
-	if (!ofs)
-	{
-		ErrorLog::OutputToConsole(u8"ファイル書き込みに失敗しました: " + _compilepath.u8string());
-		return false;
-	}
-
-	// ファイルを閉じる
-	ofs.close();
 	// 解放
 	errorBlob.Reset();
 

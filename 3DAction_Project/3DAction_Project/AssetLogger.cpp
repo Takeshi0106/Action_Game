@@ -16,7 +16,7 @@
 // 外部ファイルに使用したオブジェクト名を入れる
 bool AssetLogger::WriteLog()
 {
-	if (!FileUtis::WriteStringFile(kAssetLogPath, m_UseObjectList.GetBinaryView())) {
+	if (!FileUtis::Text::WriteTextFile(kAssetLogPath, m_UseObjectList)) {
 		ErrorLog::OutputToConsole(u8"ログファイルの書出しに失敗しました");
 		return false;
 	}

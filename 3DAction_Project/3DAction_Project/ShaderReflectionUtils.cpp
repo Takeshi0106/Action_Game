@@ -51,7 +51,7 @@ namespace ShaderReflectionUtils
 		String allShaderInfo;
 
 		// ファイルパスの情報をStringに入れる処理
-		if (!FileUtis::ReadStringFile(kShader_ConstantInfoPath, allShaderInfo)) {
+		if (!FileUtis::Text::ReadTextFile(kShader_ConstantInfoPath, allShaderInfo)) {
 			ErrorLog::OutputToConsole(u8"リフレクション情報ロード失敗");
 			return false;
 		}
@@ -207,11 +207,8 @@ namespace ShaderReflectionUtils
 		}
 		data = SaveUtils::FormatBlock(kShaderStart, (int)shaderInfo.size(), data, 0);
 
-		// バイナリーデータ作成
-		BinaryView binaryView = data.GetBinaryView();
-
 		// ファイルに書出し
-		if (!FileUtis::WriteStringFile(kShaderInfoPath, binaryView)) {
+		if (!FileUtis::Text::WriteTextFile(kShaderInfoPath, data)) {
 			ErrorLog::OutputToConsole(u8"リファレンス情報を書き出すことに失敗しました");
 			return false;
 		}

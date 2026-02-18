@@ -74,7 +74,7 @@ namespace ShaderCompilerUtils
 			compileBlob->GetBufferSize());
 
 		// 外部ファイルに書出し
-		if (!FileUtis::WriteStringFile(outputPath.u8string(), blobData)) {
+		if (!FileUtis::Binary::WriteBinaryFile(outputPath.u8string(), blobData)) {
 			MessageBoxA(nullptr, "CSOファイルの書き込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
 		}
 

@@ -1193,6 +1193,9 @@
     <ClInclude Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DXBCCompileModule.h">
       <Filter>1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC\2_DXBC_fxcCompile</Filter>
     </ClInclude>
+    <ClInclude Include="BinaryData.h">
+      <Filter>2_Core\4_Library\2_Binary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VS_TriangleDebug.hlsl">

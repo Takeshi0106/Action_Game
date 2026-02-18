@@ -94,10 +94,7 @@ bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName, c
 	}
 
 	// ファイルに書き出す
-	BinaryView binaryView = reflectionInfo.GetBinaryView();
-
-	// ファイルに書き出す
-	if (!FileUtis::WriteStringFile(savePath.u8string(), binaryView)) {
+	if (!FileUtis::Text::WriteTextFile(savePath.u8string(), reflectionInfo)) {
 		ErrorLog::OutputToConsole(u8"SPIR-Vリフレクション情報の書き出しに失敗しました。");
 		return false;
 	}

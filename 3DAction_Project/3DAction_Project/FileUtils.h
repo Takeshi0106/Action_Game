@@ -15,16 +15,40 @@
 // ==================================
 // 文字列
 #include "UTF8_String.h"
-#include "BinaryView.h"
+
+
+// ==================================
+// 前方宣言
+// ==================================
+// 実態を持つバイナリーデータクラス
+class BinaryData;
+// バイナリーデータ参照クラス
+class BinaryView;
 
 
 // ==================================
 // 関数
 // ==================================
 namespace FileUtis {
-	// 書き出すファイル
-	bool WriteStringFile(const String& filePath, const BinaryView& data);
-	// 読み込むファイル (文字列として読み込む)
-	bool ReadStringFile(const String& path, String& data);
+	// ------------------------------------
+	// テキストファイル IO
+	// ------------------------------------
+	namespace Text {
+		// 書き出し
+		bool WriteTextFile(const String& filePath, const String& data);
+		// 読み込むファイル (文字列として読み込む)
+		bool ReadTextFile(const String& path, String& data);
+	}
+
+	
+	// ------------------------------------
+	// バイナリーデータ IO
+	// ------------------------------------
+	namespace Binary {
+		// 書き出し
+		bool WriteBinaryFile(const String& filePath, const BinaryView& data);
+		// 読込
+		bool ReadBinaryFile(const String& filePath, BinaryData& data);
+	}
 }
 
