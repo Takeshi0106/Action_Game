@@ -91,7 +91,7 @@ set(IMGUI_SOURCES
     "${DEVELOPMENT_DIR}/4_Imgui/imgui_widgets.cpp")
 
 # Imgui のソースファイルをビルド対象に追加
-target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_SOURCES})
+target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${IMGUI_SOURCES}>)
 
 # Windows でビルドする場合、Imgui のインクルードパスを追加
 if(WIN32)
@@ -101,7 +101,7 @@ if(WIN32)
         "${DEVELOPMENT_DIR}/4_Imgui/imgui_impl_dx11.cpp")
 
     # Imgui のソースファイルをビルド対象に追加
-    target_sources(${PROJECT_NAME} PRIVATE ${IMGUI_Win32DX11})
+    target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${IMGUI_Win32DX11}>)
 endif()
 
 
