@@ -16,11 +16,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 独自拡張機能を無効化
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# MSVC で Clang-CL を使用している場合、/std:c++20 を追加
-if(MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_compile_options(/std:c++20)
-endif()
-
 
 # --------------------------------------
 # MSVC・Clang-CL 時の設定
