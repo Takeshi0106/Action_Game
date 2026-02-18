@@ -80,14 +80,30 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 // =====================================================
 // コンストラクタ・デストラクタ
 // ===================================================== 
+#if defined(DEBUG) || defined(_DEBUG)
+    // コンストラクタ・デストラクタ
+PlatformWindowsSystem::PlatformWindowsSystem(
+    uint16_t _width, uint16_t _height,
+    const wchar_t* _windowClassName, const wchar_t* _windowName,
+    const DrawPathConfig& _config,
+    const DevelopmentPath& _devConfig) :
+    m_Width(_width), m_Height(_height),
+    m_WindowName(_windowName), m_WindowClassName(_windowClassName),
+    m_PathConfig(_config),
+    m_DevCompileModule(
+        _config.shaderSourcePath,
+        _config.shaderBinaryPath,
+        _devConfig.kSPIRVFolderPath,
+        _devConfig.kSPIRVReflectionInfoFolderPath) {
+}
+#else
 // コンストラクタ
 PlatformWindowsSystem::PlatformWindowsSystem(uint16_t _width, uint16_t _height,
     const wchar_t* WindowClassName, const wchar_t* WindowName,
     const DrawPathConfig& _config)
     :m_Width(_width), m_Height(_height), m_WindowName(WindowName), m_WindowClassName(WindowClassName), m_PathConfig(_config)
-{
-
-}
+{}
+#endif
 
 // デストラクタ
 PlatformWindowsSystem::~PlatformWindowsSystem()
@@ -228,6 +244,11 @@ void PlatformWindowsSystem::Uninit()
 // =====================================================
 bool PlatformWindowsSystem::GameInit()
 {
+#if defined(DEBUG) || defined(_DEBUG)
+	// シェーダーコンパイル
+    // m_DevCompileModule.ShaderCompile(DX11_CompileMode::Debug);
+#endif
+
     // 描画マネージャー作成
     m_DrawManager = std::make_unique<DirectX_DrawManager>(m_PathConfig);
     m_DrawManager->Init(m_Width,m_Height,m_WinInstance);

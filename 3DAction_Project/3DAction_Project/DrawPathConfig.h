@@ -14,6 +14,7 @@
 // ===================================
 // 定義
 // ===================================
+// 描画パス
 struct DrawPathConfig
 {
 	// シェーダーバイナリパス (.cso)
@@ -28,4 +29,12 @@ struct DrawPathConfig
     const String& texturePath;
 	// モデルパス
     const String& objModelPath;
+};
+
+// 開発用デバッグパス
+struct DevelopmentPath{
+    // SPIR-Vバイナリパス
+    const String& kSPIRVFolderPath;
+	// SPIR-Vリフレクション情報パス
+	const String& kSPIRVReflectionInfoFolderPath;
 };

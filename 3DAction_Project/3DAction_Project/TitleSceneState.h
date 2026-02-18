@@ -95,7 +95,7 @@ private:
 	// 地面惑星
 	const Hashed_String m_PlanetGroundModel = Hashed_String(u8"Planet_6");
 	const Matrix4x4 m_PlanetGroundMat =
-		(Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, -5.5f, 37.5f)) *
+		(Matrix4x4::CreateTranslationMatrix_LH(Vector3(0.0f, -36.5f, 16.5f)) *
 			Matrix4x4::CreateRotationYawPitchRollMatrix_LH(0.0f, 5.0f, 0.0f) *
 			Matrix4x4::CreateScalingMatrix_LH(Vector3(20.0f, 20.0f, 20.0f))).toGPU();
 

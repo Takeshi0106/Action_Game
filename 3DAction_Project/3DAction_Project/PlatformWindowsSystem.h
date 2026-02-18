@@ -19,6 +19,8 @@
 #include <memory>
 // 固定長整数ヘッダー
 #include <cstdint>
+// シェーダーコンパイルモジュール
+#include "1_Platform/Windows/1_DirectX11/0_Development/DirectX11_DevelopmentCompileModule.h"
 
 
 // =====================================================
@@ -55,6 +57,11 @@ private:
 	static std::unique_ptr<DirectX_DrawManager> m_DrawManager; // 描画マネージャー
 	static std::unique_ptr<DirectX_CursorController> m_CursorController; // カーソル制御クラス
 
+#if defined(DEBUG) || defined(_DEBUG)
+	// 開発用シェーダーコンパイルモジュール
+	DX11_DevelopmentCompileModule m_DevCompileModule;
+#endif
+
 	// オーバーライド関数
 	bool Init()       override; // 初期化処理
 	void GameLoop()   override; // ゲームループ
@@ -72,10 +79,18 @@ private:
 
 
 public:
+#if defined(DEBUG) || defined(_DEBUG)
+	// コンストラクタ・デストラクタ
+	PlatformWindowsSystem(uint16_t _width, uint16_t _height, 
+		const wchar_t* _windowClassName, const wchar_t* _windowName, 
+		const DrawPathConfig& _config,
+		const DevelopmentPath& _devConfig);
+#else
 	// コンストラクタ・デストラクタ
 	PlatformWindowsSystem(uint16_t _width, uint16_t _height, 
 		const wchar_t* _windowClassName, const wchar_t* _windowName, 
 		const DrawPathConfig& _config);
+#endif
 	~PlatformWindowsSystem();
 
 	// ゲッター

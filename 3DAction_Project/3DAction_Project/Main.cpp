@@ -54,6 +54,11 @@ namespace {
 		u8"0_Asset/Texture",
 		u8"0_Asset/ObjModel"
 	};
+
+	const DevelopmentPath DEV_PATH_Config = {
+		u8"99_DEV/SIRV",
+		u8"99_DEV/Reflection"
+	};
 }
 
 
@@ -71,10 +76,19 @@ int main(void)
 	std::unique_ptr<ActionGame> actionGame;
 	actionGame = std::make_unique<ActionGame>();
 
+
+#if defined(DEBUG) || defined(_DEBUG)
+	// ウィンドウズプラットフォームを作成
+	PlatformWindowsSystem system(SCREEN_WIDTH, SCREEN_HEIGHT,
+		WINDOW_NAME, WINDOW_CLASS_NAME,
+		PATH_CONFIG,
+		DEV_PATH_Config);
+#else
 	// ウィンドウズプラットフォームを作成
 	PlatformWindowsSystem system(SCREEN_WIDTH, SCREEN_HEIGHT,
 		WINDOW_NAME, WINDOW_CLASS_NAME,
 		PATH_CONFIG);
+#endif
 
 	system.Execute(actionGame.get()); // 起動
 
