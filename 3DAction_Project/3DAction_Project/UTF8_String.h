@@ -71,6 +71,11 @@ public:
 	bool IsEmpty() const noexcept;
 
 	// --------------------------------
+	// 文字列をクリアする
+	// --------------------------------
+	void Clear() noexcept;
+
+	// --------------------------------
 	// ASCII を UTF-8 に変換する関数
 	// --------------------------------
 	static String FromASCII(const char* ascii);

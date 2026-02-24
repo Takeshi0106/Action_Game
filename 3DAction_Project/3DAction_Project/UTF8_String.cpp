@@ -69,6 +69,14 @@ bool String::IsEmpty() const noexcept
 	return m_String.empty();
 }
 
+// ==================================
+// 文字列をクリアする
+// ==================================
+void String::Clear() noexcept
+{
+	m_String.clear();
+}
+
 
 // ==================================
 // ASCIIをutf8に変換する
