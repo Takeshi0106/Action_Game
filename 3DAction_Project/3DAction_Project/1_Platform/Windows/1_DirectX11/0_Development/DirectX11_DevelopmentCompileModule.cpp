@@ -46,37 +46,43 @@ bool DX11_DevelopmentCompileModule::ShaderCompile(const DX11_CompileMode _mode)
 		// 区切り文字を統一
 		hlslPath = hlslPath.generic_string();
 
-		// DXBCコンパイル
-		if (m_ShaderCompileModule.ShaderCompil(hlslPath.filename().stem().u8string(), _mode))
+		// シェーダーのコンパイル
+		if (!ShaderCompile(hlslPath.stem().u8string(), _mode)) 
 		{
-			// SPIR-Vコンパイル
-			if (!m_SPIRVCompileModule.SPIRVCompile(hlslPath.filename().stem().u8string())) 
-			{
-				// 外部ファイル削除
-				DeleteCompileShader(hlslPath.filename().stem().u8string());
-
-				ErrorLog::OutputToConsole(u8"SPIR-Vコンパイルに失敗しました。");
-				return false;
-			}
-
-			// SPIR-Vリファレンス書き出し
-			if (!m_SPIRVReferenceModule.WriteSPIRVReflectionInfo(hlslPath.filename().stem().u8string())) 
-			{
-				// 外部ファイル削除
-				DeleteCompileShader(hlslPath.filename().stem().u8string());
-
-				ErrorLog::OutputToConsole(u8"SPIR-Vリファレンスの書き出しに失敗しました。");
-				return false;
-			}
-		}
-		else 
-		{
-			// 外部ファイル削除
-			DeleteCompileShader(hlslPath.filename().stem().u8string());
-
-			ErrorLog::OutputToConsole(u8"DXBCコンパイルに失敗しました。");
+			// シェーダー削除
+			DeleteCompileShader(hlslPath.stem().u8string());
+			ErrorLog::OutputToConsole(u8"シェーダーのコンパイルに失敗しました: " + hlslPath.u8string());
 			return false;
 		}
+	}
+
+	return true;
+}
+
+
+// =============================================
+// シェーダーコンパイル関数
+// =============================================
+bool DX11_DevelopmentCompileModule::ShaderCompile(
+	const String& _hlslName, 
+	const DX11_CompileMode _mode)
+{
+	// DXBCコンパイル
+	if (!m_ShaderCompileModule.ShaderCompil(_hlslName, _mode)) {
+		ErrorLog::OutputToConsole(u8"DXBCコンパイルに失敗しました。");
+		return false;
+	}
+
+	// SPIR-Vコンパイル
+	if (!m_SPIRVCompileModule.SPIRVCompile(_hlslName)) {
+		ErrorLog::OutputToConsole(u8"SPIR-Vコンパイルに失敗しました。");
+		return false;
+	}
+
+	// SPIR-Vリファレンス書き出し
+	if (!m_SPIRVReferenceModule.WriteSPIRVReflectionInfo(_hlslName)) {
+		ErrorLog::OutputToConsole(u8"SPIR-Vリファレンスの書き出しに失敗しました。");
+		return false;
 	}
 
 	return true;

@@ -41,8 +41,11 @@ private:
 
 
 	// --------------------------------
-	// 外部ファイル削除関数
+	// プライベートメンバー関数
 	// --------------------------------
+	// シェーダーコンパイル関数
+	bool ShaderCompile(const String& _hlslName, const DX11_CompileMode _mode);
+	// コンパイルしたシェーダーの外部ファイルを削除する関数
 	bool DeleteCompileShader(const String& _hlslName);
 
 
