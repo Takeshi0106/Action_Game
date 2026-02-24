@@ -177,8 +177,6 @@ bool SPIRVReferenctModule::WriteTextRefarenceInfo(const String& _shaderName)
 		data,
 		1);
 
-	reflectionInfo = SaveUtils::FormatAnonymousBlock(reflectionInfo, 0);
-
 	// ファイルに書き出す
 	if (!FileUtis::Text::WriteTextFile(savePath.u8string(), reflectionInfo)) {
 		ErrorLog::OutputToConsole(u8"SPIR-Vリフレクション情報の書き出しに失敗しました。");
