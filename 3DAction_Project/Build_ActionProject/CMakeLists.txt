@@ -172,6 +172,7 @@ if (WIN32)
  # 開発時(Debug時のみに使用する)ソース追加
     file(GLOB DX_DEV_SRC "${DEVELOPMENT_DIR}/1_Platform/Windows/1_DirectX11/0_Development/*.cpp")
 
+    # Debugビルドのときのみ、開発用ソースを追加
     target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${DX_DEV_SRC}>)
 
     # デバッグ用に、追加したソースファイルを表示
