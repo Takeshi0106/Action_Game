@@ -77,9 +77,11 @@ bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
     }
 
 	// 出力先のディレクトリが存在しない場合は作成
-    if (!std::filesystem::create_directories(outputPath.parent_path())) {
-        ErrorLog::OutputToConsole(u8"出力先のディレクトリの作成に失敗しました: " + outputPath.parent_path().u8string());
-		return false;
+    if (!std::filesystem::exists(outputPath.parent_path())) {
+        if (!std::filesystem::create_directories(outputPath.parent_path())) {
+            ErrorLog::OutputToConsole(u8"出力先のディレクトリの作成に失敗しました: " + outputPath.parent_path().u8string());
+            return false;
+        }
     }
 
     // コマンド文字列作成
