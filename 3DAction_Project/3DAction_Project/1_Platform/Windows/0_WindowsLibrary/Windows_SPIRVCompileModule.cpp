@@ -24,13 +24,22 @@ bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
     // dxc.exe のパス
     std::filesystem::path dxcPath = "C:/0_Spirv/dxc/dxc.exe";
 
+	// 区切り文字を統一
 	dxcPath = dxcPath.generic_string();
+
+	// dxc.exe が存在するかチェック
+    if (!std::filesystem::exists(dxcPath))
+    {
+        ErrorLog::OutputToConsole(u8"dxc.exe が見つかりません");
+        return false;
+    }
 
 	// .hlslパス取得
     std::filesystem::path shaderPath = std::filesystem::absolute(
 		std::filesystem::path(kHlslFolderPath.GetU8String()) /
         (_hlslName.GetU8String() + kHlslExtension.GetU8String()));
 
+	// 区切り文字を統一
     shaderPath = shaderPath.generic_string();
 
     // 出力ファイルパス
@@ -65,6 +74,12 @@ bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
     default:
         ErrorLog::OutputToConsole(u8"シェーダータイプの判定に失敗しました。ファイル名を確認してください。");
         return false;
+    }
+
+	// 出力先のディレクトリが存在しない場合は作成
+    if (!std::filesystem::create_directories(outputPath.parent_path())) {
+        ErrorLog::OutputToConsole(u8"出力先のディレクトリの作成に失敗しました: " + outputPath.parent_path().u8string());
+		return false;
     }
 
     // コマンド文字列作成
