@@ -14,8 +14,6 @@
 #include <Windows.h> // メッセージボックス出力
 // コンソール出力用ヘッダー
 #include <iostream>  // コンソールに書き出す
-// 停止ヘッダー
-#include <cstdlib>
 
 
 // ======================================
@@ -67,11 +65,6 @@ namespace ErrorLog
 		// 赤色でエラーメッセージを表示
 		String output = String(RED) + u8"ERROR :" + message + RESET;
         std::cerr << StringToChar(output) << std::endl;
-
-#if defined(DEBUG) || defined(_DEBUG)
-        // プロジェクト停止
-        std::abort();
-#endif
     }
 
 
@@ -81,11 +74,6 @@ namespace ErrorLog
     void OutputToMessageBox(const String& message)
     {
         MessageBoxW(nullptr, StringToWString(message).c_str(), L"Error", MB_ICONERROR | MB_OK);
-
-#if defined(DEBUG) || defined(_DEBUG)
-        // プロジェクト停止
-        std::abort();
-#endif
     }
 
 
