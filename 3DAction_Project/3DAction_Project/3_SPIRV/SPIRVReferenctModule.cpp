@@ -31,9 +31,15 @@ bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 	std::filesystem::path savePath = std::filesystem::path(kSPIRVReflectionInfoFolderPath.GetU8String()) /
 		(_shaderName + kSPIRVReflectionInfoExtension).GetU8String();
 
+	// 区切り文字を統一
+	savePath = savePath.generic_string();
+
 	// SPIR-V 保存先パスを作成
 	std::filesystem::path spirvPath = std::filesystem::path(kSPIRVFolderPath.GetU8String()) /
 		(_shaderName + kSPIRVExtension).GetU8String();
+
+	// 区切り文字を統一
+	savePath = savePath.generic_string();
 
 	// バイナリーデータ取得
 	BinaryData binaryData;
@@ -41,6 +47,13 @@ bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 	// SPIR-V を取得する
 	if (!FileUtis::Binary::ReadBinaryFile(spirvPath.u8string(), binaryData)) {
 		ErrorLog::OutputToConsole(u8"SPIR-Vファイルの読み込みに失敗しました。");
+		return false;
+	}
+
+	uint32_t magic = *reinterpret_cast<const uint32_t*>(binaryData.GetData());
+
+	if (magic != 0x07230203) {
+		ErrorLog::OutputToConsole(u8"SPIR-Vではありません（DXILの可能性）");
 		return false;
 	}
 

@@ -88,6 +88,8 @@ bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
     std::wstring cmd = dxcPath.wstring() + L" \"" + shaderPath.wstring() + L"\""
         L" -T " + profile +
         L" -E main"
+        L" -spirv"
+        L" -fvk-use-dx-layout"
         L" -Fo \"" + outputPath.wstring() + L"\""
         L" -fspv-target-env=vulkan1.3";
 
