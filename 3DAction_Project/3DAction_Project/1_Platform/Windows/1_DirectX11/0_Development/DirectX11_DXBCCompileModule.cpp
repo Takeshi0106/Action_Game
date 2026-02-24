@@ -136,7 +136,7 @@ bool DirectX11_DXBCCompileModule::DeleteCompileShader(const String& _hlslName)
 		}
 	}
 
-	return false;
+	return true;
 }
 
 
