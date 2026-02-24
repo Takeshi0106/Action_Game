@@ -102,7 +102,7 @@ bool DX11_DevelopmentCompileModule::DeleteCompileShader(const String& _hlslName)
 
 	// SPIR-Vコンパイルファイル削除
 	if (!m_SPIRVCompileModule.DeleteCompileShader(_hlslName)) {
-		ErrorLog::OutputToConsole(u8"SPIR-Vコンパイルファイルの削除に失敗しました。");
+		ErrorLog::OutputToConsole(u8"SPIR-Vコンパイルファイルの削除に失敗しました。");	
 		return false;
 	}
 

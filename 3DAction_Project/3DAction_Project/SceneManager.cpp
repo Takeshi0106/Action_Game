@@ -79,9 +79,13 @@ void SceneManager::Draw()
 // ========================================
 void SceneManager::Uninit()
 {
-	// シーンの終了処理
-	m_CurrentSceneState->Uninit();
-	m_CurrentSceneState.reset();
+	// null チェック
+	if (m_CurrentSceneState != nullptr)
+	{
+		// シーンの終了処理
+		m_CurrentSceneState->Uninit();
+		m_CurrentSceneState.reset();
+	}
 }
 
 
