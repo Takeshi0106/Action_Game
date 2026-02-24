@@ -39,6 +39,13 @@ private:
 	// SPIR-V リファレンスモジュール
 	SPIRVReferenctModule m_SPIRVReferenceModule;
 
+
+	// --------------------------------
+	// 外部ファイル削除関数
+	// --------------------------------
+	bool DeleteCompileShader(const String& _hlslName);
+
+
 public:
 	// --------------------------------
 	// コンストラクタ・デストラクタ

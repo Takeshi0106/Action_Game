@@ -109,6 +109,37 @@ bool DirectX11_DXBCCompileModule::ShaderCompil(
 
 
 // =====================================
+// 外部ファイルシェーダー削除
+// =====================================
+bool DirectX11_DXBCCompileModule::DeleteCompileShader(const String& _hlslName)
+{
+	// コンパイルパスを取得
+	std::filesystem::path compilePath =
+		std::filesystem::path(kCompilPath.GetU8String()) /
+		(_hlslName.GetU8String() + kCompilExtension.GetU8String());
+
+	// 区切り文字を統一
+	compilePath = compilePath.generic_string();
+
+	// ファイルが存在する場合は削除
+	if (std::filesystem::exists(compilePath)) 
+	{
+		// エラーコードを取得
+		std::error_code ec;
+
+		if (!std::filesystem::remove(compilePath, ec))
+		{
+			ErrorLog::OutputToConsole(u8"SPIR-Vファイルの削除に失敗しました: " + compilePath.u8string() + u8" エラー: " +
+				String::to_u8string(ec.value()));
+			return false;
+		}
+	}
+
+	return false;
+}
+
+
+// =====================================
 // コンパイルするかのチェック関数
 // =====================================
 bool IsCompileCheck(

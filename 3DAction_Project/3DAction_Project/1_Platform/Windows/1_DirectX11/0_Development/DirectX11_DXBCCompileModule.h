@@ -62,7 +62,11 @@ public:
 	// --------------------------------
 	// メンバー関数
 	// --------------------------------
+	// シェーダーコンパイル
 	bool ShaderCompil(
 		const String& _hlslName,
 		const DX11_CompileMode _mode);
+
+	// 外部ファイルシェーダー削除
+	bool DeleteCompileShader(const String& _hlslName);
 };

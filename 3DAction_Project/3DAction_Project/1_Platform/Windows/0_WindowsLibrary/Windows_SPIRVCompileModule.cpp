@@ -84,3 +84,34 @@ bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
 
     return true;
 }
+
+
+// ==============================================
+// SPIR-Vコンパイル外部ファイルを削除する
+// ==============================================
+bool Windows_SPIRV_CompileModule::DeleteCompileShader(const String& _hlslName)
+{
+    // 出力ファイルパス
+    std::filesystem::path outputPath = std::filesystem::absolute(
+        std::filesystem::path(kSPIRVFolderPath.GetU8String()) /
+        (_hlslName.GetU8String() + kSPIRVExtension.GetU8String()));
+
+    // 区切り文字を統一
+    outputPath = outputPath.generic_string();
+
+    // ファイルが存在する場合は削除
+    if (std::filesystem::exists(outputPath))
+    {
+        // エラーコードを取得
+        std::error_code ec;
+
+        if (!std::filesystem::remove(outputPath, ec))
+        {
+            ErrorLog::OutputToConsole(u8"SPIR-Vファイルの削除に失敗しました: " + outputPath.u8string() + u8" エラー: " +
+                String::to_u8string(ec.value()));
+            return false;
+        }
+    }
+
+    return true;
+}

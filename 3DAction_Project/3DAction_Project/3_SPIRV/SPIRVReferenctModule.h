@@ -72,5 +72,10 @@ public:
 	// ----------------------------------------
 	bool WriteSPIRVReflectionInfo(
 		const String& _shaderName);
+
+	// ----------------------------------------
+	// SPIR-Vリフレクション情報の外部ファイルを削除する関数
+	// ----------------------------------------
+	bool DeleteSPIRVReflectionInfo(const String& _shaderName);
 };
 

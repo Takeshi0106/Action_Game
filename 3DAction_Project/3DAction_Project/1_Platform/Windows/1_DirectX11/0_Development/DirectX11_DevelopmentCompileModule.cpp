@@ -50,21 +50,60 @@ bool DX11_DevelopmentCompileModule::ShaderCompile(const DX11_CompileMode _mode)
 		if (m_ShaderCompileModule.ShaderCompil(hlslPath.filename().stem().u8string(), _mode))
 		{
 			// SPIR-Vコンパイル
-			if (!m_SPIRVCompileModule.SPIRVCompile(hlslPath.filename().stem().u8string())) {
+			if (!m_SPIRVCompileModule.SPIRVCompile(hlslPath.filename().stem().u8string())) 
+			{
+				// 外部ファイル削除
+				DeleteCompileShader(hlslPath.filename().stem().u8string());
+
 				ErrorLog::OutputToConsole(u8"SPIR-Vコンパイルに失敗しました。");
 				return false;
 			}
 
 			// SPIR-Vリファレンス書き出し
-			if (!m_SPIRVReferenceModule.WriteSPIRVReflectionInfo(u8"TestShader")) {
+			if (!m_SPIRVReferenceModule.WriteSPIRVReflectionInfo(hlslPath.filename().stem().u8string())) 
+			{
+				// 外部ファイル削除
+				DeleteCompileShader(hlslPath.filename().stem().u8string());
+
 				ErrorLog::OutputToConsole(u8"SPIR-Vリファレンスの書き出しに失敗しました。");
 				return false;
 			}
 		}
-		else {
+		else 
+		{
+			// 外部ファイル削除
+			DeleteCompileShader(hlslPath.filename().stem().u8string());
+
 			ErrorLog::OutputToConsole(u8"DXBCコンパイルに失敗しました。");
 			return false;
 		}
+	}
+
+	return true;
+}
+
+
+// =============================================
+// 外部ファイル削除関数
+// =============================================
+bool DX11_DevelopmentCompileModule::DeleteCompileShader(const String& _hlslName)
+{
+	// DXBCコンパイルファイル削除
+	if (!m_ShaderCompileModule.DeleteCompileShader(_hlslName)) {
+		ErrorLog::OutputToConsole(u8"DXBCコンパイルファイルの削除に失敗しました。");
+		return false;
+	}
+
+	// SPIR-Vコンパイルファイル削除
+	if (!m_SPIRVCompileModule.DeleteCompileShader(_hlslName)) {
+		ErrorLog::OutputToConsole(u8"SPIR-Vコンパイルファイルの削除に失敗しました。");
+		return false;
+	}
+
+	// SPIR-Vリファレンスファイル削除
+	if (!m_SPIRVReferenceModule.DeleteSPIRVReflectionInfo(_hlslName)) {
+		ErrorLog::OutputToConsole(u8"SPIR-Vリファレンスファイルの削除に失敗しました。");
+		return false;
 	}
 
 	return true;

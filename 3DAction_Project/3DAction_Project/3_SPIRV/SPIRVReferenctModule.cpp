@@ -116,3 +116,33 @@ bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 
 	return true;
 }
+
+
+// =========================================
+// SPIR-Vリフレクション情報の削除関数
+// =========================================
+bool SPIRVReferenctModule::DeleteSPIRVReflectionInfo(const String& _shaderName)
+{
+	// SPIR-Vリフレクション情報の保存先パスを作成
+	std::filesystem::path savePath = std::filesystem::path(kSPIRVReflectionInfoFolderPath.GetU8String()) /
+		(_shaderName + kSPIRVReflectionInfoExtension).GetU8String();
+
+	// 区切り文字を統一
+	savePath = savePath.generic_string();
+
+	// ファイルが存在する場合は削除
+	if (std::filesystem::exists(savePath))
+	{
+		// エラーコードを取得
+		std::error_code ec;
+
+		if (!std::filesystem::remove(savePath, ec))
+		{
+			ErrorLog::OutputToConsole(u8"SPIR-Vリフレクション情報の削除に失敗しました: " + savePath.u8string() + u8" エラー: " +
+				String::to_u8string(ec.value()));
+			return false;
+		}
+	}
+
+	return true;
+}
