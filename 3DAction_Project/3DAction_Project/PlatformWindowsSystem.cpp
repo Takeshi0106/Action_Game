@@ -246,7 +246,10 @@ bool PlatformWindowsSystem::GameInit()
 {
 #if defined(DEBUG) || defined(_DEBUG)
 	// シェーダーコンパイル
-    // m_DevCompileModule.ShaderCompile(DX11_CompileMode::Debug);
+    if (!m_DevCompileModule.ShaderCompile(DX11_CompileMode::Debug)) {
+		ErrorLog::OutputToConsole(u8"シェーダーのコンパイルに失敗しました");
+		return false;
+    }
 #endif
 
     // 描画マネージャー作成
