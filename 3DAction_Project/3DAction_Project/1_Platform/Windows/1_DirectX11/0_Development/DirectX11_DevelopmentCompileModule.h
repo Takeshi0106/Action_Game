@@ -58,11 +58,12 @@ public:
 		const String& _compilPath,
 		const String& _spirvPath,
 		const String& _refPath,
+		const String& _textPath,
 		const String& _dxcPath) :
 		kHlslPath(_hlslPath),
 		m_ShaderCompileModule(_hlslPath, _compilPath),
 		m_SPIRVCompileModule(_hlslPath, _spirvPath, _dxcPath),
-		m_SPIRVReferenceModule(_spirvPath, _refPath) {
+		m_SPIRVReferenceModule(_spirvPath, _refPath, _textPath) {
 	}
 	~DX11_DevelopmentCompileModule() = default;
 

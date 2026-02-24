@@ -29,14 +29,16 @@ private:
 	// SPIR-Vリフレクション情報の保存先パス
 	const String& kSPIRVReflectionInfoFolderPath;
 
+	// SPiR-Vリフレクション情報のテキストファイル保存先フォルダーパス
+	const String& kSPIRVReflectionInfoTextPath;
 
-	// SPIR-Vリフレクション情報の拡張子
-	const String kSPIRVReflectionInfoExtension = u8".txt";
 	// SPIR-Vの拡張子
 	const String kSPIRVExtension = u8".spv";
+	// SPIR-Vリフレクション情報の拡張子
+	const String kSPIRVReflectionInfoTextExtension = u8".txt";
 
 	// -----------------------------------
-	// 書き出し用
+	// 文字列書き出し用
 	// -----------------------------------
 	// シェーダー名
 	const String kShaderName = u8"ShaderName : ";
@@ -54,15 +56,20 @@ private:
 	const String kCBSize = u8"CBSize : ";
 
 
+	// 文字列書き出し用関数
+	bool WriteTextRefarenceInfo(const String& _shaderName);
+
 public:
 	// ----------------------------------------
 	// コンストラクタ・デストラクタ
 	// ----------------------------------------
 	SPIRVReferenctModule(
 		const String& _spirvPath,
-		const String& _refPath)
+		const String& _refPath,
+		const String& _textPath)
 		:kSPIRVFolderPath(_spirvPath),
-		kSPIRVReflectionInfoFolderPath(_refPath) {
+		kSPIRVReflectionInfoFolderPath(_refPath),
+		kSPIRVReflectionInfoTextPath(_textPath) {
 	}
 
 	~SPIRVReferenctModule() = default;

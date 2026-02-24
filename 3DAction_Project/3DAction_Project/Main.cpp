@@ -59,7 +59,8 @@ namespace {
 	// 開発用のファイルパス
 	const DevelopmentPath DEV_PATH_Config = {
 		u8"99_DEV/SIRV",
-		u8"99_DEV/Reflection"
+		u8"99_DEV/Reflection",
+		u8"99_DEV/Reflection/ReflectionInfo"
 	};
 
 	// Dxc.exeのパス
