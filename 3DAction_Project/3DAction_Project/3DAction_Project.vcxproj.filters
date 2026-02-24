@@ -400,26 +400,8 @@
     <Filter Include="1_Platform\Windows\5_DrawManager\0_DirectX11\FormatConverter">
       <UniqueIdentifier>{864e4258-9d38-448b-b781-677dd8522521}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\6_ShaderCompile">
-      <UniqueIdentifier>{d88de26a-a390-47a3-a628-0b06e3a701a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\7_DirectX11_Core">
-      <UniqueIdentifier>{ba54c2db-b7b6-4d96-b01a-e999173877ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC">
-      <UniqueIdentifier>{3b7c52e5-ff96-41ae-82b1-98cc63b2657c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC\2_DXBC_fxcCompile">
-      <UniqueIdentifier>{13a23049-d97e-4dd1-8617-054b2ab6bf5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Windows\6_ShaderCompile\ReferencesData">
-      <UniqueIdentifier>{8eede957-d93b-4ec3-9f94-58b299a9dc59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile">
       <UniqueIdentifier>{4bf04251-6242-41ff-ba3e-5a9539260962}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\0_SPIR-VCompile">
-      <UniqueIdentifier>{7e67f413-2355-41ba-8b50-a26ac2733e3a}</UniqueIdentifier>
     </Filter>
     <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences">
       <UniqueIdentifier>{aadbda8c-4698-458f-970f-2c563d2e8245}</UniqueIdentifier>
@@ -430,7 +412,25 @@
     <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences\spirv_reflect">
       <UniqueIdentifier>{19ca4d23-f7dc-4148-9baf-88433e08d753}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC\1_DX11_DevelopmentCompile">
+    <Filter Include="1_Platform\Windows\6_Windows_Core">
+      <UniqueIdentifier>{538e84ab-8bda-43cd-8d81-2601cc9bd39a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_Windows_Core\3_DirectX11_Core">
+      <UniqueIdentifier>{ba54c2db-b7b6-4d96-b01a-e999173877ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_Windows_Core\0_SPIR-VCompile">
+      <UniqueIdentifier>{7e67f413-2355-41ba-8b50-a26ac2733e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_Windows_Core\1_ShaderCompile">
+      <UniqueIdentifier>{d88de26a-a390-47a3-a628-0b06e3a701a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_Windows_Core\1_ShaderCompile\DirectX11_DXBC">
+      <UniqueIdentifier>{3b7c52e5-ff96-41ae-82b1-98cc63b2657c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_Windows_Core\1_ShaderCompile\DirectX11_DXBC\2_DXBC_fxcCompile">
+      <UniqueIdentifier>{13a23049-d97e-4dd1-8617-054b2ab6bf5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Windows\6_Windows_Core\1_ShaderCompile\DirectX11_DXBC\1_DX11_DevelopmentCompile">
       <UniqueIdentifier>{e85bef9e-d31f-4e5c-8ca9-f9b4c301668d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -457,7 +457,7 @@
       <Filter>1_Platform\Windows\0_System</Filter>
     </ClCompile>
     <ClCompile Include="DirectX.cpp">
-      <Filter>1_Platform\Windows\7_DirectX11_Core</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\3_DirectX11_Core</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferInfo.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager\Shader\ShaderMetadata\ConstantBufferInfo</Filter>
@@ -643,10 +643,7 @@
       <Filter>1_Platform\Windows\1_ReportMessage</Filter>
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\0_WindowsLibrary\Windows_SPIRVCompileModule.cpp">
-      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\0_SPIR-VCompile</Filter>
-    </ClCompile>
-    <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ReferenceData.cpp">
-      <Filter>1_Platform\Windows\6_ShaderCompile\ReferencesData</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\0_SPIR-VCompile</Filter>
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_DrawCreate.cpp">
       <Filter>1_Platform\Windows\5_DrawManager\0_DirectX11</Filter>
@@ -735,17 +732,14 @@
     <ClCompile Include="4_Imgui\imgui_impl_win32.cpp">
       <Filter>2_Core\99_Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_References.cpp">
-      <Filter>1_Platform\Windows\6_ShaderCompile</Filter>
-    </ClCompile>
     <ClCompile Include="3_SPIRV\SPIRVReferenctModule.cpp">
       <Filter>1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences</Filter>
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DevelopmentCompileModule.cpp">
-      <Filter>1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC\1_DX11_DevelopmentCompile</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\1_ShaderCompile\DirectX11_DXBC\1_DX11_DevelopmentCompile</Filter>
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DXBCCompileModule.cpp">
-      <Filter>1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC\2_DXBC_fxcCompile</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\1_ShaderCompile\DirectX11_DXBC\2_DXBC_fxcCompile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -780,7 +774,7 @@
       <Filter>1_Platform\Base\4_PlatformTime</Filter>
     </ClInclude>
     <ClInclude Include="DirectX.h">
-      <Filter>1_Platform\Windows\7_DirectX11_Core</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\3_DirectX11_Core</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferInfo.h">
       <Filter>1_Platform\Windows\5_DrawManager\DirectX11_ResourcesManager\1_ShaderManager\Shader\ShaderMetadata\ConstantBufferInfo</Filter>
@@ -1086,10 +1080,7 @@
       <Filter>1_Platform\Windows\2_Math\0_WindowsMath_Utiles</Filter>
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\0_WindowsLibrary\Windows_SPIRVCompileModule.h">
-      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\0_SPIR-VCompile</Filter>
-    </ClInclude>
-    <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ReferenceData.h">
-      <Filter>1_Platform\Windows\6_ShaderCompile\ReferencesData</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\0_SPIR-VCompile</Filter>
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_DrawCreate.h">
       <Filter>1_Platform\Windows\5_DrawManager\0_DirectX11</Filter>
@@ -1181,17 +1172,14 @@
     <ClInclude Include="4_Imgui\imgui_impl_win32.h">
       <Filter>2_Core\99_Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_References.h">
-      <Filter>1_Platform\Windows\6_ShaderCompile</Filter>
-    </ClInclude>
     <ClInclude Include="3_SPIRV\SPIRVReferenctModule.h">
       <Filter>1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences</Filter>
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DevelopmentCompileModule.h">
-      <Filter>1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC\1_DX11_DevelopmentCompile</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\1_ShaderCompile\DirectX11_DXBC\1_DX11_DevelopmentCompile</Filter>
     </ClInclude>
     <ClInclude Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DXBCCompileModule.h">
-      <Filter>1_Platform\Windows\6_ShaderCompile\DirectX11_DXBC\2_DXBC_fxcCompile</Filter>
+      <Filter>1_Platform\Windows\6_Windows_Core\1_ShaderCompile\DirectX11_DXBC\2_DXBC_fxcCompile</Filter>
     </ClInclude>
     <ClInclude Include="BinaryData.h">
       <Filter>2_Core\4_Library\2_Binary</Filter>

@@ -168,8 +168,6 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_FormatConverter.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_IndexBufferData.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_IndexBufferManager.cpp" />
-    <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ReferenceData.cpp" />
-    <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_References.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_ResourceManager.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerData.cpp" />
     <ClCompile Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerManager.cpp" />
@@ -269,8 +267,6 @@ xcopy /Y /E /D "$(ProjectDir)0_Asset\*" "$(TargetDir)0_Asset\"
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_FormatConverter.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_IndexBufferData.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_IndexBufferManager.h" />
-    <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ReferenceData.h" />
-    <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_References.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_ResourceManager.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerData.h" />
     <ClInclude Include="1_Platform\Windows\1_DirectX11\DirectX11_SamplerManager.h" />
