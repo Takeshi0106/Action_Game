@@ -66,7 +66,8 @@ bool DirectX11_DXBCCompileModule::ShaderCompil(
 
 	// シェーダーのコンパイルする必要があるかのチェック
 	if (!IsCompileCheck(hlslPath, compilePath)) {
-		return false;
+		WarningLog::OutputToConsole(u8"シェーダー " + hlslPath.u8string() + u8" はコンパイルの必要がありませんでした");
+		return true;
 	}
 
 	// シェーダーの種類を判定
