@@ -26,6 +26,9 @@ private:
 	// SPIR-Vコンパイルファイルパス
 	const String& kSPIRVFolderPath;
 
+	// DXC.exeのパス
+	const String& kDxcPath;
+
 	// HLSL拡張子
 	const String kHlslExtension = u8".hlsl";
 	// SPIR-V 拡張子
@@ -36,9 +39,13 @@ public:
 	// ---------------------------------------
 	// コンストラクタ・デストラクタ
 	// ----------------------------------------
-	Windows_SPIRV_CompileModule(const String& _kHlslPath, const String& _kSPIRVPath) :
-		kHlslFolderPath(_kHlslPath),
-		kSPIRVFolderPath(_kSPIRVPath) {
+	Windows_SPIRV_CompileModule(
+		const String& _hlslPath, 
+		const String& _spirvPath,
+		const String& _dxcPath) :
+		kHlslFolderPath(_hlslPath),
+		kSPIRVFolderPath(_spirvPath),
+	    kDxcPath(_dxcPath){
 	}
 	~Windows_SPIRV_CompileModule() = default;
 

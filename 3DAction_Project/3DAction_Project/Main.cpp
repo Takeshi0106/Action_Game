@@ -55,10 +55,17 @@ namespace {
 		u8"0_Asset/ObjModel"
 	};
 
+#if defined(DEBUG) || defined(_DEBUG)
+	// 開発用のファイルパス
 	const DevelopmentPath DEV_PATH_Config = {
 		u8"99_DEV/SIRV",
 		u8"99_DEV/Reflection"
 	};
+
+	// Dxc.exeのパス
+	const String DXC_Path = u8"C:/0_Spirv/dxc/dxc.exe";
+# endif
+
 }
 
 
@@ -82,7 +89,8 @@ int main(void)
 	PlatformWindowsSystem system(SCREEN_WIDTH, SCREEN_HEIGHT,
 		WINDOW_NAME, WINDOW_CLASS_NAME,
 		PATH_CONFIG,
-		DEV_PATH_Config);
+		DEV_PATH_Config,
+		DXC_Path);
 #else
 	// ウィンドウズプラットフォームを作成
 	PlatformWindowsSystem system(SCREEN_WIDTH, SCREEN_HEIGHT,

@@ -84,7 +84,8 @@ public:
 	PlatformWindowsSystem(uint16_t _width, uint16_t _height, 
 		const wchar_t* _windowClassName, const wchar_t* _windowName, 
 		const DrawPathConfig& _config,
-		const DevelopmentPath& _devConfig);
+		const DevelopmentPath& _devConfig,
+		const String& _dxcPath);
 #else
 	// コンストラクタ・デストラクタ
 	PlatformWindowsSystem(uint16_t _width, uint16_t _height, 

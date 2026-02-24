@@ -31,6 +31,7 @@ struct DrawPathConfig
     const String& objModelPath;
 };
 
+#if defined(DEBUG) || defined(_DEBUG)
 // 開発用デバッグパス
 struct DevelopmentPath{
     // SPIR-Vバイナリパス
@@ -38,3 +39,5 @@ struct DevelopmentPath{
 	// SPIR-Vリフレクション情報パス
 	const String& kSPIRVReflectionInfoFolderPath;
 };
+
+#endif

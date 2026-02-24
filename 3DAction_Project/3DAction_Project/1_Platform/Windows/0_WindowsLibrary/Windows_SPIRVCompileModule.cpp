@@ -22,7 +22,7 @@
 bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
 {
     // dxc.exe のパス
-    std::filesystem::path dxcPath = "C:/0_Spirv/dxc/dxc.exe";
+    std::filesystem::path dxcPath = kDxcPath.GetU8String();
 
 	// 区切り文字を統一
 	dxcPath = dxcPath.generic_string();

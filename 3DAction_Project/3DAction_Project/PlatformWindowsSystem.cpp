@@ -86,7 +86,8 @@ PlatformWindowsSystem::PlatformWindowsSystem(
     uint16_t _width, uint16_t _height,
     const wchar_t* _windowClassName, const wchar_t* _windowName,
     const DrawPathConfig& _config,
-    const DevelopmentPath& _devConfig) :
+    const DevelopmentPath& _devConfig,
+    const String& _dxcPath) :
     m_Width(_width), m_Height(_height),
     m_WindowName(_windowName), m_WindowClassName(_windowClassName),
     m_PathConfig(_config),
@@ -94,7 +95,8 @@ PlatformWindowsSystem::PlatformWindowsSystem(
         _config.shaderSourcePath,
         _config.shaderBinaryPath,
         _devConfig.kSPIRVFolderPath,
-        _devConfig.kSPIRVReflectionInfoFolderPath) {
+        _devConfig.kSPIRVReflectionInfoFolderPath,
+        _dxcPath) {
 }
 #else
 // コンストラクタ
