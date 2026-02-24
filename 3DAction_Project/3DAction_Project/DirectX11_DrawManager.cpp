@@ -89,6 +89,7 @@ bool DirectX_DrawManager::Init(uint16_t width, uint16_t height, HWND windowHandl
 		return false;
 	}
 
+	// シェーダーマネージャー初期化
 	if (!m_ShaderManager.Init(DirectX11::Get::GetDevice())) {
 		ErrorLog::OutputToMessageBox(u8"ShaderManagerの初期化に失敗しました");
 		return false;
