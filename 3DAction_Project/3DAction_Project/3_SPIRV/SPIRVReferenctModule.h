@@ -24,16 +24,25 @@
 class SPIRVReferenctModule final
 {
 private:
+	// -----------------------------------
+	// バイナリーSPIRV-V 関連
+	// ------------------------------------
 	// SPIR-V保存先フォルダー名
 	const String& kSPIRVFolderPath;
+	// SPIR-Vの拡張子
+	const String kSPIRVExtension = u8".spv";
+
+	// -----------------------------------
+	// リファレクション 構造体関連
+	// ------------------------------------
 	// SPIR-Vリフレクション情報の保存先パス
 	const String& kSPIRVReflectionInfoFolderPath;
 
+	// ------------------------------------
+	// デバッグ用 リファレクションテキストファイル関連
+	// ------------------------------------
 	// SPiR-Vリフレクション情報のテキストファイル保存先フォルダーパス
 	const String& kSPIRVReflectionInfoTextPath;
-
-	// SPIR-Vの拡張子
-	const String kSPIRVExtension = u8".spv";
 	// SPIR-Vリフレクション情報の拡張子
 	const String kSPIRVReflectionInfoTextExtension = u8".txt";
 
@@ -56,6 +65,9 @@ private:
 	const String kCBSize = u8"CBSize : ";
 
 
+	// -----------------------------------
+	// メンバー関数
+	// -----------------------------------
 	// 文字列書き出し用関数
 	bool WriteTextRefarenceInfo(const String& _shaderName);
 

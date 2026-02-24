@@ -27,6 +27,7 @@ extern "C"{
 // =========================================
 bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 {
+	// テキストファイル書き出し
 	WriteTextRefarenceInfo(_shaderName);
 
 	return true;

@@ -406,9 +406,6 @@
     <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences">
       <UniqueIdentifier>{aadbda8c-4698-458f-970f-2c563d2e8245}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\ShadeerUtility">
-      <UniqueIdentifier>{245856c6-aa09-4eca-b3ce-edd87e8de9dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences\spirv_reflect">
       <UniqueIdentifier>{19ca4d23-f7dc-4148-9baf-88433e08d753}</UniqueIdentifier>
     </Filter>
@@ -432,6 +429,12 @@
     </Filter>
     <Filter Include="1_Platform\Windows\6_Windows_Core\1_DX11\3_DirectX11_Core">
       <UniqueIdentifier>{ba54c2db-b7b6-4d96-b01a-e999173877ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\2_ShadeerUtility">
+      <UniqueIdentifier>{245856c6-aa09-4eca-b3ce-edd87e8de9dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\3_RefarencesData">
+      <UniqueIdentifier>{f1585730-36e8-422e-bb4b-e58e4835ee9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -706,7 +709,7 @@
       <Filter>1_Platform\Windows\4_Timer</Filter>
     </ClCompile>
     <ClCompile Include="ShaderUtility.cpp">
-      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\ShadeerUtility</Filter>
+      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\2_ShadeerUtility</Filter>
     </ClCompile>
     <ClCompile Include="3_SPIRV\spirv_reflect.c">
       <Filter>1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences\spirv_reflect</Filter>
@@ -1143,7 +1146,7 @@
       <Filter>1_Platform\Windows\5_DrawManager\0_DirectX11\DirectX11_Resource\4_TextureResource</Filter>
     </ClInclude>
     <ClInclude Include="ShaderUtility.h">
-      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\ShadeerUtility</Filter>
+      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\2_ShadeerUtility</Filter>
     </ClInclude>
     <ClInclude Include="3_SPIRV\spirv_reflect.h">
       <Filter>1_Platform\Base\8_DevelopmentShaderCompile\1_SPIR-VReferences\spirv_reflect</Filter>
@@ -1183,6 +1186,9 @@
     </ClInclude>
     <ClInclude Include="BinaryData.h">
       <Filter>2_Core\4_Library\2_Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="RefarencesData.h">
+      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\3_RefarencesData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
