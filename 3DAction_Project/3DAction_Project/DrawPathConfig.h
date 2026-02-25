@@ -38,8 +38,6 @@ struct DevelopmentPath{
     const String& kSPIRVFolderPath;
 	// SPIR-Vリフレクション情報パス
 	const String& kSPIRVReflectionInfoFolderPath;
-	// SPIR-Vリフレクション情報テキストファイル保存先パス
-	const String& kSPIRVReflectionInfoTextPath;
 };
 
 #endif

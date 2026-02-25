@@ -96,7 +96,6 @@ PlatformWindowsSystem::PlatformWindowsSystem(
         _config.shaderBinaryPath,
         _devConfig.kSPIRVFolderPath,
         _devConfig.kSPIRVReflectionInfoFolderPath,
-		_devConfig.kSPIRVReflectionInfoTextPath,
         _dxcPath) {
 }
 #else

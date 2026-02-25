@@ -436,6 +436,9 @@
     <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\3_RefarencesData">
       <UniqueIdentifier>{f1585730-36e8-422e-bb4b-e58e4835ee9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="1_Platform\Base\8_DevelopmentShaderCompile\3_RefarencesData\Module">
+      <UniqueIdentifier>{301fe1e7-babc-42e2-9f07-37e1fbeb0690}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShaderData.cpp">
@@ -743,6 +746,9 @@
     </ClCompile>
     <ClCompile Include="1_Platform\Windows\1_DirectX11\0_Development\DirectX11_DXBCCompileModule.cpp">
       <Filter>1_Platform\Windows\6_Windows_Core\1_DX11\1_DirectX11_DXBC\2_DXBC_fxcCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="SPIRV_SelfRefDataModule.cpp">
+      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\3_RefarencesData\Module</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1189,6 +1195,9 @@
     </ClInclude>
     <ClInclude Include="RefarencesData.h">
       <Filter>1_Platform\Base\8_DevelopmentShaderCompile\3_RefarencesData</Filter>
+    </ClInclude>
+    <ClInclude Include="SPIRV_SelfRefDataModule.h">
+      <Filter>1_Platform\Base\8_DevelopmentShaderCompile\3_RefarencesData\Module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,20 +2,32 @@
 
 // =========================================
 // 【クラス概要】
-// SPIR-Vのリフレクション情報を保持するクラス
-// すべての PCOS,APIで使用することを想定しています
+// SPIR-Vのリフレクションを自作リファレクションに変換して書き出すモジュール
+// すべての PCOS,PCAPIで使用することを想定しています
 // 
 // 今は、入力レイアウトと定数バッファの情報を保持することを想定しています
 // 将来的には、テクスチャやサンプラーの情報を使用して、
 // エディターでのリソースの自動割り当てなどに使用することも行えるように
+// デバッグでしか使えないようにしています
 // =========================================
 
+
+#if defined(DEBUG) || defined(_DEBUG)
 
 // =========================================
 // ヘッダー
 // =========================================
 // 文字列ヘッダー
 #include "../UTF8_String.h"
+// 自作リファレクション変換モジュール
+#include "../SPIRV_SelfRefDataModule.h"
+
+
+// =========================================
+// 前方宣言
+// =========================================
+// SPIR-Vリフレクション構造体の前方宣言
+struct SpvReflectShaderModule;
 
 
 // =========================================
@@ -35,14 +47,24 @@ private:
 	// -----------------------------------
 	// リファレクション 構造体関連
 	// ------------------------------------
-	// SPIR-Vリフレクション情報の保存先パス
+	// 自作リファレクション変換モジュール
+	SPIRV_SelfRefDataModule m_SelfRefDataModule;
+
+	// SPIR-Vリフレクション構造体情報の保存先パス
 	const String& kSPIRVReflectionInfoFolderPath;
+	// SPIR-Vリフレクション構造体情報の拡張子
+	const String kSPIRVReflectionInfoExtension = u8".bin";
+
+	// SPIR-Vリファレクション の入力レイアウト保存先パス
+	const String kSPIRVRefILPath = u8"InputLayout";
+	// SPIR-Vリファレクション の定数バッファ保存先パス
+	const String kSPIRVRefCBPath = u8"ConstantBuffer";
 
 	// ------------------------------------
 	// デバッグ用 リファレクションテキストファイル関連
 	// ------------------------------------
-	// SPiR-Vリフレクション情報のテキストファイル保存先フォルダーパス
-	const String& kSPIRVReflectionInfoTextPath;
+	// SPIR-Vリフレクションテキスト情報の保存先パス
+	const String kSpIRVRefTextPath = u8"Text";
 	// SPIR-Vリフレクション情報の拡張子
 	const String kSPIRVReflectionInfoTextExtension = u8".txt";
 
@@ -50,26 +72,31 @@ private:
 	// 文字列書き出し用
 	// -----------------------------------
 	// シェーダー名
-	const String kShaderName = u8"ShaderName : ";
+	const String kShaderName = u8"ShaderName";
 
 	// 入力レイアウト
-	const String kIL = u8"InputLayout : ";
-	const String kILName = u8"ILName : ";
-	const String kILIndex = u8"ILIndex : ";
-	const String kILFormat = u8"ILFormat : ";
+	const String kIL = u8"InputLayout";
+	const String kILName = u8"ILName";
+	const String kILIndex = u8"ILIndex";
+	const String kILFormat = u8"ILFormat";
 
 	// 定数バッファ
-	const String kCBuffer = u8"ConstantBuffer : ";
-	const String kCBName = u8"CBName : ";
-	const String kRegisterNumber = u8"RegisterNumber : ";
-	const String kCBSize = u8"CBSize : ";
+	const String kCBuffer = u8"ConstantBuffer";
+	const String kCBName = u8"CBName";
+	const String kRegisterNumber = u8"RegisterNumber";
+	const String kCBSize = u8"CBSize";
 
 
 	// -----------------------------------
 	// メンバー関数
 	// -----------------------------------
+	// リファレクション構造体書き出し用関数
+	bool WriteBinaryRefarenceInfo(
+		const SelfReflectionInfo& _refInfo);
+
 	// 文字列書き出し用関数
-	bool WriteTextRefarenceInfo(const String& _shaderName);
+	bool WriteTextRefarenceInfo(
+		const SelfReflectionInfo& _refInfo);
 
 public:
 	// ----------------------------------------
@@ -77,11 +104,9 @@ public:
 	// ----------------------------------------
 	SPIRVReferenctModule(
 		const String& _spirvPath,
-		const String& _refPath,
-		const String& _textPath)
+		const String& _refPath)
 		:kSPIRVFolderPath(_spirvPath),
-		kSPIRVReflectionInfoFolderPath(_refPath),
-		kSPIRVReflectionInfoTextPath(_textPath) {
+		kSPIRVReflectionInfoFolderPath(_refPath){
 	}
 
 	~SPIRVReferenctModule() = default;
@@ -98,3 +123,4 @@ public:
 	bool DeleteSPIRVReflectionInfo(const String& _shaderName);
 };
 
+#endif

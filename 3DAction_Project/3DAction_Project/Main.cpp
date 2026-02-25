@@ -46,7 +46,7 @@ namespace {
 	constexpr wchar_t        WINDOW_CLASS_NAME[] = L"ゲーム";
 
 	const DrawPathConfig PATH_CONFIG= {
-		u8"0_Asset/Shader/Compile",
+		u8"0_Asset/Shader/DX11/Compile",
 		u8"0_Asset/Shader/Hlsl",
 
 		u8"0_Asset/Info/ShaderReflection.txt",
@@ -58,9 +58,8 @@ namespace {
 #if defined(DEBUG) || defined(_DEBUG)
 	// 開発用のファイルパス
 	const DevelopmentPath DEV_PATH_Config = {
-		u8"99_DEV/SIRV",
-		u8"99_DEV/Reflection",
-		u8"99_DEV/Reflection/ReflectionInfo"
+		u8"0_Asset/Shader/SIRV",
+		u8"0_Asset/Shader/Reflection"
 	};
 
 	// Dxc.exeのパス
