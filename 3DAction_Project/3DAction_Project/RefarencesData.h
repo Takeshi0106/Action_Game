@@ -28,6 +28,18 @@ enum class VertexFormat : uint8_t
     ColorRGBA8,
 };
 
+#if defined(DEBUG) || defined(_DEBUG)
+// 書き出し用フォーマット文字列
+inline const String kVertexFormatString[] = {
+    u8"Float2",
+    u8"Float3",
+    u8"Float4",
+    u8"Uint4",
+    u8"ColorRGBA8",
+};
+
+#endif
+
 
 // 入力レイアウト構造体
 struct InputLayoutInfo
