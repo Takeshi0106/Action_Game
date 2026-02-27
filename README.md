@@ -10,6 +10,11 @@ DirectXで描画などを対応できた後、GameMainを作成予定です。
 ・ Windows8  移行
 ・ DirectX11 以上対応
 
+開発環境
+https://github.com/microsoft/DirectXShaderCompiler/releases?utm_source=chatgpt.com
+上のURLの 2025年5月パッチの dxc.2025_07_14.zip を取得して、Main.cpp 内のDXC＿Pathを設定してください
+
+
 ルール
 ・ .hlsl のエントリーポイントは必ず main で
     名前の最初にVS_ PS_ CS_ とつける。
