@@ -419,6 +419,7 @@ FodyWeavers.xsd
 
 # 自分用除外
 *.cso
+*.spv
 3DAction_Project/3DAction_Project/Asset/
 
 # 実行ファイル除外
