@@ -418,9 +418,19 @@ FodyWeavers.xsd
 *.msp
 
 # 自分用除外
+
+# バイナリーデータ除外
 *.cso
 *.spv
-3DAction_Project/3DAction_Project/Asset/
+
+# テクスチャ除外
+3DAction_Project/3DAction_Project/0_Asset/Texture
+# モデル除外
+3DAction_Project/3DAction_Project/0_Asset/ObjModel
+# フォント除外
+3DAction_Project/3DAction_Project/0_Asset/Font
+# リファレクション情報除外
+3DAction_Project/3DAction_Project/0_Asset/Shader/Reflection
 
 # 実行ファイル除外
 3DAction_Project/0_実行ファイル/
