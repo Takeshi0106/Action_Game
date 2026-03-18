@@ -1,0 +1,34 @@
+ShaderName :VS_UI
+ InputLayout { 
+ BlockNumber :4
+
+  ILName :in.var.POSITION
+  ILIndex :0
+  ILFormat :Float3
+
+  ILName :in.var.NORMAL
+  ILIndex :1
+  ILFormat :Float3
+
+  ILName :in.var.TEXCOORD
+  ILIndex :2
+  ILFormat :Float2
+
+  ILName :in.var.COLOR
+  ILIndex :3
+  ILFormat :Float4
+
+ } 
+
+ ConstantBuffer { 
+ BlockNumber :2
+
+  CBName :UIOrthoMatrix
+  RegisterNumber :0
+  CBSize :64
+
+  CBName :Transform
+  RegisterNumber :1
+  CBSize :64
+
+ } 

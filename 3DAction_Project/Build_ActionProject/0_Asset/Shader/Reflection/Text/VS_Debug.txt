@@ -1,0 +1,22 @@
+ShaderName :VS_Debug
+ InputLayout { 
+ BlockNumber :1
+
+  ILName :in.var.POSITION0
+  ILIndex :0
+  ILFormat :Float3
+
+ } 
+
+ ConstantBuffer { 
+ BlockNumber :2
+
+  CBName :Transform
+  RegisterNumber :0
+  CBSize :64
+
+  CBName :DebugParams
+  RegisterNumber :1
+  CBSize :32
+
+ } 
