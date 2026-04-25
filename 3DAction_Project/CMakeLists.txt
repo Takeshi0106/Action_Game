@@ -4,7 +4,7 @@
 # CMake の最小バージョン指定
 cmake_minimum_required(VERSION 3.21)
 # プロジェクト名と使用言語指定
-project(3DAction_Project LANGUAGES CXX C)
+project(MultiPlatformFramework LANGUAGES CXX C)
 
 # --------------------------------------
 # C++ 設定
@@ -15,6 +15,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 独自拡張機能を無効化
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 # --------------------------------------
@@ -34,14 +36,15 @@ endif()
 set(PROJECT_DIR "${CMAKE_CURRENT_LIST_DIR}/Build_ActionProject")
 # プロジェクトの場所を設定
 set(SRC_DIR "${PROJECT_DIR}")
-# すべてのOS,APIで使用するソースファイル設定
-# SRC_DIR以下にあるすべての.cppを自動収集して変数に入れています。
-file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
 
 
 # --------------------------------------
 # ターゲット指定
 # --------------------------------------
+# SRC_DIR階層にあるすべての.cpp・.hを自動収集して変数に入れています。
+file(GLOB SRC_FILES 
+"${SRC_DIR}/*.cpp")
+
 # SRC_FILES が追加した.cppをビルド対象に .exe を作成する命令
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
@@ -86,34 +89,34 @@ target_link_libraries(
 # Imgui 設定
 # --------------------------------------
 # Imgui のソースファイルをビルド対象に追加
-set(IMGUI_SOURCES
-    "${SRC_DIR}/4_Imgui/imgui.cpp"
-    "${SRC_DIR}/4_Imgui/imgui_demo.cpp"
-    "${SRC_DIR}/4_Imgui/imgui_draw.cpp"
-    "${SRC_DIR}/4_Imgui/imgui_tables.cpp"
-    "${SRC_DIR}/4_Imgui/imgui_widgets.cpp")
+set(IMGUI_CORE_SOURCES
+    "${SRC_DIR}/5_Imgui/0_Core/imgui.cpp"
+    "${SRC_DIR}/5_Imgui/0_Core/imgui_demo.cpp"
+    "${SRC_DIR}/5_Imgui/0_Core/imgui_draw.cpp"
+    "${SRC_DIR}/5_Imgui/0_Core/imgui_tables.cpp"
+    "${SRC_DIR}/5_Imgui/0_Core/imgui_widgets.cpp")
 
 # Imgui のソースファイルをビルド対象に追加
-target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${IMGUI_SOURCES}>)
+target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${IMGUI_CORE_SOURCES}>)
 
-# Imgui のインクルードパスを追加 IDEでヘッダーファイルを見つけられるようにするため
+# インクルードディレクトリーを追加
 target_include_directories(${PROJECT_NAME} PRIVATE
-    "${SRC_DIR}/4_Imgui")
-
+    "${SRC_DIR}/5_Imgui/0_Core")
 
 # Windows でビルドする場合、Imgui のインクルードパスを追加
 if(WIN32)
     # Win32 DX11 で追加
     set(IMGUI_Win32DX11
-        "${SRC_DIR}/4_Imgui/imgui_impl_win32.cpp"
-        "${SRC_DIR}/4_Imgui/imgui_impl_dx11.cpp")
+        "${SRC_DIR}/5_Imgui/1_OS/Windows/imgui_impl_win32.cpp"
+        "${SRC_DIR}/5_Imgui/2_API/DirectX11/imgui_impl_dx11.cpp")
 
     # Imgui のソースファイルをビルド対象に追加
     target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${IMGUI_Win32DX11}>)
 
     # Imgui のインクルードパスを追加
     target_include_directories(${PROJECT_NAME} PRIVATE
-    "${SRC_DIR}/4_Imgui")
+        "${SRC_DIR}/5_Imgui/1_OS/Windows"
+        "${SRC_DIR}/5_Imgui/2_API/DirectX11")
 endif()
 
 
