@@ -13,7 +13,7 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 // Imguiヘッダー
-#include "4_Imgui/imgui.h"
+#include "imgui.h"
 // BOX描画
 #include "BOX.h"
 // 時間

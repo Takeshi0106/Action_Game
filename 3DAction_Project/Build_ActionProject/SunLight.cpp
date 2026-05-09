@@ -9,7 +9,7 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 // Imgui用ヘッダー
-#include "4_Imgui/imgui.h"
+#include "imgui.h"
 #endif
 
 

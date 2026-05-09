@@ -18,6 +18,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# --------------------------------------
+# プラットフォーム・API 設定
+# ---------------------------------------
+# プラットフォームの設定
+set(PLATFORM_OS "WINDOWS" CACHE STRING "Platform")
+# API の設定
+set(PLATFORM_API "DIRECTX11" CACHE STRING "API")
 
 # --------------------------------------
 # MSVC・Clang-CL 時の設定
@@ -88,37 +95,10 @@ target_link_libraries(
 # --------------------------------------
 # Imgui 設定
 # --------------------------------------
-# Imgui のソースファイルをビルド対象に追加
-set(IMGUI_CORE_SOURCES
-    "${SRC_DIR}/5_Imgui/0_Core/imgui.cpp"
-    "${SRC_DIR}/5_Imgui/0_Core/imgui_demo.cpp"
-    "${SRC_DIR}/5_Imgui/0_Core/imgui_draw.cpp"
-    "${SRC_DIR}/5_Imgui/0_Core/imgui_tables.cpp"
-    "${SRC_DIR}/5_Imgui/0_Core/imgui_widgets.cpp")
-
-# Imgui のソースファイルをビルド対象に追加
-target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${IMGUI_CORE_SOURCES}>)
-
-# インクルードディレクトリーを追加
-target_include_directories(${PROJECT_NAME} PRIVATE
-    "${SRC_DIR}/5_Imgui/0_Core")
-
-# Windows でビルドする場合、Imgui のインクルードパスを追加
-if(WIN32)
-    # Win32 DX11 で追加
-    set(IMGUI_Win32DX11
-        "${SRC_DIR}/5_Imgui/1_OS/Windows/imgui_impl_win32.cpp"
-        "${SRC_DIR}/5_Imgui/2_API/DirectX11/imgui_impl_dx11.cpp")
-
-    # Imgui のソースファイルをビルド対象に追加
-    target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${IMGUI_Win32DX11}>)
-
-    # Imgui のインクルードパスを追加
-    target_include_directories(${PROJECT_NAME} PRIVATE
-        "${SRC_DIR}/5_Imgui/1_OS/Windows"
-        "${SRC_DIR}/5_Imgui/2_API/DirectX11")
-endif()
-
+# Imgui の CMakeLists.txt を追加
+add_subdirectory("${SRC_DIR}/5_Imgui")
+# Imgui ライブラリをプロジェクトにリンク Debugビルドのときのみリンクする
+target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
 
 # --------------------------------------
 # SIPRV-Reflect 設定

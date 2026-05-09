@@ -27,9 +27,9 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 // Imgui用ヘッダー
-#include "4_Imgui/imgui.h"
-#include "4_Imgui/imgui_impl_win32.h"
-#include "4_Imgui/imgui_impl_dx11.h"
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
 #endif
 
 
