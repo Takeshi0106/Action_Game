@@ -19,8 +19,11 @@
 #include <memory>
 // 固定長整数ヘッダー
 #include <cstdint>
+
+#if defined(DEBUG) || defined(_DEBUG)
 // シェーダーコンパイルモジュール
 #include "1_Platform/Windows/1_DirectX11/0_Development/DirectX11_DevelopmentCompileModule.h"
+#endif
 
 
 // =====================================================
