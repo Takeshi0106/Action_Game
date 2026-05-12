@@ -79,15 +79,6 @@ add_subdirectory("${SRC_DIR}/3_SPIRV" "${CMAKE_BINARY_DIR}/SPIRV")
 # SPIR-V Reflect ライブラリをプロジェクトにリンク
 target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_LIB)
 
-# --------------------------------
-# リファレンス実装の追加
-# --------------------------------
-# SPIR-V Reflect のソースファイルをビルド対象に追加
-set(SPIRV_REF "${SRC_DIR}/3_SPIRV/SPIRVReferenctModule.cpp")
-# 既存ターゲットにソースを追加
-target_sources(${PROJECT_NAME} PRIVATE ${SPIRV_REF})
-
-
 # --------------------------------------
 # Windows 用ライブラリのパス
 # --------------------------------------
