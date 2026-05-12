@@ -55,25 +55,18 @@ add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
 
 # --------------------------------------
-# Assimp 設定
+# 外部ライブラリの設定
 # --------------------------------------
 # Assimp の CMakeLists.txt を追加
-add_subdirectory(
-    "C:/0_Assimp/5.2.5" "${CMAKE_BINARY_DIR}/Assimp")
+add_subdirectory("C:/0_Assimp/5.2.5" "${CMAKE_BINARY_DIR}/Assimp")
 # Assimp ライブラリをプロジェクトにリンク
 target_link_libraries(${PROJECT_NAME} PRIVATE ASSIMP_LIB)
 
-# --------------------------------------
-# Imgui 設定
-# --------------------------------------
 # Imgui の CMakeLists.txt を追加
 add_subdirectory("${SRC_DIR}/5_Imgui" "${CMAKE_BINARY_DIR}/Imgui")
 # Imgui ライブラリをプロジェクトにリンク Debugビルドのときのみリンクする
 target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
 
-# --------------------------------------
-# SIPRV-Reflect 設定
-# --------------------------------------
 # SPIR-V Reflect の CMakeLists.txt を追加
 add_subdirectory("${SRC_DIR}/3_SPIRV" "${CMAKE_BINARY_DIR}/SPIRV")
 # SPIR-V Reflect ライブラリをプロジェクトにリンク
