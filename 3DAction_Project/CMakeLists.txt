@@ -74,24 +74,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
 # --------------------------------------
 # SIPRV-Reflect 設定
 # --------------------------------------
-# SIRV-V のパスを設定
-set(SPIRV_REF_SRC "${SRC_DIR}/3_SPIRV/spirv_reflect.c")
-# SPIR-V Reflect のソースファイルをビルド対象に追加
-add_library(SPIRV_REF_C STATIC "${SPIRV_REF_SRC}")  
-
-# SPIR-V Reflect のインクルードパスを追加
-# PUBLIC は SPIRV_REF_C をリンクするターゲットにもインクルードパスを追加する
-target_include_directories(SPIRV_REF_C PUBLIC
-    "C:/0_Spirv/include")
-
-# Windows でビルドする場合、SPIR-V Reflect をビルドする際のプリプロセッサ定義を追加
-if(WIN32)
-# SPIR-V Reflect をビルドする際のプリプロセッサ定義を追加
-target_compile_definitions(SPIRV_REF_C PRIVATE SPIRV_REFLECT_USE_SYSTEM_SPIRV_H)
-endif()
-
+# SPIR-V Reflect の CMakeLists.txt を追加
+add_subdirectory("${SRC_DIR}/3_SPIRV" "${CMAKE_BINARY_DIR}/SPIRV")
 # SPIR-V Reflect ライブラリをプロジェクトにリンク
-target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_C)
+target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_LIB)
 
 # --------------------------------
 # リファレンス実装の追加
