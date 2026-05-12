@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 独自拡張機能を無効化
 set(CMAKE_CXX_EXTENSIONS OFF)
-
+# コンパイル情報を出力する
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # --------------------------------------
@@ -27,14 +27,12 @@ set(PLATFORM_OS "WINDOWS" CACHE STRING "Platform")
 set(PLATFORM_API "DIRECTX11" CACHE STRING "API")
 
 # --------------------------------------
-# MSVC・Clang-CL 時の設定
-# 静的ランタイム
+# 静的リンクでビルド
 # --------------------------------------
 if(MSVC)
     # $<$<条件>:値>
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
-
 
 # --------------------------------------
 # 開発フォルダーへのパス設定
@@ -44,59 +42,32 @@ set(PROJECT_DIR "${CMAKE_CURRENT_LIST_DIR}/Build_ActionProject")
 # プロジェクトの場所を設定
 set(SRC_DIR "${PROJECT_DIR}")
 
-
 # --------------------------------------
 # ターゲット指定
 # --------------------------------------
-# SRC_DIR階層にあるすべての.cpp・.hを自動収集して変数に入れています。
-file(GLOB SRC_FILES 
-"${SRC_DIR}/*.cpp")
+# SRC_DIR階層にあるすべての.cppを自動収集して変数に入れています。
+# IDE がうまく働かないので、後に手動で追加に修正します
+file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
 
-# SRC_FILES が追加した.cppをビルド対象に .exe を作成する命令
+# SRC_FILES で追加した実行ファイルを作成
 add_executable(${PROJECT_NAME} ${SRC_FILES})
-
-target_include_directories(${PROJECT_NAME} PRIVATE
-    "${SRC_DIR}")
-
+# プロジェクトのインクルードパスを追加
+target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
 
 # --------------------------------------
 # Assimp 設定
 # --------------------------------------
-# パスを設定
-set(ASSIMP_INCLUDE_DIR "C:/0_DXLibs/0_Assimp/5.2.5/include")
-
-# Windows OS 上でビルドを行っているかのif文です。 (Win32,Win64 ではありません)
-if(WIN32)
-    # Debug時の AssimpLib パス
-    set(ASSIMP_LIB_DEBUG   "C:/0_Assimp/5.2.5/lib/assimp-vc143-mtd.lib")
-    # Release時の AssimpLib パス
-    set(ASSIMP_LIB_RELEASE "C:/0_Assimp/5.2.5/lib/assimp-vc143-mtd.lib")
-else()
-    # OSが自動で探す (見つからなかったら、停止させる)
-    find_package(assimp REQUIRED)
-
-    # 自動で見つけたパスを設定
-    set(ASSIMP_LIB_DEBUG assimp)
-    set(ASSIMP_LIB_RELEASE assimp)
-endif()
-
-# プロジェクトにヘッダーファイルを追加
-# PRIVATE は PROJECT_NAME のターゲットのみに追加する
-target_include_directories(${PROJECT_NAME} PRIVATE ${ASSIMP_INCLUDE_DIR})
-
-# プロジェクトにライブラリを追加
-target_link_libraries(
-    ${PROJECT_NAME}
-    PRIVATE
-     $<$<CONFIG:Debug>:${ASSIMP_LIB_DEBUG}>
-     $<$<CONFIG:Release>:${ASSIMP_LIB_RELEASE}>)
-
+# Assimp の CMakeLists.txt を追加
+add_subdirectory(
+    "C:/0_Assimp/5.2.5" "${CMAKE_BINARY_DIR}/Assimp")
+# Assimp ライブラリをプロジェクトにリンク
+target_link_libraries(${PROJECT_NAME} PRIVATE ASSIMP_LIB)
 
 # --------------------------------------
 # Imgui 設定
 # --------------------------------------
 # Imgui の CMakeLists.txt を追加
-add_subdirectory("${SRC_DIR}/5_Imgui")
+add_subdirectory("${SRC_DIR}/5_Imgui" "${CMAKE_BINARY_DIR}/Imgui")
 # Imgui ライブラリをプロジェクトにリンク Debugビルドのときのみリンクする
 target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
 
@@ -194,17 +165,20 @@ endif()
 
 
 # --------------------------------------
-# プリプロセッサ定義の追加
+# プリプロセッサ定義
 # --------------------------------------
+# SPIR-V Reflect をビルドする際のプリプロセッサ定義
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+        SPIRV_REFLECT_USE_SYSTEM_SPIRV_H
+)
+
+# Windows で Unicode を使用するための定義を追加
 if (WIN32)
-    # Windows で Unicode を使用するための定義を追加
     target_compile_definitions(
         ${PROJECT_NAME} PRIVATE 
     UNICODE 
     _UNICODE)
-
-elseif(ANDROID)
-    add_library(${PROJECT_NAME} SHARED ${SRC_FILES} ${SPIRV_REF_SRC})
 
 endif()
 
@@ -212,24 +186,19 @@ endif()
 # --------------------------------------
 # ターゲット設定（共通）
 # --------------------------------------
+# 共通のインクルードパスを追加
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${INCLUDE_DIR}
 )
-    
-# Unicode（Windowsのみ）
-if(WIN32)
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE UNICODE _UNICODE SPIRV_REFLECT_USE_SYSTEM_SPIRV_H
-    )
-endif()
-
 
 # --------------------------------------
 # 警告レベル設定
 # --------------------------------------
-# MSVC なら /W4 と /permissive- を追加    
+# MSVC なら /W4(警告レベル) と /permissive-(C++標準強化) を追加    
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /W4 /permissive-)
+
+# Clang-CL なら -Wall(全警告) -Wextra(追加警告) -Wpedantic(C++標準強化) を追加
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
@@ -237,8 +206,8 @@ endif()
 # --------------------------------------
 # C++20 をターゲットに設定
 # --------------------------------------
+# このプロジェクトで C++20 を使用することを指定
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
-
 
 # --------------------------------------
 # カスタムイベント (ビルド後イベント)
