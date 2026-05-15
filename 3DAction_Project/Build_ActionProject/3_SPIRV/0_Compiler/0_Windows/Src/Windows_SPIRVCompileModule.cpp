@@ -11,9 +11,9 @@
 // ファイルシステムヘッダー
 #include <filesystem>
 // シェーダー便利関数ヘッダー
-#include "../../../ShaderUtility.h"
+#include "../../../../ShaderUtility.h"
 // レポートログ出力
-#include "../../../ReportMessage.h"
+#include "../../../../ReportMessage.h"
 
 
 // ==============================================

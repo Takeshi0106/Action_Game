@@ -6,10 +6,10 @@
 #include "SPIRV_SelfRefDataModule.h"
 // リファレンスヘッダー
 extern "C" {
-#include "3_SPIRV/spirv_reflect.h"
+#include "spirv_reflect.h"
 }
 // レポートログ出力
-#include "ReportMessage.h"
+#include "../../../ReportMessage.h"
 
 
 // ==========================================

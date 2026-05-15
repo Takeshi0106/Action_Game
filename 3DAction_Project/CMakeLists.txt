@@ -71,8 +71,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
 
 # SPIR-V Reflect の CMakeLists.txt を追加
 add_subdirectory("${SRC_DIR}/3_SPIRV" "${CMAKE_BINARY_DIR}/SPIRV")
-# SPIR-V Reflect ライブラリをプロジェクトにリンク
-target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_LIB)
+# SPIR-V ライブラリをプロジェクトにリンク
+target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_LIB SPIRV_COMPILER_LIB)
 
 # --------------------------------------
 # Windows 用ライブラリのパス

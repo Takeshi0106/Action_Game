@@ -16,9 +16,9 @@
 // ヘッダー
 // =========================================
 // 文字列ヘッダー
-#include "../UTF8_String.h"
+#include "../../../UTF8_String.h"
 // 自作リファレクション変換モジュール
-#include "../SPIRV_SelfRefDataModule.h"
+#include "../Include/SPIRV_SelfRefDataModule.h"
 
 
 // =========================================

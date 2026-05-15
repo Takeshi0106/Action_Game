@@ -11,7 +11,7 @@ set(SPIRV_TOOLS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(SPIRV_COMMON INTERFACE)
 # SPIRV定義ヘッダー
 target_include_directories(SPIRV_COMMON INTERFACE
-    "${SPIRV_ROOT}")
+    "${SPIRV_TOOLS_ROOT}")
 # マクロ定義
 target_compile_definitions(SPIRV_COMMON INTERFACE
     SPIRV_REFLECT_USE_SYSTEM_SPIRV_H)

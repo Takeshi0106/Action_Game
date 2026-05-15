@@ -16,9 +16,9 @@
 // DXBCompile用ヘッダー
 #include "DirectX11_DXBCCompileModule.h"
 // SPIR-Vコンパイル用ヘッダー
-#include "../../../../1_OS/Windows/3_SPIRV/Windows_SPIRVCompileModule.h"
+#include "../../../../3_SPIRV/0_Compiler/0_Windows/Include/Windows_SPIRVCompileModule.h"
 // SPIR-V リファレンスヘッダー
-#include "../../../../3_SPIRV/SPIRVReferenctModule.h"	
+#include "../../../../3_SPIRV/1_Reference/Include/SPIRVReferenceModule.h"	
 
 
 // ========================================
@@ -37,7 +37,7 @@ private:
 	// SPIR-V コンパイルモジュール
 	Windows_SPIRV_CompileModule m_SPIRVCompileModule;
 	// SPIR-V リファレンスモジュール
-	SPIRVReferenctModule m_SPIRVReferenceModule;
+	SPIRVReferenceModule m_SPIRVReferenceModule;
 
 
 	// --------------------------------
