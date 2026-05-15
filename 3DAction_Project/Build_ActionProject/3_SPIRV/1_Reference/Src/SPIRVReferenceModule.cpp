@@ -25,6 +25,8 @@
 extern "C"{
 #include "spirv_reflect.h"
 }
+// SPIRVリフレクションの補助関数
+#include "SPIRVReflectionUtils.h"
 
 
 // =========================================
@@ -90,7 +92,7 @@ bool SPIRVReferenceModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 	selfRefInfo.shaderName = _shaderName;
 
 	// 自作リファレクション構造体に変換
-	if (!m_SelfRefDataModule.ConvertSpvReflectToSelfRefData(
+	if (!SPIRV::ReflectionUtils::ConvertSpvReflectToSelfRefData(
 		module,
 		selfRefInfo))
 	{

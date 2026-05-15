@@ -3,13 +3,15 @@
 // ヘッダー
 // ==========================================
 // 必須ヘッダー
-#include "SPIRV_SelfRefDataModule.h"
+#include "SPIRVReflectionUtils.h"
 // リファレンスヘッダー
 extern "C" {
 #include "spirv_reflect.h"
 }
 // レポートログ出力
 #include "../../../ReportMessage.h"
+// 配列ヘッダー
+#include <vector>
 
 
 // ==========================================
@@ -21,10 +23,14 @@ VertexFormat ConvertSpvFormatToVertexFormat(SpvReflectFormat spvFormat);
 // ==========================================
 // SPIR-Vリフレクション構造体を自作のリファレクション構造体に変換する関数
 // ==========================================
-bool SPIRV_SelfRefDataModule::ConvertSpvReflectToSelfRefData(
+bool SPIRV::ReflectionUtils::ConvertSpvReflectToSelfRefData(
 	const SpvReflectShaderModule& _spvModule,
 	SelfReflectionInfo& _selfRefInfo)
 {
+	// リサイズ
+	_selfRefInfo.ilInfos.reserve(_spvModule.input_variable_count);
+	_selfRefInfo.cbInfos.reserve(_spvModule.descriptor_binding_count);
+
 	// 入力レイアウト
 	for (uint32_t i = 0; i < _spvModule.input_variable_count; i++)
 	{

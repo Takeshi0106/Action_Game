@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 // =========================================
-// 【クラス概要】
+// 【補助関数概要】
 // SPIR-Vリファレクションを自作リファレクションに
-// 変換するモジュール
+// 変換する関数
 // =========================================
 
 
@@ -12,8 +12,6 @@
 // =========================================
 // 自作リファレクションのヘッダー
 #include "../../../RefarencesData.h"
-// 配列ヘッダー
-#include <vector>
 
 
 // =========================================
@@ -24,25 +22,15 @@ struct SpvReflectShaderModule;
 
 
 // =========================================
-// クラス
+// 名前空間
 // =========================================
-class SPIRV_SelfRefDataModule final
+namespace SPIRV::ReflectionUtils
 {
-private:
-
-public:
-	// ----------------------------------------
-	// コンストラクタ・デストラクタ
-	// ----------------------------------------
-	SPIRV_SelfRefDataModule() = default;
-	~SPIRV_SelfRefDataModule() = default;
-
-
 	// ----------------------------------------
 	// SPIR-Vリフレクション構造体を自作のリファレクション構造体に変換する関数
 	// ----------------------------------------
 	bool ConvertSpvReflectToSelfRefData(
 		const SpvReflectShaderModule& _spvModule,
 		SelfReflectionInfo& _selfRefInfo);
-};
+}
 

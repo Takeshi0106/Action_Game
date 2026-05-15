@@ -10,7 +10,7 @@ set(SPIRV_REFLECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(SPIRV_REF_LIB STATIC
     "${SPIRV_REFLECT_ROOT}/Src/spirv_reflect.c"
     "${SPIRV_REFLECT_ROOT}/Src/SPIRVReferenceModule.cpp"
-    "${SPIRV_REFLECT_ROOT}/Src/SPIRV_SelfRefDataModule.cpp")
+    "${SPIRV_REFLECT_ROOT}/Src/SPIRVReflectionUtils.cpp")
 
 # =========================================
 # SPIRV 共有ライブラリを取得

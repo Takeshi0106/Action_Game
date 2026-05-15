@@ -17,8 +17,8 @@
 // =========================================
 // 文字列ヘッダー
 #include "../../../UTF8_String.h"
-// 自作リファレクション変換モジュール
-#include "../Include/SPIRV_SelfRefDataModule.h"
+// 自作リファレクションデータ
+#include "../../../RefarencesData.h"
 
 
 // =========================================
@@ -45,9 +45,6 @@ private:
 	// -----------------------------------
 	// リファレクション 構造体関連
 	// ------------------------------------
-	// 自作リファレクション変換モジュール
-	SPIRV_SelfRefDataModule m_SelfRefDataModule;
-
 	// SPIR-Vリフレクション構造体情報の保存先パス
 	const String& kSPIRVReflectionInfoFolderPath;
 	// SPIR-Vリフレクション構造体情報の拡張子
