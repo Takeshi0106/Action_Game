@@ -23,3 +23,8 @@ target_compile_definitions(SPIRV_COMMON INTERFACE
 add_subdirectory("${SPIRV_TOOLS_ROOT}/0_Compiler")
 # SPIRV リファレンス を追加
 add_subdirectory("${SPIRV_TOOLS_ROOT}/1_Reference")
+
+# =======================================
+# DXCのパスを親スコープに渡す
+# =======================================
+set(DXC_EXE "${DXC_EXE}" PARENT_SCOPE)

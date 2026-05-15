@@ -63,7 +63,7 @@ namespace {
 	};
 
 	// Dxc.exeのパス
-	const String DXC_Path = u8"C:/0_Spirv/dxc/dxc.exe";
+	const String DXC_Path = DXC_PATH;
 # endif
 
 }

@@ -74,6 +74,12 @@ add_subdirectory("${SRC_DIR}/3_SPIRV" "${CMAKE_BINARY_DIR}/SPIRV")
 # SPIR-V ライブラリをプロジェクトにリンク
 target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_LIB SPIRV_COMPILER_LIB)
 
+# 絶対パスに変換
+get_filename_component(DXC_EXE "${DXC_EXE}" ABSOLUTE)
+# #define でコンパイラーのパスをプロジェクトに渡す
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    DXC_PATH=u8\"${DXC_EXE}\")
+
 # --------------------------------------
 # Windows 用ライブラリのパス
 # --------------------------------------
