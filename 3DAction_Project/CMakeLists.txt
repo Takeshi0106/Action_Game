@@ -19,12 +19,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # --------------------------------------
-# プラットフォーム・API 設定
+# ビルド 設定
 # ---------------------------------------
 # プラットフォームの設定
 set(PLATFORM_OS "WINDOWS" CACHE STRING "Platform")
 # API の設定
 set(PLATFORM_API "DIRECTX11" CACHE STRING "API")
+# SPIRV ライブラリの設定
+option(SPIRV_MODULE "Spirv Module" ON)
 
 # --------------------------------------
 # 静的リンクでビルド

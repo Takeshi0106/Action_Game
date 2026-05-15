@@ -6,7 +6,7 @@
 // ヘッダー
 // =========================================
 // 必須ヘッダー
-#include "SPIRVReferenctModule.h"
+#include "SPIRVReferenceModule.h"
 // ファイルシステム
 #include <filesystem>
 // ログ出力
@@ -30,7 +30,7 @@ extern "C"{
 // =========================================
 // SPIR-Vリファレンス書き出し関数
 // =========================================
-bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName)
+bool SPIRVReferenceModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 {
 	// --------------------------------------------
 	// バイナリーデータを取得
@@ -114,7 +114,7 @@ bool SPIRVReferenctModule::WriteSPIRVReflectionInfo(const String& _shaderName)
 // =========================================
 // SPIR-Vリフレクション情報の削除関数
 // =========================================
-bool SPIRVReferenctModule::DeleteSPIRVReflectionInfo(const String& _shaderName)
+bool SPIRVReferenceModule::DeleteSPIRVReflectionInfo(const String& _shaderName)
 {
 	// SPIR-Vリフレクション情報の保存先パスを作成
 	std::filesystem::path savePath = std::filesystem::path(kSPIRVReflectionInfoFolderPath.GetU8String()) /
@@ -144,7 +144,7 @@ bool SPIRVReferenctModule::DeleteSPIRVReflectionInfo(const String& _shaderName)
 // =========================================
 // SPIR-Vリフレクション情報をバイナリーデータに書き出す関数
 // =========================================
-bool SPIRVReferenctModule::WriteBinaryRefarenceInfo(
+bool SPIRVReferenceModule::WriteBinaryRefarenceInfo(
 	const SelfReflectionInfo& _refInfo)
 {
 	// ----------------------------------------------------
@@ -196,7 +196,7 @@ bool SPIRVReferenctModule::WriteBinaryRefarenceInfo(
 // =========================================
 // SPIR-Vリフレクション情報を外部テキストファイルに書き出す関数
 // =========================================
-bool SPIRVReferenctModule::WriteTextRefarenceInfo(
+bool SPIRVReferenceModule::WriteTextRefarenceInfo(
 	const SelfReflectionInfo& _refInfo)
 {
 	// ----------------------------------------------------

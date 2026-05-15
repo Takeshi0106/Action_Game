@@ -31,7 +31,7 @@ struct SpvReflectShaderModule;
 // =========================================
 // クラス
 // =========================================
-class SPIRVReferenctModule final
+class SPIRVReferenceModule final
 {
 private:
 	// -----------------------------------
@@ -100,14 +100,14 @@ public:
 	// ----------------------------------------
 	// コンストラクタ・デストラクタ
 	// ----------------------------------------
-	SPIRVReferenctModule(
+	SPIRVReferenceModule(
 		const String& _spirvPath,
 		const String& _refPath)
 		:kSPIRVFolderPath(_spirvPath),
 		kSPIRVReflectionInfoFolderPath(_refPath){
 	}
 
-	~SPIRVReferenctModule() = default;
+	~SPIRVReferenceModule() = default;
 
 	// ----------------------------------------
 	// SPIR-Vのリフレクション情報を書き出すクラス
