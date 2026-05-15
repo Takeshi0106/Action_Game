@@ -434,3 +434,6 @@ FodyWeavers.xsd
 
 # 実行ファイル除外
 3DAction_Project/0_実行ファイル/
+
+# DXC除外
+3DAction_Project/Build_ActionProject/3_SPIRV/0_Compiler/0_Windows/dxc
