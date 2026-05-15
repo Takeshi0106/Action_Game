@@ -46,20 +46,20 @@ namespace {
 	constexpr wchar_t        WINDOW_CLASS_NAME[] = L"ゲーム";
 
 	const DrawPathConfig PATH_CONFIG= {
-		u8"0_Asset/Shader/DX11/Compile",
-		u8"0_Asset/Shader/Hlsl",
+		u8"Asset/Shader/DX11/Compile",
+		u8"Asset/Shader/Hlsl",
 
-		u8"0_Asset/Info/ShaderReflection.txt",
+		u8"Asset/Info/ShaderReflection.txt",
 
-		u8"0_Asset/Texture",
-		u8"0_Asset/ObjModel"
+		u8"Asset/Texture",
+		u8"Asset/ObjModel"
 	};
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// 開発用のファイルパス
 	const DevelopmentPath DEV_PATH_Config = {
-		u8"0_Asset/Shader/SIRV",
-		u8"0_Asset/Shader/Reflection"
+		u8"Asset/Shader/SIRV",
+		u8"Asset/Shader/Reflection"
 	};
 
 	// Dxc.exeのパス

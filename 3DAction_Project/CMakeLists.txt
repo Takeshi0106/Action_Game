@@ -194,6 +194,5 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # Assets フォルダもコピー
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${SRC_DIR}/0_Asset"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/0_Asset
-)
+        "${SRC_DIR}/Asset"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset)

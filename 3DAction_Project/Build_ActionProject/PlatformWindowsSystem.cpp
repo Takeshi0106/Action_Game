@@ -368,7 +368,7 @@ void PlatformWindowsSystem::InitImGui()
 
     // フォントをロード
     ImFont* font = io.Fonts->AddFontFromFileTTF(
-        "0_Asset/Font/LINESeedJP-Regular.ttf",
+        "Asset/Font/LINESeedJP-Regular.ttf",
         18.0f,
         nullptr,
         io.Fonts->GetGlyphRangesJapanese());
