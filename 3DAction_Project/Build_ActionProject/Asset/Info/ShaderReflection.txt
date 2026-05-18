@@ -1,5 +1,22 @@
 Shader { 
-BlockNumber :7
+BlockNumber :9
+
+ { 
+  ShaderName :PS_Debug
+  InputLayout { 
+  BlockNumber :0
+
+  } 
+  ConstantBuffer { 
+  BlockNumber :1
+
+   { 
+    CBufferName :DebugParams
+    RegisterNumber :0
+    Size :32
+   } 
+  } 
+ } 
 
  { 
   ShaderName :PS_NoTexture
@@ -66,6 +83,58 @@ BlockNumber :7
   ConstantBuffer { 
   BlockNumber :0
 
+  } 
+ } 
+
+ { 
+  ShaderName :VS_Debug
+  InputLayout { 
+  BlockNumber :5
+
+   { 
+    InputLayoutSemanticName :POSITION
+    InputLayoutSemanticIndex :0
+    InputLayoutInputSlot :0
+    InputLayoutFormat :6
+   } 
+   { 
+    InputLayoutSemanticName :NORMAL
+    InputLayoutSemanticIndex :0
+    InputLayoutInputSlot :0
+    InputLayoutFormat :6
+   } 
+   { 
+    InputLayoutSemanticName :COLOR
+    InputLayoutSemanticIndex :0
+    InputLayoutInputSlot :0
+    InputLayoutFormat :2
+   } 
+   { 
+    InputLayoutSemanticName :TEXCOORD
+    InputLayoutSemanticIndex :0
+    InputLayoutInputSlot :0
+    InputLayoutFormat :16
+   } 
+   { 
+    InputLayoutSemanticName :TANGENT
+    InputLayoutSemanticIndex :0
+    InputLayoutInputSlot :0
+    InputLayoutFormat :6
+   } 
+  } 
+  ConstantBuffer { 
+  BlockNumber :2
+
+   { 
+    CBufferName :Transform
+    RegisterNumber :0
+    Size :64
+   } 
+   { 
+    CBufferName :DebugParams
+    RegisterNumber :1
+    Size :32
+   } 
   } 
  } 
 

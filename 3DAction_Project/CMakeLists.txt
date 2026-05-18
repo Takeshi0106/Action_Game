@@ -188,17 +188,16 @@ endif()
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 # --------------------------------------
-# カスタムイベント (ビルド後イベント)
+# カスタムイベント
 # --------------------------------------
-# Assimp DLL をコピー
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    "C:/0_Assimp/5.2.5/bin/assimp-vc143-mtd.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
-
 # Assets フォルダもコピー
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${SRC_DIR}/Asset"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset)
+
+# Assimp DLL をコピー
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "C:/0_Assimp/5.2.5/bin/assimp-vc143-mtd.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
