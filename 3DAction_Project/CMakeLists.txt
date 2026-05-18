@@ -145,12 +145,6 @@ endif()
 # --------------------------------------
 # プリプロセッサ定義
 # --------------------------------------
-# SPIR-V Reflect をビルドする際のプリプロセッサ定義
-target_compile_definitions(${PROJECT_NAME}
-    PRIVATE
-        SPIRV_REFLECT_USE_SYSTEM_SPIRV_H
-)
-
 # Windows で Unicode を使用するための定義を追加
 if (WIN32)
     target_compile_definitions(
@@ -159,7 +153,6 @@ if (WIN32)
     _UNICODE)
 
 endif()
-
 
 # --------------------------------------
 # ターゲット設定（共通）
