@@ -3,7 +3,7 @@
 // ヘッダー
 // =====================================
 // 必須ヘッダー
-#include "DirectX11_Texture2DData.h"
+#include "DirectX11_Texture2DBufferData.h"
 // レポートメッセージヘッダー
 #include "ReportMessage.h"
 
@@ -11,7 +11,7 @@
 // =====================================
 // テクスチャ作成
 // =====================================
-bool DirectX11_Texture2DData::Create_DX11Texture2D(
+bool DirectX11_Texture2DBufferData::Create_DX11Texture2D(
 	ID3D11Device* _device,
 	const D3D11_TEXTURE2D_DESC& _desc,
 	const D3D11_SUBRESOURCE_DATA* _initialData)
@@ -62,7 +62,7 @@ bool DirectX11_Texture2DData::Create_DX11Texture2D(
 // =====================================
 // デバッグ用: テクスチャ記述が同じか確認
 // =====================================
-bool DirectX11_Texture2DData::IsSame(
+bool DirectX11_Texture2DBufferData::IsSame(
 	const D3D11_TEXTURE2D_DESC& rhs) const
 {
 	return

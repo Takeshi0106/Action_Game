@@ -18,7 +18,7 @@
 // ===================================
 // クラス
 // ===================================
-class DirectX11_Texture2DData final
+class DirectX11_Texture2DBufferData final
 {
 private:
 	// -----------------------------------
@@ -40,8 +40,8 @@ public:
 	// -----------------------------------
 	// コンストラクタ・デストラクタ
 	// -----------------------------------
-	DirectX11_Texture2DData() = default;
-	~DirectX11_Texture2DData() = default;
+	DirectX11_Texture2DBufferData() = default;
+	~DirectX11_Texture2DBufferData() = default;
 
 
 	// -----------------------------------

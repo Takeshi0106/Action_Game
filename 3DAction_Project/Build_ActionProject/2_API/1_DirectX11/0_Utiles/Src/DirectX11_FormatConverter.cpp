@@ -40,7 +40,7 @@ UINT DirectX11_FormatConverter::ToDXCPUAccess(CPUAccess _access)
     switch (_access)
     {
     case CPUAccess::None:
-        return static_cast<D3D11_CPU_ACCESS_FLAG>(0);
+        return {};
         break;
     case CPUAccess::Write:
         return D3D11_CPU_ACCESS_WRITE;

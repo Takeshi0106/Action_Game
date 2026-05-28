@@ -112,29 +112,13 @@ if(WIN32)
 endif()
 
 
-# --------------------------------------
-# プラットフォーム・API別のソースファイル追加
-# --------------------------------------
-# Windows専用のDirectXソースを追加
-if (WIN32)
-    # Windows DirectX11 APIソースを追加
-    file(GLOB DX_API_SRC "${SRC_DIR}/1_Platform/Windows/1_DirectX11/*.cpp")
-
-    # 既存ターゲットにソースを追加
-    target_sources(${PROJECT_NAME} PRIVATE ${DX_API_SRC})
-
- # 開発時(Debug時のみに使用する)ソース追加
-    file(GLOB DX_DEV_SRC "${SRC_DIR}/1_Platform/Windows/1_DirectX11/0_Development/*.cpp")
-
-    # Debugビルドのときのみ、開発用ソースを追加
-    target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${DX_DEV_SRC}>)
-
-    # OS のほう
-    # message(STATUS "DX_LIB_SRC = ${DX_LIB_SRC}")
-    # message(STATUS "DX_API_SRC = ${DX_API_SRC}")
-    # message(STATUS "DX_DEV_SRC = ${DX_DEV_SRC}")
-endif()
-
+# ---------------------------------------
+# API依存を追加する
+# ---------------------------------------
+# API の CMakeLists.txt を追加
+add_subdirectory("${SRC_DIR}/2_API" "${CMAKE_BINARY_DIR}/API")
+# API を追加
+ADD_API(${PROJECT_NAME})
 
 # --------------------------------------
 # プリプロセッサ定義

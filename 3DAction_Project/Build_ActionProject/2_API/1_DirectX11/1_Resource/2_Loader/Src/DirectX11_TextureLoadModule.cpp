@@ -184,7 +184,7 @@ TextureHandle LoadTextureFromFile(
 		&initData);
 
 	// テクスチャを取得
-	const DirectX11_Texture2DData* data = _textureManager.GetTexture2DBuffer(texHandle);
+	const DirectX11_Texture2DBufferData* data = _textureManager.GetTexture2DBuffer(texHandle);
 
 	// SRVDesc作成
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};

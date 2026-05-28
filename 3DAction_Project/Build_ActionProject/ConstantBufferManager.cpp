@@ -5,7 +5,7 @@
 // 必須ヘッダー
 #include "ConstantBufferManager.h" // 自分のヘッダー
 // 自作列挙型をDirectX用に変換
-#include "1_Platform/Windows/1_DirectX11/DirectX11_FormatConverter.h"
+#include "DirectX11_FormatConverter.h"
 // ログ出力用ヘッダー
 #include "ReportMessage.h"
 

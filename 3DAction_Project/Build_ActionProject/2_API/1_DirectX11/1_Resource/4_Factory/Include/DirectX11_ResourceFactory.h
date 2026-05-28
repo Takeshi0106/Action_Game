@@ -73,7 +73,7 @@ struct DirectX11_ResourceReference
 // ===============================================
 // クラス
 // ===============================================
-class DirectX11_DrawCreate final : public BaseDrawCreate
+class DirectX11_ResourceFactory final : public BaseDrawCreate
 {
 private:
 	// -------------------------------------------
@@ -100,14 +100,14 @@ public:
 	// --------------------------------
 	// コンストラクタ・デストラクタ
 	// --------------------------------
-	DirectX11_DrawCreate(
+	DirectX11_ResourceFactory(
 		uint32_t _windowWidth,
 		uint32_t _windowHeight,
 		ID3D11Device* _device,
 		ID3D11DeviceContext* _deviceContext,
 		DirectX11_ResourceReference _managers,
 		const String& _modelFolderPath);
-	~DirectX11_DrawCreate() override = default;
+	~DirectX11_ResourceFactory() override = default;
 
 
 	// --------------------------------

@@ -42,7 +42,7 @@ Handle DirectX11_Texture2DBufferManager::Texture2DBufferCreateOnGet(
 	}
 
 	// 新規作成
-	DirectX11_Texture2DData texture2DData;
+	DirectX11_Texture2DBufferData texture2DData;
 	texture2DData.Create_DX11Texture2D(_device, _desc, _initialData);
 
 	// データ追加

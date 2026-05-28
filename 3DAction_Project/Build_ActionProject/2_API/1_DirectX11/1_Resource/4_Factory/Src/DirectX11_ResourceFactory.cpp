@@ -3,7 +3,7 @@
 // ヘッダー
 // =======================================
 // 必須ヘッダー
-#include "DirectX11_DrawCreate.h"
+#include "DirectX11_ResourceFactory.h"
 // DirectX11ヘッダー
 #include <d3d11.h>
 
@@ -42,7 +42,7 @@
 // =======================================
 // コンストラクタ
 // =======================================
-DirectX11_DrawCreate::DirectX11_DrawCreate(
+DirectX11_ResourceFactory::DirectX11_ResourceFactory(
 	uint32_t _windowWidth,
 	uint32_t _windowHeight,
 	ID3D11Device* _device,
@@ -62,7 +62,7 @@ DirectX11_DrawCreate::DirectX11_DrawCreate(
 // =======================================
 // 初期化
 // =======================================
-bool DirectX11_DrawCreate::Init()
+bool DirectX11_ResourceFactory::Init()
 {
 	MeshMaterialCBData materialCBData{};
 
@@ -87,7 +87,7 @@ bool DirectX11_DrawCreate::Init()
 // =======================================
 // 頂点バッファ作成
 // =======================================
-Handle DirectX11_DrawCreate::CreateVertexBuffer(
+Handle DirectX11_ResourceFactory::CreateVertexBuffer(
 	const Hashed_String& _vbName,
 	const BinaryView& _data,
 	const uint32_t _vertexNumber,
@@ -122,7 +122,7 @@ Handle DirectX11_DrawCreate::CreateVertexBuffer(
 // =======================================
 // インデックスバッファ作成
 // =======================================
-Handle DirectX11_DrawCreate::CreateIndexBuffer(
+Handle DirectX11_ResourceFactory::CreateIndexBuffer(
 	const Hashed_String& _indexName,
 	const uint32_t* _indexData,
 	const size_t _indexSize,
@@ -158,7 +158,7 @@ Handle DirectX11_DrawCreate::CreateIndexBuffer(
 // =======================================
 // 定数バッファ作成
 // =======================================
-Handle DirectX11_DrawCreate::CreateConstantBuffer(
+Handle DirectX11_ResourceFactory::CreateConstantBuffer(
 	const Hashed_String& _constantName,
 	const BinaryView& _data,
 	const BufferUsage _usage,
@@ -187,7 +187,7 @@ Handle DirectX11_DrawCreate::CreateConstantBuffer(
 // =======================================
 // テクスチャ作成
 // =======================================
-Handle DirectX11_DrawCreate::CreateTexture(
+Handle DirectX11_ResourceFactory::CreateTexture(
 	const Hashed_String& _name,
 	const TextureCreateDesc& _desc)
 {
@@ -324,7 +324,7 @@ Handle DirectX11_DrawCreate::CreateTexture(
 // =======================================
 // テクスチャのロード
 // =======================================
-Handle DirectX11_DrawCreate::LoadTexture(
+Handle DirectX11_ResourceFactory::LoadTexture(
 	const Hashed_String& _textureName, 
 	const TextureLoadDesc& _loadDesc,
 	const String& _textureFolderName)
@@ -344,7 +344,7 @@ Handle DirectX11_DrawCreate::LoadTexture(
 // =======================================
 // サンプラー作成
 // =======================================
-Handle DirectX11_DrawCreate::CreateSampler(
+Handle DirectX11_ResourceFactory::CreateSampler(
 	const SamplerDesc& _desc)
 {
 	// サンプラーデスク作成
@@ -373,7 +373,7 @@ Handle DirectX11_DrawCreate::CreateSampler(
 // =======================================
 // モデルのロード
 // =======================================
-Handle DirectX11_DrawCreate::LoadModel(
+Handle DirectX11_ResourceFactory::LoadModel(
 	const Hashed_String& _modelName,
 	const Handle& _psHandle,
 	const Handle& _vsHandle,

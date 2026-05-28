@@ -39,7 +39,7 @@
 // -----------------------------------
 // 作成クラスヘッダー
 // ------------------------------------
-#include "DirectX11_DrawCreate.h"
+#include "DirectX11_ResourceFactory.h"
 
 
 // =======================================
@@ -88,7 +88,7 @@ private:
 	// インターフェイスとしての役割があるクラス
 	// --------------------------------
 	// リソース作成クラス
-	std::unique_ptr<DirectX11_DrawCreate> m_DrawCreate;
+	std::unique_ptr<DirectX11_ResourceFactory> m_ResourceFactory;
 
 
 public:
@@ -116,8 +116,8 @@ public:
 	// --------------------------------
 	// ゲッター
 	// --------------------------------
-	DirectX11_DrawCreate* GetDrawCreate() const {
-		return m_DrawCreate.get();
+	DirectX11_ResourceFactory* GetResourceFactory() const {
+		return m_ResourceFactory.get();
 	}
 
 	// --------------------------------

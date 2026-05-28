@@ -7,7 +7,7 @@
 // Dataヘッダー
 #include "ResourceViewData.h"
 // 変換ヘッダー
-#include "1_Platform/Windows/1_DirectX11/DirectX11_FormatConverter.h"
+#include "DirectX11_FormatConverter.h"
 // ログ出力
 #include "ReportMessage.h"
 

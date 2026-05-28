@@ -11,7 +11,7 @@
 // ヘッダー
 // ==============================================
 // テクスチャ2Dの実態
-#include "DirectX11_Texture2DData.h"
+#include "DirectX11_Texture2DBufferData.h"
 // データ管理テンプレートヘッダー
 #include "../../../TemplateManager.h"
 // 文字列ヘッダー
@@ -28,7 +28,7 @@ private:
 	// メンバー変数
 	// ------------------------------------------
 	// 2Dテクスチャバッファ管理
-	TemplateManager<DirectX11_Texture2DData> m_Texture2DBuffers;
+	TemplateManager<DirectX11_Texture2DBufferData> m_Texture2DBuffers;
 
 public:
 	// ------------------------------------------
@@ -49,7 +49,7 @@ public:
 	// ------------------------------------------
 	// 2Dテクスチャバッファ取得関数
 	// ------------------------------------------
-	const DirectX11_Texture2DData* GetTexture2DBuffer(const Handle& _handle) {
+	const DirectX11_Texture2DBufferData* GetTexture2DBuffer(const Handle& _handle) {
 		return m_Texture2DBuffers.GetData(_handle);
 	}
 
