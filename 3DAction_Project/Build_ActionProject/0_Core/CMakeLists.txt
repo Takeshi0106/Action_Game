@@ -8,6 +8,7 @@ add_subdirectory(2_String)
 add_subdirectory(3_Timer)
 add_subdirectory(4_Report)
 add_subdirectory(5_File)
+add_subdirectory(6_Physics)
 
 # =============================================
 # Core を追加
@@ -20,4 +21,5 @@ function(Add_Core TARGET)
     Add_Timer(${TARGET})
     Add_Report(${TARGET})
     Add_FileUtils(${TARGET})
+    Add_Physics(${TARGET})
 endfunction()

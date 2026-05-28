@@ -7,6 +7,8 @@
 #include "CollisionSystemModule.h"
 // 当たり判定ヘッダー
 #include "AABBCollider.h"
+// AABBとABB当たり判定
+#include "AABB_AABB_Collision.h"
 
 #if defined(_DEBUG) || defined(DEBUG)
 // 文字列
@@ -71,5 +73,5 @@ bool CollisionSystemModule::AABB_AABB_Check(void* _a, void* _b)
 	AABBCollider* _bCol = static_cast<AABBCollider*>(_b);
 
 	// 当たり判定計算
-	return CheckAABBCollision(*_aCol, *_bCol);
+	return AABB_AABB_Collision(*_aCol, *_bCol);
 }

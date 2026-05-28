@@ -13,6 +13,7 @@
 #include <cstdint>
 #include "Hashed_String.h"
 #include "AABBTree.h"
+#include "FatAABBCollider.h"
 
 
 // ===================================

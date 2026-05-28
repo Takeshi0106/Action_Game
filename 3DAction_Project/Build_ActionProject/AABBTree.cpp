@@ -9,6 +9,9 @@
 // アルゴリズム
 #include <algorithm>
 
+// AABB当たり判定
+#include "AABB_AABB_Collision.h"
+
 #if defined(DEBUG) || defined(_DEBUG)
 #include <string>
 #include "ReportMessage.h"
@@ -226,7 +229,7 @@ void AABBTree::Query(const AABBCollider& box, std::vector<ObjectInfo>& results)
 		const AABBNode& node = m_Nodes[index];
 
 		// 衝突判定チェック
-		if (!CheckAABBCollision(box, node.aabb))
+		if (!AABB_AABB_Collision(box, node.aabb))
 		{
 			continue;
 		}

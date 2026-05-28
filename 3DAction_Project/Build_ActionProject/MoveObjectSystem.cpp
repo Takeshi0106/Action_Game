@@ -4,7 +4,7 @@
 // =====================================
 #include "MoveObjectSystem.h"
 #include "ReportMessage.h"
-
+#include "AABB_FatAABB_Collision.h"
 
 
 // =====================================
@@ -150,7 +150,7 @@ void MoveObjectSystem::Update(float deltaTime)
 			MoveObject_AABB::CENTER_OFFSET,
 			MoveObject_AABB::HITBOX_SCALE);
 
-		if (!IsAABBInside(m_AABBColliders[i], m_FatAABBColliders[i]))
+		if (!AABB_FatAABB_Collision(m_AABBColliders[i], m_FatAABBColliders[i]))
 		{
 			// ファットAABBコライダー更新
 			m_FatAABBColliders[i] = CreateFatAABB(
