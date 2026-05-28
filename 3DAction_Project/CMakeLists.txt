@@ -56,6 +56,18 @@ add_executable(${PROJECT_NAME} ${SRC_FILES})
 # プロジェクトのインクルードパスを追加
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
 
+# ---------------------------------------
+# Mathなどの基本的なものを追加する
+# ---------------------------------------
+# Core の CMakeLists.txt を追加
+add_subdirectory("${SRC_DIR}/0_Core" "${CMAKE_BINARY_DIR}/Core")
+# OS 用の CMakeLists.txt を追加
+add_subdirectory("${SRC_DIR}/1_OS" "${CMAKE_BINARY_DIR}/OS")
+
+# Core を追加
+ADD_CORE(${PROJECT_NAME})
+ADD_OS(${PROJECT_NAME})
+
 # --------------------------------------
 # 外部ライブラリの設定
 # --------------------------------------
@@ -105,19 +117,6 @@ endif()
 # --------------------------------------
 # Windows専用のDirectXソースを追加
 if (WIN32)
-    # Windows ライブラリソースを追加
-    file(GLOB WIN_MATH_SRC "${SRC_DIR}/1_OS/Windows/0_Math/*.cpp")
-    file(GLOB WIN_TIMER_SRC "${SRC_DIR}/1_OS/Windows/1_Timer/*.cpp")
-    file(GLOB WIN_REPORT_SRC "${SRC_DIR}/1_OS/Windows/2_Report/*.cpp")
-    file(GLOB WIN_SPIRV_SRC "${SRC_DIR}/1_OS/Windows/3_SPIRV/*.cpp")
-
-    # Windowsソースを追加
-    target_sources(${PROJECT_NAME} PRIVATE 
-    ${WIN_MATH_SRC} 
-    ${WIN_TIMER_SRC}
-    ${WIN_REPORT_SRC}
-    ${WIN_SPIRV_SRC})
-
     # Windows DirectX11 APIソースを追加
     file(GLOB DX_API_SRC "${SRC_DIR}/1_Platform/Windows/1_DirectX11/*.cpp")
 
@@ -130,15 +129,10 @@ if (WIN32)
     # Debugビルドのときのみ、開発用ソースを追加
     target_sources(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:${DX_DEV_SRC}>)
 
-    # ソースファイルが含まれているかチェック用
-    # message(STATUS "WIN_TIMER_SRC = ${WIN_TIMER_SRC}")
-    # message(STATUS "WIN_REPORT_SRC = ${WIN_REPORT_SRC}")
-    # message(STATUS "WIN_SPIRV_SRC = ${WIN_SPIRV_SRC}")
-
     # OS のほう
     # message(STATUS "DX_LIB_SRC = ${DX_LIB_SRC}")
-    message(STATUS "DX_API_SRC = ${DX_API_SRC}")
-    message(STATUS "DX_DEV_SRC = ${DX_DEV_SRC}")
+    # message(STATUS "DX_API_SRC = ${DX_API_SRC}")
+    # message(STATUS "DX_DEV_SRC = ${DX_DEV_SRC}")
 endif()
 
 
@@ -153,14 +147,6 @@ if (WIN32)
     _UNICODE)
 
 endif()
-
-# --------------------------------------
-# ターゲット設定（共通）
-# --------------------------------------
-# 共通のインクルードパスを追加
-target_include_directories(${PROJECT_NAME}
-    PRIVATE ${INCLUDE_DIR}
-)
 
 # --------------------------------------
 # 警告レベル設定

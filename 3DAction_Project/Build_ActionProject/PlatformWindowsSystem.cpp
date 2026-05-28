@@ -122,6 +122,11 @@ bool PlatformWindowsSystem::Init()
 	// コンソールの文字コードをUTF-8に設定
     SetConsoleOutputCP(CP_UTF8);
 
+
+#if defined(DEBUG) || defined(_DEBUG)
+    DebugLog::OutputToConsole(u8"デバッグモードで開始します。");
+#endif
+
     // インスタンスハンドル取得
    m_AppInstance = GetModuleHandle(nullptr);
     if (m_AppInstance.Get() == nullptr) { return false; } // 取得に失敗したらfalseを返す

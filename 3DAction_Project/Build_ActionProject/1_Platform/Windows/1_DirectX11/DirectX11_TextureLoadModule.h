@@ -12,9 +12,9 @@
 // テクスチャハンドル
 #include "../../../TextureHandleh.h"
 // 文字列ヘッダー
-#include "../../../UTF8_String.h"
+#include "UTF8_String.h"
 // ハッシュ文字列ヘッダー
-#include "../../../Hashed_String.h"
+#include "Hashed_String.h"
 // テクスチャロードデスクヘッダー
 #include "../../../GraphicsEnums.h"
 

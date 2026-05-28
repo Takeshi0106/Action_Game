@@ -7,7 +7,7 @@
 // DirectX11ヘッダー
 #include <d3d11.h>
 // ログ出力用ヘッダー
-#include "../../../ReportMessage.h"
+#include "ReportMessage.h"
 
 
 // ===============================

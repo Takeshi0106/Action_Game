@@ -12,7 +12,7 @@
 // ヘッダー
 // =============================
 // 文字列ヘッダー
-#include "../../../../UTF8_String.h"
+#include "UTF8_String.h"
 // 固定整数ヘッダー
 #include <cstdint>
 

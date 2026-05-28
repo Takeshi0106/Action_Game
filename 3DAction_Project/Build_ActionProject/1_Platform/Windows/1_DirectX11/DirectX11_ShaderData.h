@@ -18,7 +18,7 @@
 // 整数ヘッダー
 #include <cstdint>
 // バイナリーデータ
-#include "../../../BinaryView.h"
+#include "BinaryView.h"
 // 定数バッファ情報構造体ヘッダー
 #include "../../../ShaderConstantInfo.h"
 

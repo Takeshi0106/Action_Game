@@ -12,7 +12,7 @@
 // ヘッダー
 // ========================================
 // 文字列ヘッダー
-#include "../../../../UTF8_String.h"
+#include "UTF8_String.h"
 // DXBCompile用ヘッダー
 #include "DirectX11_DXBCCompileModule.h"
 // SPIR-Vコンパイル用ヘッダー

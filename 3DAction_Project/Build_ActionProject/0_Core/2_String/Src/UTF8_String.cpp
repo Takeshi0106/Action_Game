@@ -8,8 +8,11 @@
 #include "UTF8_StringView.h"
 // バイナリビュー
 #include "BinaryView.h"
+
+#if defined(_DEBUG) || defined(DEBUG)
 // アラサート
 #include <cassert>
+#endif
 
 
 // =================================

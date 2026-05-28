@@ -3,7 +3,7 @@
 // ヘッダー
 // ======================================
 // 必須ヘッダー
-#include "../../../Vector2.h"
+#include "Vector2.h"
 // ユーリアリティー関数
 #include "WindowsMath_Utiles.h"
 // 計算ヘッダー
@@ -11,7 +11,7 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 // デバッグ用にログ出力
-#include "../../../ReportMessage.h"
+#include "ReportMessage.h"
 #endif
 
 

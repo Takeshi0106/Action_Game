@@ -16,7 +16,7 @@
 // 整数ヘッダー
 #include <cstdint>
 // バイナリーデータヘッダー
-#include "../../../BinaryView.h"
+#include "BinaryView.h"
 
 
 # if defined(DEBUG) || defined(_DEBUG)

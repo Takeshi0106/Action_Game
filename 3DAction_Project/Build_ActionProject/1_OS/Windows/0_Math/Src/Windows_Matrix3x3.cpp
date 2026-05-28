@@ -3,13 +3,13 @@
 // ヘッダー
 // =================================
 // 必須ヘッダー
-#include "../../../Matrix3x3.h"
+#include "Matrix3x3.h"
 // 計算のためのヘッダー
 #include <DirectXMath.h>
 #include <cmath>
 // 計算構造体ヘッダー
-#include "../../../Vector3.h"
-#include "../../../Quaternionh.h"
+#include "Vector3.h"
+#include "Quaternionh.h"
 
 
 // ==========================================

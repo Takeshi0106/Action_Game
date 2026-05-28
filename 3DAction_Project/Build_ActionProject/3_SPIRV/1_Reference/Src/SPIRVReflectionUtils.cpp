@@ -9,7 +9,7 @@ extern "C" {
 #include "spirv_reflect.h"
 }
 // レポートログ出力
-#include "../../../ReportMessage.h"
+#include "ReportMessage.h"
 // 配列ヘッダー
 #include <vector>
 

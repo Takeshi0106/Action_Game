@@ -36,7 +36,7 @@
 #include <filesystem>
 
 // レポートヘッダー
-#include "../../../ReportMessage.h"
+#include "ReportMessage.h"
 
 
 // =======================================

@@ -16,13 +16,13 @@
 // ファイルシステムヘッダー
 #include <filesystem>
 // 文字列
-#include "../../../../UTF8_String.h"
+#include "UTF8_String.h"
 // バイナリーView
-#include "../../../../BinaryView.h"
+#include "BinaryView.h"
 // 外部ファイルに書き出し読込関数
-#include "../../../../FileUtils.h"
+#include "FileUtils.h"
 // デバッグ情報ややエラー出力用
-#include "../../../../ReportMessage.h"
+#include "ReportMessage.h"
 
 
 // =====================================

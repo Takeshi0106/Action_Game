@@ -11,7 +11,7 @@ add_library(SPIRV_COMPILER_LIB STATIC
 # ==============================================
 # SPIRV 共有ライブラリを取得
 # ==============================================
-target_link_libraries(SPIRV_COMPILER_LIB PRIVATE SPIRV_COMMON)
+ADD_SPIRV_COMMON(SPIRV_COMPILER_LIB)
 
 # ==============================================
 # インクルードディレクトリーに追加

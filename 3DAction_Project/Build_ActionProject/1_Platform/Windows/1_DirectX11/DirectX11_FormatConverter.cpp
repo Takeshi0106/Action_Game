@@ -5,7 +5,7 @@
 // 標準ヘッダー
 #include "DirectX11_FormatConverter.h"
 // 出力用ヘッダー
-#include "../../../ReportMessage.h"
+#include "ReportMessage.h"
 
 
 // ==========================

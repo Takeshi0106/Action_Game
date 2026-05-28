@@ -5,7 +5,7 @@
 // 必須ヘッダー
 #include "DirectX11_ViewData.h"
 // レポートメッセージヘッダー
-#include "../../../ReportMessage.h"
+#include "ReportMessage.h"
 
 
 // ==========================================

@@ -7,7 +7,7 @@
 // ファイルシステム
 #include <filesystem>
 // ログ出力
-#include "../../../../ReportMessage.h"
+#include "ReportMessage.h"
 
 
 // =============================================

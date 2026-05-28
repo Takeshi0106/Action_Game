@@ -18,7 +18,7 @@
 // データ管理テンプレートヘッダー
 #include "../../../TemplateManager.h"
 // 文字列ヘッダー
-#include "../../../UTF8_String.h"
+#include "UTF8_String.h"
 
 
 // ==============================================

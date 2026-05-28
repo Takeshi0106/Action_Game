@@ -17,6 +17,30 @@ target_compile_definitions(SPIRV_COMMON INTERFACE
     SPIRV_REFLECT_USE_SYSTEM_SPIRV_H)
 
 # =======================================
+# 共通コアの読込み
+# =======================================
+# Core
+add_subdirectory(
+    "${SPIRV_TOOLS_ROOT}/../0_Core"
+    "${CMAKE_BINARY_DIR}/SPIRV_Core")
+# OS
+add_subdirectory(
+    "${SPIRV_TOOLS_ROOT}/../1_OS"
+    "${CMAKE_BINARY_DIR}/SPIRV_OS")
+
+# =======================================
+# 関数の定義
+# =======================================
+function(ADD_SPIRV_COMMON TARGET)
+    # 共通コアライブラリーをリンク
+    ADD_CORE(${TARGET})
+    ADD_OS(${TARGET})
+
+    # SPIRV定義をまとめたライブラリーをリンクする
+    target_link_libraries(${TARGET} PRIVATE SPIRV_COMMON)
+endfunction()
+
+# =======================================
 # SPIRV Tool の追加
 # =======================================
 # SPIRVコンパイラー を追加
