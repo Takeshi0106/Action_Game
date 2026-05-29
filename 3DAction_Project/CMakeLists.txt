@@ -65,8 +65,8 @@ add_subdirectory("${SRC_DIR}/0_Core" "${CMAKE_BINARY_DIR}/Core")
 add_subdirectory("${SRC_DIR}/1_OS" "${CMAKE_BINARY_DIR}/OS")
 
 # Core を追加
-ADD_CORE(${PROJECT_NAME})
-ADD_OS(${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} PRIVATE Core_Lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE OS_Lib)
 
 # --------------------------------------
 # 外部ライブラリの設定
@@ -76,11 +76,6 @@ add_subdirectory("C:/0_Assimp/5.2.5" "${CMAKE_BINARY_DIR}/Assimp")
 # Assimp ライブラリをプロジェクトにリンク
 target_link_libraries(${PROJECT_NAME} PRIVATE ASSIMP_LIB)
 
-# Imgui の CMakeLists.txt を追加
-add_subdirectory("${SRC_DIR}/5_Imgui" "${CMAKE_BINARY_DIR}/Imgui")
-# Imgui ライブラリをプロジェクトにリンク Debugビルドのときのみリンクする
-target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
-
 # SPIR-V Reflect の CMakeLists.txt を追加
 add_subdirectory("${SRC_DIR}/3_SPIRV" "${CMAKE_BINARY_DIR}/SPIRV")
 # SPIR-V ライブラリをプロジェクトにリンク
@@ -89,8 +84,17 @@ target_link_libraries(${PROJECT_NAME} PRIVATE SPIRV_REF_LIB SPIRV_COMPILER_LIB)
 # 絶対パスに変換
 get_filename_component(DXC_EXE "${DXC_EXE}" ABSOLUTE)
 # #define でコンパイラーのパスをプロジェクトに渡す
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-    DXC_PATH=u8\"${DXC_EXE}\")
+target_compile_definitions(${PROJECT_NAME} PRIVATE DXC_PATH=u8\"${DXC_EXE}\")
+
+# Imgui の CMakeLists.txt を追加
+add_subdirectory("${SRC_DIR}/4_Imgui" "${CMAKE_BINARY_DIR}/Imgui")
+# Imgui ライブラリをプロジェクトにリンク Debugビルドのときのみリンクする
+target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
+
+# Physics 追加
+add_subdirectory("${SRC_DIR}/5_Physics" "${CMAKE_BINARY_DIR}/Physices")
+# ライブラリを追加
+target_link_libraries(${PROJECT_NAME} PRIVATE Physics_Lib)
 
 # --------------------------------------
 # Windows 用ライブラリのパス

@@ -18,8 +18,8 @@ add_library(SPIRV_REF_LIB STATIC
 # =========================================
 # SPIRV 共有ライブラリを取得
 # =========================================
-ADD_SPIRV_COMMON(SPIRV_REFLECT_C)
-ADD_SPIRV_COMMON(SPIRV_REF_LIB)
+target_link_libraries(SPIRV_REFLECT_C PRIVATE SPIRV_COMMON)
+target_link_libraries(SPIRV_REF_LIB PRIVATE SPIRV_COMMON)
 
 # =========================================
 # C をリンク
