@@ -1,4 +1,10 @@
 # Action_Game
+
+==== 注意事項 ===
+・https://github.com/Takeshi0106/DirectXTex-Prebuilt/releases/download/2019/DirectXTex_2019.zip
+　
+　Cmakeを使用して、ビルドすると
+
 就職作品 
 複数のプラットフォームでもGameMainを修正せずに動かせるように作成中。
 今対応中のプラットフォームは DirectXだけです。
@@ -18,8 +24,6 @@ https://github.com/microsoft/DirectXShaderCompiler/releases?utm_source=chatgpt.c
 ルール
 ・ .hlsl のエントリーポイントは必ず main で
     名前の最初にVS_ PS_ CS_ とつける。
-・ 描画IDに頂点シェーダーは１つだけ、
-    頂点シェーダーに頂点バッファ、入力レイアウトは１つだけ
 
 最適化可能情報
 /* -- 上から最適化が簡単で大幅に最適化できる順で記載すること -- */
@@ -32,11 +36,3 @@ https://github.com/microsoft/DirectXShaderCompiler/releases?utm_source=chatgpt.c
 
 ・ DirectX_Math Struct 内で 自作Struct メンバー関数を使用しているため
     DirectXStruct と自作構造体の 不必要な変換が行われています。
-
-
-発見されているバグ
-
-
-懸念事項
-1. シェーダーマネージャーがシェーダーの管理以外でもリファレクション情報の書出し、読込みを行っている
-   (単一責任の観点から責任が少し広がってしまっている)
