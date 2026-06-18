@@ -2,8 +2,10 @@
 
 ==== 注意事項 ===
 ・https://github.com/Takeshi0106/DirectXTex-Prebuilt/releases/download/2019/DirectXTex_2019.zip
-　
-　Cmakeを使用して、ビルドすると
+・https://github.com/Takeshi0106/Assimp-Prebuilt/releases/download/5.2.5/5.2.5.zip
+・https://github.com/Takeshi0106/DXC-Prebuilt/releases/download/v1.0/dxc_2026_0220.zip
+　ビルドを行うと上が自動的にダウンロードされます。注意してください。
+
 
 就職作品 
 複数のプラットフォームでもGameMainを修正せずに動かせるように作成中。
