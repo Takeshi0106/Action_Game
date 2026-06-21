@@ -133,8 +133,10 @@ bool DirectX_DrawManager::Init(uint32_t width, uint32_t height, IWindowHandle* w
 // ============================================
 void DirectX_DrawManager::Uninit()
 {
+#if defined(DEBUG) || defined(_DEBUG)
 	// ImGuiの後処理
 	ImGui_ImplDX11_Shutdown();
+#endif
 
 	// -----------------------------------
 	// 各マネージャy－後処理
@@ -183,14 +185,18 @@ void DirectX_DrawManager::BegingDraw()
 	// バインド
 	BindRenderTarget();
 
+#if defined(DEBUG) || defined(_DEBUG)
 	// Imguiの
 	ImGui_ImplDX11_NewFrame();
+#endif
 }
 
 void DirectX_DrawManager::EndDraw()
 {
+#if defined(DEBUG) || defined(_DEBUG)
 	// バックバッファと深度バッファのクリア
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+#endif
 
 	// 描画終了の処理
 	DirectX11::Get::GetSwapChain()->Present(1, 0);

@@ -20,4 +20,5 @@ add_subdirectory(10_Material)
 # 念のため、Debugを追加
 # IDEでDeubgがグレーアウトするため追加
 target_compile_definitions(Core_Lib PUBLIC
-    $<$<CONFIG:Debug>:_DEBUG>)
+    $<$<CONFIG:Debug>:_DEBUG>
+    $<$<CONFIG:Release>:NDEBUG>)
