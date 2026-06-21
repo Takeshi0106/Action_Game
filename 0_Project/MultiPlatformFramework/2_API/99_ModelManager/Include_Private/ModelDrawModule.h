@@ -1,0 +1,67 @@
+﻿#pragma once
+
+// =============================
+// クラス概要
+// モデルを描画するモジュール
+// 
+// ＊注意
+// 位置などの定数情報は更新しないとそのまま使用されます。
+// =============================
+
+
+// =============================
+// ヘッダー
+// =============================
+// 抽象化描画マネージャー
+#include "IDrawManager.h"
+// 文字列ヘッダー
+#include "Hashed_String.h"
+
+
+// =============================
+// クラス
+// =============================
+class ModelDrawModule final
+{
+private:
+	// ----------------------------------
+	// メンバー変数
+	// ----------------------------------
+	// 描画マネージャー
+	IDrawManager* m_Draw = nullptr;
+
+
+public:
+	// ---------------------------------
+	// コンストラクタ・デストラクタ
+	// ---------------------------------
+	ModelDrawModule() = default;
+	~ModelDrawModule() = default;
+
+
+	// ----------------------------------
+	// 基本関数
+	// ----------------------------------
+	// 初期化
+	void Init(IDrawManager& _draw, 
+		const Hashed_String& _modelName, 
+		const String& _fileName = u8"");
+	
+	// 描画
+	void Draw(
+		const Hashed_String& _modelName,
+		const Hashed_String& _vsShaderName,
+		const Hashed_String& _psShaderName);
+
+	// 終了処理
+	void Uninit();
+
+
+	// ===================================
+	// セッター
+	// ===================================
+	void CreateModel(
+		const Hashed_String& _modelName, 
+		const String& _fileName);
+};
+

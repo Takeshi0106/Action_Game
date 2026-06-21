@@ -1,0 +1,14 @@
+# ========================================
+# V1.0 Loader の CMakeLists.txt
+# ========================================
+
+# 階層を取得
+set(DX11_API_LOADER_V1_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+
+# インクルードディレクトリーに追加
+target_include_directories(API_Lib PUBLIC 
+    "${DX11_API_LOADER_V1_ROOT}/Include_Public")
+
+# ソースファイルを追加
+target_sources(API_Lib PRIVATE
+	"${DX11_API_LOADER_V1_ROOT}/Src/TextureLoader.cpp")
