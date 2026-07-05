@@ -67,38 +67,29 @@ add_executable(${PROJECT_NAME})
 # ---------------------------------------
 # 各モジュールを追加
 # ---------------------------------------
-# Core の CMakeLists.txt を追加
-add_subdirectory("${SRC_DIR}/0_Core" "${CMAKE_BINARY_DIR}/Core")
-target_link_libraries(${PROJECT_NAME} PRIVATE Core_Lib)
+# 各CMakeLists.txt を実行
+add_subdirectory("${SRC_DIR}/00_Core" "${CMAKE_BINARY_DIR}/00_Core")
+add_subdirectory("${SRC_DIR}/01_Imgui" "${CMAKE_BINARY_DIR}/01_Imgui")
+add_subdirectory("${SRC_DIR}/02_OS" "${CMAKE_BINARY_DIR}/02_OS")
+add_subdirectory("${SRC_DIR}/03_API" "${CMAKE_BINARY_DIR}/03_API")
+add_subdirectory("${SRC_DIR}/05_Physics" "${CMAKE_BINARY_DIR}/05_Physics")
+add_subdirectory("${SRC_DIR}/06_Game" "${CMAKE_BINARY_DIR}/06_Game")
 
-# Imgui の CMakeLists.txt を追加
-add_subdirectory("${SRC_DIR}/4_Imgui" "${CMAKE_BINARY_DIR}/Imgui")
-# Imgui ライブラリをプロジェクトにリンク Debugビルドのときのみリンクする
-target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
-
-# OS 用の CMakeLists.txt を追加
-add_subdirectory("${SRC_DIR}/1_OS" "${CMAKE_BINARY_DIR}/OS")
-target_link_libraries(${PROJECT_NAME} PRIVATE OS_Lib)
-
-# API の CMakeLists.txt を追加
-add_subdirectory("${SRC_DIR}/2_API" "${CMAKE_BINARY_DIR}/API")
-target_link_libraries(${PROJECT_NAME} PRIVATE API_Lib)
-
-# 絶対パスに変換
+# DXCのパスを取得・デファインに追加
 get_filename_component(DXC_EXE "${DXC_EXE}" ABSOLUTE)
-# #define でコンパイラーのパスをプロジェクトに渡す
 target_compile_definitions(${PROJECT_NAME} PRIVATE DXC_PATH=u8\"${DXC_EXE}\")
 
-# Physics 追加
-add_subdirectory("${SRC_DIR}/5_Physics" "${CMAKE_BINARY_DIR}/Physices")
 # ライブラリを追加
+target_link_libraries(${PROJECT_NAME} PRIVATE Core_Lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE OS_Lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE API_Lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
 target_link_libraries(${PROJECT_NAME} PRIVATE Physics_Lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE Game_Lib)
 
 # SRC_DIR階層にあるすべての.cppを自動収集して変数に入れています。
 file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
-
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
-# プロジェクトのインクルードパスを追加
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
 
 # --------------------------------------

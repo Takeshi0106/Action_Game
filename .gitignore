@@ -424,11 +424,11 @@ FodyWeavers.xsd
 *.spv
 
 # Assimp除外
-0_Project/MultiPlatformFramework/2_API/99_ModelManager/Assimp
+0_Project/MultiPlatformFramework/03_API/99_ModelManager/Assimp
 # DXTex除外
-0_Project/MultiPlatformFramework/2_API/1_DirectX11/DXTex
+0_Project/MultiPlatformFramework/03_API/01_DirectX11/DXTex
 # DXC除外
-0_Project/MultiPlatformFramework/3_ShaderIntermediateLayer/0_Compiler/0_Windows/dxc
+0_Project/MultiPlatformFramework/02_OS/01_Windows/01_ShaderIntermediateLayer/dxc
 
 # Assetの除外
 0_Project/MultiPlatformFramework/Asset/ObjModel
