@@ -1,9 +1,0 @@
-ShaderName :PS_Debug
- ConstantBuffer { 
- BlockNumber :1
-
-  CBName :DebugParams
-  RegisterNumber :0
-  CBSize :32
-
- } 

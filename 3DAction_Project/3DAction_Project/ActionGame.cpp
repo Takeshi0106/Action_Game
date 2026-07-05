@@ -1,0 +1,101 @@
+﻿
+// ==========================================
+// ヘッダー
+// ==========================================
+// 必須
+#include "ActionGame.h"
+// ログ出力
+#include "ReportMessage.h"
+// タイマー
+#include "Timer.h"
+
+#if defined(DEBUG) || defined(_DEBUG)
+// Imgui 使用ヘッダー
+#include "4_Imgui/imgui.h"
+#endif
+
+
+// =================================
+// 初期化
+// =================================
+bool ActionGame::DerivativeInit()
+{
+	// シーンマネージャー初期化
+	if (!m_SceneManager.Init(&m_Modules)) {
+		ErrorLog::OutputToConsole(u8"シーンマネージャーの初期化に失敗");
+		return false;
+	}
+
+	// タイマー初期化・開始
+	Timer::Init();
+	Timer::Start();
+
+	return true;
+}
+
+
+// ================================
+// 更新
+// ================================
+bool ActionGame::Update()
+{
+	// タイマーデバッグ
+	Timer::Debug_CheckUpdate();
+
+	// 時間取得
+	float time = Timer::GetDeltaTime();
+
+	// シーン更新
+	bool IsGameEnd = m_SceneManager.Update(time);
+
+	// Imguiを実行
+	DebugImgui();
+
+	// タイマー更新処理
+	Timer::LastUpdate();
+
+	return IsGameEnd;
+}
+
+
+// ================================
+// 描画
+// ================================
+void ActionGame::Draw()
+{
+	// シーン描画
+	m_SceneManager.Draw();
+}
+
+
+// ================================
+// 後処理
+// ================================
+void ActionGame::Uninit()
+{
+	// シーンマネージャー後処理
+	m_SceneManager.Uninit();
+	// タイマー削除
+	Timer::Label::ClearTimers();
+}
+
+
+#if defined(DEBUG) || defined(_DEBUG)
+// ================================
+// Imgui使用
+// ================================
+void ActionGame::DebugImgui()
+{
+	// FPS出力
+	ImGui::Begin(reinterpret_cast<const char*>(u8"FPS情報"));
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::Text(reinterpret_cast <const char*>(u8"1フレームの時間 %.3f ms/frame (%.1f FPS)"),
+		1000.0f / io.Framerate,
+		io.Framerate);
+
+	ImGui::End();
+}
+#else
+// リリース時は何も実行しない
+void ActionGame::DebugImgui() {}
+#endif
