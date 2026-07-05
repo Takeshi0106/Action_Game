@@ -6,6 +6,9 @@
 ・https://github.com/Takeshi0106/DXC-Prebuilt/releases/download/v1.0/dxc_2026_0220.zip
 　ビルドを行うと上が自動的にダウンロードされます。注意してください。
 
+Debugでリファレンス情報を書き出しており、
+ReleseのビルドイベントでDebugAssetをコピーしているため、
+先にDebugを実行してください
 
 就職作品 
 複数のプラットフォームでもGameMainを修正せずに動かせるように作成中。
@@ -19,10 +22,6 @@ DirectXで描画などを対応できた後、GameMainを作成予定です。
 ・ DirectX11 以上対応
 
 開発環境
-https://github.com/microsoft/DirectXShaderCompiler/releases?utm_source=chatgpt.com
-上のURLの 2025年5月パッチの dxc.2025_07_14.zip を取得して、Main.cpp 内のDXC＿Pathを設定してください
-
-
 ルール
 ・ .hlsl のエントリーポイントは必ず main で
     名前の最初にVS_ PS_ CS_ とつける。

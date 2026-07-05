@@ -102,11 +102,24 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 # --------------------------------------
 # カスタムイベント
 # --------------------------------------
-# Assets フォルダもコピー
+# コピー元を設定
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(ASSET_COPY_SOURCE "${SRC_DIR}/Asset")
+
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(ASSET_COPY_SOURCE "${CMAKE_SOURCE_DIR}/out/build/windows-x64-clangcl-debug/Asset")
+    # Debug Asset が存在しなければエラー
+    if(NOT EXISTS "${ASSET_COPY_SOURCE}")
+        message(FATAL_ERROR
+            "Debug Asset が見つかりません。一度 Debug をビルドしてください。")
+    endif()
+endif()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${SRC_DIR}/Asset"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset)
+        "${ASSET_COPY_SOURCE}"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset"
+)
 
 # Assimp DLL をコピー,
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

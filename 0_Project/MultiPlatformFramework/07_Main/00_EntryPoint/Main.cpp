@@ -67,7 +67,6 @@ namespace {
 	// Dxc.exeのパス
 	const String DXC_Path = DXC_PATH;
 # endif
-
 }
 
 
