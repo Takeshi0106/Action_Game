@@ -79,18 +79,7 @@ add_subdirectory("${SRC_DIR}/06_Game" "${CMAKE_BINARY_DIR}/06_Game")
 get_filename_component(DXC_EXE "${DXC_EXE}" ABSOLUTE)
 target_compile_definitions(${PROJECT_NAME} PRIVATE DXC_PATH=u8\"${DXC_EXE}\")
 
-# ライブラリを追加
-target_link_libraries(${PROJECT_NAME} PRIVATE Core_Lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE OS_Lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE API_Lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:IMGUI>)
-target_link_libraries(${PROJECT_NAME} PRIVATE Physics_Lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE Game_Lib)
-
-# SRC_DIR階層にあるすべての.cppを自動収集して変数に入れています。
-file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
-target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
+add_subdirectory("${SRC_DIR}/07_Main" "${CMAKE_BINARY_DIR}/07_Main")
 
 # --------------------------------------
 # 警告レベル設定
