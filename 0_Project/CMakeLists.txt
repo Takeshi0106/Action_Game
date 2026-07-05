@@ -103,13 +103,13 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 # カスタムイベント
 # --------------------------------------
 # Assets フォルダもコピー
-add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${SRC_DIR}/Asset"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset)
 
 # Assimp DLL をコピー,
-add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo
     "Assimp DLL: $<IF:$<CONFIG:Debug>,${ASSIMP_DEBUG},${ASSIMP_RELEASE}>"
 
