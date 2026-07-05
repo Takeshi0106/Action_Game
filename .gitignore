@@ -423,14 +423,13 @@ FodyWeavers.xsd
 *.cso
 *.spv
 
-# テクスチャ除外
-3DAction_Project/3DAction_Project/0_Asset/Texture
-# モデル除外
-3DAction_Project/3DAction_Project/0_Asset/ObjModel
-# フォント除外
-3DAction_Project/3DAction_Project/0_Asset/Font
-# リファレクション情報除外
-3DAction_Project/3DAction_Project/0_Asset/Shader/Reflection
+# Assimp除外
+0_Project/MultiPlatformFramework/03_API/99_ModelManager/Assimp
+# DXTex除外
+0_Project/MultiPlatformFramework/03_API/01_DirectX11/DXTex
+# DXC除外
+0_Project/MultiPlatformFramework/02_OS/01_Windows/01_ShaderIntermediateLayer/dxc
 
-# 実行ファイル除外
-3DAction_Project/0_実行ファイル/
+# Assetの除外
+0_Project/MultiPlatformFramework/Asset/ObjModel
+0_Project/MultiPlatformFramework/Asset/Texture

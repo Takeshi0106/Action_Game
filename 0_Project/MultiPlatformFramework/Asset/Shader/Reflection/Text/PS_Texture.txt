@@ -1,0 +1,10 @@
+ShaderName :PS_Texture
+ InputLayout { 
+ BlockNumber :1
+
+  ILName :in.var.TEXCOORD
+  ILIndex :1
+  ILFormat :Float2
+
+ } 
+
