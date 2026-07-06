@@ -110,10 +110,6 @@ PlatformWindowsSystem::~PlatformWindowsSystem()
 // =====================================================
 bool PlatformWindowsSystem::Init()
 {
-	// コンソールの文字コードをUTF-8に設定
-    SetConsoleOutputCP(CP_UTF8);
-
-
 #if defined(DEBUG) || defined(_DEBUG)
     DebugLog::OutputToConsole(u8"デバッグモードで開始します。");
 #endif

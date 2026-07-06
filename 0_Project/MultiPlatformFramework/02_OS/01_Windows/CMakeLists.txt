@@ -72,7 +72,6 @@ add_subdirectory("${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer")
 # ======================================
 # シェーダーコンパイラーのパスを定義
 # ======================================
-set(DXC_EXE
-    "${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer/dxc/dxc.exe"
-    CACHE INTERNAL
-    "DXC executable path")
+set(DXC_EXE "${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer/dxc/dxc.exe")
+get_filename_component(DXC_EXE "${DXC_EXE}" ABSOLUTE)
+set(DXC_EXE ${DXC_EXE} CACHE INTERNAL "DXC executable path")

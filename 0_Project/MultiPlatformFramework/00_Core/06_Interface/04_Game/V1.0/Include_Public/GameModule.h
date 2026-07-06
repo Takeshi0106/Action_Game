@@ -23,7 +23,7 @@
 // ===============================
 struct GameModules
 {
-	IDrawManager* drawManager;	// 描画マネージャー
-	Input* input;					// 入力
-	CursorController* cursor;		// カーソルコントローラー
+	IDrawManager* drawManager = nullptr;	// 描画マネージャー
+	Input* input = nullptr;					// 入力
+	CursorController* cursor = nullptr;		// カーソルコントローラー
 };

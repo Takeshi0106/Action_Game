@@ -34,6 +34,9 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 // =================================================
 bool ShaderManager::Init(ID3D11Device* device)
 {
+	// 改行を出力
+	DebugLog::OutputToConsole(u8"");
+
 #if defined(DEBUG) || defined(_DEBUG)
 
 	// デバッグ用初期化
@@ -308,7 +311,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 		{
 			// コンパイルする処理
 			if (!JudgeCompileShader(std::filesystem::path(kCSOFilePath.GetU8String()), hlslPath, blob)) {
-				ErrorLog::OutputToMessageBox(filename.u8string() + u8" : コンパイルに失敗しました");
+				ErrorLog::OutputToMessageBox(filename.filename().u8string() + u8" : コンパイルに失敗しました");
 				return false;
 			}
 		}
@@ -319,7 +322,7 @@ bool ShaderManager::DebugInit(ID3D11Device* device)
 			{
 				// 失敗したらコンパイル処理
 				if (!JudgeCompileShader(std::filesystem::path(kCSOFilePath.GetU8String()), hlslPath, blob)) {
-					ErrorLog::OutputToMessageBox(filename.u8string() + u8" : コンパイルに失敗しました");
+					ErrorLog::OutputToMessageBox(filename.filename().u8string() + u8" : コンパイルに失敗しました");
 					return false;
 				}
 			}
@@ -390,7 +393,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 		if (shaTime > binTime)
 		{
 			// デバッグ用にログ出力
-			DebugLog::OutputToConsole(shaderPath.u8string() + u8" が新しく更新されています");
+			DebugLog::OutputToConsole(shaderPath.u8string() + u8"\n" + u8" が新しく更新されています");
 			return true;
 		}
 
@@ -403,7 +406,7 @@ bool IsShaderUpdateCheck(const std::filesystem::path& shaderPath, const std::fil
 	}
 
 	// デバッグ用にログ出力
-	DebugLog::OutputToConsole(shaderPath.stem().u8string() + u8" 更新する必要がないためコンパイルファイルを取得します  相対パス : " + binaryPath.u8string());
+	DebugLog::OutputToConsole(shaderPath.stem().u8string() + u8" 更新する必要がないためコンパイルファイルを取得します" + u8"\n" + binaryPath.u8string());
 
 	return false;
 }

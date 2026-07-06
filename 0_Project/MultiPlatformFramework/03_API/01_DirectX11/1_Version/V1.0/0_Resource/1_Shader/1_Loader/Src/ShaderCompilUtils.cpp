@@ -99,14 +99,14 @@ namespace ShaderCompilerUtils
 		// ファイルを開ける
 		std::ifstream ifs(csoPath, std::ios::binary | std::ios::ate); // 読み取り専用
 		if (!ifs) {
-			ErrorLog::OutputToConsole(csoPath.u8string() + u8"　：　開けませんでした");
+			ErrorLog::OutputToConsole(csoPath.filename().u8string() + u8"　：　開けませんでした");
 			return false;
 		}
 
 		// ファイルサイズを取得する
 		std::streamsize size = ifs.tellg();
 		if (size <= 0) {
-			ErrorLog::OutputToConsole(csoPath.u8string() + u8" : ファイルサイズ取得に失敗しました");
+			ErrorLog::OutputToConsole(csoPath.filename().u8string() + u8" : ファイルサイズ取得に失敗しました");
 			return false;
 		}
 
@@ -124,12 +124,12 @@ namespace ShaderCompilerUtils
 		// 中にバイナリーデータを書き込む
 		ifs.read(reinterpret_cast<char*>((*blob)->GetBufferPointer()), size);
 		if (!ifs) {
-			ErrorLog::OutputToConsole(csoPath.u8string() + u8" : バイナリーデータの読み込みに失敗しました");
+			ErrorLog::OutputToConsole(csoPath.filename().u8string() + u8" : バイナリーデータの読み込みに失敗しました");
 			ifs.close();
 			return false;
 		}
 
-		DebugLog::OutputToConsole(csoPath.u8string() + u8"シェーダーを読み込みました。");
+		DebugLog::OutputToConsole(csoPath.filename().u8string() + u8"シェーダーを読み込みました。" + u8"\n");
 
 		ifs.close(); // ファイルを閉じる
 

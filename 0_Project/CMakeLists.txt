@@ -82,6 +82,15 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE DXC_PATH=u8\"${DXC_EXE}\")
 add_subdirectory("${SRC_DIR}/07_Main" "${CMAKE_BINARY_DIR}/07_Main")
 
 # --------------------------------------
+# デファイン追加
+# --------------------------------------
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+# プロジェクトのAssetフォルダーのパスをデファインに追加
+get_filename_component(ASSET_PATH "${SRC_DIR}/Asset" ABSOLUTE)
+target_compile_definitions(${PROJECT_NAME} PRIVATE PROJECT_ASSET_PATH=u8\"${ASSET_PATH}\")
+endif()
+
+# --------------------------------------
 # 警告レベル設定
 # --------------------------------------
 # MSVC なら /W4(警告レベル) と /permissive-(C++標準強化) を追加    
@@ -102,25 +111,15 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 # --------------------------------------
 # カスタムイベント
 # --------------------------------------
-# コピー元を設定
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(ASSET_COPY_SOURCE "${SRC_DIR}/Asset")
-
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(ASSET_COPY_SOURCE "${CMAKE_SOURCE_DIR}/out/build/windows-x64-clangcl-debug/Asset")
-    # Debug Asset が存在しなければエラー
-    if(NOT EXISTS "${ASSET_COPY_SOURCE}")
-        message(FATAL_ERROR
-            "Debug Asset が見つかりません。一度 Debug をビルドしてください。")
-    endif()
-endif()
-
+# HLSLをコピー
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${ASSET_COPY_SOURCE}"
-        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset"
-)
-
+    "${SRC_DIR}/06_Game/05_HLSL"
+    "${SRC_DIR}/Asset/Shader/Hlsl")
+# Assets フォルダもコピー 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+    "${SRC_DIR}/Asset" $<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset)
 # Assimp DLL をコピー,
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo

@@ -47,6 +47,20 @@ namespace {
     constexpr const char8_t* RESET = u8"\x1b[0m";
 }
 
+// ======================================
+// 初期化
+// ======================================
+namespace ReportInit
+{
+    // コンソールの初期化
+    void Init()
+    {
+        // コンソールの出力コードを UTF-8 に設定
+        SetConsoleOutputCP(CP_UTF8);
+        // コンソールの入力コードを UTF-8 に設定
+        SetConsoleCP(CP_UTF8);
+    }
+}
 
 // ======================================
 // エラーログ（致命的な警告）

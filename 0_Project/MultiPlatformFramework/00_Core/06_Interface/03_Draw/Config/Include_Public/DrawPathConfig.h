@@ -18,26 +18,24 @@
 struct DrawPathConfig
 {
 	// シェーダーバイナリパス (.cso)
-    const String& shaderBinaryPath;
+    const String shaderBinaryPath;
 	// シェーダーソースパス (.hlsl)
-    const String& shaderSourcePath;
-
+    const String shaderSourcePath;
     // シェーダーリフレクションパス
-    const String& shaderReflectionPath;
-
+    const String shaderReflectionPath;
 	// テクスチャパス
-    const String& texturePath;
+    const String texturePath;
 	// モデルパス
-    const String& objModelPath;
+    const String objModelPath;
 };
 
 #if defined(DEBUG) || defined(_DEBUG)
 // 開発用デバッグパス
 struct DevelopmentPath{
     // SPIR-Vバイナリパス
-    const String& kSPIRVFolderPath;
+    const String kSPIRVFolderPath;
 	// SPIR-Vリフレクション情報パス
-	const String& kSPIRVReflectionInfoFolderPath;
+	const String kSPIRVReflectionInfoFolderPath;
 };
 
 #endif
