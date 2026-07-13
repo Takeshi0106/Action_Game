@@ -4,16 +4,14 @@
 // 【クラス概要】
 // Windows のウィンドウハンドルの抽象化クラス
 // ===================================
-
 // ヘッダー
 #include "IWindowHandle.h"
-// Windowsのウィンドウハンドルを使用するためのヘッダー
 #include <Windows.h>
 
 class Windows_Handle final : public IWindowHandle
 {
 private:
-	// Windowsのウィンドウハンドル
+	// メンバー変数
 	HWND m_hWnd = nullptr;
 
 public:

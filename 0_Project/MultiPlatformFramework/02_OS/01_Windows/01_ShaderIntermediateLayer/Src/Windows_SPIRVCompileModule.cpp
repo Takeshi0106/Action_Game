@@ -1,136 +1,112 @@
-﻿
-// ==============================================
-// ヘッダー
-// ==============================================
-// 必須ヘッダー
+﻿// ヘッダー
 #include "Windows_SPIRVCompileModule.h"
-// ウィンドウズヘッダー
-#include <Windows.h>
-// スマートポインター
-#include <wrl/client.h>
-// ファイルシステムヘッダー
 #include <filesystem>
-// シェーダー便利関数ヘッダー
+#include <Windows.h>
 #include "ShaderUtility.h"
-// レポートログ出力
 #include "ReportMessage.h"
 
-
-// ==============================================
-// HLSL を SPIR-V に変換する
-// ==============================================
-bool Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName)
+// 初期化
+bool Windows_SPIRV_CompileModule::Init(String& _assetPath)
 {
-    // dxc.exe のパス
-    std::filesystem::path dxcPath = kDxcPath.GetU8String();
+	// DLLを追加
+    std::filesystem::path dllPath = _assetPath.GetU8String();
+    SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
+    AddDllDirectory(dllPath.c_str());
 
-	// 区切り文字を統一
-	dxcPath = dxcPath.generic_string();
-
-	// dxc.exe が存在するかチェック
-    if (!std::filesystem::exists(dxcPath))
+    // DXC ユーティリティの作成
+    if (FAILED(DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&m_Utils))) ||
+        FAILED(DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&m_Compiler))))
     {
-        ErrorLog::OutputToConsole(u8"dxc.exe が見つかりません");
-        return false;
-    }
-
-	// .hlslパス取得
-    std::filesystem::path shaderPath = std::filesystem::absolute(
-		std::filesystem::path(kHlslFolderPath.GetU8String()) /
-        (_hlslName.GetU8String() + kHlslExtension.GetU8String()));
-
-	// 区切り文字を統一
-    shaderPath = shaderPath.generic_string();
-
-    // 出力ファイルパス
-    std::filesystem::path outputPath = std::filesystem::absolute(
-        std::filesystem::path(kSPIRVFolderPath.GetU8String()) /
-        (shaderPath.stem().u8string() + kSPIRVExtension.GetU8String()));
-
-    // 区切り文字を統一
-    outputPath = outputPath.generic_string();
-
-    // シェーダータイプを取得
-    SETSHADERTYPE type = ShaderUtility::GetShaderTypeFromFileName(shaderPath.filename().u8string());
-
-	// シェーダータイプに応じてコンパイル引数を設定
-    std::wstring profile;
-	
-    switch (type)
-    {
-		// 頂点シェーダー
-    case SETSHADERTYPE::VERTEXSHADER:
-		profile = L"vs_6_0";
-        break;
-		// ピクセルシェーダー
-    case SETSHADERTYPE::PIXSELSHADER:
-		profile = L"ps_6_0";
-        break;
-		// コンピュートシェーダー
-    case SETSHADERTYPE::CONPUTESHADER:
-		profile = L"cs_6_0";
-        break;
-		// それ以外はエラー
-    default:
-        ErrorLog::OutputToConsole(u8"シェーダータイプの判定に失敗しました。ファイル名を確認してください。");
-        return false;
-    }
-
-	// 出力先のディレクトリが存在しない場合は作成
-    if (!std::filesystem::exists(outputPath.parent_path())) {
-        if (!std::filesystem::create_directories(outputPath.parent_path())) {
-            ErrorLog::OutputToConsole(u8"出力先のディレクトリの作成に失敗しました: " + outputPath.parent_path().u8string());
-            return false;
-        }
-    }
-
-    // コマンド文字列作成
-    std::wstring cmd = dxcPath.wstring() + L" \"" + shaderPath.wstring() + L"\""
-        L" -T " + profile +
-        L" -E main"
-        L" -spirv"
-        L" -fvk-use-dx-layout"
-        L" -Fo \"" + outputPath.wstring() + L"\""
-        L" -fspv-target-env=vulkan1.3";
-
-    // 実行
-    int ret = _wsystem(cmd.c_str());
-    if (ret != 0)
-    {
-        ErrorLog::OutputToConsole(u8"SPIR-V 生成に失敗しました: " + shaderPath.u8string());
+        ErrorLog::OutputToConsole(u8"DXCの初期化に失敗しました。");
         return false;
     }
 
     return true;
 }
 
-
-// ==============================================
-// SPIR-Vコンパイル外部ファイルを削除する
-// ==============================================
-bool Windows_SPIRV_CompileModule::DeleteCompileShader(const String& _hlslName)
+// HLSL を SPIR-V に変換する
+BinaryData Windows_SPIRV_CompileModule::SPIRVCompile(const String& _hlslName, bool _isDebug)
 {
-    // 出力ファイルパス
-    std::filesystem::path outputPath = std::filesystem::absolute(
-        std::filesystem::path(kSPIRVFolderPath.GetU8String()) /
-        (_hlslName.GetU8String() + kSPIRVExtension.GetU8String()));
+	// .hlslパス取得
+	std::filesystem::path shaderPath = _hlslName.GetU8String();
+    shaderPath.make_preferred();
 
-    // 区切り文字を統一
-    outputPath = outputPath.generic_string();
-
-    // ファイルが存在する場合は削除
-    if (std::filesystem::exists(outputPath))
+    // シェーダータイプを取得
+    SETSHADERTYPE type = ShaderUtility::GetShaderTypeFromFileName(shaderPath.filename().u8string());
+    std::wstring profile;
+    switch (type)
     {
-        // エラーコードを取得
-        std::error_code ec;
-
-        if (!std::filesystem::remove(outputPath, ec))
-        {
-            ErrorLog::OutputToConsole(u8"SPIR-Vファイルの削除に失敗しました: " + outputPath.u8string() + u8" エラー: " +
-                String::to_u8string(ec.value()));
-            return false;
-        }
+    case SETSHADERTYPE::VERTEXSHADER:
+		profile = L"vs_6_0";
+        break;
+	case SETSHADERTYPE::PIXSELSHADER:
+		profile = L"ps_6_0";
+        break;
+	case SETSHADERTYPE::CONPUTESHADER:
+		profile = L"cs_6_0";
+        break;
+	default:
+        ErrorLog::OutputToConsole(u8"シェーダータイプの判定に失敗しました。ファイル名を確認してください。");
+        return BinaryData();
     }
 
-    return true;
+    // HLSL読み込み
+    Microsoft::WRL::ComPtr<IDxcBlobEncoding> source;
+    if (FAILED(m_Utils->LoadFile(shaderPath.c_str(), nullptr, &source)))
+    {
+        ErrorLog::OutputToConsole(u8"HLSLの読み込みに失敗しました。");
+        return {};
+    }
+
+    // コンパイルオプション
+    std::vector<LPCWSTR> args =
+    {
+        L"-E", L"main",
+        L"-T", profile.c_str(),
+        L"-spirv",
+        L"-fvk-use-dx-layout",
+        L"-fspv-target-env=vulkan1.3"
+    };
+    if (_isDebug)
+    {
+        args.push_back(L"-Zi");
+        args.push_back(L"-Qembed_debug");
+        args.push_back(L"-Od");
+    }
+    else
+    {
+        args.push_back(L"-O3");
+        args.push_back(L"-Qstrip_debug");
+    }
+
+    // コンパイル
+    DxcBuffer buffer{};
+    buffer.Ptr = source->GetBufferPointer();
+    buffer.Size = source->GetBufferSize();
+    buffer.Encoding = DXC_CP_UTF8;
+
+    Microsoft::WRL::ComPtr<IDxcResult> result;
+    if (FAILED(m_Compiler->Compile(
+        &buffer,
+        args.data(),
+        static_cast<UINT32>(args.size()),
+        nullptr,
+        IID_PPV_ARGS(&result))))
+    {
+        ErrorLog::OutputToConsole(u8"SPIR-Vのコンパイルに失敗しました。");
+        return {};
+    }
+
+    // SPIR-V取得
+    Microsoft::WRL::ComPtr<IDxcBlob> blob;
+    if (FAILED(result->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&blob), nullptr)))
+    {
+        ErrorLog::OutputToConsole(u8"SPIR-Vの取得に失敗しました。");
+        return {};
+    }
+
+    // BinaryDataへコピー
+    BinaryData binary;
+	binary.Write(blob->GetBufferPointer(), blob->GetBufferSize());
+    return binary;
 }

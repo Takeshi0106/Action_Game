@@ -14,9 +14,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Physics_Lib)
 target_link_libraries(${PROJECT_NAME} PRIVATE Game_Lib)
 
 # モジュールの各機能を追加
+add_subdirectory(00_EntryPoint)
 add_subdirectory(01_Game)
-
-# Mainを追加
-target_sources(${PROJECT_NAME} PRIVATE 
-    "${Main_ROOT}/00_EntryPoint/Main.cpp"
-)

@@ -5,16 +5,9 @@
 // バイナリーデータクラス
 // 実態を保持するバイナリーデータクラス
 // ==================================
-
-
-// ==================================
 // ヘッダー
-// ==================================
-// 配列ヘッダー
 #include <vector>
-// バイナリーデータ参照クラス
 #include <cstddef>
-// バイナリーデータ参照クラス
 #include "BinaryView.h"
 
 
@@ -24,27 +17,17 @@
 class BinaryData
 {    
 private:
-    // --------------------------------
-    // 実体データ
-    // --------------------------------
+    // メンバー変数
     std::vector<std::byte> m_Data;
 
-
 public:
-    // --------------------------------
     // コンストラクタ・デストラクタ
-    // --------------------------------
     BinaryData() = default;
 	~BinaryData() = default;
 
-
-    // --------------------------------
-    // 書き込み
-    // --------------------------------
 	// バイナリーデータを書き込む
     void Write(const void* data, size_t size)
     {
-        // 既存データを上書き
         m_Data.resize(size);
         std::memcpy(m_Data.data(), data, size);
     }
@@ -60,20 +43,11 @@ public:
         Write(&value, sizeof(T));
     }
 
-
-    // --------------------------------
 	// 空かどうかのチェック
-    // --------------------------------
 	bool IsEmpty() const noexcept { return m_Data.empty(); }
 
-
-    // --------------------------------
     // ゲッター
-    // --------------------------------
-	// バイナリーデータ参照を取得
     BinaryView GetBinaryView() const noexcept { return BinaryView(m_Data.data(), m_Data.size()); }
-	// データサイズを取得
 	size_t GetSize() const noexcept { return m_Data.size(); }
-	// データポインタを取得
 	const std::byte* GetData() const noexcept { return m_Data.data(); }
 };

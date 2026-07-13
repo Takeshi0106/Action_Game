@@ -14,7 +14,7 @@ if(ARCHITECTURE_VERSION STREQUAL "1.0")
 add_subdirectory(V1.0)
 
 elseif(ARCHITECTURE_VERSION STREQUAL "2.0")
-message(FATAL_ERROR "OS 2.0 is not yet implemented")
+# message(FATAL_ERROR "OS 2.0 is not yet implemented")
 
 endif()
 
@@ -27,9 +27,9 @@ set(WINDOWS_OS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 # =====================================
 # シェーダーコンパイラーのダウンロード
 # =====================================
-if(NOT EXISTS "${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer/dxc/dxc.exe")
+if(NOT EXISTS "${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer/dxc/lib/dxcompiler.lib")
     # DXCのURLを設定
-    set(DXC_WINDOWS_URL "https://github.com/Takeshi0106/DXC-Prebuilt/releases/download/v1.0/dxc_2026_0220.zip")
+    set(DXC_WINDOWS_URL "https://github.com/Takeshi0106/DXC-Prebuilt/releases/download/V2.0/dxc.zip")
     # DXCを入れるフォルダのパス
     set(DXC_WINDOWS_ROOT "${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer/dxc")
     file(MAKE_DIRECTORY "${DXC_WINDOWS_ROOT}")
@@ -67,11 +67,5 @@ endif()
 # =====================================
 # シェーダーコンパイラーを設定 
 # =====================================
+set(DXC_ROOT "${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer/dxc" CACHE INTERNAL "DXC Root")
 add_subdirectory("${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer")
-
-# ======================================
-# シェーダーコンパイラーのパスを定義
-# ======================================
-set(DXC_EXE "${WINDOWS_OS_ROOT}/01_ShaderIntermediateLayer/dxc/dxc.exe")
-get_filename_component(DXC_EXE "${DXC_EXE}" ABSOLUTE)
-set(DXC_EXE ${DXC_EXE} CACHE INTERNAL "DXC executable path")

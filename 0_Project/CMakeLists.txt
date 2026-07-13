@@ -21,13 +21,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # --------------------------------------
 # ビルド 設定
 # ---------------------------------------
-# プラットフォームの設定 (WINDOWS LINUX MAC)
-set(PLATFORM_OS "WINDOWS" CACHE STRING "Platform" FORCE)
-    if(NOT PLATFORM_OS STREQUAL "WINDOWS" AND
-       NOT PLATFORM_OS STREQUAL "LINUX" AND
-       NOT PLATFORM_OS STREQUAL "MAC")
-        message(FATAL_ERROR "Invalid PLATFORM_OS")
-    endif()
+# プラットフォーム・OS の設定
+if(WIN32)
+    set(PLATFORM_OS "WINDOWS" CACHE STRING "Platform" FORCE)    
+    set(PLATFORM_CATEGORY "PC" CACHE STRING "Platform Category" FORCE)
+elseif(APPLE)
+    set(PLATFORM_OS "MAC" CACHE STRING "Platform" FORCE)
+    set(PLATFORM_CATEGORY "PC" CACHE STRING "Platform Category" FORCE)
+elseif(UNIX)
+    set(PLATFORM_OS "LINUX" CACHE STRING "Platform" FORCE)
+    set(PLATFORM_CATEGORY "PC" CACHE STRING "Platform Category" FORCE)
+endif()
 
 # API の設定 (DIRECTX11 VULKAN OPENGL)
 set(PLATFORM_API "DIRECTX11" CACHE STRING "API" FORCE)
@@ -39,7 +43,6 @@ endif()
 
 # バージョン設定 (1.0 , 2.0)
 set(ARCHITECTURE_VERSION "1.0" CACHE STRING "Architecture version" FORCE)
-
 # シェーダーの中間層を作成するかを設定 (ON OFF)
 option(ENABLE_SHADER_INTERMEDIATE_LAYER "Enable shader intermediate layer" ON)
 
@@ -56,39 +59,32 @@ endif()
 # --------------------------------------
 # このテキストの階層からの相対パスを指定
 set(PROJECT_DIR "${CMAKE_CURRENT_LIST_DIR}/MultiPlatformFramework")
-# プロジェクトの場所を設定
-set(SRC_DIR "${PROJECT_DIR}")
 
 # --------------------------------------
 # 実行ファイルを作成
 # --------------------------------------
 add_executable(${PROJECT_NAME})
 
+# --------------------------------------
+# デファイン追加
+# --------------------------------------
+file(RELATIVE_PATH PROJECT_ASSET_PATH_DEBUG "${CMAKE_BINARY_DIR}""${PROJECT_DIR}/Asset")
+set(PROJECT_ASSET_PATH_RELEASE u8"Asset")
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    $<$<CONFIG:Debug>:PROJECT_ASSET_PATH=u8\"${PROJECT_ASSET_PATH_DEBUG}\">
+    $<$<CONFIG:Release>:PROJECT_ASSET_PATH=${PROJECT_ASSET_PATH_RELEASE}>)
+
 # ---------------------------------------
 # 各モジュールを追加
 # ---------------------------------------
 # 各CMakeLists.txt を実行
-add_subdirectory("${SRC_DIR}/00_Core" "${CMAKE_BINARY_DIR}/00_Core")
-add_subdirectory("${SRC_DIR}/01_Imgui" "${CMAKE_BINARY_DIR}/01_Imgui")
-add_subdirectory("${SRC_DIR}/02_OS" "${CMAKE_BINARY_DIR}/02_OS")
-add_subdirectory("${SRC_DIR}/03_API" "${CMAKE_BINARY_DIR}/03_API")
-add_subdirectory("${SRC_DIR}/05_Physics" "${CMAKE_BINARY_DIR}/05_Physics")
-add_subdirectory("${SRC_DIR}/06_Game" "${CMAKE_BINARY_DIR}/06_Game")
-
-# DXCのパスを取得・デファインに追加
-get_filename_component(DXC_EXE "${DXC_EXE}" ABSOLUTE)
-target_compile_definitions(${PROJECT_NAME} PRIVATE DXC_PATH=u8\"${DXC_EXE}\")
-
-add_subdirectory("${SRC_DIR}/07_Main" "${CMAKE_BINARY_DIR}/07_Main")
-
-# --------------------------------------
-# デファイン追加
-# --------------------------------------
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-# プロジェクトのAssetフォルダーのパスをデファインに追加
-get_filename_component(ASSET_PATH "${SRC_DIR}/Asset" ABSOLUTE)
-target_compile_definitions(${PROJECT_NAME} PRIVATE PROJECT_ASSET_PATH=u8\"${ASSET_PATH}\")
-endif()
+add_subdirectory("${PROJECT_DIR}/00_Core" "${CMAKE_BINARY_DIR}/00_Core")
+add_subdirectory("${PROJECT_DIR}/01_Imgui" "${CMAKE_BINARY_DIR}/01_Imgui")
+add_subdirectory("${PROJECT_DIR}/02_OS" "${CMAKE_BINARY_DIR}/02_OS")
+add_subdirectory("${PROJECT_DIR}/03_API" "${CMAKE_BINARY_DIR}/03_API")
+add_subdirectory("${PROJECT_DIR}/05_Physics" "${CMAKE_BINARY_DIR}/05_Physics")
+add_subdirectory("${PROJECT_DIR}/06_Game" "${CMAKE_BINARY_DIR}/06_Game")
+add_subdirectory("${PROJECT_DIR}/07_Main" "${CMAKE_BINARY_DIR}/07_Main")
 
 # --------------------------------------
 # 警告レベル設定
@@ -111,20 +107,29 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 # --------------------------------------
 # カスタムイベント
 # --------------------------------------
+# DXC DLL と DXIL DLL をコピーするカスタムイベントを追加
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset/Dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${DXC_DLL}"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset/Dll"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${DXIL_DLL}"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset/Dll")
 # HLSLをコピー
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "${SRC_DIR}/06_Game/05_HLSL"
-    "${SRC_DIR}/Asset/Shader/Hlsl")
+    "${PROJECT_DIR}/06_Game/05_HLSL"
+    "${PROJECT_DIR}/Asset/Shader/Hlsl")
 # Assets フォルダもコピー 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
     COMMAND ${CMAKE_COMMAND} -E copy_directory 
-    "${SRC_DIR}/Asset" $<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset)
+    "${PROJECT_DIR}/Asset" $<TARGET_FILE_DIR:${PROJECT_NAME}>/Asset)
 # Assimp DLL をコピー,
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo
     "Assimp DLL: $<IF:$<CONFIG:Debug>,${ASSIMP_DEBUG},${ASSIMP_RELEASE}>"
-
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "$<IF:$<CONFIG:Debug>,${ASSIMP_DEBUG},${ASSIMP_RELEASE}>"
     $<TARGET_FILE_DIR:${PROJECT_NAME}>)

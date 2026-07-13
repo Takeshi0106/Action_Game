@@ -16,9 +16,9 @@ add_subdirectory(07_Template)
 add_subdirectory(08_Utiles)
 add_subdirectory(09_Handle)
 add_subdirectory(10_Material)
+add_subdirectory(11_Config)
 
-# 念のため、Debugを追加
-# IDEでDeubgがグレーアウトするため追加
+# 念のため、デファイン追加
 target_compile_definitions(Core_Lib PUBLIC
     $<$<CONFIG:Debug>:_DEBUG>
     $<$<CONFIG:Release>:NDEBUG>)

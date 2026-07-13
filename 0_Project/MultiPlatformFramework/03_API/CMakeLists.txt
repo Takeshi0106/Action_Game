@@ -9,13 +9,14 @@ target_link_libraries(API_Lib PRIVATE Core_Lib)
 target_link_libraries(API_Lib PRIVATE OS_Lib)
 target_link_libraries(API_Lib PRIVATE IMGUI)
 
+# 共通
+add_subdirectory(00_Core)
+add_subdirectory(99_ModelManager)
+
 # DirectX11API
 if(PLATFORM_API STREQUAL "DIRECTX11")
     add_subdirectory(01_DirectX11)
 endif()
-
-# 共通のModelManager
-add_subdirectory(99_ModelManager)
 
 # デファインに API を追加
 if(PLATFORM_API STREQUAL "DIRECTX11")

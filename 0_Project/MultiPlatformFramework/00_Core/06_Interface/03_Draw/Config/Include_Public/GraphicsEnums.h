@@ -104,24 +104,15 @@ enum class MipMapType
 // ===========================================
 // テクスチャ作成デスク
 // ===========================================
-// テクスチャサイズタイプ
-enum class TextureSizeType
-{
-	// ピクセル指定
-	Absolute,
-	// 0〜1.0 比率
-	Relative
-};
-
 // テクスチャ作成デスク
 struct TextureCreateDesc
 {
-	// サイズタイプ
-	TextureSizeType sizeType = TextureSizeType::Relative;
-
-	// サイズ
-	float width;
-	float height;
+	// 基準テクスチャ(ウィンドウサイズ)との比率
+	float baseRelativeScaleX = 1.0f;
+	float baseRelativeScaleY = 1.0f;
+	// 絶対サイズ
+	uint32_t absoluteWidth;
+	uint32_t absoluteHeight;
 
 	// フォーマット
 	Format format;
@@ -139,7 +130,6 @@ struct TextureCreateDesc
 	// サンプラー設定
 	SamplerDesc sampler = SamplerDesc::NormalSampler();
 };
-
 
 // ===========================================
 // テクスチャロード時の作成デスク

@@ -2,7 +2,7 @@
 # DirectX11 V_2.0
 # ================================================
 
-add_subdirectory(1_Device)
-add_subdirectory(2_RendererState)
-add_subdirectory(3_Resource)
-add_subdirectory(4_System)
+add_subdirectory(01_Device)
+add_subdirectory(02_RendererState)
+add_subdirectory(03_Resource)
+add_subdirectory(04_System)
