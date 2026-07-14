@@ -1,11 +1,9 @@
-﻿
+﻿// ヘッダー
 #include "DirectX11System.h"
 #include "ReportMessage.h"
 
-// =========================
 // 初期化
-// =========================
-bool DirectX11System::Init(uint16_t _width, uint16_t _height, HWND _windowHandle)
+bool DirectX11System::Init(uint32_t _width, uint32_t _height, IWindowHandle& _windowHandle)
 {
 	// DirectX11初期化
 	if(!m_DeviceManager.Init(_width, _height, _windowHandle))
@@ -29,9 +27,7 @@ bool DirectX11System::Init(uint16_t _width, uint16_t _height, HWND _windowHandle
 	return true;
 }
 
-// =========================
 // 後処理
-// =========================
 void DirectX11System::Uninit()
 {
 	m_ResourceManager.ReleaseAllResource();

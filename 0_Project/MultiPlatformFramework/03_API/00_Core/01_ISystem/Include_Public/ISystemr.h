@@ -4,16 +4,15 @@
 // 【クラス概要】
 // APIシステムのインターフェイス(基底クラス)
 // ========================================
+// ヘッダー
+#include "IWindowHandle.h"
 
+// クラス
 class IAPISystem
 {
-protected:
-
-
 public:
-	// 初期化
-	virtual bool Init(uint16_t _width, uint16_t _height ) = 0;
-	// 後処理
+	// 初期化・後処理
+	virtual bool Init(uint32_t _width, uint32_t _height, IWindowHandle& _handle) = 0;
 	virtual void Uninit() = 0;
 
 	// ゲッター関数

@@ -69,7 +69,7 @@ add_executable(${PROJECT_NAME})
 # デファイン追加
 # --------------------------------------
 file(RELATIVE_PATH PROJECT_ASSET_PATH_DEBUG "${CMAKE_BINARY_DIR}""${PROJECT_DIR}/Asset")
-set(PROJECT_ASSET_PATH_RELEASE u8"Asset")
+set(PROJECT_ASSET_PATH_RELEASE "Asset")
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     $<$<CONFIG:Debug>:PROJECT_ASSET_PATH=u8\"${PROJECT_ASSET_PATH_DEBUG}\">
     $<$<CONFIG:Release>:PROJECT_ASSET_PATH=${PROJECT_ASSET_PATH_RELEASE}>)

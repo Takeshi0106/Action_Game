@@ -4,6 +4,7 @@
 // DirectX11Systemクラス
 // DirectX11の管理を行うクラス
 // ===============================
+#include "ISystemr.h"
 #include "DirectX11_DeviceManager.h"
 #include "DirectX11_RendererStateManager.h"
 #include "DirectX11_ResourceManager.h"
@@ -11,7 +12,7 @@
 // ===============================
 // クラス
 // ===============================
-class DirectX11System final
+class DirectX11System final : public IAPISystem
 {
 private:
 	// デバイスマネージャー
@@ -23,15 +24,13 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	DirectX11System(const DrawPathConfig& _config) : 
-		m_ResourceManager(_config) {}
+	DirectX11System() = default;
 	~DirectX11System() = default;
 
-	// 初期化
-	bool Init(uint16_t _width, uint16_t _height, HWND _windowHandle);
-	// 後処理
-	void Uninit();
+	// 初期化・後処理
+	bool Init(uint32_t _width, uint32_t _height, IWindowHandle& _windowHandle) override;
+	void Uninit() override;
 	
 	// ゲッター関数
-	const IDrawCreate* GetResourceFactory() { return m_ResourceManager.GetResourceFactory(); }
+	const IDrawCreate* GetResourceFactory() override { return m_ResourceManager.GetResourceFactory(); }
 };

@@ -59,8 +59,8 @@ public:
 	~DirectX11_ResourceManager() = default;
 	
 	// 初期化
-	bool Init(const uint32_t& _screenWidth, const uint32_t& _screenHeight, 
-		ID3D11Device* device,ID3D11DeviceContext* _deviceContext);
+	bool Init(const uint32_t _screenWidth, const uint32_t _screenHeight,
+		ID3D11Device* device, ID3D11DeviceContext* _deviceContext);
 
 	// ゲッター
 	const DirectX11_ResourceFactory* GetResourceFactory() const {
